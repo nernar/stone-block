@@ -1,0 +1,7 @@
+{
+    "name": "Cool Elytra Roll",
+    "author": "dsdekhm",
+    "version": "1.0",
+    "description": "A client-side mod that rotates the camera while turning during elytra flight.",
+    "clientside": true
+}

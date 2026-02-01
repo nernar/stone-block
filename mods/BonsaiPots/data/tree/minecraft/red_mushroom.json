@@ -1,0 +1,32 @@
+{
+  "sapling": {
+    "id": "block:red_mushroom",
+    "isVanilla": true
+  },
+  "drops": [
+    {
+      "rolls": 3,
+      "chance": 0.2,
+      "id": "block:red_mushroom",
+      "isVanilla": true
+    },
+    {
+      "rolls": 1,
+      "chance": 0.75,
+      "id": "block:brown_mushroom",
+      "data": 12,
+      "isVanilla": true,
+      "requiresSilkTouch": true
+    },
+    {
+      "rolls": 2,
+      "chance": 0.2,
+      "id": "block:red_mushroom_block",
+      "isVanilla": true,
+      "requiresSilkTouch": true
+    }
+  ],
+  "compatibleSoilTags": [
+    "mycelium"
+  ]
+}

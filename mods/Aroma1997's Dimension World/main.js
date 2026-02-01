@@ -1,0 +1,511 @@
+/*
+BUILD INFO:
+  dir: dev
+  target: main.js
+  files: 4
+*/
+
+
+
+// file: reg.js
+
+IMPORT("dimensions");
+IMPORT("ToolType");
+
+var mm ={
+addRecipe: function(result, data, tool){
+		data.push({id: tool, data: -1});
+		Recipes.addShapeless(result, data, function(api, field, result){
+			for (var i in field){
+				if (field[i].id == tool){
+					field[i].data++;
+					if (field[i].data >= Item.getMaxDamage(tool)){
+						field[i].id = field[i].count = field[i].data = 0;
+					}
+				}
+				else {
+					api.decreaseFieldSlot(i);
+				}
+			}
+		})
+		}};
+
+ToolAPI.addToolMaterial("ar", {durability: 20, level: 1, efficiency: 3, damage: 1, enchantability: 1});
+IDRegistry.genItemID("minehui");
+Item.createItem("minehui", "Mining Multitool", {name: "miningmultitool", meta: 0}, {stack: 1});
+Item.setMaxDamage(ItemID.minehui, 20);   
+Recipes.addShaped({id: ItemID.minehui, count: 1, data: 0}, [
+"aba",
+"oco",
+"odo"], ['a', BlockID.quintuple_compressed_cobblestone, 0, 'b', 259, 0, 'c', 274, 0, 'd', 280, 0]); 
+Item.setMaxDamage(ItemID.minehui, 20);       
+ToolAPI.setTool(ItemID.minehui, "ar", ToolType.hoe);   
+
+
+IDRegistry.genBlockID("portalframe");
+Block.createBlock("portalframe", [{name:"Portal Frame", texture:[["portalframe",0]
+],inCreative:true}]);
+   
+IDRegistry.genBlockID("clayore");
+Block.createBlock("clayore", [{name:"Clay Ore", texture:[["clayore",0]
+],inCreative:true}]);   
+IDRegistry.genBlockID("stickyore");
+Block.createBlock("stickyore", [{name:"Sticky Ore", texture:[["stickyore",0]
+],inCreative:true}]);   
+   
+ToolAPI.registerBlockMaterial(BlockID.clayore, "stone", 2, true);
+Block.setDestroyTime(BlockID.clayore, 3);
+Block.setDestroyLevel("clayore", 2);
+ToolAPI.registerBlockMaterial(BlockID.stickyore, "stone", 2, true);
+Block.setDestroyTime(BlockID.stickyore, 3);
+Block.setDestroyLevel("stickyore", 2);   
+
+IDRegistry.genItemID("dimensionchanger");
+Item.createItem("dimensionchanger", "DimensionChanger", {name: "dimensionchanger", meta: 0}, {stack: 1});
+Recipes.addShaped({id: ItemID.dimensionchanger, count: 1, data: 0}, [
+"aba",
+"cdc",
+"aba"], ['a', 264, 0, 'b', 381, 0, 'c', 368, 0, 'd', ItemID.minehui, 0]); 
+
+  Block.registerDropFunction(BlockID.clayore, function(coords, blockID, blockData, level){
+	var drop = [];
+		drop.push([337, 1, 0]);
+	return drop;
+});
+Block.registerDropFunction(BlockID.stickyore, function(coords, blockID, blockData, level){
+	var drop = [];
+		drop.push([341, 1, 0]);
+	return drop;
+});  
+
+mm.addRecipe({id: BlockID.portalframe, count: 1, data: 0}, [{id: 98, data: 0}], ItemID.minehui);
+
+
+
+
+
+// file: dimension.js
+
+var mineworld = new Dimension({ 
+name: "mineworld", 
+generation: { 
+layers: [ 
+{ 
+range: [103, 110], 
+noise: { 
+octaves: { 
+count: 6, 
+weight: 0.8,
+scale: [1, 0.2, 1]
+} 
+}, 
+gradient: [ 
+[.0,.0],[.0,0],[.0,.0],[0, -0] 
+], 
+
+terrain: { 
+base: 1, 
+cover:{ 
+height:5, 
+top:2, 
+block:3 
+} 
+}, 
+}, 
+
+{ 
+range: [4, 107], 
+noise: { 
+octaves: { 
+count: 6, 
+weight: 0.8,
+scale: [1, 0.4, 1]
+} 
+}, 
+gradient: [[-1, 0.8], [-0.6, 0.5], [-0.2, 0.2], [0.2, 0.9], [0.6, 0.7], [1, 0.1]],
+terrain: { 
+base: 1, 
+cover:{ 
+height:1, 
+top:1, 
+block:1 
+} 
+}, 
+}, 
+
+/*
+{ 
+range: [4, 55], 
+noise: { 
+octaves: { 
+count: 6, 
+weight: 0.8, 
+scale: [0.005, 0.01, 0.02] 
+} 
+}, 
+gradient: [[-1, 0.8], [-0.6, 0.5], [-0.2, 0.2], [0.2, 0.9], [0.6, 0.7], [1, 0.1]],
+terrain: { 
+base: 1, 
+cover:{ 
+height:1, 
+top:1, 
+block:1 
+} 
+}, 
+}, 
+*/
+{ 
+range: [0, 5], 
+noise: { 
+octaves: { 
+count: 7, 
+weight: 0.6,
+scale: [1, 0.4, 1]
+} 
+}, 
+gradient: [ 
+[.0,.0],[.0,-.0],[.0,-.0],[0, -0] 
+], 
+
+terrain: { 
+base: 7, 
+cover:{ 
+height:5, 
+top:7, 
+block:7
+} 
+}, 
+}, 
+],
+decoration: {
+biome: 1
+} 
+}, 
+
+environment: { 
+sky: [0, 196, 255], 
+fog: [0, 196, 255] 
+}, 
+callbacks: { 
+tick: function() { 
+}, 
+generateChunk: function(chunkX, chunkZ) { 
+}, 
+loaded: function() { 
+}, 
+unloaded: function() { 
+} 
+} 
+}); 
+
+//ПОРТАЛ 
+
+var pes = new TransferSequence(mineworld); 
+pes.setPortalTimeout(0); 
+
+pes.setPortalOverlay(new PortalOverlayWindow({ 
+frames: 32, 
+rate: 20, 
+fade: 1, 
+texture: "mine_portal.anim" 
+})); 
+
+var suka = new PortalShape(mineworld); 
+suka.setPortalId(BlockID.mineportal); 
+suka.setFrameIds(BlockID.portalframe); 
+suka.setMinSize(2, 3); 
+
+pes.setPortalBuilder(suka.getBuilder()); 
+pes.setLoadingScreenParams({ 
+texture: "default_dimension_loading_screen" 
+}); 
+PortalRegistry.newPortalBlock("mineportal", ["mine_portal", 0], pes.getPortal(), {type: "u-plane", frameId: 1}, true); 
+pes.setPortalTiles(BlockID.mineportal); 
+
+var suka = new PortalShape(); 
+suka.setPortalId(BlockID.mineportal); 
+suka.setFrameIds(BlockID.portalframe); 
+suka.setMinSize(2, 3); 
+
+pes.setPortalBuilder(suka.getBuilder()); 
+
+Callback.addCallback("ItemUse", function(coords, item) { 
+if (item.id == ItemID.minehui) { 
+
+var rect = suka.findPortal(coords.relative.x, coords.relative.y, coords.relative.z); 
+if (rect) { 
+suka.buildPortal(rect, false); 
+} 
+} 
+}); 
+Callback.addCallback("DestroyBlock", function(pos, block){ 
+if (block.id == BlockID.portalframe || block.id == BlockID.mineportal) { 
+DimensionHelper.eliminateIncorrectPlacedPortals(pos, BlockID.mineportal, [4]); 
+} 
+} 
+);
+
+
+function randomInt(min, max){ 
+return Math.floor(Math.random() * (max - min + 1)) + min; 
+};
+
+Callback.addCallback("tick", function(coords, item){
+if(Player.getDimension(mineworld)){
+World.setWorldTime(8000);
+World.setWeather(0);
+}
+});
+
+
+var UniqueGen={ 
+generateOre: function(id, data, chunkX, chunkZ, params){  
+for (var i = 0; i < params.veinCounts; i++){ 
+var coords = GenerationUtils.randomCoords(chunkX, chunkZ, params.min_y, params.max_y); 
+if(Math.random() < params.veinChance)GenerationUtils.genMinable(coords.x, coords.y, coords.z, { 
+id: id, 
+data: data, 
+size: params.size, 
+ratio: params.ratio, 
+checkerTile: params.checkerTile, 
+checkerMode: params.checkerMode 
+      }); 
+   }  
+}, 
+generateOreInDimension: function(id, data, dimension, chunkX, chunkZ, params){ 
+if(Player.getDimension() ==dimension){ 
+for (var i = 0; i < params.veinCounts; i++){ 
+var coords = GenerationUtils.randomCoords(chunkX, chunkZ, params.min_y, params.max_y); 
+if(Math.random() < params.veinChance)GenerationUtils.genMinable(coords.x, coords.y, coords.z, { 
+id: id, 
+data: data, 
+size: params.size, 
+ratio: params.ratio, 
+checkerTile: params.checkerTile, 
+checkerMode: params.checkerMode 
+         }); 
+      } 
+   } 
+}
+};
+
+
+Callback.addCallback("GenerateChunk", function(chunkX, chunkZ){ 
+UniqueGen.generateOreInDimension(14, 0, mineworld, chunkX, chunkZ, { 
+veinCounts: 4, 
+veinChance: 70, 
+minY: 8, 
+maxY: 50,  
+size: randomInt(8, 10),  
+ratio: [.3, .4, .5],
+checkerTile: 1, 
+checkerMode: false
+}); 
+});
+
+Callback.addCallback("GenerateChunk", function(chunkX, chunkZ){ 
+UniqueGen.generateOreInDimension(15, 0, mineworld, chunkX, chunkZ, { 
+veinCounts: 8, 
+veinChance: 80, 
+minY: 29, 
+maxY: 105,  
+size: randomInt(13, 17),  
+ratio: [.8, .4, .5], 
+checkerTile: 1, 
+checkerMode: false
+}); 
+});
+
+Callback.addCallback("GenerateChunk", function(chunkX, chunkZ){ 
+UniqueGen.generateOreInDimension(16, 0, mineworld, chunkX, chunkZ, { 
+veinCounts: 9, 
+veinChance: 90, 
+minY: 39, 
+maxY: 106,  
+size: randomInt(19, 26),  
+ratio: [.7, .3, .8],
+checkerTile: 1, 
+checkerMode: false
+}); 
+});
+
+Callback.addCallback("GenerateChunk", function(chunkX, chunkZ){ 
+UniqueGen.generateOreInDimension(21, 0, mineworld, chunkX, chunkZ, { 
+veinCounts: 5, 
+veinChance: 70, 
+minY: 3, 
+maxY: 46,  
+size: randomInt(6, 8),  
+ratio: .5, 
+checkerTile: 1, 
+checkerMode: false
+}); 
+});
+
+Callback.addCallback("GenerateChunk", function(chunkX, chunkZ){ 
+UniqueGen.generateOreInDimension(73, 0, mineworld, chunkX, chunkZ, { 
+veinCounts: 6, 
+veinChance: 80, 
+minY: 3, 
+maxY: 46,  
+size: randomInt(6, 8),  
+ratio: .5, 
+checkerTile: 1, 
+checkerMode: false
+}); 
+});
+
+Callback.addCallback("GenerateChunk", function(chunkX, chunkZ){ 
+UniqueGen.generateOreInDimension(56, 0, mineworld, chunkX, chunkZ, { 
+veinCounts: 4, 
+veinChance: 90, 
+minY: 3, 
+maxY: 19,  
+size: randomInt(5, 7),  
+ratio: .5, 
+checkerTile: 1, 
+checkerMode: false
+}); 
+});
+
+Callback.addCallback("GenerateChunk", function(chunkX, chunkZ){ 
+UniqueGen.generateOreInDimension(129, 0, mineworld, chunkX, chunkZ, { 
+veinCounts: 2, 
+veinChance: 50, 
+minY: 2, 
+maxY: 69,  
+size: randomInt(3, 6),  
+ratio: [.5, 0.1, 0.6],
+checkerTile: 1, 
+checkerMode: false
+}); 
+});
+
+Callback.addCallback("GenerateChunk", function(chunkX, chunkZ){ 
+UniqueGen.generateOreInDimension(BlockID.clayore, 0, mineworld, chunkX, chunkZ, { 
+veinCounts: 5, 
+veinChance: 85, 
+minY: 40, 
+maxY: 90,  
+size: randomInt(5, 8),  
+ratio: [.5, .2, .4],
+checkerTile: 1, 
+checkerMode: false
+}); 
+});
+
+Callback.addCallback("GenerateChunk", function(chunkX, chunkZ){ 
+UniqueGen.generateOreInDimension(BlockID.stickyore, 0, mineworld, chunkX, chunkZ, { 
+veinCounts: 6, 
+veinChance: 70, 
+minY: 30, 
+maxY: 87,  
+size: randomInt(4, 8),  
+ratio: [.5, .2, .4],
+checkerTile: 1, 
+checkerMode: false
+}); 
+});
+
+
+
+
+// file: dc.js
+
+var mdc = {
+    isEnabled: false,
+    container: new UI.Container(),
+    windowContainer: new UI.Container(),
+    dc: new UI.Window({
+        location: {
+            x: 1000,
+            y: 245,
+            width: 50,
+            height: 50
+        },
+        drawing:[
+            {type: "background", color: 0}
+        ],
+        elements:{
+            "dc":{type: "button", scale: 50, bitmap: "dc", clicker:{onClick:function(){
+                      }},
+					}
+				}
+			}),
+    open:function(){
+        if(!this.isEnabled){
+            this.container.openAs(this.dc);
+            this.isEnabled = true;
+        }
+    },
+    close:function(){
+        if(this.isEnabled){
+            this.container.close();
+            this.isEnabled = false;
+        }
+    }
+    };
+    
+
+mdc.dc.setAsGameOverlay(true);
+
+Callback.addCallback("NativeGuiChanged", function (screenName) {
+    if(screenName == "in_game_play_screen" && screenName != "hud_screen" && Player.getCarriedItem().id==ItemID.dimensionchanger) {
+        mdc.open();
+    }else if(mdc.isEnabled){
+        mdc.close();
+    }
+});
+
+
+var ch = 0;
+/*var pgd = Player.getDimension();*/
+var setRequiresIconOverride = ModAPI.requireGlobal("Item.setRequiresIconOverride");
+var tpm = mineworld.getTeleporter();
+var tpb = mineworld.getTeleporterBack();
+
+Item.registerIconOverrideFunction(ItemID.dimensionchanger, function(item, texture){
+return {name: "dimensionchanger", meta: ch}
+});
+setRequiresIconOverride(ItemID.dimensionchanger, true);
+
+Callback.addCallback("tick", function(){
+	let time = World.getThreadTime()%20;
+	if(time == 0 || time == 20){
+		let item = Player.getCarriedItem();
+		if(item.id == ItemID.dimensionchanger){
+			mdc.open();
+			if(mdc.container.isElementTouched("dc")){
+				if(ch < 4){
+					ch++;
+					}else{
+						if(Player.getDimension()==mineworld){
+							tpb.enter();
+						}else{
+						if(Player.getDimension()==0){
+							tpm.enter();
+						}}
+						ch = 0;
+						}
+						}
+						}else{
+							mdc.close();
+          
+	   }
+	}
+});
+
+
+
+
+// file: translation.js
+
+Translation.addTranslation("Mining Multitool", {ru:"Многорезцовый Шахтёр", ua:"Багаторізцевий Шахтар"});
+Translation.addTranslation("Portal Frame", {ru:"Рамка Портала", ua:"Рамка Порталу"});
+Translation.addTranslation("Clay Ore", {ru:"Закаменевшая Глина", ua:"Закам'яніла Глина"});
+Translation.addTranslation("Sticky Ore", {ru:"Закаменевшая Слизь", ua:"Закам'янілий слиз"});
+Translation.addTranslation("DimensionChanger", {ru:"Переключатель Измерений", ua:"Перемикач Вимірів"});
+
+
+
+

@@ -1,0 +1,25 @@
+v1.1-ru:
+- Немного изменен API мода.
+- Добавлена возможность включить/выключить отображение блоков в творческом режиме в конфиге мода.
+- Добавлены новые блоки: Сжатая глина х9, Сжатый кремень х3, Сжатый блок слизи х3.
+- Подправлены названия некоторых блоков.
+- Добавлен конфиг времени ломания блоков.
+- Теперь все блоки имеют материал "stone".
+- Исправлено время ломания блоков. Время увеличивается пропорционально более сжатому блоку.
+
+v1.1-en:
+- Minor changes in API modifications.
+- Added ability to enable/disable show blocks in Creative Mode in config of mod.
+- Added new blocks: Compressed Clay x9, Compressed Flint x3, Compressed Slime x3.
+- Changed names of some blocks.
+- Added config time of destroy blocks.
+- All blocks now have a material "stone".
+- Fixed time of destroy blocks. Time of destroy increase proportionally a more compressed block.
+
+
+v1.2-ru:
+- Исправлен перевод сжатой глины (ранее была сжатая шерсть >3).
+- Добавлена возможность интегрировать мод с другими.
+
+v1.2-en:
+- Added possible integrate mod with other mods.

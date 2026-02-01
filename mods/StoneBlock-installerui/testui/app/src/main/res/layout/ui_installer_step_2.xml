@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:background="#FF1B1B1B"
+	android:layout_margin="20dp"
+	android:padding="10dp">
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Выберите вариант сборки (2/3)"
+		android:textSize="19sp"
+		android:paddingLeft="15dp"
+		android:paddingTop="10dp"
+		android:paddingBottom="15dp"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<RadioGroup
+			android:orientation="vertical"
+			android:layout_width="60dp"
+			android:layout_height="match_parent"
+			android:id="@+id/uiinstaller11111LinearLayout1"
+			android:layout_marginRight="10dp">
+
+			<RadioButton
+				android:button="@drawable/image_1"
+				android:layout_width="60dp"
+				android:layout_height="60dp"/>
+
+			<RadioButton
+				android:button="@drawable/image_2"
+				android:layout_width="60dp"
+				android:layout_height="60dp"/>
+
+			<RadioButton
+				android:button="@drawable/image_3"
+				android:layout_width="60dp"
+				android:layout_height="60dp"/>
+
+			<RadioButton
+				android:button="@drawable/image_4"
+				android:layout_width="60dp"
+				android:layout_height="60dp"/>
+
+		</RadioGroup>
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toRightOf="@id/uiinstaller11111LinearLayout1"
+			android:gravity="right">
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="1.0">
+
+				<ListView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+
+			</LinearLayout>
+
+			<Button
+				android:layout_width="wrap_content"
+				style="?android:attr/buttonBarButtonStyle"
+				android:layout_height="wrap_content"
+				android:text="Выбрать"
+				android:enabled="false"
+				android:layout_weight="0.1"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>
+

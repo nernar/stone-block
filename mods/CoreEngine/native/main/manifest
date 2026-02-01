@@ -1,0 +1,13 @@
+{
+    "shared": {
+        "name": "core_engine",
+		"include": [
+
+		]
+    },
+
+    "depends": [
+    	"innercore",
+    	"nativejs"
+	]
+}

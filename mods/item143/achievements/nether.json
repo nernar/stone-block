@@ -1,0 +1,102 @@
+{
+  "groups": [
+    {
+      "uid": "nether",
+      "name": "achievements.nether",
+      "background": "achievements_api.bgs.nether",
+      "icon": 87
+    }
+  ],
+  "achievements": {
+    "nether": [
+      {
+        "uid": "root",
+        "name": "achievements.nether.root.title",
+        "description": "achievements.nether.root.description",
+        "parent": "story:enter_the_nether",
+        "column": 1,
+        "row": 2,
+        "hidden": true,
+        "icon": 87
+      },
+      {
+        "uid": "find_fortress",
+        "name": "achievements.nether.find_fortress.title",
+        "description": "achievements.nether.find_fortress.description",
+        "parent": "root",
+        "column": 2,
+        "row": 1,
+        "hidden": true,
+        "icon": 112
+      },
+      {
+        "uid": "return_to_sender",
+        "name": "achievements.nether.return_to_sender.title",
+        "description": "achievements.nether.return_to_sender.description",
+        "parent": "root",
+        "type": "challenge",
+        "column": 2,
+        "row": 2,
+        "hidden": true,
+        "icon": 385
+      },
+      {
+        "uid": "obtain_blaze_rod",
+        "name": "achievements.nether.obtain_blaze_rod.title",
+        "description": "achievements.nether.obtain_blaze_rod.description",
+        "parent": "find_fortress",
+        "column": 3,
+        "row": 1,
+        "hidden": true,
+        "icon": 369
+      },
+      {
+        "uid": "kill_wither_skeleton",
+        "name": "achievements.nether.kill_wither_skeleton.title",
+        "description": "achievements.nether.kill_wither_skeleton.description",
+        "parent": "find_fortress",
+        "column": 3,
+        "row": 0,
+        "hidden": true,
+        "icon": {
+          "id": 397,
+          "data": 1
+        }
+      },
+      {
+        "uid": "summon_wither",
+        "name": "achievements.nether.summon_wither.title",
+        "description": "achievements.nether.summon_wither.description",
+        "parent": "kill_wither_skeleton",
+        "column": 4,
+        "row": 0,
+        "hidden": true,
+        "icon": {
+          "id": 399,
+          "data": 1
+        }
+      },
+      {
+        "uid": "brew_potion",
+        "name": "achievements.nether.brew_potion.title",
+        "description": "achievements.nether.brew_potion.description",
+        "parent": "obtain_blaze_rod",
+        "column": 4,
+        "row": 1,
+        "hidden": true,
+        "icon": 373
+      },
+      {
+        "uid": "uneasy_alliance",
+        "name": "achievements.nether.uneasy_alliance.title",
+        "description": "achievements.nether.uneasy_alliance.description",
+        "parent": "return_to_sender",
+        "column": 3,
+        "row": 2,
+        "hidden": true,
+        "type": "challenge",
+        "icon": 370
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+java.lang.IllegalAccessException: Class java.lang.Class cannot access private static field com.zhekasmirnov.innercore.api.mod.coreengine.CEHandler com.zhekasmirnov.innercore.api.mod.coreengine.CoreEngineAPI.ceHandlerSingleton of class java.lang.Class
+Dev Editor from main.js at line 206
+Dev Editor from Retention.js at line 52
+Dev Editor from main.js at line 200
+Dev Editor from main.js at line 215
+
+April 8, 2022 8:15:34 PM GMT+03:00
+April 8, 2022 8:15:36 PM GMT+03:00
+Milliseconds estimated after launch: 1741

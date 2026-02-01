@@ -1,0 +1,7 @@
+{
+  "enabled":false,
+  "optimization":{
+    "radius":40,
+    "width":4
+  }
+}

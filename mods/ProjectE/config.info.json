@@ -1,0 +1,223 @@
+{
+    "description": {
+        "en": "Here you can set the configuration file for ProjectE",
+        "ru": "Here you can set the configuration file for ProjectE",
+        "zh": "你可以在这里设置等价交换的配置文件"
+    },
+
+    "properties": {
+        "困难模式": {
+            "name": {
+                "en": "Difficult Mode",
+                "ru": "Difficult Mode",
+                "zh": "困难模式"
+            },
+            "description": {
+                "en": "If enabled, this mod will become more difficult",
+                "ru": "If enabled, this mod will become more difficult",
+                "zh": "如果开启，该模组会变得更加困难"
+            }
+        },
+
+        "自动计算EMC": {
+            "name": {
+                "en": "Automatically calculate EMC",
+                "ru": "Automatically calculate EMC",
+                "zh": "自动计算EMC"
+            },
+            "description": {
+                "en": "If enabled, EMC not defined in other mods can be automatically calculated",
+                "ru": "If enabled, EMC not defined in other mods can be automatically calculated",
+                "zh": "如果开启，其它模组中未定义的EMC可以自动计算"
+            }
+        },
+
+        "无存储上限": {
+            "name": {
+                "en": "No storage limit",
+                "ru": "No storage limit",
+                "zh": "无存储上限"
+            },
+            "description": {
+                "en": "Make the block that collects EMC has no upper storage limit",
+                "ru": "Make the block that collects EMC has no upper storage limit",
+                "zh": "使收集EMC的方块没有储存上限"
+            }
+        },
+
+        "物品方块": {
+            "name": {
+                "en": "Items and blocks",
+                "ru": "Items and blocks",
+                "zh": "物品和方块"
+            },
+            "description": {
+                "en": "Here you can choose to use some items and blocks",
+                "ru": "Here you can choose to use some items and blocks",
+                "zh": "你可以在这里选择使用一些物品和方块"
+            },
+            "collapsible": true
+        },
+
+        "时间洪流怀表": {
+            "name": {
+                "en": "Watch of flowing time",
+                "ru": "Watch of flowing time",
+                "zh": "时间洪流怀表"
+            },
+            "collapsible": true
+        },
+
+        "显示EMC": {
+            "name": {
+                "en": "The settings for showing EMC",
+                "ru": "The settings for showing EMC",
+                "zh": "显示EMC的设置"
+            },
+            "collapsible": true
+        },
+
+        "强制屏幕长宽比": {
+            "name": {
+                "en": "Force changes to the screen aspect ratio obtained by this mod to change the UI",
+                "ru": "Force changes to the screen aspect ratio obtained by this mod to change the UI",
+                "zh": "强制修改本模组获取的屏幕长宽比以改变UI"
+            },
+            "collapsible": true
+        },
+
+
+        "物品方块.转换桌": {
+            "name": {
+                "en": "Transmutation Table",
+                "ru": "Transmutation Table",
+                "zh": "转换桌"
+            }
+        },
+
+        "物品方块.能量收集器": {
+            "name": {
+                "en": "Energy Collector",
+                "ru": "Energy Collector",
+                "zh": "能量收集器"
+            }
+        },
+
+        "物品方块.炼金术之袋": {
+            "name": {
+                "en": "Alchemy bag",
+                "ru": "Alchemy bag",
+                "zh": "炼金术之袋"
+            }
+        },
+
+        "物品方块.暗物质台座": {
+            "name": {
+                "en": "Matter pedestal",
+                "ru": "Matter pedestal",
+                "zh": "暗物质台座"
+            }
+        },
+
+        "物品方块.催化剂(炸弹)": {
+            "name": {
+                "en": "Nova catalyst and Astral catalys",
+                "ru": "Nova catalyst and Astral catalys",
+                "zh": "爆破新星 和 灾难新星"
+            }
+        },
+
+        "时间洪流怀表.刷新时间": {
+            "name": {
+                "en": "Refresh Time",
+                "ru": "Refresh Time",
+                "zh": "刷新时间"
+            }
+        },
+
+        "时间洪流怀表.X范围": {
+            "name": {
+                "en": "X range",
+                "ru": "X range",
+                "zh": "X范围"
+            }
+        },
+
+        "时间洪流怀表.Y范围": {
+            "name": {
+                "en": "Y range",
+                "ru": "Y range",
+                "zh": "Y范围"
+            }
+        },
+
+        "时间洪流怀表.Z范围": {
+            "name": {
+                "en": "Z range",
+                "ru": "Z range",
+                "zh": "Z范围"
+            }
+        },
+
+        "显示EMC.是否显示": {
+            "name": {
+                "en": "On / Off",
+                "ru": "On / Off",
+                "zh": "开启/关闭"
+            }
+        },
+
+        "显示EMC.size": {
+            "name": {
+                "en": "size",
+                "ru": "size",
+                "zh": "尺寸"
+            },
+            "displayIf": "显示EMC.是否显示"
+        },
+
+        "显示EMC.X": {
+            "name": {
+                "en": "X position",
+                "ru": "X position",
+                "zh": "X位置"
+            },
+            "displayIf": "显示EMC.是否显示"
+        },
+
+        "显示EMC.Y": {
+            "name": {
+                "en": "Y position",
+                "ru": "Y position",
+                "zh": "Y位置"
+            },
+            "displayIf": "显示EMC.是否显示"
+        },
+
+        "强制屏幕长宽比.开/关": {
+            "name": {
+                "en": "On / Off",
+                "ru": "On / Off",
+                "zh": "开启/关闭"
+            }
+        },
+
+        "强制屏幕长宽比.长": {
+            "name": {
+                "en": "Length",
+                "ru": "Length",
+                "zh": "长"
+            },
+            "displayIf": "强制屏幕长宽比.开/关"
+        },
+
+        "强制屏幕长宽比.宽": {
+            "name": {
+                "en": "Width",
+                "ru": "Width",
+                "zh": "宽"
+            },
+            "displayIf": "强制屏幕长宽比.开/关"
+        }
+    }
+}

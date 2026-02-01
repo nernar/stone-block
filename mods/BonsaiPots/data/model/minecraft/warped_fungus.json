@@ -1,0 +1,67 @@
+{
+  "sapling": {
+    "id": "block:warped_fungus",
+    "isVanilla": true
+  },
+  "ref": {
+    "a": {
+      "id": "block:warped_stem",
+      "isVanilla": true
+    },
+    "b": {
+      "id": "block:warped_wart_block",
+      "isVanilla": true
+    },
+    "c": {
+      "id": "block:shroomlight",
+      "isVanilla": true
+    }
+  },
+  "shape": [
+    [
+      "     ",
+      "bbbbb",
+      "     ",
+      " bbb ",
+      "bbbb ",
+      " bbb ",
+      " bb  "
+    ],
+    [
+      "  bb ",
+      "bcb b",
+      " bbb ",
+      "b   b",
+      "    b",
+      "    b",
+      "     "
+    ],
+    [
+      " bbb ",
+      "bbacb",
+      " bab ",
+      "bba b",
+      "  a b",
+      "  a b",
+      "  a  "
+    ],
+    [
+      " bbb ",
+      "bb  b",
+      " bb  ",
+      "b   b",
+      "     ",
+      "     ",
+      "     "
+    ],
+    [
+      "     ",
+      "bbbbb",
+      "     ",
+      "bbbbb",
+      "  bbb",
+      "  bbb",
+      "  b b"
+    ]
+  ]
+}

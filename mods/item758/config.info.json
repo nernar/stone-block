@@ -1,0 +1,16 @@
+{
+    "properties": {
+        "enabled": {
+            "name": {"en": "Enable mod", "ru": "Включить мод"},
+            "index": 0
+        },
+        "backupTime": {
+            "name": {"en": "Interval", "ru": "Интервал"},
+            "description": {"en": "The time interval (in seconds) that must pass to create a backup", "ru": "Промежуток времени (в секундах), который должен пройти для создания бекапа"},
+            "index": 1,
+            "type": "SeekBar",
+            "min": 30,
+            "max": 3600
+        }
+   }
+}

@@ -1,0 +1,36 @@
+{
+    "properties": {
+        "enabled": {
+            "name": {"en": "Enable mod", "ru": "Включить мод"},
+            "index": 0
+        },
+
+        "optimization": {
+            "name": {"en": "Optimization", "ru": "Оптимизация"},
+            "collapsible": true,
+            "index": 1
+        },
+        
+        "optimization.radius": {
+            "name": {"en": "Radius", "ru": "Радиус"},
+            "description": {"en": "The larger the radius, the farther from the player the mobs can glow", "ru": "Чем больше радиус, тем дальше от игрока могут светиться мобы."},
+            "index": 2,
+            "type": "SeekBar",
+            "min": 10,
+            "max": 200
+        },
+        "optimization.updateTime": {
+            "name": {"en": "Light refresh rate", "ru": "Частота обновления света"},
+            "description": {"en": "The lower the refresh rate, the more often the light is refreshed. (The higher the frequency, the less lags)", "ru": "Чем ниже частота обновления, тем чаще обновляется свет. (Чем выше частота, тем меньше лагов)"},
+            "index": 3,
+            "type": "SeekBar",
+            "min": 1,
+            "max": 10
+        },
+        "optimization.xpOrbIsGlowing": {
+            "name": {"en": "Light from the xp orb", "ru": "Свет от сфер опыта"},
+            "description": {"en": "It is recommended to turn it off, with a large amount of xp orb", "ru": "Рекомендуется выключить, при большом количестве сфер опыта в мире"},
+            "index": 4
+        },
+   }
+}

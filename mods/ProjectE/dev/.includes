@@ -1,0 +1,44 @@
+header.js
+ic_func.js
+translation.js
+api.js
+emc.js
+integration/RecipeViewer.js
+rings/helper.js
+custom.js
+philosophers stone.js
+interdiction_torch.js
+items/alchemical.js
+items/bags.js
+items/klein stars.js
+items/hammers.js
+items/matter.js
+items/gem.js
+items/mercurial_eye.js
+items/destiny.js
+rings/iron band.js
+rings/black hole.js
+rings/talisman of repair.js
+rings/pedestal.js
+rings/time watch.js
+rings/body stone.js
+rings/soul stone.js
+rings/harvest ring.js
+rings/zero.js
+rings/swift.js
+rings/amulets.js
+tablet/learner.js
+tablet/main.js
+collector/tier 1.js
+collector/tier 2.js
+collector/tier 3.js
+relay/tier 1.js
+relay/tier 2.js
+relay/tier 3.js
+condenser/chest.js
+condenser/tier 1.js
+condenser/tier 2.js
+furnace/tier 1.js
+furnace/tier 2.js
+explosive.js
+other.js

@@ -1,0 +1,47 @@
+本模组添加方法：
+①文件添加：
+  中文: 
+  如果您想添加CutomEMC-只需将下面的示例写入到custom.json :
+   {
+     id: ItemID.ingotSilver,
+     data: 0,
+     emc: 512
+   },
+  备注：
+   id：物品的ID（可以用任何你需要的ID替换）
+   data：物品的特殊值
+   emc：EMC值
+
+  Eng: 
+  if you want to add cutom EMC - just write that example bellow in to custom.json :
+   {
+     id: ItemID.ingotSilver,
+     data: 0,
+     emc: 512
+   },
+   id - ID of item (you can replace it with any other ID)
+   data - durability of item
+   emc - EMC value
+ 
+  Ru:
+  если вы хотите установить стоимость предмету собственноручно, просто скопируйте пример ниже:
+   {
+     id: ItemID.ingotSilver,
+     data: 0,
+     emc: 512
+   },
+   id - ID предмета (в нашем случае это серебряный слиток, вы можете заменить его на любой другой)
+   data - прочность
+   emc - EMC стоимость
+②指令添加：
+  输入/projecte set <id> <data> <emc>即可。
+    <id>：物品的ID(可以用任何你需要的ID替换)(可打开显示EMC手持物品查看)
+    <data>：物品的特殊值(可打开显示EMC手持物品查看)
+    <emc>：EMC值
+
+
+
+其它模组添加方法：
+ModAPI.addAPICallback("EquivalentAPI", function(api){
+api.System.setValue(id, data, emc)
+})

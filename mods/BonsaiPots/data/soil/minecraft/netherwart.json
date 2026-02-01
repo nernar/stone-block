@@ -1,0 +1,12 @@
+{
+  "soil": {
+    "id": "block:nether_wart_block",
+    "isVanilla": true
+  },
+  "block": {
+    "id": "block:nether_wart_block",
+    "isVanilla": true
+  },
+  "tickModifier": 0.9,
+  "compatibleSoilTags": ["netherrack"]
+}

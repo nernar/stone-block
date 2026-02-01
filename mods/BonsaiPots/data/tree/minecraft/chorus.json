@@ -1,0 +1,27 @@
+{
+  "sapling": {
+    "id": "item:chorus_fruit",
+    "isVanilla": true
+  },
+  "drops": [
+    {
+      "id": "item:chorus_fruit",
+      "isVanilla": true,
+      "rolls": 1,
+      "chance": 0.2
+    },
+    {
+      "id": "block:chorus_flower",
+      "isVanilla": true,
+      "rolls": 1,
+      "chance": 0.1
+    },
+    {
+      "id": "item:ender_pearl",
+      "isVanilla": true,
+      "rolls": 1,
+      "chance": 0.01
+    }
+  ],
+  "compatibleSoilTags": ["end_stone"]
+}

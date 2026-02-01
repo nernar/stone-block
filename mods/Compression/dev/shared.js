@@ -1,0 +1,1 @@
+ModAPI.registerAPI("CompressAPI", Compress);

@@ -1,0 +1,12 @@
+{
+  "soil": {
+    "id": "block:netherrack",
+    "isVanilla": true
+  },
+  "block": {
+    "id": "block:netherrack",
+    "isVanilla": true
+  },
+  "tickModifier": 1.0,
+  "compatibleSoilTags": ["netherrack"]
+}

@@ -1,0 +1,34 @@
+{
+  "sapling": {
+    "id": "block:sapling",
+    "isVanilla": true
+  },
+  "drops": [
+    {
+      "id": "item:stick",
+      "isVanilla": true,
+      "rolls": 3,
+      "chance": 0.2
+    },
+    {
+      "id": "block:log",
+      "isVanilla": true,
+      "rolls": 1,
+      "chance": 0.75
+    },
+    {
+      "id": "block:leaves",
+      "isVanilla": true,
+      "rolls": 2,
+      "chance": 0.2,
+      "requiresSilkTouch": true
+    },
+    {
+      "id": "block:sapling",
+      "isVanilla": true,
+      "rolls": 1,
+      "chance": 0.05
+    }
+  ],
+  "compatibleSoilTags": ["dirt", "grass"]
+}

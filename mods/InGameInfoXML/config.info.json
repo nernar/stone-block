@@ -1,0 +1,187 @@
+{
+    "properties": {
+      
+      
+        "enabled": {
+            "name": {
+                "en": "Enable modification"
+            }
+        },
+       "sizeElements":{
+           "name":{
+               "en": "Size"
+           },
+           "description":{
+             "en": "Size of window elements"
+           }
+       },
+        "powerButton":{
+           "name":{
+               "en": "Power button"
+           },
+           "description":{
+             "en": "Button that close or open all confirmed windos when you click"
+           }
+        },
+        
+        "WorldInfo":{
+            "name":{
+               "en": "World Information"
+           },
+           "collapsible":false
+        },
+        "WorldInfo.enabled":{
+            "name":{
+               "en": "Enabled window"
+           },
+           "description":{
+             "en": "Window with parametres that showinhg information about world"
+           }
+        },
+        
+        "Light":{
+            "name":{
+               "en": "Light parametr"
+           }
+        },
+        "Light.enabled":{
+            "name":{
+               "en": "Enabled parametr"
+           }
+        },
+        "Light.position":{
+            "name":{
+               "en": "Position of parametr"
+           }
+        },
+        
+        "Biome":{
+            "name":{
+               "en": "Biome parametr"
+           }
+        },
+        "Biome.enabled":{
+            "name":{
+               "en": "Enabled parametr"
+           }
+        },
+        "Biome.position":{
+            "name":{
+               "en": "Position of parametr"
+           }
+        },
+        
+        "Fps":{
+            "name":{
+               "en": "FPS parametr"
+           }
+        },
+        "Fps.enabled":{
+            "name":{
+               "en": "Enabled parametr"
+           }
+        },
+        "Fps.position":{
+            "name":{
+               "en": "Position of parametr"
+           }
+        },
+        
+        "Time":{
+            "name":{
+               "en": "Time parametr"
+           }
+        },
+        "Time.enabled":{
+            "name":{
+               "en": "Enabled parametr"
+           }
+        },
+        "Time.position":{
+            "name":{
+               "en": "Position of parametr"
+           }
+        },
+        
+        "Experience":{
+            "name":{
+               "en": "Expirience parametr"
+           }
+        },
+        "Experience.enabled":{
+            "name":{
+               "en": "Enabled parametr"
+           }
+        },
+        "Experience.position":{
+            "name":{
+               "en": "Position of parametr"
+           }
+        },
+        
+        "Coordinates":{
+            "name":{
+               "en": "Coordinates parametr"
+           }
+        },
+        "Coordinates.enabled":{
+            "name":{
+               "en": "Enabled parametr"
+           }
+        },
+        "Coordinates.position":{
+            "name":{
+               "en": "Position of parametr"
+           },
+            "description":{
+             "en": "The coordinate parameter occupies 3 subordinate positions (each axis occupies one position)"
+           }
+        },
+        
+        "PlayerHealthInfo":{
+          "name":{
+            "en": "Player health information"
+          },
+          collapsible:false
+        },
+        "PlayerHealthInfo.enabled":{
+          "name":{
+            "en": "Enabled window"
+          },
+          "description":{
+            "en": "Window that showin information about current player health"
+          }
+        },
+        
+        "ArmorInfo":{
+          "name":{
+            "en": "Armor information"
+          },
+          "collapsible":false
+        },
+        "ArmorInfo.enabled":{
+          "name":{
+               "en": "Enabled window"
+           },
+           "description":{
+             "en": "Window that showing information about equippied armor"
+           }
+        },
+        
+        "ItemCarriedInfo":{
+          "name":{
+               "en": "Item carried information"
+           },
+        "collapsible":false
+        },
+        "ItemCarriedInfo.enabled":{
+          "name":{
+            "en": "Enabled window"
+          },
+          "description":{
+             "en": "Window that showing information about carried item in hand (name/damage)"
+           }
+        }
+        
+    }
+}

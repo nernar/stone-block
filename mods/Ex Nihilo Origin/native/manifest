@@ -1,0 +1,11 @@
+{
+    "shared": {
+        "name": "example_lib",
+		"include": []
+    },
+
+    "depends": [
+    	"innercore",
+    	"nativejs"
+	]
+}

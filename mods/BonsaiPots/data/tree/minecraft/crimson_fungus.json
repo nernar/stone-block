@@ -1,0 +1,36 @@
+{
+  "sapling": {
+    "id": "block:crimson_fungus",
+    "isVanilla": true
+  },
+  "drops": [
+    {
+      "rolls": 3,
+      "chance": 0.2,
+      "id": "block:crimson_fungus",
+      "isVanilla": true
+    },
+    {
+      "rolls": 1,
+      "chance": 0.75,
+      "id": "block:crimson_stem",
+      "isVanilla": true
+    },
+    {
+      "rolls": 2,
+      "chance": 0.2,
+      "id": "block:nether_wart_block",
+      "isVanilla": true
+    },
+    {
+      "rolls": 1,
+      "chance": 0.05,
+      "id": "block:shroomlight",
+      "isVanilla": true
+    }
+  ],
+  "compatibleSoilTags": [
+    "crimson"
+  ],
+  "growTime": 400
+}

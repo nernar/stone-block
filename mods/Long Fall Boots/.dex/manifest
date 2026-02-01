@@ -1,0 +1,8 @@
+{
+	"boot-classes": [
+		"io.nernar.innercore.longfallboots.LongFallBoots"
+	],
+	"source-dirs": [],
+	"options": [],
+	"library-dirs": []
+}

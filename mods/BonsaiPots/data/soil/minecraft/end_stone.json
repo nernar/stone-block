@@ -1,0 +1,12 @@
+{
+  "soil": {
+    "id": "block:end_stone",
+    "isVanilla": true
+  },
+  "block": {
+    "id": "block:end_stone",
+    "isVanilla": true
+  },
+  "tickModifier": 1.0,
+  "compatibleSoilTags": ["end_stone"]
+}

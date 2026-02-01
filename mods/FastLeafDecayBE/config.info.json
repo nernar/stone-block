@@ -1,0 +1,33 @@
+{
+    "description": "This is a Fast Leaf Decay mod configuration file",
+    "properties": {
+        "enabled": {
+            "name": {
+                "en": "Enable mod",
+                "ru": "Включить мод"
+            }
+        },
+        "decaySpeed": {
+            "name": {
+                "en": "Decay speed",
+                "ru": "Скорость отмирания"
+            },
+            "description": {
+                "en": "The Speed at which Leaves Decay, Higher -> Slower",
+                "ru": "Скорость, с которой листва будет отмирать, выше -> медленнее"
+            },
+            "displayIf": "enabled"
+        },
+        "decayFuzz": {
+            "name": {
+                "en": "Decay fuzz",
+                "ru": "Случайность отмирания"
+            },
+            "description": {
+                "en": "How random will the leaf decay be? Higher -> More Random",
+                "ru": "Насколько рандомным будет отмирание листвы? Выше -> больше рандома"
+            },
+            "displayIf": "enabled"
+        }
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "name": "Fast Leaf Decay",
+    "author": "vsdum",
+    "version": "1.0",
+    "description": "A simple mod that speeds up leaf decay after you cut down the wood in a tree.",
+    "clientside": false
+}

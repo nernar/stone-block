@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:background="#FF1B1B1B"
+	android:layout_margin="20dp"
+	android:padding="10dp">
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Подтверждение установки (3/3)"
+		android:textSize="19sp"
+		android:paddingLeft="15dp"
+		android:paddingTop="10dp"
+		android:paddingBottom="15dp"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:gravity="right">
+
+		<ScrollView
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_weight="1.0">
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Сборка будет установлена в отдельную папку к остальным модпакам. Ваши текущие миры, модификации и настройки не пострадают. Сверьтесь со списком модов еще раз."/>
+
+				<ExpandableListView
+					android:layout_width="wrap_content"
+					android:layout_height="match_parent"/>
+
+			</LinearLayout>
+
+		</ScrollView>
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Установка"
+			android:enabled="false"
+			android:layout_weight="0.1"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+

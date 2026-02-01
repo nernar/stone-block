@@ -1,0 +1,12 @@
+{
+  "soil": {
+    "id": "block:dirt",
+    "isVanilla": true
+  },
+  "block": {
+    "id": "block:dirt",
+    "isVanilla": true
+  },
+  "tickModifier": 1.1,
+  "compatibleSoilTags": ["dirt"]
+}

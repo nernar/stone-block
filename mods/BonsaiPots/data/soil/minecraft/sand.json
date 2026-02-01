@@ -1,0 +1,12 @@
+{
+  "soil": {
+    "id": "block:sand",
+    "isVanilla": true
+  },
+  "block": {
+    "id": "block:sand",
+    "isVanilla": true
+  },
+  "tickModifier": 1.0,
+  "compatibleSoilTags": ["sand"]
+}

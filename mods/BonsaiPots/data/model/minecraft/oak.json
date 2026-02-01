@@ -1,0 +1,58 @@
+{
+  "sapling": {
+    "id": "block:sapling",
+    "isVanilla": true
+  },
+  "ref": {
+    "a": {
+      "id": "block:log",
+      "isVanilla": true
+    },
+    "b": {
+      "id": "block:leaves",
+      "isVanilla": true
+    }
+  },
+  "shape": [
+    [
+      "     ",
+      "     ",
+      "bbbb ",
+      " bbb ",
+      "     ",
+      "     "
+    ],
+    [
+      "  b  ",
+      "  bb ",
+      "bbbbb",
+      "bbbbb",
+      "     ",
+      "     "
+    ],
+    [
+      " bbb ",
+      " bab ",
+      "bbabb",
+      "bbabb",
+      "  a  ",
+      "  a  "
+    ],
+    [
+      "  b  ",
+      " bbb ",
+      "bbbbb",
+      "bbbbb",
+      "     ",
+      "     "
+    ],
+    [
+      "     ",
+      "     ",
+      "bbbbb",
+      " bbbb",
+      "     ",
+      "     "
+    ]
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "sapling": {
+  	"id": "block:sapling",
+  	"data": 5,
+  	"isVanilla": true
+  },
+  "ref": {
+    "a": {
+      "id": "block:log2",
+      "data": 1,
+      "isVanilla": true
+    },
+    "b": {
+      "id": "block:leaves2",
+      "data": 1,
+      "isVanilla": true
+    }
+  },
+  "shape": [
+    [
+      "        ",
+      "        ",
+      " bbbbb  ",
+      " bbbbbb ",
+      "        ",
+      "        ",
+      "        ",
+      "        ",
+      "        ",
+      "        ",
+      "        "
+    ],
+    [
+      "        ",
+      "   bb   ",
+      " bbbbbb ",
+      "bbbbbbbb",
+      "        ",
+      "        ",
+      "        ",
+      "        ",
+      "        ",
+      "        ",
+      "        "
+    ],
+    [
+      "        ",
+      "  bbbb  ",
+      "bbbbbbbb",
+      "bbabbabb",
+      "  a  a  ",
+      "  a  a  ",
+      "     a  ",
+      "        ",
+      "        ",
+      "        ",
+      "        "
+    ],
+    [
+      "   bb   ",
+      " bbbbbb ",
+      "bbbaabbb",
+      "bbbaaabb",
+      "   aaa  ",
+      "   aaa  ",
+      "   aa   ",
+      "   aa   ",
+      "   aa   ",
+      "   aa   ",
+      "   aa   "
+    ],
+    [
+      "   bb   ",
+      " bbbbbb ",
+      "bbbaabbb",
+      "bbaaabbb",
+      "  aaa   ",
+      "  aaa   ",
+      "  aaa   ",
+      "   aa   ",
+      "   aa   ",
+      "   aa   ",
+      "   aa   "
+    ],
+    [
+      "        ",
+      "  bbbb  ",
+      "bbbbbbbb",
+      "bbaababb",
+      "  aa a  ",
+      "  aa    ",
+      "  a     ",
+      "        ",
+      "        ",
+      "        ",
+      "        "
+    ],
+    [
+      "        ",
+      "   bb   ",
+      "bbbbbbbb",
+      "bbbbbbbb",
+      "        ",
+      "        ",
+      "        ",
+      "        ",
+      "        ",
+      "        ",
+      "        "
+    ],
+    [
+      "        ",
+      "        ",
+      " bbbbb  ",
+      " bbbbbb ",
+      "        ",
+      "        ",
+      "        ",
+      "        ",
+      "        ",
+      "        ",
+      "        "
+    ]
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "sapling": {
+    "id": "block:crimson_fungus",
+    "isVanilla": true
+  },
+  "ref": {
+    "a": {
+      "id": "block:crimson_stem",
+      "isVanilla": true
+    },
+    "b": {
+      "id": "block:nether_wart_block",
+      "isVanilla": true
+    },
+    "e": {
+      "id": "block:shroomlight",
+      "isVanilla": true
+    }
+  },
+  "shape": [
+    [
+      "     ",
+      "bbbbb",
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ],
+    [
+      " bb  ",
+      "beebb",
+      "bbb b",
+      "b   b",
+      "    b",
+      "    b",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ],
+    [
+      " bbb ",
+      "b abb",
+      " bab ",
+      "b a b",
+      "b a b",
+      "b a b",
+      "  a  ",
+      "  a  ",
+      "  a  ",
+      "  a  "
+    ],
+    [
+      " bbb ",
+      "beb b",
+      " bbb ",
+      "b    ",
+      "b    ",
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ],
+    [
+      "     ",
+      "bbbb ",
+      "     ",
+      "  b  ",
+      "  b  ",
+      "  b  ",
+      "  b  ",
+      "  b  ",
+      "     ",
+      "     "
+    ]
+  ]
+}

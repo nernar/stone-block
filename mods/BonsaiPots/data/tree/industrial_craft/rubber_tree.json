@@ -1,0 +1,41 @@
+{
+  "sapling": {
+    "id": "block:rubberTreeSapling",
+    "isVanilla": false
+  },
+  "drops": [
+    {
+      "id": "item:stick",
+      "isVanilla": true,
+      "rolls": 3,
+      "chance": 0.2
+    },
+    {
+      "id": "block:rubberTreeLog",
+      "isVanilla": false,
+      "rolls": 1,
+      "chance": 0.75
+    },
+    {
+      "id": "block:rubberTreeLeaves",
+      "data": 2,
+      "isVanilla": false,
+      "rolls": 2,
+      "chance": 0.2,
+      "requiresSilkTouch": true
+    },
+    {
+      "id": "block:rubberTreeSapling",
+      "isVanilla": false,
+      "rolls": 1,
+      "chance": 0.05
+    },
+    {
+      "id": "item:latex",
+      "isVanilla": false,
+      "rolls": 2,
+      "chance": 0.02
+    }
+  ],
+  "compatibleSoilTags": ["dirt", "grass"]
+}

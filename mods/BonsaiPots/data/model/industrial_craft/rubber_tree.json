@@ -1,0 +1,78 @@
+{
+  "sapling": {
+    "id": "block:rubberTreeSapling",
+    "isVanilla": false
+  },
+  "ref": {
+    "a": {
+      "id": "block:rubberTreeLeaves",
+      "isVanilla": false
+    },
+    "b": {
+      "id": "block:rubberTreeLog",
+      "isVanilla": false
+    }, 
+    "c": {
+      "id": "block:rubberTreeLogLatex",
+      "data": 4,
+      "isVanilla": false
+    }
+  },
+  "shape": [
+    [
+      "",
+      "",
+      "",
+      " aaa ",
+      " aaa ",
+      " aaa ",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "",
+      " aa  ",
+      "aaaaa",
+      "aaaaa",
+      "aaaaa",
+      "",
+      "",
+      ""
+    ],
+    [
+      "  a  ",
+      "  a  ",
+      " aaa ",
+      "aabaa",
+      "aabaa",
+      "aabaa",
+      "  b  ",
+      "  c  ",
+      "  b  "
+    ],
+    [
+      "",
+      "",
+      "  aa ",
+      "aaaaa",
+      "aaaaa",
+      "aaaaa",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "",
+      "",
+      " aaa ",
+      " aaa ",
+      " aaa ",
+      "",
+      "",
+      ""
+    ]
+  ]
+}

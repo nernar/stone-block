@@ -1,0 +1,8 @@
+{
+  "enabled":false,
+  "MaxStack":16,
+  "SpeedModifier":{
+    "roost":1,
+    "breeder":16
+  }
+}

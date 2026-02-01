@@ -1,0 +1,25 @@
+{
+    "properties": {
+      
+        "enabled": {
+            "name": {
+                "en": "Enable modification"
+            }
+        },
+       "LDradius":{
+           "name":{
+               "en": "Radius destruction"
+           },
+           "description":{
+             "en": "Determines radius of destroyed blocks when the player squatted"
+           },
+              "type": "SeekBar",
+              "min": 1,
+              "max": 5
+       },
+        "withoutBlock":{
+          "displayIf": false
+        }
+        
+    }
+}

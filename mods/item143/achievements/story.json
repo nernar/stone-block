@@ -1,0 +1,145 @@
+{
+  "groups": [
+    {
+      "uid": "story",
+      "name": "achievements.story",
+      "background": "achievements_api.bgs.stone",
+      "icon": 1
+    }
+  ],
+  "achievements": {
+    "story": [
+      {
+        "uid": "root",
+        "name": "achievements.story.root.title",
+        "description": "achievements.story.root.description",
+        "column": 1,
+        "row": 2,
+        "icon": 2
+      },
+      {
+        "uid": "mine_stone",
+        "name": "achievements.story.mine_stone.title",
+        "description": "achievements.story.mine_stone.description",
+        "parent": "root",
+        "hidden": true,
+        "column": 2,
+        "row": 2,
+        "icon": 270
+      },
+      {
+        "uid": "upgrade_tools",
+        "name": "achievements.story.upgrade_tools.title",
+        "description": "achievements.story.upgrade_tools.description",
+        "parent": "mine_stone",
+        "hidden": true,
+        "column": 3,
+        "row": 2,
+        "icon": 274
+      },
+      {
+        "uid": "obtain_armor",
+        "name": "achievements.story.obtain_armor.title",
+        "description": "achievements.story.obtain_armor.description",
+        "parent": "upgrade_tools",
+        "hidden": true,
+        "column": 4,
+        "row": 0,
+        "icon": 307
+      },
+      {
+        "uid": "lava_bucket",
+        "name": "achievements.story.lava_bucket.title",
+        "description": "achievements.story.lava_bucket.description",
+        "parent": "upgrade_tools",
+        "hidden": true,
+        "column": 4,
+        "row": 1,
+        "icon": {
+          "id": 325,
+          "data": 10
+        }
+      },
+      {
+        "uid": "iron_tools",
+        "name": "achievements.story.iron_tools.title",
+        "description": "achievements.story.iron_tools.description",
+        "parent": "upgrade_tools",
+        "hidden": true,
+        "column": 4,
+        "row": 2,
+        "icon": 257
+      },
+      {
+        "uid": "mine_diamond",
+        "name": "achievements.story.mine_diamond.title",
+        "description": "achievements.story.mine_diamond.description",
+        "parent": "iron_tools",
+        "hidden": true,
+        "column": 5,
+        "row": 2,
+        "icon": 264
+      },
+      {
+        "uid": "shiny_gear",
+        "name": "achievements.story.shiny_gear.title",
+        "description": "achievements.story.shiny_gear.description",
+        "parent": "mine_diamond",
+        "hidden": true,
+        "column": 6,
+        "row": 2,
+        "icon": 311
+      },
+      {
+        "uid": "form_obsidian",
+        "name": "achievements.story.form_obsidian.title",
+        "description": "achievements.story.form_obsidian.description",
+        "parent": "lava_bucket",
+        "hidden": true,
+        "column": 5,
+        "row": 1,
+        "icon": 49
+      },
+      {
+        "uid": "enter_the_nether",
+        "name": "achievements.story.enter_the_nether.title",
+        "description": "achievements.story.enter_the_nether.description",
+        "parent": "form_obsidian",
+        "hidden": true,
+        "column": 6,
+        "row": 1,
+        "icon": 259
+      },
+      {
+        "uid": "follow_ender_eye",
+        "name": "achievements.story.follow_ender_eye.title",
+        "description": "achievements.story.follow_ender_eye.description",
+        "parent": "enter_the_nether",
+        "hidden": true,
+        "column": 7,
+        "row": 1,
+        "icon": 381
+      },
+      {
+        "uid": "enter_the_end",
+        "name": "achievements.story.enter_the_end.title",
+        "description": "achievements.story.enter_the_end.description",
+        "parent": "follow_ender_eye",
+        "hidden": true,
+        "column": 8,
+        "row": 1,
+        "icon": 121
+      },
+      {
+        "uid": "kill_dragon",
+        "name": "achievements.story.kill_dragon.title",
+        "description": "achievements.story.kill_dragon.description",
+        "parent": "enter_the_end",
+        "column": 8,
+        "row": 2,
+        "hidden": true,
+        "icon": 276
+      }
+    ]
+  }
+}

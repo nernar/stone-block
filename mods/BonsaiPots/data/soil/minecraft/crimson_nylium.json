@@ -1,0 +1,14 @@
+{
+  "tickModifier": 1.0,
+  "soil": {
+    "id": "block:crimson_nylium",
+    "isVanilla": true
+  },
+  "compatibleSoilTags": [
+    "crimson"
+  ],
+  "block": {
+    "id": "block:crimson_nylium",
+    "isVanilla": true
+  }
+}

@@ -1,0 +1,10 @@
+{
+    "shared": {
+        "name": "fld",
+        "include": []
+    },
+    "depends": [
+    	"innercore",
+    	"nativejs"
+	]
+}

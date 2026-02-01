@@ -1,0 +1,7 @@
+{
+    "name": "Apple Skin",
+    "author": "dsdekhm",
+    "version": "1.0",
+    "description": "A mod that adds some useful information about food/hunger to the HUD",
+    "clientside": true
+}

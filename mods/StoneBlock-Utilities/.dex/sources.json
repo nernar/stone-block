@@ -1,0 +1,35 @@
+{
+  "main.js":{
+    "links":[
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "class_name":"main.js"
+  },
+  "launcher.js":{
+    "links":[
+      "5"
+    ],
+    "class_name":"launcher.js"
+  },
+  "lib/extends.js":{
+    "links":[
+      "6"
+    ],
+    "class_name":"extends.js"
+  },
+  "lib/RecipeTileEntityLib.js":{
+    "links":[
+      "7"
+    ],
+    "class_name":"RecipeTileEntityLib.js"
+  },
+  "lib/ToolLib.js":{
+    "links":[
+      "8"
+    ],
+    "class_name":"ToolLib.js"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "tickModifier": 1.0,
+  "soil": {
+    "id": "block:mycelium",
+    "isVanilla": true
+  },
+  "compatibleSoilTags": [
+    "mycelium"
+  ],
+  "block": {
+    "id": "block:mycelium",
+    "isVanilla": true
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "enabled":false,
+  "glassEnabled":false,
+  "blockEnabled":false,
+  "gen":{
+    "nickel":true,
+    "lead":true,
+    "tin":true,
+    "copper":true,
+    "platinum":true,
+    "silver":true
+  },
+  "show_resource_errors":true
+}

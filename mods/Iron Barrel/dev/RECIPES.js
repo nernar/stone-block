@@ -1,0 +1,5 @@
+Recipes.addShaped({id: BlockID.ironbarrel, count: 1, data: 0}, [" x ", "xax", " x "], ['a', VanillaBlockID.barrel, 0, 'x', 265, 0])
+Recipes.addShaped({id: BlockID.goldbarrel, count: 1, data: 0}, [" x ", "xax", " x "], ['a', BlockID.ironbarrel, 0, 'x', 266, 0])
+Recipes.addShaped({id: BlockID.diamondbarrel, count: 1, data: 0}, ["ax "], ['a', BlockID.goldbarrel, 0, 'x', 264, 0])
+Recipes.addShaped({id: BlockID.obsidianbarrel, count: 1, data: 0}, [" x ", "xax", " x "], ['a', BlockID.diamondbarrel, 0, 'x', 49, 0])
+Recipes.addShaped({id: BlockID.crystalbarrel, count: 1, data: 0}, [" x ", "xax", " x "], ['a', BlockID.diamondbarrel, 0, 'x', 20, 0])

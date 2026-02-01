@@ -1,0 +1,11 @@
+{
+  "enabled":false,
+  "DropChance":0.05,
+  "GrowthChance":0.5,
+  "SevereGrowth":{
+    "enabled":false,
+    "farmland":true,
+    "sametype":true
+  },
+  "ShowParticle":true
+}

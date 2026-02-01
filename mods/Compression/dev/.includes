@@ -1,0 +1,16 @@
+/api/compressAPI.js
+/config.js
+/localisation/ru_RU.js
+
+/data/blocks/single.js
+/data/blocks/double.js
+/data/blocks/triple.js
+/data/blocks/quadruple.js
+/data/blocks/quintuple.js
+/data/blocks/sextuple.js
+/data/blocks/septuple.js
+/data/blocks/octuple.js
+/data/blocks/nonuple.js
+/data/blocks/decuple.js
+
+/shared.js

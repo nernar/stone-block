@@ -1,0 +1,6 @@
+{
+  "name": "Linked Destruction",
+  "author": "FOLDIK UA",
+  "version": "1.2.0",
+  "description": "This mod designed to quickly destroy large areas of blocks. This is inspired by VeinMiner by PortableJim. We now have proper hotkeys! The ~ by default is a toggle, the R key is the press and hold key. The toggle will take priority over the hold."
+}

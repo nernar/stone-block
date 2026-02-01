@@ -1,0 +1,13 @@
+{
+  "tickModifier": 1.0,
+  "soil": {
+    "id": "block:warped_nylium",
+    "isVanilla": true
+  },
+  "compatibleSoilTags": [
+    "warped"
+  ],
+  "block": {
+    "id": "block:warped_nylium"
+  }
+}
