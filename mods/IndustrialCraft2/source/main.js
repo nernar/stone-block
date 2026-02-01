@@ -87,6 +87,18 @@ var EU = EnergyTypeRegistry.assureEnergyType("Eu", 1);
 // vanilla items
 Recipes.addFurnaceFuel(325, 10, 2000); // lava bucket
 ChargeItemRegistry.registerFlashItem(331, "Eu", 800, 0); // redstone
+var NetworkDataKeys = {
+    blockId: "blockId",
+    facing: "facing",
+    isActive: "active"
+};
+var IC2NetworkPackets = {
+    demontage: "icpe.demontageMachine",
+    cropLongClick: "icpe.cropDestroyStart",
+    cutterLongClick: "icpe.cutterLongClick",
+    hudClick: "icpe.clickHUDButton",
+    jetpackFlying: "icpe.setFlying"
+};
 // BLOCKS
 Translation.addTranslation("rubber_tree_log", { en: "Rubber Tree Log", ru: "Древесина гевеи", es: "Madera de Árbol de Caucho", pt: "Madeira da árvore de borracha", zh: "橡胶树原木" });
 Translation.addTranslation("rubber_tree_leaves", { en: "Rubber Tree Leaves", ru: "Листва гевеи", es: "Hojas de Arbol de Cáucho", pt: "Folhas da árvore de borracha", zh: "橡胶树树叶" });
@@ -471,7 +483,7 @@ Translation.addTranslation("potato", { en: "Potato", ru: "Картофель", e
 Translation.addTranslation("eatingplant", { en: "Eating Plant", ru: "Плотоядное растение", es: "Planta Carnivora", pt: "Planta Carnívora", zh: "食人花" });
 Translation.addTranslation("beetroots", { en: "Beetroots", ru: "Свёкла", pt: "Beterrabas", zh: "甜菜根" });
 // TEXT
-Translation.addTranslation("Mode: ", { ru: "Режим: ", es: "Modo: ", pt: "Modo: ", zh: "模式: " });
+Translation.addTranslation("Mode: %s", { ru: "Режим: %s", es: "Modo: %s", pt: "Modo: %s", zh: "模式: %s" });
 // Induction Furnace
 Translation.addTranslation("Heat:", { ru: "Нагрев:", es: "Calor:", pt: "Calor:", zh: "热量:" });
 // Fluid Distributor
@@ -504,19 +516,21 @@ Translation.addTranslation("mining_laser.super_heat", { en: "Super-Heat", ru: "�
 Translation.addTranslation("mining_laser.scatter", { en: "Scatter", ru: "Разброс", es: "Esparcido", pt: "Dispersão", zh: "散射模式" });
 Translation.addTranslation("mining_laser.3x3", { en: "3x3" });
 // Iridium Drill
-Translation.addTranslation("Fortune III", { ru: "Удача III", pt: "Fortuna III", zh: "时运 III" });
-Translation.addTranslation("Silk Touch", { ru: "Шёлковое касание", pt: "Toque suave", zh: "精准采集" });
+Translation.addTranslation("iridium_drill.fortune", { en: "Fortune III", ru: "Удача III", pt: "Fortuna III", zh: "时运 III" });
+Translation.addTranslation("iridium_drill.silk_touch", { en: "Silk Touch", ru: "Шёлковое касание", pt: "Toque suave", zh: "精准采集" });
+Translation.addTranslation("iridium_drill.fortune_3x3", { en: "Fortune III (3x3)", ru: "Удача III (3x3)", pt: "Fortuna III (3x3)", zh: "时运 III (3x3)" });
+Translation.addTranslation("iridium_drill.silk_touch_3x3", { en: "Silk Touch (3x3)", ru: "Шёлковое касание (3x3)", pt: "Toque suave (3x3)", zh: "精准采集 (3x3)" });
 // Messages
 Translation.addTranslation("message.nightvision.enabled", { en: "Nightvision mode enabled", es: "Modo Vision Noctura Habilitado", ru: "Режим ночного зрения включен", zh: "已启用夜视模式" });
 Translation.addTranslation("message.nightvision.disabled", { en: "Nightvision mode disabled", es: "Modo Vision Noctura Desabilitado", ru: "Режим ночного зрения выключен", zh: "已禁用夜视模式" });
 Translation.addTranslation("message.hover_mode.enabled", { en: "Hover mode enabled", ru: "Режим парения включен", zh: "已启用悬浮模式" });
 Translation.addTranslation("message.hover_mode.disabled", { en: "Hover mode disabled", ru: "Режим парения выключен", zh: "已禁用悬浮模式" });
-Translation.addTranslation("message.scan_result", { en: "Scan Result: ", ru: "Результат сканирования: ", es: "Resultado de la exploración: ", pt: "Resultado do Escaneamento: ", zh: "扫描结果: " });
-Translation.addTranslation("message.freq_transmitter.linked", { en: "Frequency Transmitter linked to Teleporter", ru: "Частотный связыватель соединился с телепортером" });
-Translation.addTranslation("message.freq_transmitter.notlinked", { en: "Can`t link Teleporter to itself", ru: "Невозможно связать телепортер с самим собой" });
-Translation.addTranslation("message.freq_transmitter.established", { en: "Teleportation link established", ru: "Телепортационная связь установлена" });
-Translation.addTranslation("message.freq_transmitter.unlinked", { en: "Frequency Transmitter unlinked", ru: "Частотный связыватель сброшен" });
-Translation.addTranslation("message.mining_laser.aiming", { en: "Mining laser aiming angle too steep", ru: "Шахтёрский лазер направлен слишков высоко" });
+Translation.addTranslation("message.scan_result", { en: "Scan Result: %s", ru: "Результат сканирования: %s", es: "Resultado de la exploración: %s", pt: "Resultado do Escaneamento: %s", zh: "扫描结果: %s" });
+Translation.addTranslation("message.freq_transmitter.linked", { en: "Frequency Transmitter linked to Teleporter", ru: "Частотный связыватель соединился с телепортером", zh: "遥控器已连接至传送机" });
+Translation.addTranslation("message.freq_transmitter.notlinked", { en: "Can`t link Teleporter to itself", ru: "Невозможно связать телепортер с самим собой", zh: "传送机不能连接自己" });
+Translation.addTranslation("message.freq_transmitter.established", { en: "Teleportation link established", ru: "Телепортационная связь установлена", zh: "已建立传送点" });
+Translation.addTranslation("message.freq_transmitter.unlinked", { en: "Frequency Transmitter unlinked", ru: "Частотный связыватель сброшен", zh: "已断开遥控器" });
+Translation.addTranslation("message.mining_laser.aiming", { en: "Mining laser aiming angle too steep", ru: "Шахтёрский лазер направлен слишков высоко", zh: "镭射枪瞄准角度过小" });
 // Tooltips
 Translation.addTranslation("tooltip.tin_can", { en: "This looks bad...", ru: "Это выглядит несъедобно…", pt: "Isso parece ruim...", zh: "这看起来很糟糕..." });
 Translation.addTranslation("tooltip.power_tier", { en: "Power Tier: %s", ru: "Энергоуровень: %s", pt: "Nível de Voltagem: %s", zh: "能量等级: %s" });
@@ -538,11 +552,11 @@ Translation.addTranslation("ic2.dir.west", { en: "west", ru: "западной",
 Translation.addTranslation("Heat: ", { ru: "Нагрев: ", es: "Calor: ", pt: "Calor: ", zh: "热量: " });
 // Creative Groups
 Translation.addTranslation("Ores", { ru: "Руды", pt: "Minérios", zh: "矿石" });
-Translation.addTranslation("Resource Blocks", { ru: "Блоки ресурсов", pt: "Blocos de Recusrso" });
-Translation.addTranslation("Electric Generators", { ru: "Электрогенераторы", pt: "Geradores Elétricos" });
-Translation.addTranslation("Heat Generators", { ru: "Теплогенераторы", pt: "Geradores de Calor" });
-Translation.addTranslation("Processing Machines", { ru: "Машины-обработчики", pt: "Máquinas de Processamento" });
-Translation.addTranslation("Energy Storages", { ru: "Энергохранилища", pt: "Armazenamento de Energia" });
+Translation.addTranslation("Resource Blocks", { ru: "Блоки ресурсов", pt: "Blocos de Recusrso", zh: "资源方块" });
+Translation.addTranslation("Electric Generators", { ru: "Электрогенераторы", pt: "Geradores Elétricos", zh: "发电机" });
+Translation.addTranslation("Heat Generators", { ru: "Теплогенераторы", pt: "Geradores de Calor", zh: "加热机" });
+Translation.addTranslation("Processing Machines", { ru: "Машины-обработчики", pt: "Máquinas de Processamento", zh: "加工机器" });
+Translation.addTranslation("Energy Storages", { ru: "Энергохранилища", pt: "Armazenamento de Energia", zh: "能量储存" });
 Translation.addTranslation("Transformers", { ru: "Трансформаторы", pt: "Transformadores", zh: "变压器" });
 Translation.addTranslation("Cables", { ru: "Провода", pt: "Cabos", zh: "导线" });
 Translation.addTranslation("Battery Packs", { ru: "Аккумуляторные ранцы", pt: "Mochilas de Baterias", zh: "电池背包" });
@@ -2676,8 +2690,8 @@ var Machine;
             return _super !== null && _super.apply(this, arguments) || this;
         }
         MachineBase.prototype.onInit = function () {
-            this.networkData.putInt("blockId", this.blockID);
-            this.networkData.putInt("facing", this.getFacing());
+            this.networkData.putInt(NetworkDataKeys.blockId, this.blockID);
+            this.networkData.putInt(NetworkDataKeys.facing, this.getFacing());
             this.networkData.sendChanges();
             this.setupContainer();
             delete this.liquidStorage;
@@ -2710,15 +2724,15 @@ var Machine;
         };
         MachineBase.prototype.setActive = function (isActive) {
             // TODO: sounds
-            if (this.networkData.getBoolean("active") !== isActive) {
-                this.networkData.putBoolean("active", isActive);
+            if (this.networkData.getBoolean(NetworkDataKeys.isActive) !== isActive) {
+                this.networkData.putBoolean(NetworkDataKeys.isActive, isActive);
                 this.networkData.sendChanges();
             }
         };
         MachineBase.prototype.renderModel = function () {
-            if (this.networkData.getBoolean("active")) {
-                var blockId = Network.serverToLocalId(this.networkData.getInt("blockId"));
-                var facing = this.networkData.getInt("facing");
+            if (this.networkData.getBoolean(NetworkDataKeys.isActive)) {
+                var blockId = Network.serverToLocalId(this.networkData.getInt(NetworkDataKeys.blockId));
+                var facing = this.networkData.getInt(NetworkDataKeys.facing);
                 TileRenderer.mapAtCoords(this.x, this.y, this.z, blockId, facing);
             }
             else {
@@ -2741,7 +2755,7 @@ var Machine;
         MachineBase.prototype.setFacing = function (side) {
             if (this.getFacing() != side) {
                 this.blockSource.setBlock(this.x, this.y, this.z, this.blockID, side);
-                this.networkData.putInt("blockData", side);
+                this.networkData.putInt(NetworkDataKeys.facing, side);
                 this.networkData.sendChanges();
                 return true;
             }
@@ -3510,11 +3524,11 @@ var ICTool;
         if (MachineRegistry.isMachine(block.id)) {
             var item = Player.getCarriedItem();
             if (ICTool.isUseableWrench(item, 10)) {
-                Network.sendToServer("icpe.demontageMachine", { x: coords.x, y: coords.y, z: coords.z });
+                Network.sendToServer(IC2NetworkPackets.demontage, { x: coords.x, y: coords.y, z: coords.z });
             }
         }
     });
-    Network.addServerPacket("icpe.demontageMachine", function (client, data) {
+    Network.addServerPacket(IC2NetworkPackets.demontage, function (client, data) {
         var player = client.getPlayerUid();
         var region = WorldRegion.getForActor(player);
         var blockID = region.getBlockId(data);
@@ -3577,7 +3591,7 @@ var ToolHUD;
     }
     ToolHUD.setArmorButton = setArmorButton;
     function onClick(name) {
-        Network.sendToServer("icpe.clickHUDButton", { name: name });
+        Network.sendToServer(IC2NetworkPackets.hudClick, { name: name });
     }
     ToolHUD.onClick = onClick;
     function updateUIbuttons() {
@@ -3641,11 +3655,11 @@ var ToolHUD;
     }
     Callback.addCallback("LocalTick", onUpdate);
     // Server Side
-    Network.addServerPacket("icpe.clickHUDButton", function (client, data) {
+    Network.addServerPacket(IC2NetworkPackets.hudClick, function (client, data) {
         var player = client.getPlayerUid();
         getButton(data.name).onClick(player);
     });
-    Network.addServerPacket("icpe.setFlying", function (client, data) {
+    Network.addServerPacket(IC2NetworkPackets.jetpackFlying, function (client, data) {
         var player = client.getPlayerUid();
         JetpackProvider.setFlying(player, data.fly);
     });
@@ -3697,7 +3711,7 @@ var ToolHUD;
             var isFlying = ToolHUD.container.isElementTouched(this.name);
             if (this.isTouched != isFlying) {
                 this.isTouched = isFlying;
-                Network.sendToServer("icpe.setFlying", { fly: isFlying });
+                Network.sendToServer(IC2NetworkPackets.jetpackFlying, { fly: isFlying });
             }
             var armor = Player.getArmorSlot(1);
             var hoverMode = ((_a = armor.extra) === null || _a === void 0 ? void 0 : _a.getBoolean("hover")) || false;
@@ -3753,11 +3767,11 @@ var ToolHUD;
                 var extra = slot.extra || new ItemExtraData();
                 if (extra.getBoolean("hover")) {
                     extra.putBoolean("hover", false);
-                    BlockEngine.sendUnlocalizedMessage(client, "§4", "message.hover_mode.disabled");
+                    BlockEngine.sendMessage(client, "§4", "message.hover_mode.disabled");
                 }
                 else {
                     extra.putBoolean("hover", true);
-                    BlockEngine.sendUnlocalizedMessage(client, "§2", "message.hover_mode.enabled");
+                    BlockEngine.sendMessage(client, "§2", "message.hover_mode.enabled");
                 }
                 Entity.setArmorSlot(player, 1, slot.id, 1, slot.data, extra);
             }
@@ -3812,11 +3826,11 @@ var ToolHUD;
             var extra = slot.extra || new ItemExtraData();
             if (extra.getBoolean("nv")) {
                 extra.putBoolean("nv", false);
-                BlockEngine.sendUnlocalizedMessage(client, "§4", "message.nightvision.disabled");
+                BlockEngine.sendMessage(client, "§4", "message.nightvision.disabled");
             }
             else {
                 extra.putBoolean("nv", true);
-                BlockEngine.sendUnlocalizedMessage(client, "§2", "message.nightvision.enabled");
+                BlockEngine.sendMessage(client, "§2", "message.nightvision.enabled");
             }
             Entity.setArmorSlot(player, 0, slot.id, 1, slot.data, extra);
         };
@@ -5248,10 +5262,10 @@ Callback.addCallback("DestroyBlockStart", function (coords, block, playerUid) {
     if (block.id == BlockID.crop) {
         // ? TEST IT!!! i think it can cause problem
         // Block.setTempDestroyTime(block.id, 1000);
-        Network.sendToServer("icpe.cropDestroyStart", { x: coords.x, y: coords.y, z: coords.z });
+        Network.sendToServer(IC2NetworkPackets.cropLongClick, { x: coords.x, y: coords.y, z: coords.z });
     }
 });
-Network.addServerPacket("icpe.cropDestroyStart", function (client, data) {
+Network.addServerPacket(IC2NetworkPackets.cropLongClick, function (client, data) {
     var region = WorldRegion.getForActor(client.getPlayerUid());
     var tileEntity = region.getTileEntity(data.x, data.y, data.z);
     if (tileEntity) {
@@ -5740,7 +5754,7 @@ var Machine;
         WindGenerator.prototype.updateBlockCount = function () {
             var blockCount = -1;
             for (var x = -4; x <= 4; x++)
-                for (var y = -2; y <= 2; y++)
+                for (var y = -3; y <= 3; y++)
                     for (var z = -4; z <= 4; z++) {
                         if (this.blockSource.getBlockId(this.x + x, this.y + y, this.z + z) != 0) {
                             blockCount++;
@@ -6660,7 +6674,6 @@ var Machine;
                 return;
             if (!this.audioSource) {
                 this.audioSource = SoundManager.createSource(SourceType.TILEENTITY, this, "NuclearReactorLoop.ogg");
-                ;
             }
             if (this.data.output < 40) {
                 var geigerSound = "GeigerLowEU.ogg";
@@ -9767,12 +9780,13 @@ var Machine;
 // rarity - 1
 // rarity - 1
 BlockRegistry.createBlock("pump", [
-    { name: "Pump", texture: [["pump_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["pump_front", 0], ["pump_side", 0], ["pump_side", 0]], inCreative: true }
+    { name: "Pump", texture: [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["pump_bottom", 0], ["pump_side", 0], ["pump_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.pump, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.pump, 2, [["pump_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["pump_front", 0], ["pump_side", 0], ["pump_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.pump, 2, [["pump_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["pump_front", 1], ["pump_side", 1], ["pump_side", 1]]);
-TileRenderer.setRotationFunction(BlockID.pump);
+TileRenderer.setHandAndUiModel(BlockID.pump, 0, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["pump_bottom", 0], ["pump_side", 0], ["pump_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.pump, 0, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["pump_bottom", 0], ["pump_side", 0], ["pump_side", 0]], true);
+TileRenderer.registerModelWithRotation(BlockID.pump, 0, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["pump_bottom", 1], ["pump_side", 1], ["pump_side", 1]], true);
+TileRenderer.setRotationFunction(BlockID.pump, true);
 ItemName.addTierTooltip("pump", 1);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.pump, count: 1, data: 0 }, [
@@ -9867,7 +9881,7 @@ var Machine;
             var liquid = this.liquidTank.getLiquidStored();
             if (this.y > 0 && this.liquidTank.getAmount() <= 7000 && this.data.energy >= this.energyDemand) {
                 if (this.data.progress == 0) {
-                    this.data.coords = this.recursiveSearch(liquid, this.x, this.y - 1, this.z, {});
+                    this.data.coords = this.getLiquidCoords(liquid);
                 }
                 if (this.data.coords) {
                     newActive = true;
@@ -9890,20 +9904,38 @@ var Machine;
             }
             this.setActive(newActive);
         };
-        Pump.prototype.recursiveSearch = function (liquid, x, y, z, map) {
+        Pump.prototype.recursiveSearch = function (liquid, x, y, z, checked) {
             var block = this.region.getBlock(x, y, z);
             var coordsKey = x + ':' + y + ':' + z;
-            if (!map[coordsKey] && Math.abs(this.x - x) <= 64 && Math.abs(this.z - z) <= 64 && this.getLiquidType(liquid, block)) {
+            if (!checked[coordsKey] && Math.abs(this.x - x) <= 64 && Math.abs(this.z - z) <= 64 && this.getLiquidType(liquid, block)) {
                 if (block.data == 0)
                     return new Vector3(x, y, z);
-                map[coordsKey] = true;
-                return this.recursiveSearch(liquid, x, y + 1, z, map) ||
-                    this.recursiveSearch(liquid, x + 1, y, z, map) ||
-                    this.recursiveSearch(liquid, x - 1, y, z, map) ||
-                    this.recursiveSearch(liquid, x, y, z + 1, map) ||
-                    this.recursiveSearch(liquid, x, y, z - 1, map);
+                checked[coordsKey] = true;
+                return this.recursiveSearch(liquid, x, y + 1, z, checked)
+                    || this.recursiveSearch(liquid, x + 1, y, z, checked)
+                    || this.recursiveSearch(liquid, x - 1, y, z, checked)
+                    || this.recursiveSearch(liquid, x, y, z + 1, checked)
+                    || this.recursiveSearch(liquid, x, y, z - 1, checked);
             }
             return null;
+        };
+        Pump.prototype.getLiquidCoords = function (liquid) {
+            var startPos = World.getRelativeCoords(this.x, this.y, this.z, this.getFacing());
+            if (this.region.getBlockId(startPos) == BlockID.miner) {
+                startPos.y--;
+                if (this.region.getBlockId(startPos) == BlockID.miningPipe) {
+                    while (startPos.y > 0 && this.region.getBlockId(startPos.x, startPos.y - 1, startPos.z) == BlockID.miningPipe) {
+                        startPos.y--;
+                    }
+                    var checked = {};
+                    return this.recursiveSearch(liquid, startPos.x + 1, startPos.y, startPos.z, checked)
+                        || this.recursiveSearch(liquid, startPos.x - 1, startPos.y, startPos.z, checked)
+                        || this.recursiveSearch(liquid, startPos.x, startPos.y, startPos.z + 1, checked)
+                        || this.recursiveSearch(liquid, startPos.x, startPos.y, startPos.z - 1, checked)
+                        || this.recursiveSearch(liquid, startPos.x, startPos.y - 1, startPos.z, checked);
+                }
+            }
+            return this.recursiveSearch(liquid, startPos.x, startPos.y, startPos.z, {});
         };
         Pump.prototype.getLiquidType = function (liquid, block) {
             if ((!liquid || liquid == "water") && (block.id == 8 || block.id == 9)) {
@@ -9917,8 +9949,8 @@ var Machine;
         Pump.prototype.getOperationSound = function () {
             return "PumpOp.ogg";
         };
-        Pump.prototype.canRotate = function (side) {
-            return side > 1;
+        Pump.prototype.canRotate = function () {
+            return true;
         };
         return Pump;
     }(Machine.ElectricMachine));
@@ -10226,7 +10258,7 @@ var Machine;
             return false;
         };
         Miner.prototype.isEmptyBlock = function (block) {
-            return block.id == 0 || block.id == 51 || block.id >= 8 && block.id <= 11 && block.data > 0;
+            return block.id == 0 || block.id == 51 || block.id == 8 || block.id == 9;
         };
         Miner.prototype.canBeDestroyed = function (blockID, level) {
             if (ToolAPI.getBlockMaterialName(blockID) != "unbreaking" && level >= ToolAPI.getBlockDestroyLevel(blockID)) {
@@ -10364,6 +10396,9 @@ var Machine;
                             this.mineBlock(this.x, this.data.y - 1, this.z, block_1, drillSlot);
                             this.setPipe(this.data.y);
                         }
+                    }
+                    else {
+                        this.data.progress = 0;
                     }
                 }
             }
@@ -12512,7 +12547,7 @@ Callback.addCallback("PreLoaded", function () {
         { id: ItemID.rubber, data: 0 }
     ]);
     Recipes.addShapeless({ id: ItemID.cableGold2, count: 1, data: 0 }, [
-        { id: ItemID.cableGold1, data: 0 },
+        { id: ItemID.cableGold0, data: 0 },
         { id: ItemID.rubber, data: 0 },
         { id: ItemID.rubber, data: 0 }
     ]);
@@ -12691,24 +12726,24 @@ var ItemBatteryCharging = /** @class */ (function (_super) {
         var client = Network.getClientForPlayer(player);
         switch (mode) {
             case 0:
-                BlockEngine.sendUnlocalizedMessage(client, "Mode: ", "charging.enabled");
+                BlockEngine.sendMessage(client, "Mode: %s", "charging.enabled");
                 break;
             case 1:
-                BlockEngine.sendUnlocalizedMessage(client, "Mode: ", "charging.not_in_hand");
+                BlockEngine.sendMessage(client, "Mode: %s", "charging.not_in_hand");
                 break;
             case 2:
-                BlockEngine.sendUnlocalizedMessage(client, "Mode: ", "charging.disabled");
+                BlockEngine.sendMessage(client, "Mode: %s", "charging.disabled");
                 break;
         }
     };
     ItemBatteryCharging.prototype.getModeTooltip = function (mode) {
         switch (mode) {
             case 0:
-                return Translation.translate("Mode: ") + Translation.translate("charging.enabled");
+                return Translation.translate("Mode: %s").replace("%s", Translation.translate("charging.enabled"));
             case 1:
-                return Translation.translate("Mode: ") + Translation.translate("charging.not_in_hand");
+                return Translation.translate("Mode: %s").replace("%s", Translation.translate("charging.not_in_hand"));
             case 2:
-                return Translation.translate("Mode: ") + Translation.translate("charging.disabled");
+                return Translation.translate("Mode: %s").replace("%s", Translation.translate("charging.disabled"));
         }
     };
     ItemBatteryCharging.prototype.onNameOverride = function (item, name) {
@@ -14055,7 +14090,7 @@ var JetpackProvider;
                 item.extra.putBoolean("hover", false);
                 var client = Network.getClientForPlayer(playerUid);
                 if (client)
-                    BlockEngine.sendUnlocalizedMessage(client, "§4", "message.hover_mode.disabled");
+                    BlockEngine.sendMessage(client, "§4", "message.hover_mode.disabled");
                 return item;
             }
             else {
@@ -14390,7 +14425,6 @@ var ArmorQuantumChestplate = /** @class */ (function (_super) {
             Entity.setFire(playerUid, 0, true);
         }
         return JetpackProvider.onTick(item, playerUid);
-        ;
     };
     return ArmorQuantumChestplate;
 }(ArmorQuantumSuit));
@@ -15063,13 +15097,13 @@ var ItemTransmitter = /** @class */ (function (_super) {
                 extra.putInt("z", coords.z);
                 extra.putInt("dimension", dimension);
                 Entity.setCarriedItem(player, item.id, 1, item.data, extra);
-                BlockEngine.sendUnlocalizedMessage(client, "message.freq_transmitter.linked");
+                BlockEngine.sendMessage(client, "message.freq_transmitter.linked");
             }
             else {
                 if (dimension != extra.getInt("dimension"))
                     return;
                 if (receiveCoords.x == coords.x && receiveCoords.y == coords.y && receiveCoords.z == coords.z) {
-                    BlockEngine.sendUnlocalizedMessage(client, "message.freq_transmitter.notlinked");
+                    BlockEngine.sendMessage(client, "message.freq_transmitter.notlinked");
                 }
                 else {
                     var region = WorldRegion.getForActor(player);
@@ -15083,14 +15117,14 @@ var ItemTransmitter = /** @class */ (function (_super) {
                         data = receiver.data;
                         data.frequency = coords;
                         data.frequency.energy = basicTeleportCost;
-                        BlockEngine.sendUnlocalizedMessage(client, "message.freq_transmitter.established");
+                        BlockEngine.sendMessage(client, "message.freq_transmitter.established");
                     }
                 }
             }
         }
         else if (receiveCoords) {
             Entity.setCarriedItem(player, item.id, 1, item.data);
-            BlockEngine.sendUnlocalizedMessage(client, "message.freq_transmitter.unlinked");
+            BlockEngine.sendMessage(client, "message.freq_transmitter.unlinked");
         }
     };
     return ItemTransmitter;
@@ -15121,7 +15155,7 @@ var ItemScanner = /** @class */ (function (_super) {
         var client = Network.getClientForPlayer(player);
         if (client && ICTool.useElectricItem(item, this.getEnergyPerUse(), player)) {
             SoundManager.playSoundAtEntity(player, "ODScanner.ogg");
-            BlockEngine.sendUnlocalizedMessage(client, "message.scan_result", "".concat(coords.x, ", ").concat(coords.y, ", ").concat(coords.z));
+            BlockEngine.sendMessage(client, "message.scan_result", "".concat(coords.x, ", ").concat(coords.y, ", ").concat(coords.z));
             var ores = {};
             var radius = this.getScanRadius();
             var region = BlockSource.getDefaultForActor(player);
@@ -15210,10 +15244,10 @@ Callback.addCallback("DestroyBlockStart", function (coords, block, playerUid) {
     var cableData = CableRegistry.getCableData(block.id);
     if (item.id == ItemID.cutter && cableData && cableData.insulation > 0) {
         Game.prevent();
-        Network.sendToServer("icpe.cutterLongClick", { x: coords.x, y: coords.y, z: coords.z });
+        Network.sendToServer(IC2NetworkPackets.cutterLongClick, { x: coords.x, y: coords.y, z: coords.z });
     }
 });
-Network.addServerPacket("icpe.cutterLongClick", function (client, coords) {
+Network.addServerPacket(IC2NetworkPackets.cutterLongClick, function (client, coords) {
     var playerUid = client.getPlayerUid();
     var player = new PlayerEntity(playerUid);
     var item = player.getCarriedItem();
@@ -15472,13 +15506,13 @@ var ToolDrillIridium = /** @class */ (function (_super) {
     ToolDrillIridium.prototype.getModeName = function (mode) {
         switch (mode) {
             case 0:
-                return Translation.translate("Mode: ") + Translation.translate("Fortune III");
+                return Translation.translate("Mode: %s").replace("%s", Translation.translate("iridium_drill.fortune"));
             case 1:
-                return Translation.translate("Mode: ") + Translation.translate("Silk Touch");
+                return Translation.translate("Mode: %s").replace("%s", Translation.translate("iridium_drill.silk_touch"));
             case 2:
-                return Translation.translate("Mode: ") + "3x3 " + Translation.translate("Fortune III");
+                return Translation.translate("Mode: %s").replace("%s", Translation.translate("iridium_drill.fortune_3x3"));
             case 3:
-                return Translation.translate("Mode: ") + "3x3 " + Translation.translate("Silk Touch");
+                return Translation.translate("Mode: %s").replace("%s", Translation.translate("iridium_drill.silk_touch_3x3"));
         }
     };
     ToolDrillIridium.prototype.onNameOverride = function (item, name) {
@@ -15494,16 +15528,16 @@ var ToolDrillIridium = /** @class */ (function (_super) {
         var client = Network.getClientForPlayer(player);
         switch (mode) {
             case 0:
-                BlockEngine.sendUnlocalizedMessage(client, "§e", "Mode: ", "Fortune III");
+                BlockEngine.sendMessage(client, "§e", "Mode: %s", "iridium_drill.fortune");
                 break;
             case 1:
-                BlockEngine.sendUnlocalizedMessage(client, "§9", "Mode: ", "Silk Touch");
+                BlockEngine.sendMessage(client, "§9", "Mode: %s", "iridium_drill.silk_touch");
                 break;
             case 2:
-                BlockEngine.sendUnlocalizedMessage(client, "§c", "Mode: ", "3x3 ", "Fortune III");
+                BlockEngine.sendMessage(client, "§c", "Mode: %s", "iridium_drill.fortune_3x3");
                 break;
             case 3:
-                BlockEngine.sendUnlocalizedMessage(client, "§2", "Mode: ", "3x3 ", "Silk Touch");
+                BlockEngine.sendMessage(client, "§2", "Mode: %s", "iridium_drill.silk_touch_3x3");
                 break;
         }
     };
@@ -15625,6 +15659,10 @@ var ItemNanoSaber = /** @class */ (function (_super) {
             SoundManager.playSoundAtEntity(player, "NanosaberPowerup.ogg");
         }
     };
+    /** KEX compatibility for dynamic Nano Saber damage */
+    ItemNanoSaber.prototype.getAttackDamageBonus = function (item) {
+        return item.extra && item.extra.getBoolean("active") ? 16 : 0;
+    };
     ItemNanoSaber.onTick = function (playerUid) {
         if (World.getThreadTime() % 20 == 0) {
             var player = new PlayerActor(playerUid);
@@ -15678,7 +15716,7 @@ var ItemMiningLaser = /** @class */ (function (_super) {
     ItemMiningLaser.prototype.onNameOverride = function (item, name) {
         name = _super.prototype.onNameOverride.call(this, item, name);
         var mode = this.readMode(item.extra);
-        name += "\n" + Translation.translate("Mode: ") + Translation.translate(this.getModeName(mode));
+        name += "\n" + Translation.translate("Mode: %s").replace("%s", Translation.translate(this.getModeName(mode)));
         return name;
     };
     ItemMiningLaser.prototype.onModeSwitch = function (item, player) {
@@ -15687,7 +15725,7 @@ var ItemMiningLaser = /** @class */ (function (_super) {
         extra.putInt("mode", mode);
         Entity.setCarriedItem(player, item.id, 1, item.data, extra);
         var client = Network.getClientForPlayer(player);
-        BlockEngine.sendUnlocalizedMessage(client, "Mode: ", this.getModeName(mode));
+        BlockEngine.sendMessage(client, "Mode: %s", this.getModeName(mode));
     };
     ItemMiningLaser.prototype.makeShot = function (item, player) {
         var laserSetting = this.readMode(item.extra);
@@ -15775,7 +15813,7 @@ var ItemMiningLaser = /** @class */ (function (_super) {
             }
             else {
                 var client = Network.getClientForPlayer(player);
-                BlockEngine.sendUnlocalizedMessage(client, "message.mining_laser.aiming");
+                BlockEngine.sendMessage(client, "message.mining_laser.aiming");
             }
         }
     };
@@ -15835,7 +15873,7 @@ var CropAnalyser = /** @class */ (function (_super) {
                 client.sendMessage("Tier: ".concat(tileEntity.crop.getProperties().tier));
                 client.sendMessage("Discovered by: ".concat(tileEntity.crop.getDiscoveredBy()));
             case 1:
-                BlockEngine.sendUnlocalizedMessage(client, tileEntity.crop.getID());
+                BlockEngine.sendMessage(client, tileEntity.crop.getID());
         }
     };
     CropAnalyser.prototype.setupContainer = function (container) {

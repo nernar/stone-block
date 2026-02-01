@@ -1,6 +1,9 @@
 class MainUI {
 
     private static readonly INNER_WIDTH = 960;
+    private static readonly SLOT_X_MIN = 8;
+    private static readonly SLOT_X_MAX = 24;
+    private static readonly SLOT_MAX = this.SLOT_X_MAX * this.calcSlotCountY(this.SLOT_X_MAX);
 
     private static page = 0;
     private static list: ItemInfo[] = [];
@@ -32,14 +35,13 @@ class MainUI {
         }
     }
 
-    private static readonly slotCountXLimit = {min: 8, max: 24};
-    private static slotCountX = 0;
-    private static slotCountY: number = this.calcSlotCountY();
+    private static slotCountX = Cfg.slotCountX;
+    private static slotCountY = this.calcSlotCountY(this.slotCountX);
     private static slotCount = this.slotCountX * this.slotCountY;
     static readonly tankCount = 8;
 
-    private static calcSlotCountY(): number {
-        const slotSize = this.INNER_WIDTH / this.slotCountX;
+    private static calcSlotCountY(slotCountX: number): number {
+        const slotSize = this.INNER_WIDTH / slotCountX;
         let count = 0;
         while(68 + slotSize * count <= ScreenHeight - 70){
             count++;
@@ -48,27 +50,35 @@ class MainUI {
     }
 
     private static setSlotCount(x: number): boolean { //return [need refresh]
-        const x2 = Math.min(Math.max(x, this.slotCountXLimit.min), this.slotCountXLimit.max);
+        const x2 = Math.min(Math.max(x, this.SLOT_X_MIN), this.SLOT_X_MAX);
         if(this.slotCountX === x2){
             return false;
         }
         this.slotCountX = x2;
-        this.slotCountY = this.calcSlotCountY();
+        this.slotCountY = this.calcSlotCountY(this.slotCountX);
         this.slotCount = this.slotCountX * this.slotCountY;
-        __config__.getValue("slotCountX").set(x2);
         return true;
     }
 
-    private static changeSlotXCount(val: -1 | 1): void {
-        if(!this.liquidMode){
-            if(this.setSlotCount(this.slotCountX + val)){
-                this.refreshSlotsWindow();
-                this.switchWindow(false, true);
-            }
-        }
-    }
+    private static changeSlotXCount(val: number, force?: boolean): void {
 
-    private static refreshSlotsWindow(): void {
+        if(this.liquidMode){
+            return;
+        }
+
+        if(this.setSlotCount(val) || force){
+            const elements = this.window.getElements();
+            const diff = this.SLOT_X_MAX - this.SLOT_X_MIN;
+            elements.get("textZoom").setBinding("text", this.slotCountX + "");
+            elements.get("scrollZoom").setBinding("raw-value", java.lang.Float.valueOf((this.SLOT_X_MAX - this.slotCountX) / diff));
+            this.page = 0;
+            this.refreshSlotsWindow();
+            this.updateWindow();
+        }
+
+    }
+/*
+    private static refreshSlotsWindow_old(): void {
 
         const height = this.slotCountY * (this.INNER_WIDTH / this.slotCountX);
         const location: UI.WindowLocationParams = {x: 20, y: 68, width: this.INNER_WIDTH, height: height};
@@ -90,22 +100,72 @@ class MainUI {
         this.slotsWindow = new UI.Window({
             location: location,
             params: {slot: "_default_slot_empty"},
-            drawing: [
-                {type: "background", color: UI.FrameTextureSource.get("classic_frame_slot").getCentralColor()}
-            ],
+            drawing: [],
             elements: elemSlot
         });
+
+        this.slotsWindow.setBackgroundColor(Color.parseColor("#8B8B8B"));
+
+    }
+*/
+    private static refreshSlotsWindow(): void {
+
+        const slotSize = 1000 / this.slotCountX;
+        const elements = this.slotsWindow.getElements();
+        const empty = {id: 0, count: 0, data: 0};
+        let elem: UI.Element;
+
+        for(let i = 0; i < this.SLOT_MAX; i++){
+            elem = elements.get("slot" + i);
+            elem.setBinding("source", empty);
+            if(i < this.slotCount){
+                elem.size = java.lang.Integer.valueOf(slotSize);
+                elem.setSize(slotSize, slotSize);
+                elem.setPosition((i % this.slotCountX) * slotSize, (i / this.slotCountX | 0) * slotSize);
+                continue;
+            }
+            elem.setPosition(-1000, -1000);
+        }
 
     }
 
 
-    private static slotsWindow: UI.Window;
+    private static slotsWindow: UI.Window = (() => {
+
+        const height = ScreenHeight - 68 - 70;
+        const location: UI.WindowLocationParams = {x: 20, y: 68, width: this.INNER_WIDTH, height: height};
+        const slotSize = 1000 / this.SLOT_X_MAX;
+        const elemSlot: UI.UIElementSet = {};
+
+        for(let i = 0; i < this.SLOT_MAX; i++){
+            elemSlot["slot" + i] = {
+                type: "slot",
+                x: (i % this.SLOT_X_MAX) * slotSize,
+                y: (i / this.SLOT_X_MAX | 0) * slotSize,
+                size: slotSize,
+                visual: true,
+                clicker: UiFuncs.slotClicker,
+                onTouchEvent: UiFuncs.onTouchSlot
+            };
+        }
+
+        const window: UI.Window = new UI.Window({
+            location: location,
+            params: {slot: "_default_slot_empty"},
+            elements: elemSlot
+        });
+
+        window.setBackgroundColor(Color.parseColor("#8B8B8B"));
+
+        return window;
+
+    })();
 
     private static tanksWindow: UI.Window = (() => {
 
         const height = ScreenHeight - 68 - 70;
         const location: UI.WindowLocationParams = {x: 20, y: 68, width: this.INNER_WIDTH, height: height};
-        const drawTank: UI.DrawingElement[] = [{type: "background", color: UI.FrameTextureSource.get("classic_frame_slot").getCentralColor()}];
+        const drawTank: UI.DrawingElement[] = [];
         const elemTank: UI.UIElementSet = {};
 
         for(let i = 0; i < this.tankCount; i++){
@@ -131,11 +191,15 @@ class MainUI {
             };
         }
 
-        return new UI.Window({
+        const window = new UI.Window({
             location: location,
             drawing: drawTank,
             elements: elemTank
-        });
+        })
+
+        window.setBackgroundColor(Color.parseColor("#8B8B8B"));
+
+        return window;
 
     })();
 
@@ -143,15 +207,14 @@ class MainUI {
     private static readonly window: UI.WindowGroup = (() => {
 
         const window = new UI.WindowGroup();
-        const slotSize = 960 / this.slotCountX;
 
         const controller = window.addWindow("controller", {
             location: {x: 0, y: 0, width: 1000, height: ScreenHeight},
             drawing: [
-                {type: "background", color: Color.TRANSPARENT},
                 {type: "frame", x: 0, y: 0, width: 1000, height: ScreenHeight, bitmap: "classic_frame_bg_light", scale: 3},
                 {type: "frame", x: 20 - 3, y: 68 - 3, width: 960 + 6, height: ScreenHeight - 68 - 70 + 6, bitmap: "classic_frame_slot", scale: 3},
                 {type: "frame", x: 20, y: ScreenHeight - 60, width: 230, height: 50, bitmap: "classic_frame_bg_light", scale: 1},
+                {type: "line", x1: 740, y1: 40, x2: 900, y2: 40, width: 4, color: Color.DKGRAY},
                 {type: "text", x: 40, y: ScreenHeight - 27, text: "Item", font: {size: 20}},
                 {type: "text", x: 160, y: ScreenHeight - 27, text: "Liquid", font: {size: 20}}
             ],
@@ -210,20 +273,48 @@ class MainUI {
                     text: "",
                     font: {color: Color.WHITE, size: 16, shadow: 0.5}
                 },
-                buttonPlus: {type: "button", x: 800, y: 25, bitmap: "rv.button_plus", bitmap2: "rv.button_plus_pressed", scale: 2, clicker: {
+                scrollZoom: {
+                    type: "scroll",
+                    x: 740, y: 30,
+                    length: 160 - 20, width: 20,
+                    bitmapHandle: "rv.handle_zoom", bitmapHandleHover: "rv.handle_zoom",
+                    bitmapBg: "_default_slot_empty", bitmapBgHover: "_default_slot_empty",
+                    onTouchEvent: (elem, event) => {
+                        const diff = this.SLOT_X_MAX - this.SLOT_X_MIN;
+                        const page = Math.round(event.localX * diff);
+                        const zoom = this.SLOT_X_MAX - page;
+                        if(this.liquidMode){
+                            event.localX = (this.SLOT_X_MAX - this.slotCountX) / diff;
+                            return;
+                        }
+                        event.localX = page / diff;
+                        elem.window.getElements().get("textZoom").setBinding("text", zoom + "");
+                        this.changeSlotXCount(zoom);
+                    }
+                },
+                textZoom: {type: "text", x: 820, y: 8, font: {color: Color.DKGRAY, size: 12, align: UI.Font.ALIGN_CENTER}},
+                buttonMinus: {type: "button", x: 710, y: 30, bitmap: "rv.button_minus", bitmap2: "rv.button_minus_pressed", scale: 1.5, clicker: {
                     onClick: () => {
-                        this.changeSlotXCount(-1);
+                        if(!this.liquidMode){
+                            this.changeSlotXCount(this.slotCountX + 1);
+                        }
                     }
                 }},
-                buttonMinus: {type: "button", x: 850, y: 25, bitmap: "rv.button_minus", bitmap2: "rv.button_minus_pressed", scale: 2, clicker: {
+                buttonPlus: {type: "button", x: 910, y: 30, bitmap: "rv.button_plus", bitmap2: "rv.button_plus_pressed", scale: 1.5, clicker: {
                     onClick: () => {
-                        this.changeSlotXCount(1);
+                        if(!this.liquidMode){
+                            this.changeSlotXCount(this.slotCountX - 1);
+                        }
                     }
                 }},
-                switchMode: {type: "switch", x: 93, y: ScreenHeight - 50, scale: 2, onNewState: (state, container, elem) => {
-                    World.isWorldLoaded() && this.switchWindow(!!state);
-                    //elem.texture = new UI.Texture(UI.TextureSource.get("default_switch" + (state ? "on" : "off")));
-                }},
+                switchMode: {
+                    type: "switch",
+                    x: 93, y: ScreenHeight - 50, scale: 2,
+                    onNewState: (state, container, elem) => {
+                        World.isWorldLoaded() && this.switchWindow(!!state);
+                        //elem.texture = new UI.Texture(UI.TextureSource.get("default_switch" + (state ? "on" : "off")));
+                    }
+                },
                 buttonPrev: {
                     type: "button",
                     x: 520, y: ScreenHeight - 60, scale: 2,
@@ -250,7 +341,7 @@ class MainUI {
             }
         });
 
-        this.setSlotCount(__config__.getNumber("slotCountX").intValue());
+        this.setSlotCount(Cfg.slotCountX);
         this.refreshSlotsWindow();
         window.addWindowInstance("list", this.slotsWindow);
         window.addWindowInstance("overlay", UiFuncs.genOverlayWindow());
@@ -258,11 +349,15 @@ class MainUI {
         window.setBlockingBackground(true);
         window.setCloseOnBackPressed(true);
 
+        controller.setBackgroundColor(Color.TRANSPARENT);
+
         controller.setEventListener({
-            onOpen: () => {
+            onOpen: window => {
                 StartButton.close();
             },
-            onClose: () => {
+            onClose: window => {
+                this.liquidMode = false;
+                Cfg.set("slotCountX", this.slotCountX);
                 StartButton.open();
             }
         });
@@ -303,48 +398,64 @@ class MainUI {
     }
 
 
+    private static whileDisplaying = false;
+
     static updateWindow(): void {
 
-        let elements = this.window.getElements();
-        let elem: UI.Element;
-        const maxPage = this.liquidMode ? (this.liqList.length / this.tankCount | 0) + 1 : (this.list.length / this.slotCount | 0) + 1;
+        const threadName = "rv_MainUI_updateWindow";
+
+        this.whileDisplaying = false;
+        joinThread(threadName);
+
+        const maxPage = Math.ceil(this.liquidMode ? this.liqList.length / this.tankCount : this.list.length / this.slotCount);
         this.page = this.page < 0 ? maxPage - 1 : this.page >= maxPage ? 0 : this.page;
-        elements.get("textPage").setBinding("text", (this.page + 1) + " / " + maxPage);
+        this.window.getElements().get("textPage").setBinding("text", (this.page + 1) + " / " + maxPage);
 
         if(this.liquidMode){
-            elements = this.tanksWindow.getElements();
-            let liquid: string;
-            for(let i = 0; i < this.tankCount; i++){
-                elem = elements.get("tank" + i);
-                liquid = this.liqList[this.tankCount * this.page + i];
-                if(liquid){
-                    elem.setBinding("texture", LiquidRegistry.getLiquidUITexture(liquid, elem.elementRect.width(), elem.elementRect.height()));
-                    elem.setBinding("value", 1);
+            Threading.initThread(threadName, () => {
+                const elems = this.tanksWindow.getElements();
+                let elem: UI.Element;
+                let liquid: string;
+                this.whileDisplaying = true;
+                for(let i = 0; i < this.tankCount && this.whileDisplaying; i++){
+                    elem = elems.get("tank" + i);
+                    liquid = this.liqList[this.tankCount * this.page + i];
+                    if(liquid){
+                        elem.setBinding("texture", LiquidRegistry.getLiquidUITexture(liquid, elem.elementRect.width(), elem.elementRect.height()));
+                        elem.setBinding("value", 1);
+                    }
+                    else{
+                        elem.setBinding("texture", "_default_slot_empty");
+                        elem.setBinding("value", 0);
+                    }
                 }
-                else{
-                    elem.setBinding("texture", "_default_slot_empty");
-                    elem.setBinding("value", 0);
-                }
-            }
+            });
         }
         else{
-            elements = this.slotsWindow.getElements();
-            let item: ItemInfo;
-            for(let i = 0; i < this.slotCount; i++){
-                item = this.list[this.slotCount * this.page + i];
-                elements.get("slot" + i).setBinding("source", item ? {id: item.id, count: 1, data: item.data} : {id: 0, count: 0, data: 0});
-            }
+            Threading.initThread(threadName, () => {
+                const elems = this.slotsWindow.getElements();
+                const empty = {id: 0, count: 0, data: 0};
+                let item: ItemInfo;
+                this.whileDisplaying = true;
+                java.lang.Thread.sleep(20);
+                for(let i = 0; i < this.slotCount && this.whileDisplaying; i++){
+                    item = this.list[this.slotCount * this.page + i];
+                    elems.get("slot" + i).setBinding("source", item ? {id: item.id, count: 1, data: item.data} : empty);
+                }
+            });
         }
 
     }
 
 
     static openWindow(list: ItemInfo[] = ItemList.get()): void {
+        joinThread("rv_LevelLoaded", "[RV]: Waiting for preparations");
         this.list = list;
         this.liqList = Object.keys(LiquidRegistry.liquids);
         this.window.open();
         this.changeSortMode(true);
         this.switchWindow(false, true);
+        this.changeSlotXCount(this.slotCountX, true);
     }
 
 

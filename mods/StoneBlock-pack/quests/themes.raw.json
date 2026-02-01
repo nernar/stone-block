@@ -1,0 +1,143 @@
+{
+	"better_questing.light": {
+		"bindings": {
+			"background": "better_questing.light.background",
+			"frame": "better_questing.light.frame",
+			"panel": "better_questing.light.panel",
+			"tooltip_background": "better_questing.light.tooltip_background",
+			"button_normal": "better_questing.light.button_normal",
+			"button_normal_hover": "better_questing.light.button_normal_hover",
+			"quest_normal": "better_questing.light.quest_normal",
+			"quest_main": "better_questing.light.quest_main"
+		},
+		"properties": {
+			"text_header": "#FF000000",
+			"text_main": "#FF000000",
+			"text_aux": "#FF000000",
+			"status_locked": "#FFC00000",
+			"status_foregoing": "#FF00C0C0",
+			"status_done": "#FF00C000",
+			"page_divider": "#FF000000",
+			"quest_line_locked": "#FFC00000",
+			"quest_line_unlocked": [
+				"#FFFFFF00",
+				"#FF808000"
+			],
+			"quest_line_pending": "#FF00FF00",
+			"quest_line_complete": "#FF00FF00",
+			"quest_icon_locked": "#FF808080",
+			"quest_icon_unlocked": [
+				"#FFC00000",
+				"#FF600000"
+			],
+			"quest_icon_pending": [
+				"#FF00FFFF",
+				"#FF008080"
+			],
+			"quest_icon_complete": "#FF00FF00"
+		}
+	},
+	"better_questing.dark": {
+		"bindings": {
+			"background": "better_questing.dark.background",
+			"frame": "better_questing.dark.frame",
+			"panel": "better_questing.dark.panel",
+			"tooltip_background": "better_questing.dark.tooltip_background",
+			"button_normal": "better_questing.dark.button_normal",
+			"button_normal_hover": "better_questing.dark.button_normal_hover",
+			"quest_normal": "better_questing.dark.quest_normal",
+			"quest_main": "better_questing.dark.quest_main"
+		},
+		"properties": {
+			"text_header": "#FFFFFFFF",
+			"text_main": "#FFFFFFFF",
+			"text_aux": "#FFFFFFFF",
+			"status_locked": "#FFC00000",
+			"status_foregoing": "#FF00C0C0",
+			"status_done": "#FF00C000",
+			"page_divider": "#FFFFFFFF",
+			"quest_line_locked": "#FFC00000",
+			"quest_line_unlocked": [
+				"#FFFFFF00",
+				"#FF808000"
+			],
+			"quest_line_pending": "#FF00FF00",
+			"quest_line_complete": "#FF00FF00",
+			"quest_icon_locked": "#FF808080",
+			"quest_icon_unlocked": [
+				"#FFC00000",
+				"#FF600000"
+			],
+			"quest_icon_pending": [
+				"#FF00FFFF",
+				"#FF008080"
+			],
+			"quest_icon_complete": "#FF00FF00"
+		}
+	},
+	"better_questing.ender": {
+		"parent": "better_questing.dark",
+		"bindings": {
+			"background": "better_questing.ender.background",
+			"frame": "better_questing.ender.frame",
+			"panel": "better_questing.ender.panel",
+			"tooltip_background": "better_questing.ender.tooltip_background",
+			"button_normal": "better_questing.ender.button_normal",
+			"button_normal_hover": "better_questing.ender.button_normal_hover",
+			"quest_normal": "better_questing.ender.quest_normal",
+			"quest_main": "better_questing.ender.quest_main"
+		}
+	},
+	"better_questing.nether": {
+		"parent": "better_questing.dark",
+		"bindings": {
+			"background": "better_questing.nether.background",
+			"frame": "better_questing.nether.frame",
+			"panel": "better_questing.nether.panel",
+			"tooltip_background": "better_questing.nether.tooltip_background",
+			"button_normal": "better_questing.nether.button_normal",
+			"button_normal_hover": "better_questing.nether.button_normal_hover",
+			"quest_normal": "better_questing.nether.quest_normal",
+			"quest_main": "better_questing.nether.quest_main"
+		}
+	},
+	"better_questing.overworld": {
+		"parent": "better_questing.dark",
+		"bindings": {
+			"background": "better_questing.overworld.background",
+			"frame": "better_questing.overworld.frame",
+			"panel": "better_questing.overworld.panel",
+			"tooltip_background": "better_questing.overworld.tooltip_background",
+			"button_normal": "better_questing.overworld.button_normal",
+			"button_normal_hover": "better_questing.overworld.button_normal_hover",
+			"quest_normal": "better_questing.overworld.quest_normal",
+			"quest_main": "better_questing.overworld.quest_main"
+		}
+	},
+	"better_questing.stronghold": {
+		"parent": "better_questing.dark",
+		"bindings": {
+			"background": "better_questing.stronghold.background",
+			"frame": "better_questing.stronghold.frame",
+			"panel": "better_questing.stronghold.panel",
+			"tooltip_background": "better_questing.stronghold.tooltip_background",
+			"button_normal": "better_questing.stronghold.button_normal",
+			"button_normal_hover": "better_questing.stronghold.button_normal_hover",
+			"quest_normal": "better_questing.stronghold.quest_normal",
+			"quest_main": "better_questing.stronghold.quest_main"
+		}
+	},
+	"better_questing.vanilla": {
+		"parent": "better_questing.light",
+		"bindings": {
+			"background": "better_questing.vanilla.background",
+			"frame": "better_questing.vanilla.frame",
+			"panel": "better_questing.vanilla.panel",
+			"tooltip_background": "better_questing.vanilla.tooltip_background",
+			"button_normal": "better_questing.vanilla.button_normal",
+			"button_normal_hover": "better_questing.vanilla.button_normal_hover",
+			"quest_normal": "better_questing.vanilla.quest_normal",
+			"quest_main": "better_questing.vanilla.quest_main"
+		}
+	}
+}

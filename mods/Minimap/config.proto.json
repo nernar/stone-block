@@ -1,5 +1,5 @@
 {
-  "version":2,
+  "version":2.1,
   "runtime":{
     "type":1,
     "surface":1,
@@ -24,14 +24,15 @@
     "gravity":2
   },
   "stylesheet":{
-    "border":0,
+    "border":1,
     "pointer":3,
     "local_pointer":2,
     "shape":1,
-    "explore":0
+    "explore":0,
+    "vanilla_colormap":false
   },
   "performance":{
-    "radius":12,
+    "radius":14,
     "priority":0,
     "delay":20,
     "thread":1,
@@ -39,6 +40,7 @@
   },
   "development":{
     "location":false,
-    "show_process":false
+    "show_process":false,
+    "show_research":false
   }
 }

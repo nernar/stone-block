@@ -1,6 +1,7 @@
 {
-  "name": "ModPack for SB",
-  "author": "StoneBlock Team",
-  "version": "0.0.1",
-  "description": "Сборка модов для StoneBlock"
+	"name": "StoneBlock",
+	"version": "1.0",
+	"author": "Nernar",
+	"description": "Configure modpack aspects.",
+	"clientOnly": false
 }

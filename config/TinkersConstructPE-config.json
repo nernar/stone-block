@@ -1,0 +1,16 @@
+{
+  "enabled":true,
+  "SlotsLikeVanilla":true,
+  "toolLeveling":{
+    "baseXp":500,
+    "multiplier":2
+  },
+  "oreGen":{
+    "cobaltRate":20,
+    "arditeRate":20
+  },
+  "modifierSlots":3,
+  "oreToIngotRatio":2,
+  "checkInsideSmeltery":true,
+  "showItemOnTable":true
+}

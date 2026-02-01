@@ -1,0 +1,6301 @@
+{
+	"quests": {
+		"0": {
+			"name": "Stone Crook",
+			"description": "Crooks are useful for obtaining different resources by breaking blocks with them.",
+			"slot": {
+				"id": "stoneHook",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "stoneHook",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"1": {
+			"name": "The start",
+			"description": "The start!\n\nPebbles are obtained by breaking Stone with an empty hand.",
+			"slot": {
+				"id": "stonePebble",
+				"count": 64,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "stonePebble",
+					"count": 16,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"2": {
+			"name": "Crafting table",
+			"description": "Time to make a crafting table with the pebbles you just obtained.\n\nPebbles -> cobble stone -> Stone crafting table",
+			"slot": {
+				"id": "craftingTable",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "craftingTable",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"3": {
+			"name": "Dirt",
+			"description": "Dirt can be obtained by breaking blocks with a hammer.\nCraft a stone hammer and start smashing.\nProgression:\nStone > Cobblestone > Gravel > Dirt > Sand > Dust",
+			"slot": {
+				"id": "dirt",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "dirt",
+					"count": 10,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"4": {
+			"name": "Saplings",
+			"description": "Vanilla saplings are obtained by breaking Dirt with a Crook.",
+			"slot": {
+				"id": "sapling",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "sapling",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "sapling",
+					"count": 4,
+					"data": 1
+			},
+				{
+					"id": "sapling",
+					"count": 4,
+					"data": 2
+			},
+				{
+					"id": "sapling",
+					"count": 4,
+					"data": 3
+			},
+				{
+					"id": "sapling",
+					"count": 4,
+					"data": 4
+			},
+				{
+					"id": "sapling",
+					"count": 4,
+					"data": 5
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"5": {
+			"name": "Wood",
+			"description": "Collect wood",
+			"slot": {
+				"id": "log",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "log",
+					"count": 16,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"6": {
+			"name": "String",
+			"description": "String is obtained by infecting leaves with Silk Worms\n\nSilk Worms drops from leaves and the drop chance is higher when breaking the leaves with a Crook",
+			"slot": {
+				"id": "string",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "string",
+					"count": 32,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"7": {
+			"name": "Sieve",
+			"description": "Sieve´s requires a mesh.\nDifferent resources are obtained by running dirt, gravel, sand, and dust through it with the different mesh´s.",
+			"slot": {
+				"id": "ex_heavysieve_oak",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ex_heavysieve_oak",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_heavysieve_spruce",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_heavysieve_birch",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_heavysieve_jungle",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_heavysieve_acacia",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_heavysieve_big_oak",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"8": {
+			"name": "Silk Mesh",
+			"description": "See RV for which resources this mesh will give.",
+			"slot": {
+				"id": "ex_meshSilk",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ex_meshSilk",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"9": {
+			"name": "Flint Mesh",
+			"description": "See RV for which resources this mesh will give.",
+			"slot": {
+				"id": "ex_meshFlint",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ex_meshFlint",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"10": {
+			"name": "Iron Mesh",
+			"description": "See RV for which resources this mesh will give.",
+			"slot": {
+				"id": "ex_meshIron",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ex_meshIron",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"11": {
+			"name": "Diamond Mesh",
+			"description": "See RV for which resources this mesh will give.",
+			"slot": {
+				"id": "ex_meshDiamond",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ex_meshDiamond",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"12": {
+			"name": "Storage",
+			"description": "Is your inventory getting a little full? Lets make a chest!",
+			"slot": {
+				"id": "chest",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "chest",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "stoneChest",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"13": {
+			"name": "Storage Drawer",
+			"description": "A good, cheap storage option",
+			"slot": {
+				"id": "oakDrawer",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "oakDrawer",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "spruceDrawer",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "brichDrawer",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "jungleDrawer",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "acaciaDrawer",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "bigDrawer",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"14": {
+			"name": "Tinkers!",
+			"description": "Tinkers Tools are special tools that can be upgraded and also have special features and lots of different kind of tools.",
+			"slot": {
+				"id": "tcon_toolstation",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "tcon_toolstation",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_partbuilder",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_stenciltable",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_blank",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_pickaxe",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_shovel",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_axe",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_broadaxe",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_sword",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_hammer",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_excavator",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_rod",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_rod2",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_binding",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_binding2",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_guard",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "tcon_pattern_largeplate",
+					"count": 4,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"15": {
+			"name": "Smeltery",
+			"description": "Can be used to smelt ores but mostly used to smelt metals to craft advanced Tinkers Tools.",
+			"slot": {
+				"id": "tcon_smeltery",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "tcon_cast_pickaxe",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_shovel",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_axe",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_broadaxe",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_sword",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_hammer",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_excavator",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_rod",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_rod2",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_binding",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_binding2",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_guard",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_largeplate",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_ingot",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_nugget",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_gem",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_plate",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_cast_gear",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_pickaxe",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_shovel",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_axe",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_broadaxe",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_sword",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_hammer",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_excavator",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_rod",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_rod2",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_binding",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_binding2",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_guard",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_claycast_largeplate",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_tank",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_smeltery",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "tcon_faucet",
+					"count": 2,
+					"data": 0
+			},
+				{
+					"id": "tcon_seared_glass",
+					"count": 16,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"16": {
+			"name": "Floral Fertilizer",
+			"description": "Floral fertilizer is used to obtained botania flowers\n\nright click it on grass",
+			"slot": {
+				"id": "magi_fertilizer",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "magi_fertilizer",
+					"count": 5,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"17": {
+			"name": "Compacting drawers",
+			"description": "special stone-colored drawer that auto-convert compressible items.",
+			"slot": {
+				"id": "storagedrawers:compdrawers",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "storagedrawers:compdrawers",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"18": {
+			"name": "Lava generation",
+			"description": "Crucibles can transform Stone into Lava.\n\nSpeeds:\nTorch: 1\nLava 3\nFire 5\nMega Torch 10\nYellorium Block 20\nBlutonium Block 30\nSuperheating Element 60\nAwakened Draconium Block 120\n",
+			"slot": {
+				"id": "ex_crucible_oak",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ex_crucible_oak",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_crucible_spruce",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_crucible_birch",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_crucible_jungle",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_crucible_acacia",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_crucible_big_oak",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"19": {
+			"name": "Water",
+			"description": "Craft a bucket with iron from sifting to pick up water.",
+			"slot": {
+				"id": "water_bucket",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "water_bucket",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"20": {
+			"name": "Cobblestone generator tier 1",
+			"description": "Cobblestone generator tier 1 is capable of making 1 Cobblestone per 40 ticks.",
+			"slot": {
+				"id": "tp:cobblegen_block",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "tp:cobblegen_block",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"21": {
+			"name": "Cobblestone generator tier 2",
+			"description": "Cobblestone generator tier 2 is capable of making 1 Cobblestone per 20 ticks.",
+			"slot": {
+				"id": "tp:iron_cobblegen_block",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "tp:iron_cobblegen_block",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"22": {
+			"name": "Cobblestone generator tier 3",
+			"description": "Cobblestone generator tier 3 is capable of making 1 Cobblestone per 10 ticks.",
+			"slot": {
+				"id": "tp:diamond_cobblegen_block",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "tp:diamond_cobblegen_block",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"23": {
+			"name": "Cobblestone generator tier 4",
+			"description": "Cobblestone generator tier 4 is capable of making 1 Cobblestone per 5 ticks.",
+			"slot": {
+				"id": "tp:blaze_cobblegen_block",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "tp:blaze_cobblegen_block",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"24": {
+			"name": "Cobblestone generator tier 5",
+			"description": "Cobblestone generator tier 5 is capable of making 1 Cobblestone per tick.",
+			"slot": {
+				"id": "tp:emerald_cobblegen_block",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "tp:emerald_cobblegen_block",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"25": {
+			"name": "Mob farm",
+			"description": "Create a mobs farm",
+			"slot": {
+				"id": "rotten_flesh",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "rotten_flesh",
+					"count": 12,
+					"data": 0
+			},
+				{
+					"id": "bone",
+					"count": 6,
+					"data": 0
+			},
+				{
+					"id": "ender_pearl",
+					"count": 2,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"26": {
+			"name": "Automated mob farm",
+			"description": "Automate your mob farm",
+			"slot": {
+				"id": "extrautils2:spike_iron",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "openblocks:fan",
+					"count": 2,
+					"data": 0
+			},
+				{
+					"id": "extrautils2:spike_iron",
+					"count": 4,
+					"data": 0
+			},
+				{
+					"id": "randomthings:itemcollector",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"27": {
+			"name": "Nether",
+			"description": "To the nether we go.",
+			"slot": {
+				"id": "obsidian",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "obsidian",
+					"count": 10,
+					"data": 0
+			},
+				{
+					"id": "flint_and_steel",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"28": {
+			"name": "Auto Sieve",
+			"description": "This sieve uses RF to sieve for you ",
+			"slot": {
+				"id": "ex_autosieve",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ex_autosieve",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"29": {
+			"name": "Wither Skulls",
+			"description": "While your in the nether pickup some Wither Skeleton Skulls",
+			"slot": {
+				"id": "skull",
+				"count": 1,
+				"data": 1
+			},
+			"requires": [
+				{
+					"id": "skull",
+					"count": 3,
+					"data": 1
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"30": {
+			"name": "End Stone",
+			"description": "Craft End Stone",
+			"slot": {
+				"id": "end_stone",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "end_stone",
+					"count": 9,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"31": {
+			"name": "End",
+			"description": "Use the items required in this quest to make a portal to the end\n\nGoogle \"Artificial End Portal\" on more info on how to build it.\n\n(Pro Tip: Craft an End Cake instead)",
+			"slot": {
+				"id": "end_portal_frame",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "end_rod",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "end_stone",
+					"count": 10,
+					"data": 0
+			},
+				{
+					"id": "obsidian",
+					"count": 16,
+					"data": 0
+			},
+				{
+					"id": "randomthings:ingredient",
+					"count": 1,
+					"data": 1
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"32": {
+			"name": "Deep Dark",
+			"description": "Lots of mobs and ores",
+			"slot": {
+				"id": "extrautils2:teleporter",
+				"count": 1,
+				"data": 1
+			},
+			"requires": [
+				{
+					"id": "extrautils2:teleporter",
+					"count": 1,
+					"data": 1
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"33": {
+			"name": "Aroma mining dimension",
+			"description": "Mining dimension",
+			"slot": {
+				"id": "minehui",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "portalframe",
+					"count": 10,
+					"data": 0
+			},
+				{
+					"id": "minehui",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"34": {
+			"name": "Nether star",
+			"description": "Look, a star!",
+			"slot": {
+				"id": "nether_star",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "nether_star",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"35": {
+			"name": "Neutron",
+			"description": "You´ll need this later to make Infinity ingos to make Avaritia items later\n\nyou'll need a lot of it",
+			"slot": {
+				"id": "neutron_pile",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "neutCo",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			]
+		},
+		"36": {
+			"name": "Extreme Crafting",
+			"description": "9x9 crafting table... interesting ",
+			"slot": {
+				"id": "extWorckbench",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "extWorckbench",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"37": {
+			"name": "Infinity Catalyst",
+			"description": "One is all and all is one",
+			"slot": {
+				"id": "catalystInfinity",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "catalystInfinity",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"38": {
+			"name": "Infinity Ingot",
+			"description": "The fury of the universe in the palm of your hand",
+			"slot": {
+				"id": "ingotInfinity",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ingotInfinity",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"39": {
+			"name": "Infinity Armor",
+			"description": "Insane Armor",
+			"slot": {
+				"id": "inf_leggings",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "inf_helmet",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "inf_chestplate",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "inf_leggings",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "inf_boots",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"40": {
+			"name": "World Breaker",
+			"description": "Insane pickaxe with Fortune X",
+			"slot": {
+				"id": "cosmPickaxe",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "cosmPickaxe",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"41": {
+			"name": "Survival Generator",
+			"description": "It consumes Furnace fuels to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_survival"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_survival"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"42": {
+			"name": "Dischantment Generator",
+			"description": "It burns enchanted items including Enchanted Books to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_enchant"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_enchant"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"43": {
+			"name": "Slimey Generator",
+			"description": "It burns solid Slimeballs or Slime Blocks with Milk to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_slime"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_slime"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"44": {
+			"name": "Death Generator",
+			"description": "It will burn Bones, Bone Blocks, Rotten Flesh and Wither Skeleton Skulls to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_death"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_death"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"45": {
+			"name": "Frosty Generator",
+			"description": "It consumes various types of Ice and Snow to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_ice"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_ice"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"46": {
+			"name": "Netherstar Generator",
+			"description": "It burns Nether Stars to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_netherstar"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_netherstar"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"47": {
+			"name": "Halitosis Generator",
+			"description": "It burns Dragon's Breath to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_dragonsbreath"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_dragonsbreath"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"48": {
+			"name": "Explosive Generator",
+			"description": "It burns either Gunpowder or TNT to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_tnt"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_tnt"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"49": {
+			"name": "Overclocked Generator",
+			"description": "It is the upgrade of the Furnace Generator and will consume any Solid Fuel (fuels that can be used in a Vanilla Furnace) to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_overclock"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_overclock"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"50": {
+			"name": "Pink Generator",
+			"description": "Generate RF from pink stuff",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_pink"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_pink"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"51": {
+			"name": "Potion Generator",
+			"description": "It generates RF using potions",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_potion"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_potion"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"52": {
+			"name": "Ender Generator",
+			"description": "It burns Ender Pearls and Eyes of Ender to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_ender"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_ender"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"53": {
+			"name": "Heated Redstone Generator",
+			"description": "It consumes Lava and Redstone to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_redstone"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_redstone"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"54": {
+			"name": "Magmatic Generator",
+			"description": "It consumes lava to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_lava"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_lava"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"55": {
+			"name": "Culinary Generator",
+			"description": "It generate RF from food",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator_culinary"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator_culinary"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"56": {
+			"name": "Furnace Generator",
+			"description": "It burns solid Furnace fuels to generate RF",
+			"slot": {
+				"id": "extrautils2:machine",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"type": "extrautils2:generator"
+				}
+			},
+			"requires": [
+				{
+					"id": "extrautils2:machine",
+					"count": 1,
+					"data": 0,
+					"extra": {
+						"type": "extrautils2:generator"
+					}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"57": {
+			"name": "Rainbow Generator",
+			"description": "It generate one million RF/t on each side while all other 16 Generators from Extra Utilities 2 are running.",
+			"slot": {
+				"id": "extrautils2:rainbowgenerator",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "extrautils2:rainbowgenerator",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"58": {
+			"name": "Solar Panel 1",
+			"description": "Produces 1 RF/tick. Internal storage 25,000. Transfer 8 RF/tick",
+			"slot": {
+				"id": "sfr_1",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "sfr_1",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"59": {
+			"name": "Solar Panel 2",
+			"description": "Produces 8 RF/tick. Internal storage 125,000. Transfer 64 RF/tick",
+			"slot": {
+				"id": "sfr_2",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "sfr_2",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"60": {
+			"name": "Solar Panel 3",
+			"description": "Produces 32 RF/tick. Internal storage 425,000. Transfer 256 RF/tick",
+			"slot": {
+				"id": "sfr_3",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "sfr_3",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"61": {
+			"name": "Solar Panel 4",
+			"description": "Produces 128 RF/tick. Internal storage 2,000,000. Transfer 1,024 RF/tick",
+			"slot": {
+				"id": "sfr_4",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "sfr_4",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"62": {
+			"name": "Solar Panel 5",
+			"description": "Produces 512 RF/tick. Internal storage 8,000,000. Transfer 4,096 RF/tick",
+			"slot": {
+				"id": "sfr_5",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "sfr_5",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"63": {
+			"name": "Solar Panel 6",
+			"description": "Produces 2,048 RF/tick. Internal storage 32,000,000. Transfer 16,384 RF/tick",
+			"slot": {
+				"id": "sfr_6",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "sfr_6",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"64": {
+			"name": "Solar Panel 7",
+			"description": "Produces 8,192 RF/tick. Internal storage 64,000,000. Transfer 64,000 RF/tick",
+			"slot": {
+				"id": "sfr_7",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "sfr_7",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"65": {
+			"name": "Solar Panel 8",
+			"description": "Produces 32,768 RF/tick. Internal storage 128,000,000. Transfer 256,000 RF/tick",
+			"slot": {
+				"id": "sfr_8",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "sfr_8",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"66": {
+			"name": "Oak Crucible",
+			"description": "Place organic items, leaves, saplings or food into an Oak Crucible, and wait for it to turn into water.",
+			"slot": {
+				"id": "ex_crucible_oak",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ex_crucible_oak",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_crucible_spruce",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_crucible_birch",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_crucible_jungle",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_crucible_acacia",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_crucible_big_oak",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"67": {
+			"name": "Clay",
+			"description": "Clay can be obtained by clicking an Oak Crucible filled with water or Wooden Barrel with a Dust Block.",
+			"slot": {
+				"id": "clay",
+				"count": 3,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "clay",
+					"count": 3,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"68": {
+			"name": "Solar Array Tier 1",
+			"description": "Solar Array",
+			"slot": {
+				"id": "environmentaltech:solar_cont_1",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "environmentaltech:solar_cont_1",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"69": {
+			"name": "Solar Array Tier 2",
+			"description": "Solar Array",
+			"slot": {
+				"id": "environmentaltech:solar_cont_2",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "environmentaltech:solar_cont_2",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"70": {
+			"name": "Solar Array Tier 3",
+			"description": "Solar Array",
+			"slot": {
+				"id": "environmentaltech:solar_cont_3",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "environmentaltech:solar_cont_3",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"71": {
+			"name": "Solar Array Tier 4",
+			"description": "Solar Array",
+			"slot": {
+				"id": "environmentaltech:solar_cont_4",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "environmentaltech:solar_cont_4",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"72": {
+			"name": "Solar Array Tier 5",
+			"description": "Solar Array",
+			"slot": {
+				"id": "environmentaltech:solar_cont_5",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "environmentaltech:solar_cont_5",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"73": {
+			"name": "Solar Array Tier 6",
+			"description": "Solar Array",
+			"slot": {
+				"id": "environmentaltech:solar_cont_6",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "environmentaltech:solar_cont_6",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"74": {
+			"name": "Reactor",
+			"description": "Max size:\ny:48 x/z:32 ",
+			"slot": {
+				"id": "bigreactors:reactorcontroller",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "bigreactors:reactorcasing",
+					"count": 32,
+					"data": 0
+			},
+				{
+					"id": "bigreactors:reactorpowertaprf",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "bigreactors:reactoraccessport",
+					"count": 2,
+					"data": 0
+			},
+				{
+					"id": "bigreactors:reactorcontroller",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "bigreactors:reactorfuelrod",
+					"count": 3,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"76": {
+			"name": "Inscriber",
+			"description": "Used to make processors for AE.",
+			"slot": {
+				"id": "appliedenergistics2:inscriber",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "appliedenergistics2:inscriber",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"77": {
+			"name": "Presses",
+			"description": "Used in inscriber to make parts for processors",
+			"slot": {
+				"id": "appliedenergistics2:material",
+				"count": 1,
+				"data": 19
+			},
+			"requires": [
+				{
+					"id": "appliedenergistics2:material",
+					"count": 1,
+					"data": 13
+			},
+				{
+					"id": "appliedenergistics2:material",
+					"count": 1,
+					"data": 14
+			},
+				{
+					"id": "appliedenergistics2:material",
+					"count": 1,
+					"data": 15
+			},
+				{
+					"id": "appliedenergistics2:material",
+					"count": 1,
+					"data": 19
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"78": {
+			"name": "Growth Acceleration",
+			"description": "Accelerates AE seeds",
+			"slot": {
+				"id": "appliedenergistics2:quartz_growth_accelerator",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "appliedenergistics2:quartz_growth_accelerator",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"79": {
+			"name": "Growth Chamber",
+			"description": "Accelerates crystal seeds within its own inventory",
+			"slot": {
+				"id": "ae2stuff:grower",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ae2stuff:grower",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"80": {
+			"name": "ME Drive",
+			"description": "Stores up to 10 storage drives",
+			"slot": {
+				"id": "appliedenergistics2:drive",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "appliedenergistics2:drive",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"81": {
+			"name": "1k Me Storage Cell",
+			"description": "1,024 bytes of storage.",
+			"slot": {
+				"id": "appliedenergistics2:storage_cell_1k",
+				"count": 1,
+				"data": 0,
+				"extra": {}
+			},
+			"requires": [
+				{
+					"id": "appliedenergistics2:storage_cell_1k",
+					"count": 1,
+					"data": 0,
+					"extra": {}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"82": {
+			"name": "4k Me Storage Cell",
+			"description": "4,096 bytes of storage.",
+			"slot": {
+				"id": "appliedenergistics2:storage_cell_4k",
+				"count": 1,
+				"data": 0,
+				"extra": {}
+			},
+			"requires": [
+				{
+					"id": "appliedenergistics2:storage_cell_4k",
+					"count": 1,
+					"data": 0,
+					"extra": {}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"83": {
+			"name": "16k Me Storage Cell",
+			"description": "16,384 bytes of storage.",
+			"slot": {
+				"id": "appliedenergistics2:storage_cell_16k",
+				"count": 1,
+				"data": 0,
+				"extra": {}
+			},
+			"requires": [
+				{
+					"id": "appliedenergistics2:storage_cell_16k",
+					"count": 1,
+					"data": 0,
+					"extra": {}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"84": {
+			"name": "64k Me Storage Cell",
+			"description": "65,536 bytes of storage.",
+			"slot": {
+				"id": "appliedenergistics2:storage_cell_64k",
+				"count": 1,
+				"data": 0,
+				"extra": {}
+			},
+			"requires": [
+				{
+					"id": "appliedenergistics2:storage_cell_64k",
+					"count": 1,
+					"data": 0,
+					"extra": {}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"85": {
+			"name": "Controller",
+			"description": "Provides 32 channels on each side of the Me Controllor",
+			"slot": {
+				"id": "appliedenergistics2:controller",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "appliedenergistics2:controller",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"87": {
+			"name": "Auto Crafting",
+			"description": "The assembler is a powered machine which crafts items, it can be upgraded by inserting Acceleration Cards into it; once upgraded it is very fast.\nUses the Encoded Patterns (must be a crafting recipe)  from attached ME Interface to craft items when they are requested by the Crafting CPU.",
+			"slot": {
+				"id": "ex_auto_crafting_table",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ex_auto_crafting_table",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "ex_autocompressor",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"88": {
+			"name": "Security",
+			"description": "Allows you to configure which users, and what permissions the users have with the ME System. By existing it enforces permissions on the usage of the system.",
+			"slot": {
+				"id": "appliedenergistics2:security_station",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "appliedenergistics2:security_station",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"89": {
+			"name": "Processor",
+			"description": "Processors",
+			"slot": {
+				"id": "appliedenergistics2:material",
+				"count": 1,
+				"data": 24
+			},
+			"requires": [
+				{
+					"id": "appliedenergistics2:material",
+					"count": 1,
+					"data": 24
+			},
+				{
+					"id": "appliedenergistics2:material",
+					"count": 1,
+					"data": 23
+			},
+				{
+					"id": "appliedenergistics2:material",
+					"count": 1,
+					"data": 22
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"90": {
+			"name": "Wireless Access",
+			"description": "Access your system wirelessvia a Wireless Terminal ",
+			"slot": {
+				"id": "appliedenergistics2:wireless_terminal",
+				"count": 1,
+				"data": 0,
+				"extra": {}
+			},
+			"requires": [
+				{
+					"id": "appliedenergistics2:wireless_terminal",
+					"count": 1,
+					"data": 0,
+					"extra": {}
+			},
+				{
+					"id": "appliedenergistics2:wireless_access_point",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"91": {
+			"name": "Wireless Crafting",
+			"description": "Craft from anywhere you like, provided that you have an infinity booster upgrade.",
+			"slot": {
+				"id": "wct:wct",
+				"count": 1,
+				"data": 0,
+				"extra": {
+					"infinityenergy": 0
+				}
+			},
+			"requires": [
+				{
+					"id": "wct:infinity_booster_card",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "wct:wct",
+					"count": 1,
+					"data": 0,
+					"extra": {}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"93": {
+			"name": "Disk Drive",
+			"description": "The Disk Drive is a block that has one goal: provide storage to the system.\n\nYou can insert storage disks or fluid storage disks in the inventory slots and those disks will be used to put the items or fluids on.",
+			"slot": {
+				"id": "diskDrive",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "diskDrive",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"94": {
+			"name": "Controller",
+			"description": "The Controller is the block every Refined Storage system will need. It is the core of your system.\nYou are supposed to connect every device that depends on a storage network connection to the Controller.\n\nYou can connect devices by connecting Cable to them.\n\nCables are not always necessary, as long as the devices are next to each other in any direction a connection will be established as well.",
+			"slot": {
+				"id": "RS_controller",
+				"count": 1,
+				"data": 2
+			},
+			"requires": [
+				{
+					"id": "RS_controller",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"95": {
+			"name": "Crafter",
+			"description": "The Crafter is a block that crafts items with patterns. It can take speed upgrades to increase the crafting speed.\n\nWith patterns meant for machine automation, the Crafter has to face the correct input side of the machine.",
+			"slot": {
+				"id": "refinedstorage:crafter",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "refinedstorage:crafter",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"96": {
+			"name": "Security Manager",
+			"description": "The Security Manager is a block that can store security cards.\n\nFrom it's GUI, you can configure what permissions each player (that is bound with a Security Card) has.\n\nOnce the Security Card is inserted into the top slots, the permissions for that player will be restricted to the ones configured.",
+			"slot": {
+				"id": "refinedstorage:security_manager",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "refinedstorage:security_manager",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"97": {
+			"name": "Processor",
+			"description": "Processor is used to craft the various Refined Storage devices.",
+			"slot": {
+				"id": "advanced_processor",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "basic_processor",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "improved_processor",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "advanced_processor",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"98": {
+			"name": "1k Storage Disk",
+			"description": "The 1k Storage Disk can store 1.000 items.",
+			"slot": {
+				"id": "1Kdisk",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "1Kdisk",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"99": {
+			"name": "4k Storage Disk",
+			"description": "The 1k Storage Disk can store 4.000 items.",
+			"slot": {
+				"id": "4Kdisk",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "4Kdisk",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"100": {
+			"name": "16k Storage Disk",
+			"description": "The 16k Storage Disk can store 16.000 items.",
+			"slot": {
+				"id": "16Kdisk",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "16Kdisk",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"101": {
+			"name": "64k Storage Disk",
+			"description": "The 64k Storage Disk can store 64.000 items.",
+			"slot": {
+				"id": "64Kdisk",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "64Kdisk",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"102": {
+			"name": "Crafting Grid",
+			"description": "The Crafting Grid is the same as a regular Grid, but has a crafting inventory too.",
+			"slot": {
+				"id": "RS_crafting_grid",
+				"count": 1,
+				"data": 1
+			},
+			"requires": [
+				{
+					"id": "RS_crafting_grid",
+					"count": 1,
+					"data": 1
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"103": {
+			"name": "Wireless Grid",
+			"description": "With the Wireless Grid the player can access their items from anywhere.\n\nTo activate the Wireless Grid, the player has to right click the Wireless Grid on a Controller.",
+			"slot": {
+				"id": "refinedstorage:wireless_grid",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "refinedstorage:wireless_grid",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"104": {
+			"name": "Wireless Crafting Grid",
+			"description": "Wireless Grid with a crafting grid",
+			"slot": {
+				"id": "refinedstorageaddons:wireless_crafting_grid",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "refinedstorageaddons:wireless_crafting_grid",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"105": {
+			"name": "Drawer Controller",
+			"description": "Drawer Controllers are the second special block in the mod. They will search for any connected drawer within 12 blocks, and then expose all of those drawers as a large combined inventory. This lets you hook up a single pipe, tube, duct, spark, storage bus, etc. and interact with the entire bank of drawers.\nThe second function of the controller is as a deposit-only interactive block. By right-clicking on the front face with an item, the item will be deposited into the connected network. By double-right clicking, it will attempt to dump your entire inventory. Items will only be dumped if they already exist in the network, allowing you to clear out a bunch of mob drops or farmed crops without literally dumping your entire inventory.",
+			"slot": {
+				"id": "storagedrawers:controller",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "storagedrawers:controller",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"106": {
+			"name": "Draw Keys",
+			"description": "Draw keys",
+			"slot": {
+				"id": "storagedrawers:drawer_key",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "storagedrawers:drawer_key",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "storagedrawers:personal_key",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"107": {
+			"name": "Upgrades",
+			"description": "Upgrades the storage capacity",
+			"slot": {
+				"id": "storagedrawers:upgrade_template",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "storagedrawers:upgrade_storage",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "storagedrawers:upgrade_storage",
+					"count": 1,
+					"data": 1
+			},
+				{
+					"id": "storagedrawers:upgrade_storage",
+					"count": 1,
+					"data": 2
+			},
+				{
+					"id": "storagedrawers:upgrade_storage",
+					"count": 1,
+					"data": 3
+			},
+				{
+					"id": "storagedrawers:upgrade_storage",
+					"count": 1,
+					"data": 4
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"109": {
+			"name": "Controller Slave",
+			"description": "Controller Slaves act as an extension of a drawer controller, exposing more faces for attaching machines, pipes, or crafting frames. Controllers will bind to a slave when they find them on the network, and all slaves bound to the same controller will share the same inventory and range as that controller. Unlike drawers, slaves cannot be shared, and you should be careful to not put them in range of multiple controllers. Using controller slaves is better for performance than using multiple controllers.",
+			"slot": {
+				"id": "storagedrawers:controllerslave",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "storagedrawers:controllerslave",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"111": {
+			"name": "Prosperity",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 5
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 16,
+					"data": 5
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"112": {
+			"name": "Inferium Essence",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"113": {
+			"name": "Chaotic Core",
+			"description": "Crafting component",
+			"slot": {
+				"id": "chaosCore",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "chaosCore",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"114": {
+			"name": "Infusion Stone",
+			"description": "Needed to craft the next tier in Essences.",
+			"slot": {
+				"id": "mysticalagriculture:infusion_crystal",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:infusion_crystal",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"115": {
+			"name": "Netherrack Furnace",
+			"description": "Faster than the Vanilla furnace.",
+			"slot": {
+				"id": "netherrackFurnace",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "netherrackFurnace",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"116": {
+			"name": "Prudentium Essence",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 1
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 1
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"117": {
+			"name": "Intermedium Essence",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 2
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 2
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"118": {
+			"name": "Superium Essence",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 3
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 3
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"119": {
+			"name": "Supremium Essence",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 4
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 4
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"120": {
+			"name": "Base Essence Ingot",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 32
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 32
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"121": {
+			"name": "Inferium Ingot",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 33
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 33
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"122": {
+			"name": "Prudentium Ingot",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 34
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 34
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"123": {
+			"name": "Intermedium Ingot",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 35
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 35
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"124": {
+			"name": "Superium Ingot",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 36
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 36
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"125": {
+			"name": "Supremium Ingot",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 37
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 37
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"126": {
+			"name": "Base Crafting Seed",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 16
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 16
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"127": {
+			"name": "Tier 1 Crafting Seed",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 17
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 17
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"128": {
+			"name": "Tier 2 Crafting Seed",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 18
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 18
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"129": {
+			"name": "Tier 3 Crafting Seed",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 19
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 19
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"130": {
+			"name": "Tier 4 Crafting Seed",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 20
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 20
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"131": {
+			"name": "Insanium Essence",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagradditions:insanium",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "mysticalagradditions:insanium",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"132": {
+			"name": "Insanium Ingot",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagradditions:insanium",
+				"count": 1,
+				"data": 2
+			},
+			"requires": [
+				{
+					"id": "mysticalagradditions:insanium",
+					"count": 1,
+					"data": 2
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"133": {
+			"name": "Tier 5 Crafting Seed",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagriculture:crafting",
+				"count": 1,
+				"data": 21
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:crafting",
+					"count": 1,
+					"data": 21
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"134": {
+			"name": "Tier 6 Crafting Seed",
+			"description": "Crafting material",
+			"slot": {
+				"id": "mysticalagradditions:insanium",
+				"count": 1,
+				"data": 1
+			},
+			"requires": [
+				{
+					"id": "mysticalagradditions:insanium",
+					"count": 1,
+					"data": 1
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"135": {
+			"name": "Master Infusion Stone",
+			"description": "Does the samething as the regular infusion stone except it is unbreakable.",
+			"slot": {
+				"id": "mysticalagriculture:master_infusion_crystal",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "mysticalagriculture:master_infusion_crystal",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"136": {
+			"name": "Iron Furnace",
+			"description": "Faster than the previous furnace.",
+			"slot": {
+				"id": "ironFurnace",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ironFurnace",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"137": {
+			"name": "Gold Furnace",
+			"description": "Faster than the previous furnace.",
+			"slot": {
+				"id": "goldFurnace",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "goldFurnace",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"138": {
+			"name": "Diamond Furnace",
+			"description": "Faster furnace than the previous furnace.",
+			"slot": {
+				"id": "diamondFurnace",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "diamondFurnace",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"139": {
+			"name": "Obsidian Furnace",
+			"description": "Faster furnace than the previous furnace.",
+			"slot": {
+				"id": "obsidianFurnace",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "obsidianFurnace",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"140": {
+			"name": "Ultimate Furnace",
+			"description": "Faster furnace than the previous furnace.",
+			"slot": {
+				"id": "blastFurnace",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "blastFurnace",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"141": {
+			"name": "Alchemical Chest",
+			"description": "Alchemical Chest",
+			"slot": {
+				"id": "alchChest",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "alchChest",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"142": {
+			"name": "Portable Battery",
+			"description": "A battery that can refill the power for items in your inventory.",
+			"slot": {
+				"id": "draconicevolution:draconium_capacitor",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "draconicevolution:draconium_capacitor",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"143": {
+			"name": "Draconic Evolution Information Tablet",
+			"description": "Everything you need to know about this mod can be found here",
+			"slot": {
+				"id": "draconicevolution:info_tablet",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "draconicevolution:info_tablet",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"144": {
+			"name": "Draconic Core",
+			"description": "Crafting component",
+			"slot": {
+				"id": "chaosCore",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "chaosCore",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"145": {
+			"name": "Draconic Energy Core",
+			"description": "Multiblock power storage",
+			"slot": {
+				"id": "draconicevolution:energy_storage_core",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "draconicevolution:energy_storage_core",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"146": {
+			"name": "Mob Grinder",
+			"description": "has a range of 7x7 in front of the grinder. When a mob is killed by the grinder, it will drop experience orbs that will despawn after 30 seconds",
+			"slot": {
+				"id": "grinder",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "grinder",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"147": {
+			"name": "Wyvern Armor",
+			"description": "Tough armor that probably needs an upgrade.",
+			"slot": {
+				"id": "wywernHelmet",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "wywernHelmet",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "wywernChestplate",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "wywernLeggings",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "wywernBoots",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"148": {
+			"name": "Fusion Crafting start",
+			"description": "A way of crafting items",
+			"slot": {
+				"id": "draconicevolution:crafting_injector",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "draconicevolution:fusion_crafting_core",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "draconicevolution:crafting_injector",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"149": {
+			"name": "Draconic Armor",
+			"description": "One of the best armor in the game.",
+			"slot": {
+				"id": "draconicHelmet",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "draconicHelmet",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "draconicChestplate",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "draconicLeggings",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "draconicBoots",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"150": {
+			"name": "Wyvern Fusion Crafting",
+			"description": "Craft up to wyvern level items.",
+			"slot": {
+				"id": "draconicevolution:crafting_injector",
+				"count": 1,
+				"data": 1
+			},
+			"requires": [
+				{
+					"id": "draconicevolution:crafting_injector",
+					"count": 1,
+					"data": 1
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"151": {
+			"name": "Draconic Fusion Crafting",
+			"description": "Craft up to Draconic items.",
+			"slot": {
+				"id": "draconicevolution:crafting_injector",
+				"count": 1,
+				"data": 2
+			},
+			"requires": [
+				{
+					"id": "draconicevolution:crafting_injector",
+					"count": 1,
+					"data": 2
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"152": {
+			"name": "Advanced Dislocator",
+			"description": "It can store up to 100 different waypoints, which can additionally be used across dimensions. It uses Ender Pearls as fuel.",
+			"slot": {
+				"id": "draconicevolution:dislocator_advanced",
+				"count": 1,
+				"data": 0,
+				"extra": {}
+			},
+			"requires": [
+				{
+					"id": "draconicevolution:dislocator_advanced",
+					"count": 1,
+					"data": 0,
+					"extra": {}
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"153": {
+			"name": "Ender Dragon",
+			"description": "KILL IT!",
+			"slot": {
+				"id": "mysticalagradditions:special",
+				"count": 1,
+				"data": 1
+			},
+			"requires": [
+				{
+					"id": "draconicevolution:dragon_heart",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"154": {
+			"name": "Chaos Guardian",
+			"description": "Kill it and claim its treasure.",
+			"slot": {
+				"id": "dragonHeart",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "chaosCrystal",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"155": {
+			"name": "Wyvern Core",
+			"description": "Crafting component",
+			"slot": {
+				"id": "wywernCore",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "wywernCore",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"156": {
+			"name": "Awakened Core",
+			"description": "Crafting component",
+			"slot": {
+				"id": "awakedCore",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "awakedCore",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"157": {
+			"name": "Chaos Fusion Crafting",
+			"description": "Craft up to Chaos items.",
+			"slot": {
+				"id": "draconicevolution:crafting_injector",
+				"count": 1,
+				"data": 3
+			},
+			"requires": [
+				{
+					"id": "draconicevolution:crafting_injector",
+					"count": 1,
+					"data": 3
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"158": {
+			"name": "Portable Battery XL",
+			"description": "Can charge items in your inventory with power.",
+			"slot": {
+				"id": "draconicevolution:draconium_capacitor",
+				"count": 1,
+				"data": 1
+			},
+			"requires": [
+				{
+					"id": "draconicevolution:draconium_capacitor",
+					"count": 1,
+					"data": 1
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"159": {
+			"name": "Mob Spawner",
+			"description": "\nRight clicking on a Stabilized Mob Spawner with a mob soul will change the spawner to that mob type. \nMob soul can be obtained as a very rare drop from killing mobs with Draconic Weapons or items enchanted with the Reaper Enchantment.",
+			"slot": {
+				"id": "draconicevolution:mob_soul",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "draconicevolution:draconic_spawner",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"160": {
+			"name": "Philosopher's Stone",
+			"description": "The gateway to alchemy itself.",
+			"slot": {
+				"id": "philosophersStone",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "philosophersStone",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true,
+			"ignoreExtra": true
+		},
+		"161": {
+			"name": "Gem Armor",
+			"description": "Gem armor is more offensive and offers flight. It is made by combining different Power Items with Red Matter Armour, most notably the Klein Star Omega which you need for every recipe.",
+			"slot": {
+				"id": "gemBoots",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "gemHelm",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "gemChest",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "gemLegg",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "gemBoots",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"162": {
+			"name": "Transmutation Table",
+			"description": "By placing items into the fire slot on the table, they are burned into EMC, which can then be used to create items from the output slots. However, the table must gain knowledge on how to create these items. The table gains knowledge whenever an item enters any of its slots.",
+			"slot": {
+				"id": "transmutationTablet",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "transmutationTablet",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"165": {
+			"name": "Dark Matter Armor",
+			"description": "Dark Matter Armor is very resistant but not quite indestructable.",
+			"slot": {
+				"id": "dmBoots",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "dmHelm",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "dmChest",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "dmLegg",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "dmBoots",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"166": {
+			"name": "Energy Condenser MK2",
+			"description": "Works a bit faster than its predecessor.",
+			"slot": {
+				"id": "energyCondenser2",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "energyCondenser2",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"167": {
+			"name": "Dark Matter",
+			"description": "Crafting component",
+			"slot": {
+				"id": "darkMatter",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "darkMatter",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"168": {
+			"name": "Red Matter",
+			"description": "Crafting component",
+			"slot": {
+				"id": "redMatter",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "redMatter",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"169": {
+			"name": "Energy Condenser",
+			"description": "A big chest that uses emc to transmute items place in it into another specified item.",
+			"slot": {
+				"id": "energyCondenser1",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "energyCondenser1",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"170": {
+			"name": "Red Matter Armor",
+			"description": "More resistant than dark matter armor, but confirmed weaknesses to the armor are fall damage, explosions and musket shots.",
+			"slot": {
+				"id": "rmBoots",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "rmHelm",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "rmChest",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "rmLegg",
+					"count": 1,
+					"data": 0
+			},
+				{
+					"id": "rmBoots",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"171": {
+			"name": "Tome of Knowledge",
+			"description": "Learn about every item that has an EMC value.",
+			"slot": {
+				"id": "tomeKnowledge",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "tomeKnowledge",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"172": {
+			"name": "Transmutation Tablet",
+			"description": "Portable version of the transmutation table.",
+			"slot": {
+				"id": "transmute_tablet",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "transmute_tablet",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"173": {
+			"name": "Philosopher's Morningstar",
+			"description": "Combination of a Red Matter Hammer, Red Matter Pickaxe and Red Matter Shovel.",
+			"slot": {
+				"id": "rmMorningStar",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "rmMorningStar",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"174": {
+			"name": "Philosopher's Katar",
+			"description": "Combines the functions of the Red Matter Sword, Red Matter Hoe, Red Matter Axe and Red Matter Shears.",
+			"slot": {
+				"id": "rmKatar",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "rmKatar",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"175": {
+			"name": "Philosopher's Pickaxe",
+			"description": "By right clicking an ore vein, the pickaxe will instantly mine the entire vein as long as it is under 32 blocks long. When the vein is mined, the pickaxe will create a loot ball containing the ores mined for easy collection.",
+			"slot": {
+				"id": "rmPickaxe",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "rmPickaxe",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"179": {
+			"name": "Klein Star",
+			"description": "The Klein Star is a device for storing EMC",
+			"slot": {
+				"id": "kleinStar6",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "kleinStar6",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"groupDetect": true,
+			"partialMatch": true
+		},
+		"180": {
+			"name": "Iron Storage Crate",
+			"description": "Stores 54 Stacks of items",
+			"slot": {
+				"id": "ironChest",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "ironChest",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"181": {
+			"name": "Gold Storage Crate",
+			"description": "Stores 81 Stacks of items",
+			"slot": {
+				"id": "goldChest",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "goldChest",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"182": {
+			"name": "Diamond Storage Crate",
+			"description": "Stores 108 Stacks of items",
+			"slot": {
+				"id": "diamondChest",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "diamondChest",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"183": {
+			"name": "Quantum Storage Unit",
+			"description": "It can hold up to 2147483647 of one item",
+			"slot": {
+				"id": "quantumstorage:quantum_storage_unit",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "quantumstorage:quantum_storage_unit",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"184": {
+			"name": "Black Hole Tank",
+			"description": "It can hold up to 2147483647mb of one fluid",
+			"slot": {
+				"id": "industrialforegoing:black_hole_tank",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "industrialforegoing:black_hole_tank",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"185": {
+			"name": "Quantum Tank",
+			"description": "It can hold up to 2147483647mb of one fluid",
+			"slot": {
+				"id": "quantumstorage:quantum_tank",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "quantumstorage:quantum_tank",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		},
+		"186": {
+			"name": "Black Hole Unit",
+			"description": "It can hold up to 2147483647 of one item",
+			"slot": {
+				"id": "industrialforegoing:black_hole_unit",
+				"count": 1,
+				"data": 0
+			},
+			"requires": [
+				{
+					"id": "industrialforegoing:black_hole_unit",
+					"count": 1,
+					"data": 0
+			}
+			],
+			"rewards": [
+				{
+					"id": "loot_chest",
+					"count": 1,
+					"data": 101
+			}
+			],
+			"partialMatch": true
+		}
+	},
+	"lines": {
+		"0": {
+			"name": "Start of StoneBlock",
+			"description": "Welcome to StoneBlock\n\nHere is some quests you can have fun with, and also how to get start.",
+			"quests": {
+				"0": {
+					"x": 3.6,
+					"y": 0,
+					"requires": [
+					3
+					]
+				},
+				"1": {
+					"x": 0,
+					"y": 0
+				},
+				"2": {
+					"x": 1.2,
+					"y": 0,
+					"requires": [
+					1
+					]
+				},
+				"3": {
+					"x": 2.4,
+					"y": 0,
+					"requires": [
+					2
+					]
+				},
+				"4": {
+					"x": 4.8,
+					"y": 0,
+					"requires": [
+					0
+					]
+				},
+				"5": {
+					"x": 6,
+					"y": 0,
+					"requires": [
+					4
+					]
+				},
+				"6": {
+					"x": 7.2,
+					"y": 0,
+					"requires": [
+					5
+					]
+				},
+				"7": {
+					"x": 8.4,
+					"y": 0,
+					"requires": [
+					6
+					]
+				},
+				"8": {
+					"x": 8.4,
+					"y": 1.2,
+					"requires": [
+					6,
+					7
+					]
+				},
+				"9": {
+					"x": 8.4,
+					"y": 2.4,
+					"requires": [
+					8
+					]
+				},
+				"10": {
+					"x": 8.4,
+					"y": 3.6,
+					"requires": [
+					9
+					]
+				},
+				"11": {
+					"x": 8.4,
+					"y": 4.8,
+					"requires": [
+					10
+					]
+				},
+				"12": {
+					"x": 4.8,
+					"y": 1.2,
+					"requires": [
+					5
+					]
+				},
+				"14": {
+					"x": 6,
+					"y": 1.2,
+					"requires": [
+					5
+					]
+				},
+				"15": {
+					"x": 6,
+					"y": 2.4,
+					"requires": [
+					14
+					]
+				},
+				"16": {
+					"x": 3.6,
+					"y": 1.2,
+					"requires": [
+					4
+					]
+				},
+				"18": {
+					"x": 10.8,
+					"y": 0,
+					"requires": [
+					66
+					]
+				},
+				"19": {
+					"x": 9.6,
+					"y": 1.2,
+					"requires": [
+					66
+					]
+				},
+				"20": {
+					"x": 10.8,
+					"y": 1.2,
+					"requires": [
+					18
+					]
+				},
+				"21": {
+					"x": 10.8,
+					"y": 2.4,
+					"requires": [
+					20
+					]
+				},
+				"22": {
+					"x": 10.8,
+					"y": 3.6,
+					"requires": [
+					21
+					]
+				},
+				"23": {
+					"x": 10.8,
+					"y": 4.8,
+					"requires": [
+					22
+					]
+				},
+				"24": {
+					"x": 10.8,
+					"y": 6,
+					"requires": [
+					23
+					]
+				},
+				"25": {
+					"x": 7.2,
+					"y": 1.2,
+					"requires": [
+					6
+					]
+				},
+				"26": {
+					"x": 7.2,
+					"y": 2.4,
+					"requires": [
+					25
+					]
+				},
+				"27": {
+					"x": 12,
+					"y": 0,
+					"requires": [
+					18
+					]
+				},
+				"28": {
+					"x": 8.4,
+					"y": 6,
+					"requires": [
+					11
+					]
+				},
+				"29": {
+					"x": 13.2,
+					"y": 0,
+					"requires": [
+					27
+					]
+				},
+				"30": {
+					"x": 12,
+					"y": 1.2,
+					"requires": [
+					27
+					]
+				},
+				"31": {
+					"x": 12,
+					"y": 2.4,
+					"requires": [
+					30
+					]
+				},
+				"32": {
+					"x": 10,
+					"y": 7.2,
+					"requires": [
+					24
+					]
+				},
+				"33": {
+					"x": 11.6,
+					"y": 7.2,
+					"requires": [
+					24
+					]
+				},
+				"34": {
+					"x": 14.4,
+					"y": 0,
+					"requires": [
+					29
+					]
+				},
+				"35": {
+					"x": 14.4,
+					"y": 2.4,
+					"requires": [
+					36
+					]
+				},
+				"36": {
+					"x": 14.4,
+					"y": 1.2,
+					"requires": [
+					34
+					]
+				},
+				"37": {
+					"x": 14.4,
+					"y": 3.6,
+					"requires": [
+					35
+					]
+				},
+				"38": {
+					"x": 14.4,
+					"y": 4.8,
+					"requires": [
+					37
+					]
+				},
+				"39": {
+					"x": 14.4,
+					"y": 6,
+					"requires": [
+					38,
+					149
+					]
+				},
+				"40": {
+					"x": 14.4,
+					"y": 7.2,
+					"requires": [
+					39
+					]
+				},
+				"66": {
+					"x": 9.6,
+					"y": 0,
+					"requires": [
+					7
+					]
+				},
+				"67": {
+					"x": 9.6,
+					"y": 2.4,
+					"requires": [
+					19
+					]
+				}
+			}
+		},
+		"2": {
+			"name": "Mystical Agricultural",
+			"quests": {
+				"111": {
+					"x": 7.4,
+					"y": 1.2,
+					"requires": [
+					10
+					]
+				},
+				"112": {
+					"x": 8.8,
+					"y": 1.2,
+					"requires": [
+					111
+					]
+				},
+				"114": {
+					"x": 7.4,
+					"y": 2.6,
+					"requires": [
+					111
+					]
+				},
+				"115": {
+					"x": 6,
+					"y": 1.2,
+					"requires": [
+					111
+					]
+				},
+				"116": {
+					"x": 10,
+					"y": 1.2,
+					"requires": [
+					112
+					]
+				},
+				"117": {
+					"x": 11.2,
+					"y": 1.2,
+					"requires": [
+					116
+					]
+				},
+				"118": {
+					"x": 12.4,
+					"y": 1.2,
+					"requires": [
+					117
+					]
+				},
+				"119": {
+					"x": 13.6,
+					"y": 1.2,
+					"requires": [
+					118
+					]
+				},
+				"120": {
+					"x": 8.6,
+					"y": 0,
+					"requires": [
+					111
+					]
+				},
+				"121": {
+					"x": 9.8,
+					"y": 0,
+					"requires": [
+					112,
+					120
+					]
+				},
+				"122": {
+					"x": 11,
+					"y": 0,
+					"requires": [
+					121,
+					116
+					]
+				},
+				"123": {
+					"x": 12.2,
+					"y": 0,
+					"requires": [
+					122,
+					117
+					]
+				},
+				"124": {
+					"x": 13.4,
+					"y": 0,
+					"requires": [
+					123,
+					118
+					]
+				},
+				"125": {
+					"x": 14.6,
+					"y": 0,
+					"requires": [
+					124,
+					119
+					]
+				},
+				"126": {
+					"x": 9.2,
+					"y": 2.4,
+					"requires": [
+					111
+					]
+				},
+				"127": {
+					"x": 10.4,
+					"y": 2.4,
+					"requires": [
+					112,
+					126
+					]
+				},
+				"128": {
+					"x": 11.6,
+					"y": 2.4,
+					"requires": [
+					116,
+					127
+					]
+				},
+				"129": {
+					"x": 12.8,
+					"y": 2.4,
+					"requires": [
+					117,
+					128
+					]
+				},
+				"130": {
+					"x": 14,
+					"y": 2.4,
+					"requires": [
+					118,
+					129
+					]
+				},
+				"131": {
+					"x": 14.8,
+					"y": 1.2,
+					"requires": [
+					119
+					]
+				},
+				"132": {
+					"x": 15.8,
+					"y": 0,
+					"requires": [
+					125,
+					131
+					]
+				},
+				"133": {
+					"x": 15.2,
+					"y": 2.4,
+					"requires": [
+					119,
+					130
+					]
+				},
+				"134": {
+					"x": 16.4,
+					"y": 2.4,
+					"requires": [
+					131,
+					133
+					]
+				},
+				"135": {
+					"x": 7.4,
+					"y": 3.8,
+					"requires": [
+					114
+					]
+				},
+				"136": {
+					"x": 4.8,
+					"y": 1.2,
+					"requires": [
+					115
+					]
+				},
+				"137": {
+					"x": 3.6,
+					"y": 1.2,
+					"requires": [
+					136
+					]
+				},
+				"138": {
+					"x": 2.4,
+					"y": 1.2,
+					"requires": [
+					137
+					]
+				},
+				"139": {
+					"x": 1.2,
+					"y": 1.2,
+					"requires": [
+					138
+					]
+				},
+				"140": {
+					"x": 0,
+					"y": 1.2,
+					"requires": [
+					139
+					]
+				}
+			}
+		},
+		"5": {
+			"name": "Storage",
+			"quests": {
+				"13": {
+					"x": 16,
+					"y": 0,
+					"requires": [
+					12
+					]
+				},
+				"17": {
+					"x": 16,
+					"y": 1.2,
+					"requires": [
+					13
+					]
+				},
+				"76": {
+					"x": 0.4,
+					"y": 0,
+					"requires": [
+					12
+					]
+				},
+				"77": {
+					"x": 0.4,
+					"y": 1.2,
+					"requires": [
+					76
+					]
+				},
+				"78": {
+					"x": 1.6,
+					"y": 0,
+					"requires": [
+					76
+					]
+				},
+				"79": {
+					"x": 1.6,
+					"y": 1.2,
+					"requires": [
+					78
+					]
+				},
+				"80": {
+					"x": 2.8,
+					"y": 0,
+					"requires": [
+					78
+					]
+				},
+				"81": {
+					"x": 2.8,
+					"y": 1.2,
+					"requires": [
+					80
+					]
+				},
+				"82": {
+					"x": 2.8,
+					"y": 2.4,
+					"requires": [
+					81
+					]
+				},
+				"83": {
+					"x": 2.8,
+					"y": 3.6,
+					"requires": [
+					82
+					]
+				},
+				"84": {
+					"x": 2.8,
+					"y": 4.8,
+					"requires": [
+					83
+					]
+				},
+				"85": {
+					"x": 4,
+					"y": 0,
+					"requires": [
+					80
+					]
+				},
+				"87": {
+					"x": 6.4,
+					"y": 0,
+					"requires": [
+					85
+					]
+				},
+				"88": {
+					"x": 5.2,
+					"y": 1.2,
+					"requires": [
+					85
+					]
+				},
+				"89": {
+					"x": 0.4,
+					"y": 2.4,
+					"requires": [
+					77
+					]
+				},
+				"90": {
+					"x": 5.2,
+					"y": 2.4,
+					"requires": [
+					88
+					]
+				},
+				"91": {
+					"x": 5.2,
+					"y": 3.6,
+					"requires": [
+					90
+					]
+				},
+				"93": {
+					"x": 11.2,
+					"y": 0,
+					"requires": [
+					97
+					]
+				},
+				"94": {
+					"x": 8.8,
+					"y": 0,
+					"requires": [
+					12
+					]
+				},
+				"95": {
+					"x": 13.6,
+					"y": 0,
+					"requires": [
+					102
+					]
+				},
+				"96": {
+					"x": 12.4,
+					"y": 1.2,
+					"requires": [
+					102
+					]
+				},
+				"97": {
+					"x": 10,
+					"y": 0,
+					"requires": [
+					94
+					]
+				},
+				"98": {
+					"x": 11.2,
+					"y": 1.2,
+					"requires": [
+					93
+					]
+				},
+				"99": {
+					"x": 11.2,
+					"y": 2.4,
+					"requires": [
+					98
+					]
+				},
+				"100": {
+					"x": 11.2,
+					"y": 3.6,
+					"requires": [
+					99
+					]
+				},
+				"101": {
+					"x": 11.2,
+					"y": 4.8,
+					"requires": [
+					100
+					]
+				},
+				"102": {
+					"x": 12.4,
+					"y": 0,
+					"requires": [
+					93
+					]
+				},
+				"103": {
+					"x": 12.4,
+					"y": 2.4,
+					"requires": [
+					96
+					]
+				},
+				"104": {
+					"x": 12.4,
+					"y": 3.6,
+					"requires": [
+					103
+					]
+				},
+				"105": {
+					"x": 16,
+					"y": 2.4,
+					"requires": [
+					17
+					]
+				},
+				"106": {
+					"x": 16,
+					"y": 3.6,
+					"requires": [
+					105
+					]
+				},
+				"107": {
+					"x": 16,
+					"y": 4.8,
+					"requires": [
+					106
+					]
+				},
+				"109": {
+					"x": 17.2,
+					"y": 2.4,
+					"requires": [
+					105
+					]
+				},
+				"180": {
+					"x": 0,
+					"y": 8.8,
+					"requires": [
+					12
+					]
+				},
+				"181": {
+					"x": 1.2,
+					"y": 8.8,
+					"requires": [
+					180
+					]
+				},
+				"182": {
+					"x": 2.4,
+					"y": 8.8,
+					"requires": [
+					181
+					]
+				},
+				"183": {
+					"x": 3.6,
+					"y": 8.8,
+					"requires": [
+					182
+					]
+				},
+				"184": {
+					"x": 0,
+					"y": 7.6,
+					"requires": [
+					18
+					]
+				},
+				"185": {
+					"x": 0,
+					"y": 10,
+					"requires": [
+					18
+					]
+				},
+				"186": {
+					"x": 0,
+					"y": 6.4,
+					"requires": [
+					12
+					]
+				}
+			}
+		},
+		"6": {
+			"name": "Draconic Evolution",
+			"quests": {
+				"113": {
+					"x": 3,
+					"y": 8.8,
+					"requires": [
+					156
+					]
+				},
+				"142": {
+					"x": 1.2,
+					"y": 4.8,
+					"requires": [
+					143
+					]
+				},
+				"143": {
+					"x": 3,
+					"y": 3,
+					"requires": [
+					30
+					]
+				},
+				"144": {
+					"x": 3,
+					"y": 4.6,
+					"requires": [
+					143
+					]
+				},
+				"145": {
+					"x": 1.4,
+					"y": 3,
+					"requires": [
+					143
+					]
+				},
+				"146": {
+					"x": 3,
+					"y": 1.4,
+					"requires": [
+					143
+					]
+				},
+				"147": {
+					"x": 4.8,
+					"y": 4.8,
+					"requires": [
+					143
+					]
+				},
+				"148": {
+					"x": 4.6,
+					"y": 3,
+					"requires": [
+					143
+					]
+				},
+				"149": {
+					"x": 6,
+					"y": 6,
+					"requires": [
+					147
+					]
+				},
+				"150": {
+					"x": 6,
+					"y": 3,
+					"requires": [
+					148
+					]
+				},
+				"151": {
+					"x": 7.4,
+					"y": 3,
+					"requires": [
+					150
+					]
+				},
+				"152": {
+					"x": 1.2,
+					"y": 1.2,
+					"requires": [
+					143
+					]
+				},
+				"153": {
+					"x": 4.8,
+					"y": 1.2,
+					"requires": [
+					143
+					]
+				},
+				"154": {
+					"x": 6,
+					"y": 0,
+					"requires": [
+					153
+					]
+				},
+				"155": {
+					"x": 3,
+					"y": 6,
+					"requires": [
+					144
+					]
+				},
+				"156": {
+					"x": 3,
+					"y": 7.4,
+					"requires": [
+					155
+					]
+				},
+				"157": {
+					"x": 8.8,
+					"y": 3,
+					"requires": [
+					151
+					]
+				},
+				"158": {
+					"x": 0,
+					"y": 6,
+					"requires": [
+					142
+					]
+				},
+				"159": {
+					"x": 3,
+					"y": 0,
+					"requires": [
+					146
+					]
+				}
+			}
+		},
+		"7": {
+			"name": "ProjectE",
+			"quests": {
+				"141": {
+					"x": 2.8,
+					"y": 1.4,
+					"requires": [
+					160
+					]
+				},
+				"160": {
+					"x": 4.2,
+					"y": 1.4,
+					"requires": [
+					34
+					]
+				},
+				"161": {
+					"x": 7,
+					"y": 4.2,
+					"requires": [
+					170
+					]
+				},
+				"162": {
+					"x": 2.8,
+					"y": 2.8,
+					"requires": [
+					160
+					]
+				},
+				"165": {
+					"x": 5.6,
+					"y": 2.8,
+					"requires": [
+					167
+					]
+				},
+				"166": {
+					"x": 0,
+					"y": 1.4,
+					"requires": [
+					169
+					]
+				},
+				"167": {
+					"x": 5.6,
+					"y": 1.4,
+					"requires": [
+					160
+					]
+				},
+				"168": {
+					"x": 7,
+					"y": 1.4,
+					"requires": [
+					167
+					]
+				},
+				"169": {
+					"x": 1.4,
+					"y": 1.4,
+					"requires": [
+					141
+					]
+				},
+				"170": {
+					"x": 7,
+					"y": 2.8,
+					"requires": [
+					168
+					]
+				},
+				"171": {
+					"x": 4.2,
+					"y": 0,
+					"requires": [
+					160
+					]
+				},
+				"172": {
+					"x": 1.6,
+					"y": 4,
+					"requires": [
+					162
+					]
+				},
+				"173": {
+					"x": 8.4,
+					"y": 1.4,
+					"requires": [
+					168
+					]
+				},
+				"174": {
+					"x": 8.4,
+					"y": 0,
+					"requires": [
+					168
+					]
+				},
+				"175": {
+					"x": 7,
+					"y": 0,
+					"requires": [
+					168
+					]
+				},
+				"179": {
+					"x": 4.2,
+					"y": 2.8,
+					"requires": [
+					160
+					]
+				}
+			}
+		},
+		"8": {
+			"name": "Power Generation",
+			"quests": {
+				"41": {
+					"x": 0,
+					"y": 0,
+					"requires": [
+					18
+					]
+				},
+				"42": {
+					"x": 0,
+					"y": 1,
+					"requires": [
+					18
+					]
+				},
+				"43": {
+					"x": 0,
+					"y": 2,
+					"requires": [
+					18
+					]
+				},
+				"44": {
+					"x": 0,
+					"y": 3,
+					"requires": [
+					18
+					]
+				},
+				"45": {
+					"x": 0,
+					"y": 4,
+					"requires": [
+					18
+					]
+				},
+				"46": {
+					"x": 2,
+					"y": 4,
+					"requires": [
+					18
+					]
+				},
+				"47": {
+					"x": 1,
+					"y": 4,
+					"requires": [
+					18
+					]
+				},
+				"48": {
+					"x": 3,
+					"y": 4,
+					"requires": [
+					18
+					]
+				},
+				"49": {
+					"x": 4,
+					"y": 4,
+					"requires": [
+					18
+					]
+				},
+				"50": {
+					"x": 4,
+					"y": 3,
+					"requires": [
+					18
+					]
+				},
+				"51": {
+					"x": 4,
+					"y": 2,
+					"requires": [
+					18
+					]
+				},
+				"52": {
+					"x": 4,
+					"y": 1,
+					"requires": [
+					18
+					]
+				},
+				"53": {
+					"x": 4,
+					"y": 0,
+					"requires": [
+					18
+					]
+				},
+				"54": {
+					"x": 3,
+					"y": 0,
+					"requires": [
+					18
+					]
+				},
+				"55": {
+					"x": 2,
+					"y": 0,
+					"requires": [
+					18
+					]
+				},
+				"56": {
+					"x": 1,
+					"y": 0,
+					"requires": [
+					18
+					]
+				},
+				"57": {
+					"x": 2,
+					"y": 2,
+					"requires": [
+					41,
+					56,
+					55,
+					54,
+					53,
+					52,
+					51,
+					50,
+					49,
+					48,
+					46,
+					47,
+					45,
+					44,
+					43,
+					42
+					]
+				},
+				"58": {
+					"x": 5.4,
+					"y": 0,
+					"requires": [
+					18
+					]
+				},
+				"59": {
+					"x": 5.4,
+					"y": 1,
+					"requires": [
+					58
+					]
+				},
+				"60": {
+					"x": 5.4,
+					"y": 2,
+					"requires": [
+					59
+					]
+				},
+				"61": {
+					"x": 5.4,
+					"y": 3,
+					"requires": [
+					60
+					]
+				},
+				"62": {
+					"x": 5.4,
+					"y": 4,
+					"requires": [
+					61
+					]
+				},
+				"63": {
+					"x": 5.4,
+					"y": 5,
+					"requires": [
+					62
+					]
+				},
+				"64": {
+					"x": 5.4,
+					"y": 6,
+					"requires": [
+					63
+					]
+				},
+				"65": {
+					"x": 5.4,
+					"y": 7,
+					"requires": [
+					64
+					]
+				},
+				"68": {
+					"x": 6.8,
+					"y": 0,
+					"requires": [
+					18
+					]
+				},
+				"69": {
+					"x": 6.8,
+					"y": 1,
+					"requires": [
+					68
+					]
+				},
+				"70": {
+					"x": 6.8,
+					"y": 2,
+					"requires": [
+					69
+					]
+				},
+				"71": {
+					"x": 6.8,
+					"y": 3,
+					"requires": [
+					70
+					]
+				},
+				"72": {
+					"x": 6.8,
+					"y": 4,
+					"requires": [
+					71
+					]
+				},
+				"73": {
+					"x": 6.8,
+					"y": 5,
+					"requires": [
+					72
+					]
+				},
+				"74": {
+					"x": 8.2,
+					"y": 0,
+					"requires": [
+					18
+						]
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,9 @@
+{
+	"shared": {
+		"name": "infinite-depth"
+	},
+	"depends": [
+		"innercore",
+		"nativejs"
+	]
+}

@@ -1,3 +1,6 @@
+Game.isDedicatedServer = Game.isDedicatedServer || function () {
+    return false;
+};
 var BlockPos = WRAP_JAVA("com.core.api.mcpe.api.BlockPos");
 var Vec2 = WRAP_JAVA("com.core.api.mcpe.api.Vec2");
 var Vec3 = WRAP_JAVA("com.core.api.mcpe.api.Vec3");
@@ -14,9 +17,71 @@ var Mob = WRAP_JAVA("com.core.api.mcpe.entity.Mob");
 var NativePlayer = WRAP_JAVA("com.core.api.mcpe.entity.Player");
 var LocalPlayer = WRAP_JAVA("com.core.api.mcpe.entity.LocalPlayer");
 var ServerPlayer = WRAP_JAVA("com.core.api.mcpe.entity.ServerPlayer");
+var ItemStack = WRAP_JAVA("com.core.api.mcpe.item.ItemStack");
 var NativeVar = WRAP_JAVA("com.core.api.engine.NativeVar");
 var ActorDamageCause = WRAP_JAVA("com.core.api.entity.ActorDamageCause");
-/*let BlockSource_ = BlockSource;
+var NativeUi = WRAP_JAVA("com.core.api.engine.ui.NativeUi");
+var ImageElement = WRAP_JAVA("com.core.api.engine.ui.types.ImageElement");
+var TextElement = WRAP_JAVA("com.core.api.engine.ui.types.TextElement");
+var MeshElement = WRAP_JAVA("com.core.api.engine.ui.types.MeshElement");
+var HookManager = WRAP_JAVA("com.core.api.module.HookManager");
+if (__config__.getBool("membory_display") == true) {
+    var Membory_1 = new UI.Window({
+        drawing: [
+            { type: "color", color: android.graphics.Color.argb(0, 0, 0, 0) }
+        ],
+        elements: {
+            "membory": { type: "text", x: 0, y: 0, text: "", size: 70, font: { color: android.graphics.Color.argb(1, 1, 1, 1) } }
+        }
+    });
+    Membory_1.setAsGameOverlay(true);
+    Membory_1.setTouchable(false);
+    Membory_1.open();
+    var time_1 = 1000 / 30;
+    Threading.initThread("membory-information-update", function () {
+        var context = UI.getContext();
+        while (true) {
+            java.lang.Thread.sleep(time_1);
+            var free = Math.floor(context.getFreeMemory() / 1024 / 1024);
+            var total = Math.floor(context.getTotalMemory() / 1024 / 1024);
+            var float = free / total;
+            var obj = Membory_1.content.elements["membory"];
+            if (float >= .85)
+                obj.font.color = android.graphics.Color.RED;
+            else if (float >= .6)
+                obj.font.color = android.graphics.Color.YELLOW;
+            else
+                obj.font.color = android.graphics.Color.GREEN;
+            obj.text = free + "/" + total;
+            Membory_1.forceRefresh();
+        }
+    });
+}
+var Helper = WRAP_NATIVE("HelperCoreUtility");
+// let ui = new NativeUi([
+//     new TextElement({
+//         x: 100,
+//         y: 100,
+//         text: "Белевич где двери"
+//     })
+// ]);
+// let size = 0;
+// ui.setListener({
+//     update(ui, value){
+//         size += size + (5 * value);
+//         if(size >= 1000)
+//             size = 100;
+//         ui.getElements()[0].size = size;
+//     },
+//     touch(){
+//         return true;
+//     }
+// });
+// ui.open();
+/*
+Любопытной варваре нос аторвали
+И хуй тоже оторвут, если ещё раз сюда залезишь
+let BlockSource_ = BlockSource;
 BlockSource = new Warp("com.zhekasmirnov.apparatus.mcpe.NativeBlockSource");
 function createBlockSource(region){
     try {
@@ -85,10 +150,9 @@ var EntityRegister = {
         CustomEntityJava.setHandlerTick(name, func);
     }
 };
-var gui = WRAP_NATIVE("GUI");
 var Gui = {
-    animationDestroy: function (x, y, z) {
-        gui.setDestroyBlock(x, y, z);
+    animationDestroy: function (x, y, z, speed) {
+        GlobalContext.getClientInstance().renderDestroyBlock(x, y, z, speed || 1);
     }
 };
 var TickingAreasManagerJava = WRAP_JAVA("com.core.api.level.area.TickingAreasManager");
@@ -163,68 +227,102 @@ World.setFlatGenerator = function (json) {
     return WorldJavaAPI.setFlatGenerator(json);
 };
 World.setFlatGenerator('{"biome_id":1,"block_layers":[{"block_data":0,"block_id":7,"count":1},{"block_data":0,"block_id":3,"count":2},{"block_data":0,"block_id":2,"count":1}],"encoding_version":3,"structure_options":null}');
-var ScalesJava = WRAP_JAVA("com.core.api.module.Scales");
-Network.addClientPacket("scalees.setValue", function (data) {
-    ScalesJava.getScaleByPlayer(Player.get(), data.name).setValue(data.v);
+if (Game.isDedicatedServer())
+    var ScalesJava = WRAP_JAVA("com.core.api.module_server.Scales");
+else
+    var ScalesJava = WRAP_JAVA("com.core.api.module.Scales");
+Network.addClientPacket("scales.setValue", function (data) {
+    ScalesJava.getScaleByPlayer(data.player, data.name).setValue(data.value);
+});
+Network.addClientPacket("scales.setMode", function (data) {
+    ScalesJava.setServerMode(data.mode);
 });
 Callback.addCallback("EntityDeath", function (entity) {
-    if (Network.getConnectedPlayers().indexOf(entity) != -1) {
+    var players = Network.getConnectedPlayers();
+    if (players.indexOf(entity) != -1) {
         var scales = ScalesJava.getScales();
         for (var i in scales) {
             var name = scales[i];
-            if (ScalesJava.getScaleByName(name).isReset)
+            if (ScalesJava.getScaleByName(name).isReset())
                 ScalesJava.getScaleByPlayer(entity, name).reset();
         }
     }
 });
-function PlayerScale(javaClass, player, name) {
-    this.getValue = function () {
-        return javaClass.getValue();
+Callback.addCallback("ServerPlayerLoaded", function (player) {
+    var scales = ScalesJava.getScales();
+    var client = Network.getClientForPlayer(player);
+    if (client) {
+        for (var i in scales)
+            Scales.getScaleByPlayer(player, scales[i]).send();
+        var packet = { mode: Game.isDedicatedServer() };
+        client.send("scales.setMode", packet);
+    }
+    ;
+});
+var PlayerScale = /** @class */ (function () {
+    function PlayerScale(java_class, player, name) {
+        this.java_class = java_class;
+        this.player = player;
+        this.name = name;
+    }
+    PlayerScale.prototype.getValue = function () {
+        return this.java_class.getValue();
     };
-    this.setValue = function (v) {
-        var client = Network.getClientForPlayer(player);
-        if (client)
-            client.send("scalees.setValue", {
-                name: name,
-                v: v
-            });
-        return javaClass.setValue(v);
+    PlayerScale.prototype.send = function (value, client) {
+        if (value === void 0) { value = this.getValue(); }
+        if (client === void 0) { client = Network.getClientForPlayer(this.player); }
+        var packet = {
+            player: Entity.getNameTag(this.player),
+            name: String(this.name),
+            value: Number(value)
+        };
+        client && client.send("scales.setValue", packet);
     };
-    this.addValue = function (v) {
+    PlayerScale.prototype.setValue = function (value) {
+        this.send(value);
+        this.java_class.setValue(value);
+    };
+    PlayerScale.prototype.addValue = function (v) {
         this.setValue(this.getValue() + v);
     };
-    this.reset = function () {
-        javaClass.reset();
+    PlayerScale.prototype.reset = function () {
+        this.java_class.reset();
     };
-    this.getType = function () {
-        return javaClass.getType();
+    PlayerScale.prototype.getType = function () {
+        return this.java_class.getType();
     };
-}
-function Scale(java) {
-    this.setDisplay = function (v) {
-        java.setDisplay(v);
+    return PlayerScale;
+}());
+var Scale = /** @class */ (function () {
+    function Scale(java_class) {
+        this.java_class = java_class;
+    }
+    Scale.prototype.setDisplay = function (v) {
+        this.java_class.setDisplay(v);
         return this;
     };
-    this.isDisplay = function () {
-        return java.isDisplay();
+    Scale.prototype.isDisplay = function () {
+        return this.java_class.isDisplay();
     };
-    this.get = function () {
-        return java;
-    };
-}
-var Scales = {
-    register: function (obj) {
+    return Scale;
+}());
+var Scales;
+(function (Scales) {
+    function register(obj) {
         return new Scale(ScalesJava.register(obj));
-    },
-    getScaleByPlayer: function (player, name) {
+    }
+    Scales.register = register;
+    function getScaleByPlayer(player, name) {
         return new PlayerScale(ScalesJava.getScaleByPlayer(player, name), player, name);
-    },
-    isCreative: function (player, name) {
+    }
+    Scales.getScaleByPlayer = getScaleByPlayer;
+    function isCreative(player, name) {
         return new PlayerActor(player).getGameMode() == 0;
     }
-};
-Saver.addSavesScope("lib.scales", function read(scope) {
-    var players = Object.keys(scope.players);
+    Scales.isCreative = isCreative;
+})(Scales || (Scales = {}));
+Saver.addSavesScope("lib.scales", function (scope) {
+    var players = Object.keys(scope.players || {});
     for (var i in players) {
         var player = players[i];
         var scales = Object.keys(scope.players[player]);
@@ -233,16 +331,16 @@ Saver.addSavesScope("lib.scales", function read(scope) {
             ScalesJava.getScaleByPlayer(player, scale).setValue(scope.players[player][scale]);
         }
     }
-}, function save() {
+}, function () {
     var obj = {};
     var players = ScalesJava.getPlayers();
     for (var i in players) {
         var player = players[i];
         var scales = ScalesJava.getScales();
-        obj[player] = {};
+        var data_save = obj[player] = {};
         for (var j in scales) {
             var scale = scales[j];
-            obj[player][scale] = ScalesJava.getScaleByPlayer(player, scale).getValue();
+            data_save[scale] = ScalesJava.getScaleByPlayer(player, scale).getValue();
         }
     }
     return {
@@ -250,36 +348,57 @@ Saver.addSavesScope("lib.scales", function read(scope) {
     };
 });
 var JsHelper = WRAP_JAVA("com.core.api.JsHelper");
-ModAPI.registerAPI("CoreUtility", {
-    ToolTip: JsHelper.get(ToolTip, this),
+var ModuleAPI = WRAP_JAVA("com.core.api.module.ModuleAPI");
+var CoreUtility = {
+    ToolTip: JsHelper.get(ToolTip),
     ConversionType: ConversionType,
     NativeAPI: NativeAPI,
-    Injector: JsHelper.get(Injector, this),
+    Injector: JsHelper.get(Injector),
     EntityRegister: EntityRegister,
     ItemsUtil: ItemsUtil,
-    FileUtils: JsHelper.get(FileUtils, this),
+    FileUtils: JsHelper.get(FileUtils),
     Gui: Gui,
     TickingAreasManager: TickingAreasManager,
     GlobalContext: GlobalContext,
-    Parameter: JsHelper.get(Parameter, this),
-    BlockPos: JsHelper.get(BlockPos, this),
-    Vec3: JsHelper.get(Vec3, this),
-    Vec2: JsHelper.get(Vec2, this),
-    ChunkPos: JsHelper.get(ChunkPos, this),
-    Actor: JsHelper.get(Actor, this),
-    Mob: JsHelper.get(Mob, this),
-    NativePlayer: JsHelper.get(NativePlayer, this),
-    LocalPlayer: JsHelper.get(LocalPlayer, this),
-    ServerPlayer: JsHelper.get(ServerPlayer, this),
-    ActorDamageCause: JsHelper.get(ActorDamageCause, this),
+    Parameter: JsHelper.get(Parameter),
+    BlockPos: JsHelper.get(BlockPos),
+    Vec3: JsHelper.get(Vec3),
+    Vec2: JsHelper.get(Vec2),
+    ChunkPos: JsHelper.get(ChunkPos),
+    ItemStack: JsHelper.get(ItemStack),
+    Actor: JsHelper.get(Actor),
+    Mob: JsHelper.get(Mob),
+    NativePlayer: JsHelper.get(NativePlayer),
+    LocalPlayer: JsHelper.get(LocalPlayer),
+    ServerPlayer: JsHelper.get(ServerPlayer),
+    NativeUi: JsHelper.get(NativeUi),
+    ImageElement: JsHelper.get(ImageElement),
+    TextElement: JsHelper.get(TextElement),
+    MeshElement: JsHelper.get(MeshElement),
+    ActorDamageCause: JsHelper.get(ActorDamageCause),
     BlockUtils: BlockUtils,
     BlockRegistry: BlockRegistry,
     Scales: Scales,
-    version: 2,
+    HookManager: JsHelper.get(HookManager),
+    Module: JsHelper.get(ModuleAPI),
+    version: Number(com.core.api.Boot.API_VERSION),
     requireGlobal: function (cmd) {
         return eval(cmd);
     }
-});
+};
+JsHelper.log("Module count " + ModuleAPI.modules.size());
+for (var key in ModuleAPI.object)
+    CoreUtility[key] = ModuleAPI.object[key];
+with (ModuleAPI.object) {
+    for (var i = 0; i < ModuleAPI.modules.size(); i++) {
+        var api = ModuleAPI.modules.get(i).getApi();
+        function EXPORT(name, value) {
+            CoreUtility[name] = value;
+        }
+        api.start();
+    }
+}
+ModAPI.registerAPI("CoreUtility", CoreUtility);
 //container.openAs(window);
 //WRAP_JAVA("com.core.api.module.NativeAPI").setWorldGenerator("{'biome_id':1,'block_layers': [{'block_name': 'minecraft:dirt',count:80}],'encoding_version':5}");
 /*

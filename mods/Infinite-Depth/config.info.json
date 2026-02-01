@@ -1,0 +1,165 @@
+{
+	"description": {
+		"en": "Use input fields to change world boundaries along the vertical axis, open config to add new dimensions.",
+		"ru": "Используйте поля для изменения границ мира по вертикальной оси, откройте конфиг для добавления новых измерений."
+	},
+	"properties": {
+		"enabled": {
+			"name": {
+				"en": "Launch",
+				"ru": "Запуск мода"
+			},
+			"index": 0
+		},
+		"overworld": {
+			"name": {
+				"en": "Overworld",
+				"ru": "Верхний мир"
+			},
+			"index": 1
+		},
+		"overworld.onset": {
+			"name": {
+				"en": "Onset",
+				"ru": "Начальная координата"
+			},
+			"description": {
+				"en": "Minimum world level at which bedrock will be located. Negative values may cause minor world rendering issues, but they do not affect gameplay. Accepts values between -2048 and 2048.",
+				"ru": "Минимальный уровень мира, на котором будет находиться коренная порода. Отрицательные значения могут вызывать незначительные проблемы с отображением мира, не влияющие на геймплей. Принимает значения между -2048 и 2048."
+			}
+		},
+		"overworld.height": {
+			"name": {
+				"en": "Height",
+				"ru": "Высота мира"
+			},
+			"description": {
+				"en": "Height limit that is relative to starting coordinate. For example, if starting coordinate is -64 and world height is 384, then maximum building level will be 320.",
+				"ru": "Верхняя граница, относительно начальной координаты. Например, если начальная координата -64, а высота мира 384, то максимальный уровень строительства будет равен 320."
+			},
+			"type": "SeekBar",
+			"min": 0,
+			"max": 512
+		},
+		"overworld.min": {
+			"name": {
+				"en": "Min Y",
+				"ru": "Нижний уровень"
+			},
+			"description": {
+				"en": "Minimum world coordinate that cannot be greater than upper level. Accepts values between -2048 and 2048.",
+				"ru": "Минимальная координата мира, не может быть больше верхнего уровня. Принимает значения между -2048 и 2048."
+			}
+		},
+		"overworld.max": {
+			"name": {
+				"en": "Max Y",
+				"ru": "Верхний уровень"
+			},
+			"description": {
+				"en": "Maximum world coordinate that cannot be less than lower level. Accepts values between -2048 and 2048.",
+				"ru": "Максимальная координата мира, не может быть меньше нижнего уровня. Принимает значения между -2048 и 2048."
+			}
+		},
+		"nether": {
+			"name": {
+				"en": "Nether",
+				"ru": "Нижний мир"
+			},
+			"index": 2
+		},
+		"nether.onset": {
+			"name": {
+				"en": "Onset",
+				"ru": "Начальная координата"
+			},
+			"description": {
+				"en": "Minimum world level at which bedrock will be located. Negative values may cause minor world rendering issues, but they do not affect gameplay. Accepts values between -2048 and 2048.",
+				"ru": "Минимальный уровень мира, на котором будет находиться коренная порода. Отрицательные значения могут вызывать незначительные проблемы с отображением мира, не влияющие на геймплей. Принимает значения между -2048 и 2048."
+			}
+		},
+		"nether.height": {
+			"name": {
+				"en": "Height",
+				"ru": "Высота мира"
+			},
+			"description": {
+				"en": "Height limit that is relative to starting coordinate. For example, if starting coordinate is -64 and world height is 384, then maximum building level will be 320.",
+				"ru": "Верхняя граница, относительно начальной координаты. Например, если начальная координата -64, а высота мира 384, то максимальный уровень строительства будет равен 320."
+			},
+			"type": "SeekBar",
+			"min": 0,
+			"max": 512
+		},
+		"nether.min": {
+			"name": {
+				"en": "Min Y",
+				"ru": "Нижний уровень"
+			},
+			"description": {
+				"en": "Minimum world coordinate that cannot be greater than upper level. Accepts values between -2048 and 2048.",
+				"ru": "Минимальная координата мира, не может быть больше верхнего уровня. Принимает значения между -2048 и 2048."
+			}
+		},
+		"nether.max": {
+			"name": {
+				"en": "Max Y",
+				"ru": "Верхний уровень"
+			},
+			"description": {
+				"en": "Maximum world coordinate that cannot be less than lower level. Accepts values between -2048 and 2048.",
+				"ru": "Максимальная координата мира, не может быть меньше нижнего уровня. Принимает значения между -2048 и 2048."
+			}
+		},
+		"end": {
+			"name": {
+				"en": "The End",
+				"ru": "Край"
+			},
+			"index": 3
+		},
+		"end.onset": {
+			"name": {
+				"en": "Onset",
+				"ru": "Начальная координата"
+			},
+			"description": {
+				"en": "Minimum world level at which bedrock will be located. Negative values may cause minor world rendering issues, but they do not affect gameplay. Accepts values between -2048 and 2048.",
+				"ru": "Минимальный уровень мира, на котором будет находиться коренная порода. Отрицательные значения могут вызывать незначительные проблемы с отображением мира, не влияющие на геймплей. Принимает значения между -2048 и 2048."
+			}
+		},
+		"end.height": {
+			"name": {
+				"en": "Height",
+				"ru": "Высота мира"
+			},
+			"description": {
+				"en": "Height limit that is relative to starting coordinate. For example, if starting coordinate is -64 and world height is 384, then maximum building level will be 320.",
+				"ru": "Верхняя граница, относительно начальной координаты. Например, если начальная координата -64, а высота мира 384, то максимальный уровень строительства будет равен 320."
+			},
+			"type": "SeekBar",
+			"min": 0,
+			"max": 512
+		},
+		"end.min": {
+			"name": {
+				"en": "Min Y",
+				"ru": "Нижний уровень"
+			},
+			"description": {
+				"en": "Minimum world coordinate that cannot be greater than upper level. Accepts values between -2048 and 2048.",
+				"ru": "Минимальная координата мира, не может быть больше верхнего уровня. Принимает значения между -2048 и 2048."
+			}
+		},
+		"end.max": {
+			"name": {
+				"en": "Max Y",
+				"ru": "Верхний уровень"
+			},
+			"description": {
+				"en": "Maximum world coordinate that cannot be less than lower level. Accepts values between -2048 and 2048.",
+				"ru": "Максимальная координата мира, не может быть меньше нижнего уровня. Принимает значения между -2048 и 2048."
+			}
+		}
+	}
+}

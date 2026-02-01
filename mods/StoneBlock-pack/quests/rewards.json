@@ -1,0 +1,740 @@
+{
+	"0": {
+		"name": "Rewards",
+		"description": 2,
+		"rewards": [
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "tconstruct:punji",
+						"count": 5,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "botania:cosmetic",
+						"count": 1,
+						"data": 4,
+						"extra": {}
+					},
+					{
+						"id": "botania:cosmetic",
+						"count": 1,
+						"data": 7
+					},
+					{
+						"id": "botania:cosmetic",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "randomthings:fluiddisplay",
+						"count": 8,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "chancecubes:chance_cube",
+						"count": 7,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "stone",
+						"count": 16,
+						"data": 0
+					},
+					{
+						"id": "log",
+						"count": 8,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "bigreactors:brore",
+						"count": 12,
+						"data": 0
+					}
+				]
+			}
+		]
+	},
+	"1": {
+		"name": "Good Rewards",
+		"description": 2,
+		"rewards": [
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "botania:blacklotus",
+						"count": 16,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "thermalfoundation:tool.hammer_invar",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "thermaldynamics:duct_64",
+						"count": 16,
+						"data": 0
+					},
+					{
+						"id": "thermaldynamics:duct_64",
+						"count": 8,
+						"data": 1
+					},
+					{
+						"id": "thermaldynamics:duct_64",
+						"count": 2,
+						"data": 2
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "harvestcraft:epicbaconitem",
+						"count": 12,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "extrautils2:ingredients",
+						"count": 2,
+						"data": 6
+					}
+				]
+			}
+		]
+	},
+	"2": {
+		"name": "Greater Rewards",
+		"description": 2,
+		"rewards": [
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "GlowstoneIngot",
+						"count": 16,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "randomthings:naturecore",
+						"count": 9,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "chancecubes:compact_giant_chance_cube",
+						"count": 7,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "mysticalagriculture:mystical_fertilizer",
+						"count": 32,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "botania:brewflask",
+						"count": 1,
+						"data": 0,
+						"extra": {
+							"brewkey": "haste"
+						}
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "botania:brewflask",
+						"count": 1,
+						"data": 0,
+						"extra": {
+							"brewkey": "speed"
+						}
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "thermalfoundation:tool.shield_diamond",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "appliedenergistics2:fluix_block",
+						"count": 8,
+						"data": 0
+					},
+					{
+						"id": "appliedenergistics2:quartz_block",
+						"count": 8,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "infusedObsidian",
+						"count": 8,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "thermalfoundation:upgrade",
+						"count": 3,
+						"data": 3
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "mirror",
+						"count": 9,
+						"data": 0
+					},
+					{
+						"id": "photovoltaic_cell_1",
+						"count": 9,
+						"data": 0
+					},
+					{
+						"id": "photovoltaic_cell_2",
+						"count": 9,
+						"data": 0
+					},
+					{
+						"id": "photovoltaic_cell_3",
+						"count": 9,
+						"data": 0
+					},
+					{
+						"id": "photovoltaic_cell_4",
+						"count": 9,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "upgradeOverclocker",
+						"count": 4,
+						"data": 0
+					},
+					{
+						"id": "upgradeTransformer",
+						"count": 4,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "extrautils2:ingredients",
+						"count": 8,
+						"data": 15
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "mekanism:speedupgrade",
+						"count": 4,
+						"data": 0
+					},
+					{
+						"id": "mekanism:energyupgrade",
+						"count": 4,
+						"data": 0
+					}
+				]
+			}
+		]
+	},
+	"3": {
+		"name": "Rare Rewards",
+		"description": 2,
+		"rewards": [
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "morefurnaces:furnaceblock",
+						"count": 1,
+						"data": 2
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "manasteel",
+						"count": 16,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "tp:growth_block",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "botania:lens",
+						"count": 1,
+						"data": 4,
+						"extra": {}
+					},
+					{
+						"id": "botania:lens",
+						"count": 1,
+						"data": 1,
+						"extra": {}
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "botania:brewflask",
+						"count": 1,
+						"data": 0,
+						"extra": {
+							"brewkey": "fireResistance"
+						}
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "mekanism:otherdust",
+						"count": 1,
+						"data": 4
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "draconicCore",
+						"count": 8,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "thermaldynamics:duct_0",
+						"count": 8,
+						"data": 5
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "appliedenergistics2:material",
+						"count": 4,
+						"data": 38
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "64Kdisk",
+						"count": 4,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "extrautils2:ingredients",
+						"count": 16,
+						"data": 16
+					}
+				]
+			}
+		]
+	},
+	"4": {
+		"name": "Ultra-Rare Rewards",
+		"description": 1,
+		"rewards": [
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "storagedrawers:upgrade_storage",
+						"count": 3,
+						"data": 3
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "botania:blacklotus",
+						"count": 8,
+						"data": 1
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "mysticalagriculture:charm",
+						"count": 1,
+						"data": 15
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "mysticalagriculture:charm",
+						"count": 1,
+						"data": 1
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "mysticalagriculture:charm",
+						"count": 1,
+						"data": 3
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "chancecubes:chance_pendant_tier3",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "botania:exchangerod",
+						"count": 1,
+						"data": 0,
+						"extra": {}
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "tp:growth_upgrade",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "wywernCore",
+						"count": 4,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "alchemyBag15",
+						"count": 1,
+						"data": 0
+					},
+					{
+						"id": "alchemyBag1",
+						"count": 1,
+						"data": 0
+					},
+					{
+						"id": "alchemyBag5",
+						"count": 1,
+						"data": 0
+					}
+				]
+			}
+		]
+	},
+	"5": {
+		"name": "Legendary Rewards",
+		"description": 1,
+		"rewards": [
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "tp:netherstar_block",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "tconstruct:materials",
+						"count": 1,
+						"data": 50
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "draconiumBlock",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "chancecubes:silk_touch_pendant",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "talismanRepair",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "thermalexpansion:florb",
+						"count": 8,
+						"data": 0,
+						"extra": {
+							"fluid": "cryotheum"
+						}
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "thermalfoundation:upgrade",
+						"count": 2,
+						"data": 35
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "tp:growth_upgrade_two",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "avaritia:skullfire_sword",
+						"count": 1,
+						"data": 0,
+						"extra": {
+							"ench": {
+								"10": {
+									"lvl": 25,
+									"id": 21
+								}
+							},
+							"unbreakable": 1,
+							"hideFlags": 0,
+							"attributeModifiers": {
+								"10": {
+									"uuidMost": 8962846864864988000,
+									"uuidLeast": -7324077734101406000,
+									"amount": 999,
+									"slot": "mainhand",
+									"attributeMame": "generic.attackDamage",
+									"operation": 0,
+									"name": "generic.attackDamage"
+								}
+							}
+						}
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "mysticalagriculture:ultimate_furnace",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "mysticalagradditions:special",
+						"count": 1,
+						"data": 0
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "mysticalagradditions:special",
+						"count": 1,
+						"data": 1
+					}
+				]
+			},
+			{
+				"weight": 1,
+				"items": [
+					{
+						"id": "mysticalagradditions:special",
+						"count": 1,
+						"data": 4
+					}
+				]
+			}
+		]
+	}
+}

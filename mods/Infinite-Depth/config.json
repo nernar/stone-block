@@ -1,0 +1,15 @@
+{
+  "enabled":true,
+  "overworld":{
+    "onset":0,
+    "height":256
+  },
+  "nether":{
+    "onset":0,
+    "height":256
+  },
+  "end":{
+    "onset":0,
+    "height":256
+  }
+}
