@@ -1,0 +1,1 @@
+{"source": "java/patched", "type": "java", "directory": "java\\patched", "source-dirs": ["src"], "library-dirs": ["lib"], "verbose": true, "options": [], "boot-classes": []}

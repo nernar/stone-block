@@ -24,6 +24,15 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -52,7 +61,7 @@ IMPORT("StorageInterface");
 IMPORT("SoundLib");
 IMPORT("BackpackAPI");
 var startTime = Debug.sysTime();
-ItemModel.setCurrentCacheGroup("industrial-craft", "1");
+ItemModel.setCurrentCacheGroup("industrial-craft", "2");
 // constants
 var GUI_SCALE = 3.2;
 var GUI_SCALE_NEW = 3;
@@ -88,9 +97,9 @@ var EU = EnergyTypeRegistry.assureEnergyType("Eu", 1);
 Recipes.addFurnaceFuel(325, 10, 2000); // lava bucket
 ChargeItemRegistry.registerFlashItem(331, "Eu", 800, 0); // redstone
 var NetworkDataKeys = {
-    blockId: "blockId",
-    facing: "facing",
-    isActive: "active"
+    isActive: "active",
+    isBoosted: "boosted",
+    powerOutput: "power"
 };
 var IC2NetworkPackets = {
     demontage: "icpe.demontageMachine",
@@ -101,6 +110,7 @@ var IC2NetworkPackets = {
 };
 // BLOCKS
 Translation.addTranslation("rubber_tree_log", { en: "Rubber Tree Log", ru: "Древесина гевеи", es: "Madera de Árbol de Caucho", pt: "Madeira da árvore de borracha", zh: "橡胶树原木" });
+Translation.addTranslation("rubber_tree_log_latex", { en: "Rubber Tree Log with Latex Drip", ru: "Древесина гевеи с подтёком латекса" });
 Translation.addTranslation("rubber_tree_leaves", { en: "Rubber Tree Leaves", ru: "Листва гевеи", es: "Hojas de Arbol de Cáucho", pt: "Folhas da árvore de borracha", zh: "橡胶树树叶" });
 Translation.addTranslation("rubber_tree_sapling", { en: "Rubber Tree Sapling", ru: "Саженец гевеи", es: "Pimpollo de Árbol de Caucho", pt: "Muda de árvore de borracha", zh: "橡胶树树苗" });
 Translation.addTranslation("copper_ore", { en: "Copper Ore", ru: "Медная руда", es: "Mineral de Cobre", pt: "Minério de Cobre", zh: "铜矿石" });
@@ -118,6 +128,7 @@ Translation.addTranslation("uranium_block", { en: "Uranium Block", ru: "Уран
 Translation.addTranslation("mining_pipe", { en: "Mining Pipe", ru: "Буровая труба", es: "Tubo Minero", pt: "Tubo de Mineração", zh: "采矿管道" });
 Translation.addTranslation("reinforced_stone", { en: "Reinforced Stone", ru: "Укреплённый камень", es: "Piedra Reforzada", pt: "Pedra Reforçada", zh: "防爆石" });
 Translation.addTranslation("reinforced_glass", { en: "Reinforced Glass", ru: "Укреплённое стекло", es: "Cristal Reforzado", pt: "Vidro Reforçado", zh: "防爆玻璃" });
+Translation.addTranslation("reinforced_door", { en: "Reinforced Door", ru: "Укреплённая дверь", es: "Puerta Reforzada", pt: "Porta Reforçada", zh: "防爆门" });
 Translation.addTranslation("machine_block", { en: "Machine Block", ru: "Машинный блок", es: "Máquina", pt: "Bloco de Máquina Básica", zh: "基础机械外壳" });
 Translation.addTranslation("advanced_machine_block", { en: "Advanced Machine Block", ru: "Улучшенный машинный блок", es: "Máquina Avanzada", pt: "Bloco de Máquina Avançada", zh: "高级机械外壳" });
 // Generators
@@ -141,6 +152,10 @@ Translation.addTranslation("BatBox", { ru: "Энергохранилище", es:
 Translation.addTranslation("CESU", { ru: "МЭСН", es: "Unidad CESU", pt: "Unidade de Armazenamento de Energia (UAE)", zh: "CESU储电箱" });
 Translation.addTranslation("MFE", { ru: "МФЭ", es: "Unidad MFE", pt: "Transmissor de Energia Multi-funcional (TEMF)", zh: "MFE储电箱" });
 Translation.addTranslation("MFSU", { ru: "МФСУ", es: "Unidad MFSU", pt: "Unidade de Armazenamento Multi-funcional (UAMF)", zh: "MFSU储电箱" });
+Translation.addTranslation("Charge Pad (BatBox)", { ru: "Заряжающая плита (Эн.хр)", es: "Almohadilla de Carga (BatBox)", pt: "Bloco de Recarga (CB)", zh: "充电座 (BatBox)" });
+Translation.addTranslation("Charge Pad (CESU)", { ru: "Заряжающая плита (МЭСН)", es: "Almohadilla de Carga (CESU)", pt: "Bloco de Recarga (UAE)", zh: "充电座 (CESU)" });
+Translation.addTranslation("Charge Pad (MFE)", { ru: "Заряжающая плита (МФЭ)", es: "Almohadilla de Carga (MFE)", pt: "Bloco de Recarga (TEMF)", zh: "充电座 (MFE)" });
+Translation.addTranslation("Charge Pad (MFSU)", { ru: "Заряжающая плита (МФСУ)", es: "Almohadilla de Carga (MFSU)", pt: "Bloco de Recarga (UAMF)", zh: "充电座 (MFSU)" });
 // Transformer
 Translation.addTranslation("LV Transformer", { ru: "Трансформатор НН", es: "Transformador de Baja Tensión", pt: "Transformador de Baixa Voltagem", zh: "低压变压器" });
 Translation.addTranslation("MV Transformer", { ru: "Трансформатор СН", es: "Transformador de Media Tensión", pt: "Transformador de Média Voltagem", zh: "中压变压器" });
@@ -158,7 +173,9 @@ Translation.addTranslation("Recycler", { ru: "Утилизатор", es: "Recicl
 Translation.addTranslation("Metal Former", { ru: "Металлоформовщик", es: "Arqueador de Metal", pt: "Moldelador de Metais", zh: "金属成型机" });
 Translation.addTranslation("Ore Washing Plant", { ru: "Рудопромывочная машина", es: "Planta de Lavado de Minerales", pt: "Estação de Lavagem de Minérios", zh: "洗矿机" });
 Translation.addTranslation("Thermal Centrifuge", { ru: "Термальная центрифуга", es: "Centrífuga Térmica", pt: "Centrífuga Térmica", zh: "热能离心机" });
-Translation.addTranslation("Blast Furnace", { ru: "Доменная печь", es: "Alto Horno", pt: "Fornalha de Aquecimento", zh: "高炉" });
+Translation.addTranslation("Industrial Blast Furnace", { ru: "Доменная печь", es: "Alto Horno", pt: "Fornalha de Aquecimento", zh: "高炉" });
+Translation.addTranslation("Industrial Workbench", { ru: "Промышленный верстак", pt: "Mesa de Trabalho Industrial", zh: "工业工作台" });
+Translation.addTranslation("Automatic Crafter", { ru: "Автоматический верстак", pt: "Fabricador em Lotes", zh: "批量工作台" });
 Translation.addTranslation("Miner", { ru: "Буровая установка", es: "Perforadora", pt: "Minerador", zh: "采矿机" });
 Translation.addTranslation("Advanced Miner", { ru: "Продвинутый автошахтёр", es: "Minero Avanzado", pt: "Minerador Avançado", zh: "高级采矿机" });
 Translation.addTranslation("Tesla Coil", { ru: "Катушка теслы", es: "Bobina de Tesla", pt: "Bobina de Tesla", zh: "特斯拉线圈" });
@@ -167,14 +184,19 @@ Translation.addTranslation("Mass Fabricator", { ru: "Производитель 
 Translation.addTranslation("Fermenter", { ru: "Ферментер", es: "Fermentadora", pt: "Fermentador", zh: "发酵机" });
 Translation.addTranslation("Solid Canning Machine", { ru: "Консервирующий механизм", es: "Máquina de Enlatado", pt: "Enlatadora de Sólidos", zh: "固体装罐机" });
 Translation.addTranslation("Fluid/Solid Canning Machine", { ru: "Универсальный наполняющий механизм", es: "Enlatadora de Líquidos/Sólidos", pt: "Enlatadora de Fluidos/Sólidos", zh: "流体/固体装罐机" });
+Translation.addTranslation("Block Cutting Machine", { ru: "Режущая машина", es: "Cortadora de Bloques", pt: "Cortadora de Blocos", zh: "方块切割机" });
 Translation.addTranslation("Crop Matron", { ru: "Автосадовник", es: "Máquina Cosechadora", pt: "Fazendeiro", zh: "作物监管机" });
 Translation.addTranslation("Crop Harvester", { ru: "Сборщик урожая", es: "Cocechador de Cultivo", pt: "Colheitadeira", zh: "作物收割机" });
-// Explosive
-Translation.addTranslation("Nuke", { ru: "Ядерная бомба", pt: "Bomba Nuke", zh: "核弹" });
-// Fluid
+// Fluid Machines
 Translation.addTranslation("Pump", { ru: "Помпа", es: "Bomba Extractora", pt: "Bomba", zh: "泵" });
 Translation.addTranslation("Fluid Distributor", { ru: "Жидкостный распределитель", es: "Distribuidor de Líquido", pt: "Distribuidor de Fluidos", zh: "流体分配机" });
 Translation.addTranslation("Tank", { ru: "Бак", es: "Tanque", pt: "Tanque", zh: "流体储存器" });
+Translation.addTranslation("Solar Distiller", { ru: "Солнечный опреснитель", es: "Destilador Solar", pt: "Destilador Solar", zh: "太阳能蒸馏机" });
+// Fluids
+Translation.addTranslation("Biogas", { ru: "Биогаз", es: "Biogás", pt: "Biogás", zh: "沼气" });
+Translation.addTranslation("Distilled Water", { ru: "Дистиллированная вода", es: "Agua Destilada", pt: "Água Destilada", zh: "蒸馏水" });
+// Explosive
+Translation.addTranslation("Nuke", { ru: "Ядерная бомба", pt: "Bomba Nuke", zh: "核弹" });
 // ITEMS
 Translation.addTranslation("latex", { en: "Latex", ru: "Латекс", es: "Caucho", pt: "Resina Pegajosa", zh: "粘性树脂" });
 Translation.addTranslation("rubber", { en: "Rubber", ru: "Резина", es: "Rubber", pt: "Borracha", zh: "橡胶" });
@@ -246,6 +268,9 @@ Translation.addTranslation("electric_motor", { en: "Electric Motor", ru: "Эле
 Translation.addTranslation("power_unit", { en: "Power Unit", ru: "Силовой агрегат", es: "Unidad de Potencia", pt: "Motor", zh: "驱动把手" });
 Translation.addTranslation("small_power_unit", { en: "Small Power Unit", ru: "Малый силовой агрегат", es: "Pequeña Unidad de Potencia", pt: "Motor Pequeno", zh: "小型驱动把手" });
 Translation.addTranslation("heat_conductor", { en: "Heat Conductor", ru: "Теплопроводник ", es: "Conductor de calor", pt: "Condutor de Calor", zh: "热传导器" });
+Translation.addTranslation("cutting_blade_iron", { en: "Iron Cutting Blade", ru: "Железный режущий диск ", es: "Cuchilla de Corte (Hierro)", pt: "Lâmina de Corte (Ferro)", zh: "切割锯片(铁)" });
+Translation.addTranslation("cutting_blade_steel", { en: "Steel Cutting Blade", ru: "Стальной режущий диск ", es: "Cuchilla de Corte (Hierro Refinado)", pt: "Lâmina de Corte (Aço)", zh: "切割锯片(钢)" });
+Translation.addTranslation("cutting_blade_diamond", { en: "Diamond Cutting Blade", ru: "Алмазный режущий диск ", es: "Cuchilla de Corte (Diamante)", pt: "Lâmina de Corte (Diamante)", zh: "切割锯片(钻石)" });
 // Energy Storage
 Translation.addTranslation("re_battery", { en: "RE-Battery", ru: "Аккумулятор", es: "Batería Recargable", pt: "Bateria Reutilizável", zh: "充电电池" });
 Translation.addTranslation("adv_re_battery", { en: "Advanced RE-Battery", ru: "Продвинутый аккумулятор", es: "Bateria-RE Avanzada", pt: "Bateria Reutilizável Avançada", zh: "高级充电电池" });
@@ -293,13 +318,18 @@ Translation.addTranslation("silver_dust", { en: "Silver Dust", ru: "Серебр
 Translation.addTranslation("stone_dust", { en: "Stone Dust", ru: "Каменная пыль", es: "Polvo de Piedra", pt: "Pó de Pedra", zh: "石粉" });
 Translation.addTranslation("coal_dust", { en: "Coal Dust", ru: "Угольная пыль", es: "Polvo de Carbón", pt: "Pó de Carvão", zh: "煤粉" });
 Translation.addTranslation("sulfur_dust", { en: "Sulfur Dust", ru: "Серная пыль", es: "Polvo de Sulfuro", pt: "Pó de Enxofre", zh: "硫粉" });
+Translation.addTranslation("clay_dust", { en: "Clay Dust", ru: "Глиняная пыль", es: "Polvo de Arcilla", pt: "Pó de Argila", zh: "粘土粉" });
+Translation.addTranslation("silicon_dioxide_dust", { en: "Silicon Dioxide", ru: "Диоксид кремния", es: "Dioxido de Silicona", pt: "Dióxido de Silício", zh: "二氧化硅粉" });
 Translation.addTranslation("lapis_dust", { en: "Lapis Dust", ru: "Лазуритовая пыль", es: "Polvo de Lapislázuli", pt: "Pó de Lápis-Lazúli", zh: "青金石粉" });
+Translation.addTranslation("obsidian_dust", { en: "Obsidian Dust", ru: "Обсидиановая пыль", es: "Polvo de Obsidiana", pt: "Pó de Obsidiana", zh: "黑曜石粉" });
 Translation.addTranslation("diamond_dust", { en: "Diamond Dust", ru: "Алмазная пыль", es: "Polvo de Diamante", pt: "Pó de Diamante", zh: "钻石粉" });
 Translation.addTranslation("energium_dust", { en: "Energium Dust", ru: "Энергетическая пыль", es: "Polvo de Energium", pt: "Pó de Enérgio", zh: "能量水晶粉" });
 // Small Dusts
 Translation.addTranslation("small_copper_dust", { en: "Tiny Pile of Copper Dust", ru: "Небольшая кучка медной пыли", es: "Diminuta Pila de Polvo de Cobre", pt: "Pequena Pilha de Pó de Cobre", zh: "小撮铜粉" });
 Translation.addTranslation("small_tin_dust", { en: "Tiny Pile of Tin Dust", ru: "Небольшая кучка оловянной пыли", es: "Diminuta Pila de Polvo de Estaño", pt: "Pequena Pilha de Pó de Estanho", zh: "小撮锡粉" });
+Translation.addTranslation("small_bronze_dust", { en: "Tiny Pile of Bronze Dust", ru: "Небольшая кучка бронзовой пыли", es: "Diminuta Pila de Polvo de Bronce", pt: "Pequena Pilha de Pó de Bronze", zh: "小撮青铜粉" });
 Translation.addTranslation("small_iron_dust", { en: "Tiny Pile of Iron Dust", ru: "Небольшая кучка железной пыли", es: "Diminuta Pila de Polvo de Hierro", pt: "Pequena Pilha de Pó de Ferro", zh: "小撮铁粉" });
+Translation.addTranslation("small_steel_dust", { en: "Tiny Pile of Steel Dust", ru: "Небольшая кучка стальной пыли", es: "Diminuta Pila de Polvo de Acero", pt: "Pequena Pilha de Pó de Aço", zh: "小撮钢粉" });
 Translation.addTranslation("small_lead_dust", { en: "Tiny Pile of Lead Dust", ru: "Небольшая кучка свинцовой пыли", es: "Diminuta Pila de Polvo de Plomo", pt: "Pequena Pilha de Pó de Chumbo", zh: "小撮铅粉" });
 Translation.addTranslation("small_gold_dust", { en: "Tiny Pile of Gold Dust", ru: "Небольшая кучка золотой пыли", es: "Diminuta Pila de Polvo de Oro", pt: "Pequena Pilha de Pó de Ouro", zh: "小撮金粉" });
 Translation.addTranslation("small_silver_dust", { en: "Tiny Pile of Silver Dust", ru: "Небольшая кучка серебряной пыли", es: "Diminuta Pila de Polvo de Plata", pt: "Pequena Pilha de Pó de Prata", zh: "小撮银粉" });
@@ -321,6 +351,7 @@ Translation.addTranslation("steel_plate", { en: "Steel Plate", ru: "Стальн
 Translation.addTranslation("gold_plate", { en: "Gold Plate", ru: "Золотая пластина", es: "Placa de Oro", pt: "Placa de Ouro", zh: "金板" });
 Translation.addTranslation("lapis_plate", { en: "Lapis Plate", ru: "Лазуритовая пластина", es: "Placa de Lapislázuli", pt: "Placa de Lápis-Lazúli", zh: "青金石板" });
 Translation.addTranslation("lead_plate", { en: "Lead Plate", ru: "Свинцовая пластина", es: "Placa de Plomo", pt: "Placa de Chumbo", zh: "铅板" });
+Translation.addTranslation("silver_plate", { en: "Silver Plate", ru: "Серебряная пластина", es: "Placa de Plata", pt: "Placa de Prata", zh: "银板" });
 // Dense Plates
 Translation.addTranslation("dense_copper_plate", { en: "Dense Copper Plate", ru: "Плотная медная пластина", es: "Placa de Cobre Denso", pt: "Placa Densa de Cobre", zh: "致密铜板" });
 Translation.addTranslation("dense_tin_plate", { en: "Dense Tin Plate", ru: "Плотная оловянная пластина", es: "Placa Densa de Estaño", pt: "Placa Densa de Estanho", zh: "致密锡板" });
@@ -329,6 +360,7 @@ Translation.addTranslation("dense_iron_plate", { en: "Dense Iron Plate", ru: "П
 Translation.addTranslation("dense_steel_plate", { en: "Dense Steel Plate", ru: "Плотная стальная пластина", es: "Placa de Hierro Refinado Denso", pt: "Placa Densa de Aço", zh: "致密钢板" });
 Translation.addTranslation("dense_gold_plate", { en: "Dense Gold Plate", ru: "Плотная золотая пластина", es: "Placa Densa de Oro", pt: "Placa Densa de Ouro", zh: "致密金板" });
 Translation.addTranslation("dense_lead_plate", { en: "Dense Lead Plate", ru: "Плотная свинцовая пластина", es: "Placa Densa de Plomo", pt: "Placa Densa de Chumbo", zh: "致密铅板" });
+Translation.addTranslation("dense_silver_plate", { en: "Dense Silver Plate", ru: "Плотная серебряная пластина", es: "Placa Densa de Plata", pt: "Placa Densa de Prata", zh: "致密银板" });
 // Casings
 Translation.addTranslation("copper_casing", { en: "Copper Casing", ru: "Медная оболочка", es: "Carcasa para Objetos de Cobre", pt: "Invólucro de Cobre", zh: "铜质外壳" });
 Translation.addTranslation("tin_casing", { en: "Tin Casing", ru: "Оловянная оболочка", es: "Carcasa para Objetos de Estaño", pt: "Invólucro de Estanho", zh: "锡质外壳" });
@@ -337,6 +369,7 @@ Translation.addTranslation("iron_casing", { en: "Iron Casing", ru: "Железн
 Translation.addTranslation("steel_casing", { en: "Steel Casing", ru: "Стальная оболочка", es: "Carcasa para Objetos de Hierro", pt: "Invólucro de Aço", zh: "钢质外壳" });
 Translation.addTranslation("gold_casing", { en: "Gold Casing", ru: "Золотая оболочка", es: "Carcasa para Objetos de Oro", pt: "Invólucro de Ouro", zh: "黄金外壳" });
 Translation.addTranslation("lead_casing", { en: "Lead Casing", ru: "Свинцовая оболочка", es: "Carcasa para Objetos de Plomo", pt: "Invólucro de Chumbo", zh: "铅质外壳" });
+Translation.addTranslation("silver_casing", { en: "Silver Casing", ru: "Серебряная оболочка", es: "Carcasa para Objetos de Plata", pt: "Invólucro de Prata", zh: "银质外壳" });
 // Cans
 Translation.addTranslation("tin_can", { en: "Tin Can", ru: "Консервная банка", es: "Lata de Estaño", pt: "Lata de Estanho", zh: "锡罐(空)" });
 Translation.addTranslation("tin_can_full", { en: "Filled Tin Can", ru: "Заполненная консервная банка", es: "Lata de Estaño (llena)", pt: "Lata de Estanho (Cheia)", zh: "锡罐(满)" });
@@ -347,6 +380,7 @@ Translation.addTranslation("lava_cell", { en: "Lava Cell", ru: "Капсула �
 Translation.addTranslation("biomass_cell", { en: "Biomass Cell", ru: "Капсула биомассы", es: "Celda de Biomasa", pt: "Célula com Biomassa", zh: "生物质单元" });
 Translation.addTranslation("biogas_cell", { en: "Biogas Cell", ru: "Капсула биогаза", pt: "Célula com Biogás", zh: "沼气单元" });
 Translation.addTranslation("coolant_cell", { en: "Coolant Cell", ru: "Капсула хладагента", es: "Celda de Refrigerante", pt: "Célula com Líquido Refrigerante", zh: "冷却液单元" });
+Translation.addTranslation("distilled_water_cell", { en: "Distilled Water Cell", ru: "Капсула дистиллированной воды", es: "Celda de Agua Destilada", pt: "Célula com Água Destilada", zh: "蒸馏水单元" });
 Translation.addTranslation("uu_matter_cell", { en: "UU-Matter Cell", ru: "Капсула жидкой материи", es: "Celda de Materia UU", pt: "Célula com Matéria UU", zh: "UU物质单元" });
 Translation.addTranslation("air_cell", { en: "Compressed Air Cell", ru: "Капсула со сжатым воздухом", es: "Celda de Aire Comprimida", pt: "Célula com Ar Comprimido", zh: "压缩空气单元" });
 // Cables
@@ -384,7 +418,8 @@ Translation.addTranslation("hazmat_helmet", { en: "Scuba Helmet", ru: "Шлем-
 Translation.addTranslation("hazmat_chestplate", { en: "Hazmat Suit", ru: "Защитная куртка", es: "Traje para Materiales Peligrosos", pt: "Roupa Anti-Radiação", zh: "防化服" });
 Translation.addTranslation("hazmat_leggings", { en: "Hazmat Suit Leggings", ru: "Защитные штаны", es: "Pantalones para Materiales Peligrosos", pt: "Calças Anti-Radiação", zh: "防化裤" });
 Translation.addTranslation("rubber_boots", { en: "Rubber Boots", ru: "Резиновые ботинки", es: "Botas de Goma", pt: "Botas de Borracha", zh: "橡胶靴" });
-Translation.addTranslation("electric_jetpack", { en: "Jetpack", ru: "Реактивный ранец", es: "Jetpack Eléctrico", pt: "Mochila à Jato Elétrica", zh: "电力喷气背包" });
+Translation.addTranslation("fuel_jetpack", { en: "Jetpack", ru: "Реактивный ранец", es: "Jetpack", pt: "Mochila à Jato", zh: "喷气背包" });
+Translation.addTranslation("electric_jetpack", { en: "Electric Jetpack", ru: "Электрический реактивный ранец", es: "Jetpack Eléctrico", pt: "Mochila à Jato Elétrica", zh: "电力喷气背包" });
 Translation.addTranslation("batpack", { en: "Batpack", ru: "Аккумуляторный ранец", es: "Mochila de Baterías", pt: "Mochila de Baterias", zh: "电池背包" });
 Translation.addTranslation("advanced_batpack", { en: "Advanced Batpack", ru: "Продвинутый аккумуляторный ранец", es: "Mochila de Baterías Avanzada", pt: "Mochila de Baterias Avançada", zh: "高级电池背包" });
 Translation.addTranslation("energypack", { en: "Energy Pack", ru: "Энергетический ранец", es: "Pack de Energía", pt: "Mochila de Energia", zh: "能量水晶储电背包" });
@@ -410,13 +445,13 @@ Translation.addTranslation("electric_hoe", { en: "Electric Hoe", ru: "Элект
 Translation.addTranslation("electric_treetap", { en: "Electric Treetap", ru: "Электрокраник", es: "Grifo para Resina Eléctrico", pt: "Drenador Elétrico", zh: "电动树脂提取器" });
 Translation.addTranslation("wind_meter", { en: "Windmeter", ru: "Измеритель ветра", es: "Piranómetro", pt: "Anemômetro", zh: "风力计" });
 Translation.addTranslation("chainsaw", { en: "Chainsaw", ru: "Электропила", es: "Motosierra", pt: "Serra Elétrica", zh: "链锯" });
-Translation.addTranslation("drill", { en: "Mining Drill", ru: "Шахтёрский бур", es: "Taladro", pt: "Broca de Mineração", zh: "采矿钻头" });
+Translation.addTranslation("mining_drill", { en: "Mining Drill", ru: "Шахтёрский бур", es: "Taladro", pt: "Broca de Mineração", zh: "采矿钻头" });
 Translation.addTranslation("diamond_drill", { en: "Diamond Drill", ru: "Алмазный бур", es: "Taladro de Diamante", pt: "Broca de Diamante", zh: "钻石钻头" });
 Translation.addTranslation("iridium_drill", { en: "Iridium Drill", ru: "Иридиевый бур", es: "Taladro de Iridio", pt: "Broca de Irídio", zh: "铱钻头" });
 Translation.addTranslation("nano_saber", { en: "Nano Saber", ru: "Нано-сабля", es: "Nano-Sable", pt: "Sabre Nano", zh: "纳米剑" });
 Translation.addTranslation("mining_laser", { en: "Mining Laser", ru: "Шахтёрский лазер", es: "Láser Minero", pt: "Laser de Mineração", zh: "采矿镭射枪" });
 Translation.addTranslation("eu_meter", { en: "EU Meter", ru: "Мультиметр", pt: "Leitor de EU", zh: "EU电表" });
-Translation.addTranslation("debug_item", { ru: "Предмет отладки", pt: "Item de Depuração", zh: "测试工具" });
+Translation.addTranslation("debug_item", { en: "Debug Item", ru: "Предмет отладки", pt: "Item de Depuração", zh: "测试工具" });
 Translation.addTranslation("crop_analyzer", { en: "Crop Analyzer", ru: "Агроанализатор", es: "Semillalizador", pt: "Plantanalizador", zh: "作物分析器" });
 Translation.addTranslation("weeding_trowel", { en: "Weeding Trowel", ru: "Пропалыватель", pt: "Espátula Transplantadora", zh: "除草铲" });
 // Painter
@@ -484,6 +519,7 @@ Translation.addTranslation("eatingplant", { en: "Eating Plant", ru: "Плото�
 Translation.addTranslation("beetroots", { en: "Beetroots", ru: "Свёкла", pt: "Beterrabas", zh: "甜菜根" });
 // TEXT
 Translation.addTranslation("Mode: %s", { ru: "Режим: %s", es: "Modo: %s", pt: "Modo: %s", zh: "模式: %s" });
+Translation.addTranslation("generic.text.empty", { en: "Empty", ru: "Пусто", es: "Vacio", pt: "Vazio", zh: "空" });
 // Induction Furnace
 Translation.addTranslation("Heat:", { ru: "Нагрев:", es: "Calor:", pt: "Calor:", zh: "热量:" });
 // Fluid Distributor
@@ -534,14 +570,20 @@ Translation.addTranslation("message.mining_laser.aiming", { en: "Mining laser ai
 // Tooltips
 Translation.addTranslation("tooltip.tin_can", { en: "This looks bad...", ru: "Это выглядит несъедобно…", pt: "Isso parece ruim...", zh: "这看起来很糟糕..." });
 Translation.addTranslation("tooltip.power_tier", { en: "Power Tier: %s", ru: "Энергоуровень: %s", pt: "Nível de Voltagem: %s", zh: "能量等级: %s" });
+Translation.addTranslation("tooltip.power_production", { en: "Power Production: %s", ru: "Генерация: %s" });
+Translation.addTranslation("tooltip.power_output", { en: "Output: %s", ru: "Выход: %s" });
+Translation.addTranslation("tooltip.power_consumption", { en: "Consumption: %s", ru: "Потребление: %s", pt: "Consumo: %s", zh: "消耗: %s" });
 Translation.addTranslation("tooltip.max_voltage", { en: "Max voltage: %s EU/t", ru: "Макс. напряжение: %s EU/t", pt: "Voltagem Máx: %s EU/t", zh: "最大电压: %s EU/t" });
-Translation.addTranslation("tooltip.upgrade.overclocker.time", { en: "Decrease process time to ", ru: "Уменьшает время работы до ", pt: "Diminui o tempo de processo para ", zh: "加工用时缩短为" });
-Translation.addTranslation("tooltip.upgrade.overclocker.power", { en: "Increase power to ", ru: "Увеличивает энергопотребление до ", pt: "Aumenta o Uso de Energia em ", zh: "能量增加到" });
+Translation.addTranslation("tooltip.transformer", { en: "Low: %s EU/t High: %s EU/t", ru: "Пониж.: %s EU/t Повыш.: %s EU/t", pt: "Baixa: %s EU/t Alta: %s EU/t", es: "Baja: %s EU/t Alta: %s EU/t", zh: "低压: %s EU/t 高压: %s EU/t" });
+Translation.addTranslation("tooltip.upgrade.overclocker.time", { en: "Decrease process time to %s", ru: "Уменьшает время работы до %s", pt: "Diminui o tempo de processo para %s", zh: "加工用时缩短为%s" });
+Translation.addTranslation("tooltip.upgrade.overclocker.power", { en: "Increase power to %s", ru: "Увеличивает энергопотребление до %s", pt: "Aumenta o Uso de Energia em %s", zh: "能量增加到%s" });
 Translation.addTranslation("tooltip.upgrade.transformer", { en: "Increase energy tier by 1", ru: "Увеличивает энергоуровень на 1", pt: "Aumenta o nível da máquina em 1", zh: "增加一级输出电压" });
 Translation.addTranslation("tooltip.upgrade.storage", { en: "Increase energy storage by %s EU", ru: "Увеличивает энергоёмкость на %s EU", pt: "Aumenta o armazenamento de energia em %s EU", zh: "增加%s EU储能" });
 Translation.addTranslation("tooltip.upgrade.ejector", { en: "Automatically output to\nthe %s side", ru: "Автоматическое извлечение с %s стороны", pt: "Saída automática para o %s", zh: "自动输出到%s方向" });
 Translation.addTranslation("tooltip.upgrade.pulling", { en: "Automatically input from\nthe %s side", ru: "Автоматический ввод с %s стороны", pt: "Entrada automática para o %s", zh: "自动从%s抽入物品" });
 Translation.addTranslation("tooltip.upgrade.anyside", { en: "first valid", ru: "первой подходящей", es: "Primera vez efectivo", pt: "Primeira vez eficaz", zh: "初次生效" });
+Translation.addTranslation("tooltip.blade.hardness", { en: "Hardness: %s", ru: "Твёрдость: %s", pt: "Dureza: %s", zh: "硬度: %s" });
+Translation.addTranslation("tooltip.radioactive", { en: "Radioactive", ru: "Радиоактивный" });
 Translation.addTranslation("ic2.dir.bottom", { en: "bottom", ru: "нижней", es: "abajo", pt: "lado de baixo", zh: "底部" });
 Translation.addTranslation("ic2.dir.top", { en: "top", ru: "верхней", es: "arriba", pt: "lado de cima", zh: "顶部" });
 Translation.addTranslation("ic2.dir.north", { en: "north", ru: "северной", es: "norte", pt: "norte", zh: "北边" });
@@ -550,6 +592,7 @@ Translation.addTranslation("ic2.dir.east", { en: "east", ru: "восточной
 Translation.addTranslation("ic2.dir.west", { en: "west", ru: "западной", es: "oeste", pt: "oeste", zh: "西边" });
 // Recipe Viewer
 Translation.addTranslation("Heat: ", { ru: "Нагрев: ", es: "Calor: ", pt: "Calor: ", zh: "热量: " });
+Translation.addTranslation("description.blade_hardness", { en: "Blade hardness: %s", ru: "Твёрдость лезвия: %s", pt: "Dureza: %s", zh: "硬度: %s" });
 // Creative Groups
 Translation.addTranslation("Ores", { ru: "Руды", pt: "Minérios", zh: "矿石" });
 Translation.addTranslation("Resource Blocks", { ru: "Блоки ресурсов", pt: "Blocos de Recusrso", zh: "资源方块" });
@@ -660,7 +703,7 @@ var Agriculture;
         /**
          * Register new card
          * @param {CropCard} cropCard
-         * @returns {number} registred card ID
+         * @returns {number} registered card ID
          */
         CropCardManager.registerCropCard = function (cropCard) {
             var cardID = this.cropCards.push(cropCard) - 1;
@@ -1024,16 +1067,16 @@ var Agriculture;
         CropVanilla.prototype.getProduct = function () {
             return { id: 0, count: 1, data: 0 };
         };
-        CropVanilla.prototype.canGrow = function (tileentity) {
-            var light = tileentity.region.getLightLevel(tileentity.x, tileentity.y, tileentity.z);
-            return tileentity.data.currentSize < tileentity.crop.getMaxSize() && light >= 9;
+        CropVanilla.prototype.canGrow = function (tileEntity) {
+            var light = tileEntity.region.getLightLevel(tileEntity);
+            return tileEntity.data.currentSize < tileEntity.crop.getMaxSize() && light >= 9;
         };
         CropVanilla.prototype.getGain = function (te) {
             return te.crop.getProduct();
         };
         CropVanilla.prototype.getSeeds = function (te) {
             if (te.data.statGain <= 1 && te.data.statGrowth <= 1 && te.data.statResistance <= 1) {
-                // TODO check reqursion
+                // TODO check recursion
                 return this.getSeed(te);
                 // return AgricultureAPI.abstractFunctions["CropVanilla"].getSeed();
             }
@@ -1319,21 +1362,28 @@ var Agriculture;
         CropEatingplant.prototype.tick = function (te) {
             if (te.data.currentSize == 1)
                 return;
-            var entity = Entity.findNearest({ x: te.x + .5, y: te.y + .5, z: te.z + .5 }, null, 2);
-            if (!entity)
-                return;
-            Entity.damageEntity(entity, te.data.currentSize * 2);
-            if (EntityHelper.isPlayer(entity) && !this.hasMetalArmor(entity)) {
-                Entity.addEffect(entity, PotionEffect.poison, 1, 50);
+            var range = 1;
+            var entities = te.region.listEntitiesInAABB(te.x + .5 - range, te.y, te.z + .5 - range, te.x + .5 + range, te.y + range * 2, te.z + .5 + range);
+            for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
+                var entity = entities_1[_i];
+                // entity is player in survival or mob without metal armor
+                if (((EntityHelper.isPlayer(entity) && new PlayerEntity(entity).getGameMode() != 1)
+                    || EntityHelper.isMob(entity)) && !this.hasMetalArmor(entity)) {
+                    Entity.damageEntity(entity, te.data.currentSize * 2);
+                    Entity.addEffect(entity, PotionEffect.poison, 1, 50);
+                    if (te.crop.canGrow(te)) {
+                        te.data.growthPoints += 100;
+                    }
+                    te.region.dropAtBlock(te.x, te.y, te.z, VanillaItemID.rotten_flesh, 1, 0);
+                    break;
+                }
             }
-            if (te.crop.canGrow(te))
-                te.data.growthPoints += 100;
-            World.drop(te.x + .5, te.y + .5, te.z + .5, 367, 1, 0);
         };
-        CropEatingplant.prototype.hasMetalArmor = function (player) {
+        CropEatingplant.prototype.hasMetalArmor = function (entity) {
             for (var i = 0; i < 4; i++) {
-                var armorSlot = new PlayerEntity(player).getArmor(i);
-                if (armorSlot.id > 297 && armorSlot.id < 302)
+                var armorSlot = Entity.getArmorSlot(entity, i);
+                // break loop if no armor or leather armor
+                if (armorSlot.id == 0 || (armorSlot.id >= 298 && armorSlot.id <= 301))
                     return false;
             }
             return true;
@@ -2092,60 +2142,63 @@ var Agriculture;
 /// <reference path="./CropCards/BaseCards/Metal/CropBaseMetalUncommon.ts"/>
 var Agriculture;
 (function (Agriculture) {
-    // Basic
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropWeed());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropVenomilia());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropStickreed());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropTerraWart());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropRedWheat());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropCoffee());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropHops());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropEatingplant());
-    // Vanilla
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropWheat());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropPotato());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropPumpkin());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropCarrots());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBeetroots());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropMelon());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropReed());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropCocoa());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropNetherWart());
-    // Mushroom
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropRedMushroom());
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBrownMushroom());
-    // Flowers
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropColorFlowerCard("dandelion", ["Yellow", "Flower"], IDConverter.getStack("yellow_dye"), {
-        id: VanillaBlockID.yellow_flower,
-        size: 4,
-        growth: 1,
-        gain: 1,
-        resistance: 1,
-        addToCreative: true
-    }));
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropColorFlowerCard("rose", ["Red", "Flower", "Rose"], IDConverter.getStack("red_dye"), {
-        id: VanillaBlockID.red_flower,
-        size: 4,
-        growth: 1,
-        gain: 1,
-        resistance: 1,
-        addToCreative: true
-    }));
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropColorFlowerCard("blackthorn", ["Black", "Flower", "Rose"], IDConverter.getStack("black_dye")));
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropColorFlowerCard("tulip", ["Purple", "Flower", "Tulip"], IDConverter.getStack("purple_dye")));
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropColorFlowerCard("cyazint", ["Blue", "Flower"], IDConverter.getStack("cyan_dye")));
-    // Metal common
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBaseMetalCommon("ferru", ["Gray", "Leaves", "Metal"], [VanillaTileID.iron_ore, VanillaTileID.iron_block], { id: ItemID.dustSmallIron, count: 1, data: 0 }));
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBaseMetalCommon("cyprium", ["Orange", "Leaves", "Metal"], [BlockID.blockCopper, BlockID.oreCopper], { id: ItemID.dustSmallCopper, count: 1, data: 0 }));
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBaseMetalCommon("stagnium", ["Shiny", "Leaves", "Metal"], [BlockID.blockTin, BlockID.oreTin], { id: ItemID.dustSmallTin, count: 1, data: 0 }));
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBaseMetalCommon("plumbiscus", ["Shiny", "Leaves", "Metal"], [BlockID.blockLead, BlockID.oreLead], { id: ItemID.dustSmallLead, count: 1, data: 0 }));
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBaseMetalUncommon("aurelia", ["Gold", "Leaves", "Metal"], [VanillaTileID.gold_ore, VanillaTileID.gold_block], { id: VanillaItemID.gold_nugget, count: 1, data: 0 }));
-    Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBaseMetalUncommon("shining", ["Silver", "Leaves", "Metal"], [BlockID.blockSilver, BlockID.oreSilver], { id: ItemID.dustSmallSilver, count: 1, data: 0 }));
+    Callback.addCallback("PreLoaded", function () {
+        // Basic
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropWeed());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropVenomilia());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropStickreed());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropTerraWart());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropRedWheat());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropCoffee());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropHops());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropEatingplant());
+        // Vanilla
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropWheat());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropPotato());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropPumpkin());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropCarrots());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBeetroots());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropMelon());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropReed());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropCocoa());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropNetherWart());
+        // Mushroom
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropRedMushroom());
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBrownMushroom());
+        // Flowers
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropColorFlowerCard("dandelion", ["Yellow", "Flower"], IDConverter.getStack("yellow_dye"), {
+            id: VanillaBlockID.yellow_flower,
+            size: 4,
+            growth: 1,
+            gain: 1,
+            resistance: 1,
+            addToCreative: true
+        }));
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropColorFlowerCard("rose", ["Red", "Flower", "Rose"], IDConverter.getStack("red_dye"), {
+            id: VanillaBlockID.red_flower,
+            size: 4,
+            growth: 1,
+            gain: 1,
+            resistance: 1,
+            addToCreative: true
+        }));
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropColorFlowerCard("blackthorn", ["Black", "Flower", "Rose"], IDConverter.getStack("black_dye")));
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropColorFlowerCard("tulip", ["Purple", "Flower", "Tulip"], IDConverter.getStack("purple_dye")));
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropColorFlowerCard("cyazint", ["Blue", "Flower"], IDConverter.getStack("cyan_dye")));
+        // Metal common
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBaseMetalCommon("ferru", ["Gray", "Leaves", "Metal"], [VanillaTileID.iron_ore, VanillaTileID.iron_block], { id: ItemID.dustSmallIron, count: 1, data: 0 }));
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBaseMetalCommon("cyprium", ["Orange", "Leaves", "Metal"], [BlockID.blockCopper, BlockID.oreCopper], { id: ItemID.dustSmallCopper, count: 1, data: 0 }));
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBaseMetalCommon("stagnium", ["Shiny", "Leaves", "Metal"], [BlockID.blockTin, BlockID.oreTin], { id: ItemID.dustSmallTin, count: 1, data: 0 }));
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBaseMetalCommon("plumbiscus", ["Shiny", "Leaves", "Metal"], [BlockID.blockLead, BlockID.oreLead], { id: ItemID.dustSmallLead, count: 1, data: 0 }));
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBaseMetalUncommon("aurelia", ["Gold", "Leaves", "Metal"], [VanillaTileID.gold_ore, VanillaTileID.gold_block], { id: VanillaItemID.gold_nugget, count: 1, data: 0 }));
+        Agriculture.CropCardManager.registerCropCard(new Agriculture.CropBaseMetalUncommon("shining", ["Silver", "Leaves", "Metal"], [BlockID.blockSilver, BlockID.oreSilver], { id: ItemID.dustSmallSilver, count: 1, data: 0 }));
+    });
 })(Agriculture || (Agriculture = {}));
 var IC2Config;
 (function (IC2Config) {
+    var defaultConfig = FileTools.ReadText(__dir__ + "default.config.json");
+    __config__.checkAndRestore(defaultConfig);
     IC2Config.soundEnabled = getBool("sound_enabled");
-    IC2Config.machineSoundEnabled = getBool("machine_sounds");
     IC2Config.voltageEnabled = getBool("voltage_enabled");
     IC2Config.hardRecipes = getBool("hard_recipes");
     function getBool(name) {
@@ -2161,46 +2214,161 @@ var IC2Config;
     }
     IC2Config.getFloat = getFloat;
 })(IC2Config || (IC2Config = {}));
-var isLevelDisplayed = false;
-Callback.addCallback("LevelDisplayed", function () {
-    isLevelDisplayed = true;
-});
-Callback.addCallback("LevelLeft", function () {
-    isLevelDisplayed = false;
-});
+var EnergyProductionModifiers = {
+    FuelGenerator: 10 * IC2Config.getFloat("power_modifiers.fuel_generator"),
+    GeothermalGenerator: 20 * IC2Config.getFloat("power_modifiers.geothermal_generator"),
+    SolarPanel: 1 * IC2Config.getFloat("power_modifiers.solar_panel"),
+    WindGenerator: 10 * IC2Config.getFloat("power_modifiers.wind_generator"),
+    WaterGenerator: 3 * IC2Config.getFloat("power_modifiers.water_generator"),
+    EUReactor: 5 * IC2Config.getFloat("power_modifiers.nuclear_reactor"),
+    RTGenerator: 1 * IC2Config.getFloat("power_modifiers.radioisotope_generator")
+};
 // show tps
-var lasttime = -1;
-var frame = 0;
-Callback.addCallback("tick", function () {
-    if (!Game.isDeveloperMode)
-        return;
-    var t = Debug.sysTime();
-    if (frame++ % 20 == 0) {
-        if (lasttime != -1) {
-            var tps = 1000 / (t - lasttime) * 20;
-            Game.tipMessage(Math.round(tps * 10) / 10 + "tps");
+{
+    var lasttime_1 = -1;
+    var frame_1 = 0;
+    Callback.addCallback("tick", function () {
+        if (!Game.isDeveloperMode)
+            return;
+        var t = Debug.sysTime();
+        if (frame_1++ % 20 == 0) {
+            if (lasttime_1 != -1) {
+                var tps = 1000 / (t - lasttime_1) * 20;
+                Game.tipMessage(Math.round(tps * 10) / 10 + "tps");
+            }
+            lasttime_1 = t;
         }
-        lasttime = t;
+    });
+}
+var CableDamageArea = /** @class */ (function () {
+    /**
+     * Builds a cached view of hazardous cable blocks grouped by world chunk.
+     * Computes both per-chunk and total safe-voltage thresholds in one pass.
+     */
+    function CableDamageArea(blockNodes) {
+        this.maxSafetyVoltage = -1;
+        this.chunks = [];
+        var chunkMap = {};
+        for (var key in blockNodes) {
+            var blockNode = blockNodes[key];
+            if (!blockNode.extraData.maxSafetyVoltage)
+                continue;
+            var x = blockNode.x, y = blockNode.y, z = blockNode.z;
+            var chunkX = Math.floor(x / CableDamageArea.CHUNK_SIZE);
+            var chunkY = Math.floor(y / CableDamageArea.CHUNK_SIZE);
+            var chunkZ = Math.floor(z / CableDamageArea.CHUNK_SIZE);
+            var chunkKey = chunkX + ":" + chunkY + ":" + chunkZ;
+            var chunk = chunkMap[chunkKey];
+            if (!chunk) {
+                chunk = chunkMap[chunkKey] = {
+                    chunkX: chunkX,
+                    chunkY: chunkY,
+                    chunkZ: chunkZ,
+                    minX: Number.MAX_SAFE_INTEGER,
+                    minY: Number.MAX_SAFE_INTEGER,
+                    minZ: Number.MAX_SAFE_INTEGER,
+                    maxX: Number.MIN_SAFE_INTEGER,
+                    maxY: Number.MIN_SAFE_INTEGER,
+                    maxZ: Number.MIN_SAFE_INTEGER,
+                    maxSafetyVoltage: 0,
+                    nodes: []
+                };
+                this.chunks.push(chunk);
+            }
+            if (x < chunk.minX)
+                chunk.minX = x;
+            if (y < chunk.minY)
+                chunk.minY = y;
+            if (z < chunk.minZ)
+                chunk.minZ = z;
+            if (x > chunk.maxX)
+                chunk.maxX = x;
+            if (y > chunk.maxY)
+                chunk.maxY = y;
+            if (z > chunk.maxZ)
+                chunk.maxZ = z;
+            if (!chunk.maxSafetyVoltage || blockNode.extraData.maxSafetyVoltage < chunk.maxSafetyVoltage) {
+                chunk.maxSafetyVoltage = blockNode.extraData.maxSafetyVoltage;
+            }
+            if (this.maxSafetyVoltage < 0 || chunk.maxSafetyVoltage < this.maxSafetyVoltage) {
+                this.maxSafetyVoltage = chunk.maxSafetyVoltage;
+            }
+            chunk.nodes.push(blockNode);
+        }
     }
-});
+    /** Returns true when there are no hazardous cable chunks to process. */
+    CableDamageArea.prototype.isEmpty = function () {
+        return this.chunks.length == 0;
+    };
+    /**
+     * Returns the damage chunk by its coords or null if it's not found.
+     * @param chunkX chunk X coord
+     * @param chunkY chunk Y coord
+     * @param chunkZ chunk Z coord
+     */
+    CableDamageArea.prototype.getChunk = function (chunkX, chunkY, chunkZ) {
+        return this.chunks.find(function (chunk) { return chunk.chunkX == chunkX && chunk.chunkY == chunkY && chunk.chunkZ == chunkZ; }) || null;
+    };
+    /**
+     * Returns the chunk slice assigned to the current tick within a 20-tick cycle.
+     */
+    CableDamageArea.prototype.getChunkBatch = function (threadTime) {
+        var count = this.chunks.length;
+        if (count == 0)
+            return [];
+        var batchSize = Math.ceil(count / 20);
+        var start = (threadTime % 20) * batchSize;
+        var end = Math.min(start + batchSize, count);
+        return this.chunks.slice(start, end);
+    };
+    CableDamageArea.CHUNK_SIZE = 8;
+    return CableDamageArea;
+}());
+/// <reference path="CableDamageArea.ts" />
 var EUCableGrid = /** @class */ (function (_super) {
     __extends(EUCableGrid, _super);
     function EUCableGrid(energyType, maxValue, blockID, region) {
         var _this = _super.call(this, energyType, maxValue, blockID, region) || this;
-        var cableData = CableRegistry.getCableData(blockID);
-        if (cableData) {
-            _this.maxSafetyVoltage = CableRegistry.maxSafetyVoltage[cableData.insulation];
-        }
+        _this.damageArea = null;
+        _this.damageEnabled = !!CableRegistry.getCableData(blockID);
         return _this;
     }
-    EUCableGrid.prototype.onOverload = function (voltage) {
+    EUCableGrid.prototype.isValidWire = function (tile) {
+        if (_super.prototype.isValidWire.call(this, tile))
+            return true;
+        var cableData = CableRegistry.getCableData(this.blockID);
+        var otherData = CableRegistry.getCableData(tile.id);
+        return cableData && otherData && cableData.name == otherData.name;
+    };
+    EUCableGrid.prototype.mergeGrid = function (grid) {
+        _super.prototype.mergeGrid.call(this, grid);
+        this.resetDamageArea();
+        return this;
+    };
+    EUCableGrid.prototype.addCoords = function (x, y, z, tile) {
+        var blockNode = _super.prototype.addCoords.call(this, x, y, z, tile);
+        var cableData = CableRegistry.getCableData(tile.id);
+        if (cableData && cableData.insulation < cableData.maxInsulation) {
+            blockNode.extraData.maxSafetyVoltage = cableData.maxSafetyVoltage;
+            this.resetDamageArea();
+        }
+        return blockNode;
+    };
+    EUCableGrid.prototype.removeCoords = function (x, y, z) {
+        var blockNode = _super.prototype.removeCoords.call(this, x, y, z);
+        if (blockNode) {
+            this.resetDamageArea();
+        }
+        return blockNode;
+    };
+    EUCableGrid.prototype.onOverload = function (packetSize) {
         if (IC2Config.voltageEnabled) {
-            var region = new WorldRegion(this.region);
-            for (var key in this.blocksMap) {
-                var coords = this.getCoordsFromString(key);
-                region.setBlock(coords, 0, 0);
-                region.sendPacketInRadius(coords, 64, "ic2.cableBurnParticles", coords);
-            }
+            var region_1 = new WorldRegion(this.region);
+            this.blockNodes.forEachNode(function (blockNode) {
+                var coords = { x: blockNode.x, y: blockNode.y, z: blockNode.z };
+                region_1.setBlock(coords, 0, 0);
+                region_1.sendPacketInRadius(coords, 64, "ic2.cableBurnParticles", coords);
+            });
             this.destroy();
         }
     };
@@ -2220,54 +2388,57 @@ var EUCableGrid = /** @class */ (function (_super) {
         }
         return false;
     };
-    EUCableGrid.prototype.dealElectrocuteDamage = function (damage) {
-        var minX = 2e9, minY = 256, minZ = 2e9, maxX = -2e9, maxY = 0, maxZ = -2e9;
-        for (var key in this.blocksMap) {
-            var _a = this.getCoordsFromString(key), x = _a.x, y = _a.y, z = _a.z;
-            if (x < minX)
-                minX = x;
-            if (y < minY)
-                minY = y;
-            if (z < minZ)
-                minZ = z;
-            if (x > maxX)
-                maxX = x;
-            if (y > maxY)
-                maxY = y;
-            if (z > maxZ)
-                maxZ = z;
+    EUCableGrid.prototype.tick = function () {
+        _super.prototype.tick.call(this);
+        if (IC2Config.voltageEnabled && this.damageEnabled && this.energyPower > 0) {
+            this.dealElectrocuteDamage(this.energyPower);
         }
-        var region = new WorldRegion(this.region);
-        var entities = region.listEntitiesInAABB(minX - 1, minY - 1, minZ - 1, maxX + 2, maxY + 2, maxZ + 2);
-        for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
-            var ent = entities_1[_i];
-            if (!EntityHelper.canTakeDamage(ent, DamageSource.electricity))
+    };
+    EUCableGrid.prototype.dealElectrocuteDamage = function (voltage) {
+        var damageArea = this.getOrCreateDamageArea();
+        if (damageArea.isEmpty() || voltage <= damageArea.maxSafetyVoltage)
+            return;
+        var threadTime = World.getThreadTime();
+        var chunks = damageArea.getChunkBatch(threadTime);
+        var damage = Math.ceil(voltage / 32);
+        var affectedEntities = {};
+        for (var _i = 0, chunks_1 = chunks; _i < chunks_1.length; _i++) {
+            var chunk = chunks_1[_i];
+            if (voltage <= chunk.maxSafetyVoltage)
                 continue;
-            var pos = Entity.getPosition(ent);
-            if (EntityHelper.isPlayer(ent))
-                pos.y -= 1.62;
-            for (var key in this.blocksMap) {
-                var keyArr = key.split(":");
-                var x = parseInt(keyArr[0]) + .5, y = parseInt(keyArr[1]) + .5, z = parseInt(keyArr[2]) + .5;
-                if (Math.abs(pos.x - x) <= 1.5 && Math.abs(pos.y - y) <= 1.5 && Math.abs(pos.z - z) <= 1.5) {
-                    Entity.damageEntity(ent, damage);
-                    break;
+            var entities = this.region.listEntitiesInAABB(chunk.minX - 1, chunk.minY - 1, chunk.minZ - 1, chunk.maxX + 2, chunk.maxY + 2, chunk.maxZ + 2);
+            for (var _a = 0, entities_2 = entities; _a < entities_2.length; _a++) {
+                var ent = entities_2[_a];
+                if (affectedEntities[ent] || !EntityHelper.canTakeDamage(ent, DamageSource.electricity)) {
+                    continue;
+                }
+                var pos = Entity.getPosition(ent);
+                if (EntityHelper.isPlayer(ent))
+                    pos.y -= 1.62;
+                for (var _b = 0, _c = chunk.nodes; _b < _c.length; _b++) {
+                    var blockNode = _c[_b];
+                    if (voltage <= blockNode.extraData.maxSafetyVoltage)
+                        continue;
+                    var cx = blockNode.x + .5, cy = blockNode.y + .5, cz = blockNode.z + .5;
+                    if (Math.abs(pos.x - cx) <= 1.5 && Math.abs(pos.y - cy) <= 1.5 && Math.abs(pos.z - cz) <= 1.5) {
+                        affectedEntities[ent] = true;
+                        if (damage > 16)
+                            Entity.setFire(ent, 20, true);
+                        Entity.damageEntity(ent, damage);
+                        break;
+                    }
                 }
             }
         }
     };
-    EUCableGrid.prototype.tick = function () {
-        _super.prototype.tick.call(this);
-        if (IC2Config.voltageEnabled && this.maxSafetyVoltage && World.getThreadTime() % 20 == 0) {
-            if (this.energyPower > this.maxSafetyVoltage) {
-                var damage = Math.ceil(this.energyPower / 32);
-                this.dealElectrocuteDamage(damage);
-            }
+    EUCableGrid.prototype.getOrCreateDamageArea = function () {
+        if (!this.damageArea) {
+            this.damageArea = new CableDamageArea(this.blockNodes.data);
         }
+        return this.damageArea;
     };
-    EUCableGrid.prototype.getCoordsFromString = function (coordKey) {
-        var coordArray = coordKey.split(':').map(function (c) { return parseInt(c); });
-        return { x: coordArray[0], y: coordArray[1], z: coordArray[2] };
+    EUCableGrid.prototype.resetDamageArea = function () {
+        this.damageArea = null;
     };
     return EUCableGrid;
 }(EnergyGrid));
@@ -2287,8 +2458,13 @@ var CableRegistry;
     CableRegistry.maxSafetyVoltage = {
         0: 5,
         1: 128,
-        2: 512
+        2: 512,
+        3: 2048
     };
+    function getMaxSafetyVoltage(insulation) {
+        return CableRegistry.maxSafetyVoltage[insulation] || -1;
+    }
+    CableRegistry.getMaxSafetyVoltage = getMaxSafetyVoltage;
     function getCableData(id) {
         return insulationData[id];
     }
@@ -2314,7 +2490,12 @@ var CableRegistry;
         if (maxInsulationLevel) {
             for (var index = 0; index <= maxInsulationLevel; index++) {
                 var blockID = Block.getNumericId(stringID + index);
-                insulationData[blockID] = { name: stringID, insulation: index, maxInsulation: maxInsulationLevel };
+                insulationData[blockID] = {
+                    name: stringID,
+                    insulation: index,
+                    maxInsulation: maxInsulationLevel,
+                    maxSafetyVoltage: getMaxSafetyVoltage(index)
+                };
                 EU.registerWire(blockID, maxVoltage, EUCableGrid);
                 setupDrop(stringID + index);
             }
@@ -2459,14 +2640,21 @@ var EntityHelper;
         return entities;
     }
     EntityHelper.getEntitiesInRadius = getEntitiesInRadius;
+    function isPhysicalDamage(type) {
+        return type == EDamageCause.MOB || type == EDamageCause.IMPACT ||
+            type == EDamageCause.MOB_EXPLOSION || type == EDamageCause.LAVA;
+    }
+    EntityHelper.isPhysicalDamage = isPhysicalDamage;
 })(EntityHelper || (EntityHelper = {}));
 var LaserShot = /** @class */ (function () {
     function LaserShot(player, pos, vel, params) {
         var _a, _b, _c, _d;
         var region = WorldRegion.getForActor(player);
         var entity = region.spawnEntity(pos.x + vel.x, pos.y + vel.y, pos.z + vel.z, EntityType.ARROW);
-        Entity.setSkin(entity, "models/laser.png");
         Entity.setVelocity(entity, vel.x, vel.y, vel.z);
+        var pitch = Math.asin(-vel.y);
+        var yaw = Math.atan2(vel.x, vel.z);
+        Entity.setLookAngle(entity, yaw, pitch);
         this.player = player;
         this.entity = entity;
         this.region = region;
@@ -2509,7 +2697,7 @@ var LaserShot = /** @class */ (function () {
         }
     };
     LaserShot.prototype.checkBlock = function (x, y, z) {
-        var block = World.getBlock(x, y, z);
+        var block = this.region.getBlock(x, y, z);
         if (ToolAPI.getBlockMaterialName(block.id) == "unbreaking") {
             this.power = 0;
         }
@@ -2524,7 +2712,7 @@ var LaserShot = /** @class */ (function () {
         if (target.coords) {
             Game.prevent();
             var c = target.coords;
-            var block = World.getBlock(c.x, c.y, c.z);
+            var block = this.region.getBlock(c.x, c.y, c.z);
             if (block.id != 7 && block.id != 120) {
                 this.destroyBlock(c.x, c.y, c.z, block);
                 this.hitBlock = true;
@@ -2536,8 +2724,9 @@ var LaserShot = /** @class */ (function () {
             }
         }
         else {
-            if (target.entity == this.player)
+            if (target.entity == this.player) {
                 return;
+            }
             var damage = this.power;
             if (damage > 0) {
                 if (this.smelt)
@@ -2607,53 +2796,104 @@ Callback.addCallback("tick", function () {
 Callback.addCallback("ProjectileHit", function (projectile, item, target) {
     LaserShotProvider.onProjectileHit(projectile, target);
 });
+/**
+ * API for integrating other mods with IndustrialCraft PE
+ */
 var IntegrationAPI;
 (function (IntegrationAPI) {
+    /**
+     * Registers item in Recycler blacklist.
+     * @param id item id
+     */
     function addToRecyclerBlacklist(id) {
-        recyclerBlacklist.push(id);
+        Machine.recyclerBlacklist.push(id);
     }
     IntegrationAPI.addToRecyclerBlacklist = addToRecyclerBlacklist;
+    /**
+     * Alllows item to be stored in Tool Box.
+     * @param id item id
+     */
     function addToolBooxValidItem(id) {
         toolboxItems.push(id);
     }
     IntegrationAPI.addToolBooxValidItem = addToolBooxValidItem;
+    /**
+     * Allows ore to be detected by Scanner and mined by Miner.
+     * Block ids starting with "ore" or ending with "_ore" are automatically registered.
+     * @param id block id
+     */
+    function registerOreForScanner(id) {
+        if (!scannerOreBlocks.includes(id)) {
+            scannerOreBlocks.push(id);
+        }
+    }
+    IntegrationAPI.registerOreForScanner = registerOreForScanner;
 })(IntegrationAPI || (IntegrationAPI = {}));
 var ItemName;
 (function (ItemName) {
-    /**@deprecated */
-    function setRarity(id, rarity) {
-        ItemRegistry.setRarity(id, rarity);
-    }
-    ItemName.setRarity = setRarity;
-    /**@deprecated */
-    function getRarity(id) {
-        return ItemRegistry.getRarity(id);
-    }
-    ItemName.getRarity = getRarity;
-    function addTooltip(id, tooltip) {
-        Item.registerNameOverrideFunction(id, function (item, name) {
-            return ItemRegistry.getItemRarityColor(item.id) + name + "\n§7" + tooltip;
-        });
+    var tooltips = {};
+    function addTooltip(id, text) {
+        var params = [];
+        for (var _i = 2; _i < arguments.length; _i++) {
+            params[_i - 2] = arguments[_i];
+        }
+        var tooltip = { text: text, params: params };
+        if (!tooltips[id]) {
+            tooltips[id] = [tooltip];
+        }
+        else {
+            tooltips[id].push(tooltip);
+        }
+        Item.registerNameOverrideFunction(id, tooltipNameOverrideFunc);
     }
     ItemName.addTooltip = addTooltip;
     function addTierTooltip(blockID, tier) {
-        addTooltip(Block.getNumericId(blockID), getPowerTierText(tier));
+        addTooltip(Block.getNumericId(blockID), "tooltip.power_tier", tier);
     }
     ItemName.addTierTooltip = addTierTooltip;
-    function addStorageBlockTooltip(blockID, tier, capacity) {
+    function addProductionTooltip(blockID, unit, minValue, maxValue) {
+        var outputText = maxValue ? "".concat(minValue, "-").concat(maxValue, " ").concat(unit, "/t") : "".concat(minValue, " ").concat(unit, "/t");
+        addTooltip(Block.getNumericId(blockID), "tooltip.power_production", outputText);
+    }
+    ItemName.addProductionTooltip = addProductionTooltip;
+    function addConsumptionTooltip(blockID, unit, minValue, maxValue) {
+        var consumptionText = maxValue ? "".concat(minValue, "-").concat(maxValue, " ").concat(unit, "/t") : "".concat(minValue, " ").concat(unit, "/t");
+        addTooltip(Block.getNumericId(blockID), "tooltip.power_consumption", consumptionText);
+    }
+    ItemName.addConsumptionTooltip = addConsumptionTooltip;
+    function addStorageBlockTooltip(blockID, tier, capacity, output) {
         Item.registerNameOverrideFunction(Block.getNumericId(blockID), function (item, name) {
             var color = ItemRegistry.getItemRarityColor(item.id);
-            return color + name + "\n§7" + getBlockStorageText(item, tier, capacity);
+            return color + name + "\n§7" + getBlockStorageText(item, tier, capacity, output);
         });
     }
     ItemName.addStorageBlockTooltip = addStorageBlockTooltip;
-    function getBlockStorageText(item, tier, capacity) {
-        var energy = item.extra ? item.extra.getInt("energy") : 0;
-        return "".concat(getPowerTierText(tier), "\n").concat(displayEnergy(energy), "/").concat(capacity, " EU");
+    function getTranslatedTextWithParams(key) {
+        var params = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            params[_i - 1] = arguments[_i];
+        }
+        var text = Translation.translate(key);
+        for (var _a = 0, params_1 = params; _a < params_1.length; _a++) {
+            var param = params_1[_a];
+            text = text.replace("%s", param.toString());
+        }
+        return text;
+    }
+    ItemName.getTranslatedTextWithParams = getTranslatedTextWithParams;
+    function getBlockStorageText(item, tier, capacity, output) {
+        var _a;
+        var energy = ((_a = item.extra) === null || _a === void 0 ? void 0 : _a.getInt("energy")) || 0;
+        var tooltip = getPowerTierText(tier) + '\n';
+        if (output) {
+            tooltip += "".concat(getTranslatedTextWithParams("tooltip.power_output", output), " EU/t\n");
+        }
+        tooltip += "".concat(displayEnergy(energy), "/").concat(capacity, " EU");
+        return tooltip;
     }
     ItemName.getBlockStorageText = getBlockStorageText;
     function getPowerTierText(tier) {
-        return Translation.translate("tooltip.power_tier").replace("%s", tier.toString());
+        return getTranslatedTextWithParams("tooltip.power_tier", tier);
     }
     ItemName.getPowerTierText = getPowerTierText;
     function getItemStorageText(item) {
@@ -2678,6 +2918,12 @@ var ItemName;
         return energy.toString();
     }
     ItemName.displayEnergy = displayEnergy;
+    var tooltipNameOverrideFunc = function (item, name) {
+        var tooltip = tooltips[item.id]
+            .map(function (tooltip) { return getTranslatedTextWithParams.apply(void 0, __spreadArray([tooltip.text], tooltip.params, false)); })
+            .join("\n");
+        return ItemRegistry.getItemRarityColor(item.id) + name + "\n§7" + tooltip;
+    };
 })(ItemName || (ItemName = {}));
 /// <reference path="IWrenchable.ts" />
 var Machine;
@@ -2690,21 +2936,12 @@ var Machine;
             return _super !== null && _super.apply(this, arguments) || this;
         }
         MachineBase.prototype.onInit = function () {
-            this.networkData.putInt(NetworkDataKeys.blockId, this.blockID);
-            this.networkData.putInt(NetworkDataKeys.facing, this.getFacing());
-            this.networkData.sendChanges();
             this.setupContainer();
             delete this.liquidStorage;
         };
         MachineBase.prototype.setupContainer = function () { };
         MachineBase.prototype.addLiquidTank = function (name, limit, liquids) {
-            var tank = new BlockEngine.LiquidTank(this, name, limit, liquids);
-            var liquid = this.liquidStorage.getLiquidStored();
-            if (liquid) {
-                var amount = this.liquidStorage.getLiquid(liquid, tank.getLimit() / 1000);
-                tank.addLiquid(liquid, Math.round(amount * 1000));
-            }
-            return tank;
+            return new BlockEngine.LiquidTank(this, name, limit, liquids);
         };
         MachineBase.prototype.canRotate = function (side) {
             return false;
@@ -2723,31 +2960,10 @@ var Machine;
             return false;
         };
         MachineBase.prototype.setActive = function (isActive) {
-            // TODO: sounds
             if (this.networkData.getBoolean(NetworkDataKeys.isActive) !== isActive) {
                 this.networkData.putBoolean(NetworkDataKeys.isActive, isActive);
                 this.networkData.sendChanges();
             }
-        };
-        MachineBase.prototype.renderModel = function () {
-            if (this.networkData.getBoolean(NetworkDataKeys.isActive)) {
-                var blockId = Network.serverToLocalId(this.networkData.getInt(NetworkDataKeys.blockId));
-                var facing = this.networkData.getInt(NetworkDataKeys.facing);
-                TileRenderer.mapAtCoords(this.x, this.y, this.z, blockId, facing);
-            }
-            else {
-                BlockRenderer.unmapAtCoords(this.x, this.y, this.z);
-            }
-        };
-        MachineBase.prototype.clientLoad = function () {
-            var _this = this;
-            this.renderModel();
-            this.networkData.addOnDataChangedListener(function (data, isExternal) {
-                _this.renderModel();
-            });
-        };
-        MachineBase.prototype.clientUnload = function () {
-            BlockRenderer.unmapAtCoords(this.x, this.y, this.z);
         };
         MachineBase.prototype.getFacing = function () {
             return this.blockSource.getBlockData(this.x, this.y, this.z);
@@ -2755,8 +2971,6 @@ var Machine;
         MachineBase.prototype.setFacing = function (side) {
             if (this.getFacing() != side) {
                 this.blockSource.setBlock(this.x, this.y, this.z, this.blockID, side);
-                this.networkData.putInt(NetworkDataKeys.facing, side);
-                this.networkData.sendChanges();
                 return true;
             }
             return false;
@@ -2768,10 +2982,47 @@ var Machine;
         };
         MachineBase.prototype.getDefaultDrop = function () {
             var _a;
-            return (_a = this.defaultDrop) !== null && _a !== void 0 ? _a : this.blockID;
+            return new ItemStack((_a = this.defaultDrop) !== null && _a !== void 0 ? _a : this.blockID, 1, 0);
         };
-        MachineBase.prototype.adjustDrop = function (item) {
-            return item;
+        MachineBase.prototype.getDemontaged = function () {
+            return new ItemStack(this.blockID, 1, 0);
+        };
+        MachineBase.prototype.updateActivity = function (isActive) {
+            if (isActive) {
+                var region = BlockSource.getCurrentClientRegion();
+                var block = region.getBlock(this.x, this.y, this.z);
+                TileRenderer.mapAtCoords(this.x, this.y, this.z, block.id, block.data);
+                this.startPlaySound();
+            }
+            else {
+                BlockRenderer.unmapAtCoords(this.x, this.y, this.z);
+                this.stopPlaySound();
+            }
+        };
+        MachineBase.prototype.clientLoad = function () {
+            if (IC2Config.soundEnabled) {
+                this.audioSource = new AudioSourceClient({
+                    x: this.x + .5,
+                    y: this.y + .5,
+                    z: this.z + .5
+                });
+            }
+            this.wasActive = this.networkData.getBoolean(NetworkDataKeys.isActive);
+            this.updateActivity(this.wasActive);
+        };
+        MachineBase.prototype.clientUnload = function () {
+            var _a;
+            BlockRenderer.unmapAtCoords(this.x, this.y, this.z);
+            (_a = this.audioSource) === null || _a === void 0 ? void 0 : _a.unload();
+        };
+        MachineBase.prototype.clientTick = function () {
+            var _a;
+            (_a = this.audioSource) === null || _a === void 0 ? void 0 : _a.update();
+            var isActive = this.networkData.getBoolean(NetworkDataKeys.isActive);
+            if (this.wasActive != isActive) {
+                this.updateActivity(isActive);
+                this.wasActive = isActive;
+            }
         };
         MachineBase.prototype.getOperationSound = function () {
             return null;
@@ -2779,35 +3030,89 @@ var Machine;
         MachineBase.prototype.getStartingSound = function () {
             return null;
         };
-        MachineBase.prototype.getInterruptSound = function () {
+        MachineBase.prototype.getFinishingSound = function () {
             return null;
         };
         MachineBase.prototype.startPlaySound = function () {
-            /*if (!IC2Config.machineSoundEnabled) return;
-            if (!this.audioSource && !this.remove) {
-                if (this.finishingSound != 0) {
-                    SoundManager.stop(this.finishingSound);
+            if (!IC2Config.soundEnabled || !this.audioSource || this.remove)
+                return;
+            if (this.getFinishingSound()) {
+                this.audioSource.stop(this.getFinishingSound());
+            }
+            var opSound = this.getOperationSound();
+            if (this.getStartingSound()) {
+                var stream = this.audioSource.play(this.getStartingSound());
+                if (opSound) {
+                    if (stream) {
+                        stream.setOnCompleteEvent(function (source, stream) {
+                            source.play(opSound, true, stream.volume, stream.radius);
+                        });
+                    }
+                    else {
+                        this.audioSource.play(opSound, true); // if failed to play starting sound set looping operation sound
+                    }
                 }
-                if (this.getStartingSound()) {
-                    this.audioSource = SoundManager.createSource(SourceType.TILEENTITY, this, this.getStartingSound());
-                    //this.audioSource.setNextSound(this.getOperationSound(), true);
-                } else if (this.getOperationSound()) {
-                    this.audioSource = SoundManager.createSource(SourceType.TILEENTITY, this, this.getOperationSound());
-                }
-            }*/
+            }
+            else if (opSound) {
+                this.audioSource.playSingle(opSound, true);
+            }
         };
         MachineBase.prototype.stopPlaySound = function () {
-            /*if (this.audioSource) {
-                SoundManager.removeSource(this.audioSource);
-                this.audioSource = null;
-                if (this.getInterruptSound()) {
-                    this.finishingSound = SoundManager.playSoundAtBlock(this, this.getInterruptSound(), 1);
-                }
-            }*/
+            if (!IC2Config.soundEnabled || !this.audioSource || this.remove)
+                return;
+            var wasPlayingSound = false;
+            if (this.getStartingSound()) {
+                wasPlayingSound = this.audioSource.stop(this.getStartingSound());
+            }
+            if (this.getOperationSound()) {
+                wasPlayingSound || (wasPlayingSound = this.audioSource.stop(this.getOperationSound()));
+            }
+            if (wasPlayingSound && this.getFinishingSound()) {
+                this.audioSource.play(this.getFinishingSound());
+            }
+        };
+        MachineBase.prototype.onPlaySound = function (packetData, packetExtra) {
+            if (!this.audioSource)
+                return;
+            var stream = this.audioSource.getStream(packetData.name);
+            if (!stream) {
+                this.audioSource.play(packetData.name, false, packetData.vol, packetData.rad);
+            }
+        };
+        MachineBase.prototype.playOnce = function (soundName, volume, radius) {
+            if (volume === void 0) { volume = 1; }
+            if (radius === void 0) { radius = 16; }
+            this.networkEntity.send("playSound", { name: soundName, vol: volume, rad: radius });
+        };
+        MachineBase.prototype.canStackBeMerged = function (inputStack, outputStack, slotMaxStack) {
+            if (outputStack.id == 0)
+                return true;
+            var outputMaxStack = slotMaxStack || Item.getMaxStack(outputStack.id, outputStack.data);
+            return outputStack.id == inputStack.id && outputStack.data == inputStack.data &&
+                outputStack.count + inputStack.count <= outputMaxStack &&
+                outputStack.extra == inputStack.extra;
         };
         __decorate([
             Machine.ClientSide
-        ], MachineBase.prototype, "renderModel", null);
+        ], MachineBase.prototype, "updateActivity", null);
+        __decorate([
+            Machine.ClientSide
+        ], MachineBase.prototype, "getOperationSound", null);
+        __decorate([
+            Machine.ClientSide
+        ], MachineBase.prototype, "getStartingSound", null);
+        __decorate([
+            Machine.ClientSide
+        ], MachineBase.prototype, "getFinishingSound", null);
+        __decorate([
+            Machine.ClientSide
+        ], MachineBase.prototype, "startPlaySound", null);
+        __decorate([
+            Machine.ClientSide
+        ], MachineBase.prototype, "stopPlaySound", null);
+        __decorate([
+            Machine.NetworkEvent(Side.Client, "playSound")
+        ], MachineBase.prototype, "onPlaySound", null);
         return MachineBase;
     }(TileEntityBase));
     Machine.MachineBase = MachineBase;
@@ -2827,11 +3132,15 @@ var Machine;
         ElectricMachine.prototype.getTier = function () {
             return 1;
         };
-        ElectricMachine.prototype.getEnergyStorage = function () {
+        ElectricMachine.prototype.getEnergyCapacity = function () {
             return 0;
         };
+        /** @deprecated use getEnergyCapacity instead */
+        ElectricMachine.prototype.getEnergyStorage = function () {
+            return this.getEnergyCapacity();
+        };
         ElectricMachine.prototype.getRelativeEnergy = function () {
-            return this.data.energy / this.getEnergyStorage();
+            return this.data.energy / this.getEnergyCapacity();
         };
         ElectricMachine.prototype.getMaxPacketSize = function () {
             return 8 << this.getTier() * 2;
@@ -2845,28 +3154,38 @@ var Machine;
             this.data.energy -= ChargeItemRegistry.addEnergyToSlot(this.container.getSlot(slotName), "Eu", this.data.energy, this.getTier());
         };
         ElectricMachine.prototype.dischargeSlot = function (slotName) {
-            var amount = this.getEnergyStorage() - this.data.energy;
+            var amount = this.getEnergyCapacity() - this.data.energy;
             this.data.energy += ChargeItemRegistry.getEnergyFromSlot(this.container.getSlot(slotName), "Eu", amount, this.getTier());
         };
         ElectricMachine.prototype.energyTick = function (type, src) { };
         ElectricMachine.prototype.energyReceive = function (type, amount, voltage) {
             var maxVoltage = this.getMaxPacketSize();
             if (voltage > maxVoltage) {
+                amount = Math.min(amount, maxVoltage);
                 if (IC2Config.voltageEnabled) {
                     this.blockSource.setBlock(this.x, this.y, this.z, 0, 0);
                     this.blockSource.explode(this.x + 0.5, this.y + 0.5, this.z + 0.5, this.getExplosionPower(), true);
-                    SoundManager.playSoundAtBlock(this, "MachineOverload.ogg", 1, 32);
+                    SoundLib.playSoundAtBlock(this, this.dimension, "MachineOverload.ogg", 1, 1, 32);
                     this.selfDestroy();
-                    return 1;
+                    return amount;
                 }
-                amount = Math.min(amount, maxVoltage);
             }
-            var add = Math.min(amount, this.getEnergyStorage() - this.data.energy);
+            var add = Math.min(amount, Math.floor(this.getEnergyCapacity() - this.data.energy));
             this.data.energy += add;
             return add;
         };
+        ElectricMachine.prototype.getFreeEnergyAmount = function () {
+            var storage = this.getEnergyCapacity();
+            if (storage > this.data.energy) {
+                return Math.floor(storage - this.data.energy);
+            }
+            return 0;
+        };
         ElectricMachine.prototype.getExplosionPower = function () {
             return 1.2;
+        };
+        ElectricMachine.prototype.isGenerator = function () {
+            return false;
         };
         ElectricMachine.prototype.isConductor = function (type) {
             return false;
@@ -2874,7 +3193,7 @@ var Machine;
         ElectricMachine.prototype.canReceiveEnergy = function (side, type) {
             return true;
         };
-        ElectricMachine.prototype.canExtractEnergy = function (side, type) {
+        ElectricMachine.prototype.canEmitEnergy = function (side, type) {
             return false;
         };
         ElectricMachine.prototype.rebuildGrid = function () {
@@ -2895,10 +3214,13 @@ var Machine;
             _this.defaultDrop = BlockID.primalGenerator;
             return _this;
         }
+        Generator.prototype.isGenerator = function () {
+            return true;
+        };
         Generator.prototype.canReceiveEnergy = function () {
             return false;
         };
-        Generator.prototype.canExtractEnergy = function () {
+        Generator.prototype.canEmitEnergy = function () {
             return true;
         };
         Generator.prototype.energyTick = function (type, src) {
@@ -2927,7 +3249,7 @@ var MachineRegistry;
             var BasePrototype = Machine.MachineBase.prototype;
             Prototype.id = id;
             (_a = Prototype.getDefaultDrop) !== null && _a !== void 0 ? _a : (Prototype.getDefaultDrop = BasePrototype.getDefaultDrop);
-            (_b = Prototype.adjustDrop) !== null && _b !== void 0 ? _b : (Prototype.adjustDrop = BasePrototype.adjustDrop);
+            (_b = Prototype.getDemontaged) !== null && _b !== void 0 ? _b : (Prototype.getDemontaged = BasePrototype.getDemontaged);
             (_c = Prototype.startPlaySound) !== null && _c !== void 0 ? _c : (Prototype.startPlaySound = BasePrototype.startPlaySound);
             (_d = Prototype.stopPlaySound) !== null && _d !== void 0 ? _d : (Prototype.stopPlaySound = BasePrototype.stopPlaySound);
             (_e = Prototype.setActive) !== null && _e !== void 0 ? _e : (Prototype.setActive = function (isActive) {
@@ -2946,7 +3268,9 @@ var MachineRegistry;
         // register prototype
         machineIDs[id] = true;
         TileEntity.registerPrototype(id, Prototype);
-        setMachineDrop(id, Prototype.defaultDrop);
+        BlockRegistry.registerDrop(id, function (coords, blockID, blockData, level) {
+            return MachineRegistry.getMachineDrop(blockID, level);
+        });
         if (Prototype instanceof Machine.ElectricMachine) {
             // wire connection
             ICRender.getGroup("ic-wire").add(id, -1);
@@ -2974,7 +3298,7 @@ var MachineRegistry;
         (_b = Prototype.getMaxPacketSize) !== null && _b !== void 0 ? _b : (Prototype.getMaxPacketSize = BasePrototype.getMaxPacketSize);
         (_c = Prototype.getExplosionPower) !== null && _c !== void 0 ? _c : (Prototype.getExplosionPower = BasePrototype.getExplosionPower);
         (_d = Prototype.energyReceive) !== null && _d !== void 0 ? _d : (Prototype.energyReceive = BasePrototype.energyReceive);
-        this.registerPrototype(id, Prototype);
+        registerPrototype(id, Prototype);
         // register for energy net
         EnergyTileRegistry.addEnergyTypeForId(id, EU);
     }
@@ -2984,11 +3308,11 @@ var MachineRegistry;
         var BasePrototype = Machine.Generator.prototype;
         (_a = Prototype.energyTick) !== null && _a !== void 0 ? _a : (Prototype.energyTick = BasePrototype.energyTick);
         (_b = Prototype.canReceiveEnergy) !== null && _b !== void 0 ? _b : (Prototype.canReceiveEnergy = BasePrototype.canReceiveEnergy);
-        (_c = Prototype.canExtractEnergy) !== null && _c !== void 0 ? _c : (Prototype.canExtractEnergy = BasePrototype.canExtractEnergy);
-        this.registerElectricMachine(id, Prototype);
+        (_c = Prototype.canEmitEnergy) !== null && _c !== void 0 ? _c : (Prototype.canEmitEnergy = BasePrototype.canEmitEnergy);
+        registerElectricMachine(id, Prototype);
     }
     MachineRegistry.registerGenerator = registerGenerator;
-    function createStorageInterface(blockID, descriptor) {
+    function createFluidStorageInterface(blockID, descriptor) {
         var _a, _b, _c, _d;
         descriptor.liquidUnitRatio = 0.001;
         (_a = descriptor.getInputTank) !== null && _a !== void 0 ? _a : (descriptor.getInputTank = function () {
@@ -2997,37 +3321,43 @@ var MachineRegistry;
         (_b = descriptor.getOutputTank) !== null && _b !== void 0 ? _b : (descriptor.getOutputTank = function () {
             return this.tileEntity.liquidTank;
         });
-        (_c = descriptor.canReceiveLiquid) !== null && _c !== void 0 ? _c : (descriptor.canReceiveLiquid = function (liquid) {
-            return this.getInputTank().isValidLiquid(liquid);
+        (_c = descriptor.canReceiveLiquid) !== null && _c !== void 0 ? _c : (descriptor.canReceiveLiquid = function (liquid, side) {
+            return this.getInputTank(side, this.tileEntity).isValidLiquid(liquid);
         });
         (_d = descriptor.canTransportLiquid) !== null && _d !== void 0 ? _d : (descriptor.canTransportLiquid = function () { return true; });
         StorageInterface.createInterface(blockID, descriptor);
     }
-    MachineRegistry.createStorageInterface = createStorageInterface;
+    MachineRegistry.createFluidStorageInterface = createFluidStorageInterface;
     function setStoragePlaceFunction(blockID, hasVerticalRotation) {
         Block.registerPlaceFunction(blockID, function (coords, item, block, player, blockSource) {
             var region = new WorldRegion(blockSource);
             var place = World.canTileBeReplaced(block.id, block.data) ? coords : coords.relative;
             var rotation = TileRenderer.getBlockRotation(player, hasVerticalRotation);
             region.setBlock(place, item.id, rotation);
-            // region.playSound(place.x + .5, place.y + .5, place.z + .5, "dig.stone", 1, 0.8)
             var tile = region.addTileEntity(place);
             if (item.extra) {
                 tile.data.energy = item.extra.getInt("energy");
             }
+            return place;
         });
     }
     MachineRegistry.setStoragePlaceFunction = setStoragePlaceFunction;
-    /**@deprecated */
     function getMachineDrop(blockID, level) {
         var drop = [];
         if (level >= ToolAPI.getBlockDestroyLevel(blockID)) {
-            var dropID = TileEntity.getPrototype(blockID).getDefaultDrop();
-            drop.push([dropID, 1, 0]);
+            var prototype = TileEntity.getPrototype(blockID);
+            if (prototype && prototype.getDefaultDrop) {
+                var item = prototype.getDefaultDrop();
+                drop.push([item.id, item.count, item.data, item.extra]);
+            }
+            else {
+                drop.push([blockID, 1, 0]);
+            }
         }
         return drop;
     }
     MachineRegistry.getMachineDrop = getMachineDrop;
+    /** @deprecated */
     function setMachineDrop(blockID, dropID) {
         dropID !== null && dropID !== void 0 ? dropID : (dropID = Block.getNumericId(blockID));
         BlockRegistry.registerDrop(blockID, function (coords, blockID, blockData, level) {
@@ -3039,25 +3369,72 @@ var MachineRegistry;
         });
     }
     MachineRegistry.setMachineDrop = setMachineDrop;
-    function fillTankOnClick(tank, item, playerUid) {
+    function emptyTankOnClick(tank, item, playerUid) {
+        var _a;
         var liquid = tank.getLiquidStored();
-        var empty = LiquidItemRegistry.getEmptyItem(item.id, item.data);
+        if (!liquid)
+            return false;
+        var full = LiquidItemRegistry.getFullStack(item, liquid);
+        if (full) {
+            var player = new PlayerEntity(playerUid);
+            var amount = tank.getAmount(liquid);
+            var resultStack = void 0;
+            if (amount >= full.amount) {
+                tank.getLiquid(amount);
+                resultStack = new ItemStack(full.id, 1, full.data, full.extra);
+            }
+            else {
+                var liquidItem = LiquidItemRegistry.getItemInterface(full.id);
+                if (liquidItem) {
+                    resultStack = new ItemStack(item.id, 1, item.data, (_a = item.extra) === null || _a === void 0 ? void 0 : _a.copy());
+                    var addedAmount = liquidItem.addLiquid(resultStack, liquid, amount);
+                    tank.getLiquid(addedAmount);
+                }
+            }
+            if (resultStack) {
+                if (item.count > 1) {
+                    player.addItemToInventory(resultStack);
+                    item.count--;
+                    player.setCarriedItem(item);
+                }
+                else {
+                    player.setCarriedItem(resultStack);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+    MachineRegistry.emptyTankOnClick = emptyTankOnClick;
+    function fillTankOnClick(tank, item, playerUid) {
+        var _a;
+        var liquid = tank.getLiquidStored();
+        var empty = LiquidItemRegistry.getEmptyStack(item);
         if (empty && (!liquid && tank.isValidLiquid(empty.liquid) || empty.liquid == liquid) && !tank.isFull()) {
             var player = new PlayerEntity(playerUid);
-            var liquidLimit = tank.getLimit();
-            var storedAmount = tank.getAmount(liquid);
-            var count = Math.min(item.count, Math.floor((liquidLimit - storedAmount) / empty.amount));
-            if (count > 0) {
-                tank.addLiquid(empty.liquid, empty.amount * count);
-                player.addItemToInventory(new ItemStack(empty.id, count, empty.data));
-                item.count -= count;
-                player.setCarriedItem(item);
+            var freeAmount = tank.getLimit() - tank.getAmount(liquid);
+            var resultStack = void 0;
+            if (freeAmount >= empty.amount) {
+                tank.addLiquid(empty.liquid, empty.amount);
+                resultStack = new ItemStack(empty.id, 1, empty.data, empty.extra);
             }
-            else if (item.count == 1 && empty.storage) {
-                var amount = Math.min(liquidLimit - storedAmount, empty.amount);
-                tank.addLiquid(empty.liquid, amount);
-                item.data += amount;
-                player.setCarriedItem(item);
+            else {
+                var liquidItem = LiquidItemRegistry.getItemInterface(item.id);
+                if (liquidItem) {
+                    resultStack = new ItemStack(item.id, 1, item.data, (_a = item.extra) === null || _a === void 0 ? void 0 : _a.copy());
+                    var extractedAmount = liquidItem.getLiquid(resultStack, freeAmount);
+                    tank.addLiquid(empty.liquid, extractedAmount);
+                }
+            }
+            if (resultStack) {
+                if (item.count > 1) {
+                    player.addItemToInventory(resultStack);
+                    item.count--;
+                    player.setCarriedItem(item);
+                }
+                else {
+                    player.setCarriedItem(resultStack);
+                }
             }
             return true;
         }
@@ -3081,12 +3458,13 @@ var MachineRegistry;
         header.contentProvider.drawing[2].text = Translation.translate(text);
     }
     MachineRegistry.updateGuiHeader = updateGuiHeader;
-    function createInventoryWindow(header, uiDescriptor) {
+    function createInventoryWindow(header, uiDescriptor, minHeight) {
         var gui = new UI.StandartWindow({
             standard: {
                 header: { text: { text: Translation.translate(header) } },
                 inventory: { standard: true },
-                background: { standard: true }
+                background: { standard: true },
+                minHeight: minHeight,
             },
             drawing: uiDescriptor.drawing || [],
             elements: uiDescriptor.elements
@@ -3098,108 +3476,23 @@ var MachineRegistry;
     }
     MachineRegistry.createInventoryWindow = createInventoryWindow;
 })(MachineRegistry || (MachineRegistry = {}));
+/** @deprecated */
 var transferByTier = {
     1: 32,
     2: 256,
     3: 2048,
     4: 8192
 };
-var MachineRecipeRegistry;
-(function (MachineRecipeRegistry) {
-    MachineRecipeRegistry.recipeData = {};
-    MachineRecipeRegistry.fluidRecipeData = {};
-    function registerRecipesFor(name, data, validateKeys) {
-        if (validateKeys) {
-            var newData = {};
-            for (var key in data) {
-                var newKey = void 0;
-                if (key.includes(":")) {
-                    var keyArray = key.split(":");
-                    if (keyArray[0] == "minecraft") {
-                        var stringID = keyArray[1];
-                        var numericID = VanillaBlockID[stringID] || VanillaItemID[stringID];
-                        if (!numericID) {
-                            var source = IDConverter.getIDData(stringID);
-                            newKey = source.id + ":" + source.data;
-                        }
-                        else {
-                            newKey = numericID;
-                            if (keyArray[2])
-                                newKey += ":" + keyArray[2];
-                        }
-                    }
-                    else {
-                        newKey = eval(keyArray[0]) + ":" + keyArray[1];
-                    }
-                }
-                else {
-                    newKey = eval(key);
-                }
-                if (newKey)
-                    newData[newKey] = data[key];
-            }
-            data = newData;
-        }
-        this.recipeData[name] = data;
-    }
-    MachineRecipeRegistry.registerRecipesFor = registerRecipesFor;
-    function addRecipeFor(name, input, result) {
-        var recipes = this.requireRecipesFor(name, true);
-        if (Array.isArray(recipes)) {
-            recipes.push({ input: input, result: result });
-        }
-        else {
-            recipes[input] = result;
-        }
-    }
-    MachineRecipeRegistry.addRecipeFor = addRecipeFor;
-    function requireRecipesFor(name, createIfNotFound) {
-        if (!MachineRecipeRegistry.recipeData[name] && createIfNotFound) {
-            MachineRecipeRegistry.recipeData[name] = {};
-        }
-        return MachineRecipeRegistry.recipeData[name];
-    }
-    MachineRecipeRegistry.requireRecipesFor = requireRecipesFor;
-    function getRecipeResult(name, key1, key2) {
-        var data = this.requireRecipesFor(name);
-        if (data && key1) {
-            return data[key1] || data[key1 + ":" + key2];
-        }
-        return null;
-    }
-    MachineRecipeRegistry.getRecipeResult = getRecipeResult;
-    function hasRecipeFor(name, key1, key2) {
-        return !!this.getRecipeResult(name, key1, key2);
-    }
-    MachineRecipeRegistry.hasRecipeFor = hasRecipeFor;
-    function registerFluidRecipes(name, data) {
-        MachineRecipeRegistry.fluidRecipeData[name] = data;
-    }
-    MachineRecipeRegistry.registerFluidRecipes = registerFluidRecipes;
-    function requireFluidRecipes(name) {
-        if (!MachineRecipeRegistry.fluidRecipeData[name]) {
-            MachineRecipeRegistry.fluidRecipeData[name] = {};
-        }
-        return MachineRecipeRegistry.fluidRecipeData[name];
-    }
-    MachineRecipeRegistry.requireFluidRecipes = requireFluidRecipes;
-    function addFluidRecipe(name, liquid, data) {
-        var recipes = requireFluidRecipes(name);
-        recipes[liquid] = data;
-    }
-    MachineRecipeRegistry.addFluidRecipe = addFluidRecipe;
-    function getFluidRecipe(name, liquid) {
-        var recipes = requireFluidRecipes(name);
-        return recipes[liquid];
-    }
-    MachineRecipeRegistry.getFluidRecipe = getFluidRecipe;
-})(MachineRecipeRegistry || (MachineRecipeRegistry = {}));
 var MathUtil;
 (function (MathUtil) {
     function randomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
     MathUtil.randomInt = randomInt;
+    function randomFloat(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+    MathUtil.randomFloat = randomFloat;
     function setInRange(value, minValue, maxValue) {
         if (value < minValue)
             return minValue;
@@ -3209,29 +3502,28 @@ var MathUtil;
     }
     MathUtil.setInRange = setInRange;
 })(MathUtil || (MathUtil = {}));
-/** @deprecated */
-var randomInt = MathUtil.randomInt;
 var RadiationAPI;
 (function (RadiationAPI) {
     RadiationAPI.radioactiveItems = {};
     RadiationAPI.hazmatArmor = {};
     RadiationAPI.sources = [];
     RadiationAPI.effectDuration = {};
-    function setRadioactivity(itemID, duration, stack) {
+    function setRadioactivity(itemId, duration, stack) {
         if (stack === void 0) { stack = false; }
-        RadiationAPI.radioactiveItems[itemID] = { duration: duration, stack: stack };
+        ItemName.addTooltip(itemId, "tooltip.radioactive");
+        RadiationAPI.radioactiveItems[itemId] = { duration: duration, stack: stack };
     }
     RadiationAPI.setRadioactivity = setRadioactivity;
-    function getRadioactivity(itemID) {
-        return RadiationAPI.radioactiveItems[itemID];
+    function getRadioactivity(itemId) {
+        return RadiationAPI.radioactiveItems[itemId];
     }
     RadiationAPI.getRadioactivity = getRadioactivity;
-    function isRadioactiveItem(itemID) {
-        return !!RadiationAPI.radioactiveItems[itemID];
+    function isRadioactiveItem(itemId) {
+        return !!RadiationAPI.radioactiveItems[itemId];
     }
     RadiationAPI.isRadioactiveItem = isRadioactiveItem;
-    function emitItemRadiation(entity, itemID) {
-        var radiation = getRadioactivity(itemID);
+    function emitItemRadiation(entity, itemId) {
+        var radiation = getRadioactivity(itemId);
         if (radiation) {
             if (radiation.stack) {
                 addRadiation(entity, radiation.duration);
@@ -3242,20 +3534,21 @@ var RadiationAPI;
                 return true;
             }
         }
+        return false;
     }
     RadiationAPI.emitItemRadiation = emitItemRadiation;
-    function registerHazmatArmor(itemID) {
-        RadiationAPI.hazmatArmor[itemID] = true;
+    function registerHazmatArmor(itemId) {
+        RadiationAPI.hazmatArmor[itemId] = true;
     }
     RadiationAPI.registerHazmatArmor = registerHazmatArmor;
-    function isHazmatArmor(itemID) {
-        return RadiationAPI.hazmatArmor[itemID];
+    function isHazmatArmor(itemId) {
+        return RadiationAPI.hazmatArmor[itemId];
     }
     RadiationAPI.isHazmatArmor = isHazmatArmor;
     function hasHazmatSuit(playerUid) {
         for (var i = 0; i < 4; i++) {
-            var itemID = Entity.getArmorSlot(playerUid, i).id;
-            if (!isHazmatArmor(itemID))
+            var itemId = Entity.getArmorSlot(playerUid, i).id;
+            if (!isHazmatArmor(itemId))
                 return false;
         }
         return true;
@@ -3295,8 +3588,8 @@ var RadiationAPI;
     RadiationAPI.addEffect = addEffect;
     function addEffectInRange(region, x, y, z, radius, duration) {
         var entities = EntityHelper.getEntitiesInRadius(region, new Vector3(x, y, z), radius);
-        for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
-            var ent = entities_2[_i];
+        for (var _i = 0, entities_3 = entities; _i < entities_3.length; _i++) {
+            var ent = entities_3[_i];
             if (EntityHelper.canTakeDamage(ent, DamageSource.radiation)) {
                 addEffect(ent, duration);
             }
@@ -3343,8 +3636,8 @@ var RadiationAPI;
             if (!hasHazmatSuit(playerUid)) {
                 var player = new PlayerActor(playerUid);
                 for (var i = 0; i < 36; i++) {
-                    var itemID = player.getInventorySlot(i).id;
-                    emitItemRadiation(playerUid, itemID);
+                    var itemId = player.getInventorySlot(i).id;
+                    emitItemRadiation(playerUid, itemId);
                 }
             }
             var duration = RadiationAPI.effectDuration[playerUid];
@@ -3360,68 +3653,419 @@ var RadiationAPI;
         }
     });
 })(RadiationAPI || (RadiationAPI = {}));
-SoundManager.init(16);
-SoundManager.setResourcePath(__dir__ + "assets/sounds/");
-SoundManager.registerSound("GeneratorLoop.ogg", "Generators/GeneratorLoop.ogg", true);
-SoundManager.registerSound("GeothermalLoop.ogg", "Generators/GeothermalLoop.ogg", true);
-SoundManager.registerSound("WatermillLoop.ogg", "Generators/WatermillLoop.ogg", true);
-SoundManager.registerSound("WindGenLoop.ogg", "Generators/WindGenLoop.ogg", true);
-SoundManager.registerSound("MassFabLoop.ogg", "Generators/MassFabricator/MassFabLoop.ogg", true);
-SoundManager.registerSound("MassFabScrapSolo.ogg", "Generators/MassFabricator/MassFabScrapSolo.ogg");
-SoundManager.registerSound("GeigerHighEU.ogg", "Generators/NuclearReactor/GeigerHighEU.ogg", true);
-SoundManager.registerSound("GeigerLowEU.ogg", "Generators/NuclearReactor/GeigerLowEU.ogg", true);
-SoundManager.registerSound("GeigerMedEU.ogg", "Generators/NuclearReactor/GeigerMedEU.ogg", true);
-SoundManager.registerSound("NuclearReactorLoop.ogg", "Generators/NuclearReactor/NuclearReactorLoop.ogg", true);
-SoundManager.registerSound("CompressorOp.ogg", "Machines/CompressorOp.ogg", true);
-SoundManager.registerSound("ElectrolyzerLoop.ogg", "Machines/ElectrolyzerLoop.ogg", true);
-SoundManager.registerSound("ExtractorOp.ogg", "Machines/ExtractorOp.ogg", true);
-SoundManager.registerSound("InterruptOne.ogg", "Machines/InterruptOne.ogg");
-SoundManager.registerSound("IronFurnaceOp.ogg", "Machines/IronFurnaceOp.ogg", true);
-SoundManager.registerSound("MaceratorOp.ogg", "Machines/MaceratorOp.ogg", true);
-SoundManager.registerSound("MachineOverload.ogg", "Machines/MachineOverload.ogg");
-SoundManager.registerSound("MagnetizerLoop.ogg", "Machines/MagnetizerLoop.ogg", true);
-SoundManager.registerSound("MinerOp.ogg", "Machines/MinerOp.ogg", true);
-SoundManager.registerSound("PumpOp.ogg", "Machines/PumpOp.ogg", true);
-SoundManager.registerSound("RecyclerOp.ogg", "Machines/RecyclerOp.ogg", true);
-SoundManager.registerSound("TerraformerGenericloop.ogg", "Machines/TerraformerGenericloop.ogg", true);
-SoundManager.registerSound("ElectroFurnaceLoop.ogg", "Machines/Electro Furnace/ElectroFurnaceLoop.ogg", true);
-SoundManager.registerSound("ElectroFurnaceStart.ogg", "Machines/Electro Furnace/ElectroFurnaceStart.ogg");
-SoundManager.registerSound("ElectroFurnaceStop.ogg", "Machines/Electro Furnace/ElectroFurnaceStop.ogg");
-SoundManager.registerSound("InductionLoop.ogg", "Machines/Induction Furnace/InductionLoop.ogg", true);
-SoundManager.registerSound("InductionStart.ogg", "Machines/Induction Furnace/InductionStart.ogg");
-SoundManager.registerSound("InductionStop.ogg", "Machines/Induction Furnace/InductionStop.ogg");
-SoundManager.registerSound("TeleChargedLoop.ogg", "Machines/Teleporter/TeleChargedLoop.ogg", true);
-SoundManager.registerSound("TeleUse.ogg", "Machines/Teleporter/TeleUse.ogg");
-SoundManager.registerSound("BatteryUse.ogg", "Tools/BatteryUse.ogg");
-SoundManager.registerSound("dynamiteomote.ogg", "Tools/dynamiteomote.ogg");
-SoundManager.registerSound("eat.ogg", "Tools/eat.ogg");
-SoundManager.registerSound("InsulationCutters.ogg", "Tools/InsulationCutters.ogg");
-SoundManager.registerSound("JetpackLoop.ogg", "Tools/JetpackLoop.ogg", true);
-SoundManager.registerSound("NukeExplosion.ogg", "Tools/NukeExplosion.ogg");
-SoundManager.registerSound("ODScanner.ogg", "Tools/ODScanner.ogg");
-SoundManager.registerSound("Painter.ogg", "Tools/Painter.ogg");
-SoundManager.registerSound("RubberTrampoline.ogg", "Tools/RubberTrampoline.ogg");
-SoundManager.registerSound("Treetap.ogg", "Tools/Treetap.ogg");
-SoundManager.registerSound("Wrench.ogg", "Tools/Wrench.ogg");
-SoundManager.registerSound("ChainsawIdle.ogg", "Tools/Chainsaw/ChainsawIdle.ogg", true);
-SoundManager.registerSound("ChainsawStop.ogg", "Tools/Chainsaw/ChainsawStop.ogg");
-SoundManager.registerSound("ChainsawUseOne.ogg", "Tools/Chainsaw/ChainsawUseOne.ogg");
-SoundManager.registerSound("ChainsawUseTwo.ogg", "Tools/Chainsaw/ChainsawUseTwo.ogg");
-SoundManager.registerSound("DrillHard.ogg", "Tools/Drill/DrillHard.ogg");
-SoundManager.registerSound("DrillSoft.ogg", "Tools/Drill/DrillSoft.ogg");
-SoundManager.registerSound("DrillUseLoop.ogg", "Tools/Drill/DrillUseLoop.ogg", true);
-SoundManager.registerSound("MiningLaser.ogg", "Tools/MiningLaser/MiningLaser.ogg");
-SoundManager.registerSound("MiningLaserExplosive.ogg", "Tools/MiningLaser/MiningLaserExplosive.ogg");
-SoundManager.registerSound("MiningLaserLongRange.ogg", "Tools/MiningLaser/MiningLaserLongRange.ogg");
-SoundManager.registerSound("MiningLaserLowFocus.ogg", "Tools/MiningLaser/MiningLaserLowFocus.ogg");
-SoundManager.registerSound("MiningLaserScatter.ogg", "Tools/MiningLaser/MiningLaserScatter.ogg");
-SoundManager.registerSound("NanosaberIdle.ogg", "Tools/Nanosaber/NanosaberIdle.ogg", true);
-SoundManager.registerSound("NanosaberPowerup.ogg", "Tools/Nanosaber/NanosaberPowerup.ogg");
-SoundManager.registerSound("NanosaberSwing.ogg", ["Tools/Nanosaber/NanosaberSwing1.ogg", "Tools/Nanosaber/NanosaberSwing2.ogg", "Tools/Nanosaber/NanosaberSwing3.ogg"]);
-SoundManager.registerSound("QuantumsuitBoots.ogg", "Tools/QuantumSuit/QuantumsuitBoots.ogg");
+var MachineRecipe;
+(function (MachineRecipe) {
+    var RecipeDictionary = /** @class */ (function () {
+        function RecipeDictionary() {
+            this.recipes = {};
+        }
+        RecipeDictionary.prototype.findRecipe = function (predicate) {
+            for (var key in this.recipes) {
+                var recipe = this.recipes[key];
+                if (predicate(recipe)) {
+                    return recipe;
+                }
+            }
+            return null;
+        };
+        RecipeDictionary.prototype.getAll = function () {
+            return Object.values(this.recipes);
+        };
+        RecipeDictionary.prototype.clear = function () {
+            this.recipes = {};
+        };
+        RecipeDictionary.prototype.putRecipe = function (key, recipe) {
+            this.recipes[key] = recipe;
+        };
+        RecipeDictionary.prototype.removeByKey = function (recipeKey) {
+            if (recipeKey in this.recipes) {
+                delete this.recipes[recipeKey];
+                return true;
+            }
+            return false;
+        };
+        return RecipeDictionary;
+    }());
+    MachineRecipe.RecipeDictionary = RecipeDictionary;
+})(MachineRecipe || (MachineRecipe = {}));
+/// <reference path="./RecipeDictionary.ts" />
+var MachineRecipe;
+(function (MachineRecipe) {
+    var SourceRecipeDictionary = /** @class */ (function (_super) {
+        __extends(SourceRecipeDictionary, _super);
+        function SourceRecipeDictionary() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        SourceRecipeDictionary.prototype.register = function (recipe) {
+            var _a, _b;
+            var _c, _d;
+            if (!recipe.source.id) {
+                Logger.Log("Invalid source id for ".concat(this.name, " recipe"), "ERROR");
+                return;
+            }
+            (_a = (_c = recipe.source).count) !== null && _a !== void 0 ? _a : (_c.count = 1);
+            (_b = (_d = recipe.source).data) !== null && _b !== void 0 ? _b : (_d.data = -1);
+            var recipeKey = this.getInputKey(recipe.source.id, recipe.source.data);
+            this.putRecipe(recipeKey, recipe);
+        };
+        SourceRecipeDictionary.prototype.getRecipe = function (sourceId, sourceData) {
+            return this.recipes[this.getInputKey(sourceId, sourceData)] ||
+                this.recipes[this.getInputKey(sourceId, -1)] || null;
+        };
+        SourceRecipeDictionary.prototype.removeRecipe = function (sourceId, sourceData) {
+            var recipeKey = this.getInputKey(sourceId, sourceData);
+            return this.removeByKey(recipeKey);
+        };
+        SourceRecipeDictionary.prototype.getInputKey = function (sourceId, sourceData) {
+            return sourceId + ":" + sourceData;
+        };
+        return SourceRecipeDictionary;
+    }(MachineRecipe.RecipeDictionary));
+    MachineRecipe.SourceRecipeDictionary = SourceRecipeDictionary;
+})(MachineRecipe || (MachineRecipe = {}));
+/// <reference path="./SourceRecipeDictionary.ts" />
+var MachineRecipe;
+(function (MachineRecipe) {
+    var BlastFurnaceRecipeDictionary = /** @class */ (function (_super) {
+        __extends(BlastFurnaceRecipeDictionary, _super);
+        function BlastFurnaceRecipeDictionary() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        BlastFurnaceRecipeDictionary.prototype.register = function (recipe) {
+            if (recipe.result.some(function (o) { return !o.id; })) {
+                Logger.Log("Invalid result id for ".concat(this.name, " recipe"), "ERROR");
+                return;
+            }
+            _super.prototype.register.call(this, recipe);
+        };
+        BlastFurnaceRecipeDictionary.prototype.addRecipe = function (input, output, heatCost) {
+            this.register({ source: input, result: output, heatCost: heatCost });
+        };
+        return BlastFurnaceRecipeDictionary;
+    }(MachineRecipe.SourceRecipeDictionary));
+    MachineRecipe.BlastFurnaceRecipeDictionary = BlastFurnaceRecipeDictionary;
+})(MachineRecipe || (MachineRecipe = {}));
+/// <reference path="./SourceRecipeDictionary.ts" />
+var MachineRecipe;
+(function (MachineRecipe) {
+    var BlockCutterRecipeDictionary = /** @class */ (function (_super) {
+        __extends(BlockCutterRecipeDictionary, _super);
+        function BlockCutterRecipeDictionary() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        BlockCutterRecipeDictionary.prototype.register = function (recipe) {
+            if (!recipe.result.id) {
+                Logger.Log("Invalid result id for ".concat(this.name, " recipe"), "ERROR");
+                return;
+            }
+            _super.prototype.register.call(this, recipe);
+        };
+        BlockCutterRecipeDictionary.prototype.addRecipe = function (input, output, hardnessLevel) {
+            var _a;
+            (_a = output.data) !== null && _a !== void 0 ? _a : (output.data = 0);
+            this.register({ source: input, result: output, hardnessLevel: hardnessLevel });
+        };
+        return BlockCutterRecipeDictionary;
+    }(MachineRecipe.SourceRecipeDictionary));
+    MachineRecipe.BlockCutterRecipeDictionary = BlockCutterRecipeDictionary;
+})(MachineRecipe || (MachineRecipe = {}));
+/// <reference path="../recipe/RecipeDictionary.ts" />
+var MachineRecipe;
+(function (MachineRecipe) {
+    var FluidEnrichRecipeDictionary = /** @class */ (function (_super) {
+        __extends(FluidEnrichRecipeDictionary, _super);
+        function FluidEnrichRecipeDictionary() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        FluidEnrichRecipeDictionary.prototype.register = function (recipe) {
+            var _a, _b;
+            var _c, _d;
+            if (!recipe.source.id || !recipe.inputFluid.name) {
+                Logger.Log("Invalid input for ".concat(this.name, " recipe"), "ERROR");
+                return;
+            }
+            (_a = (_c = recipe.source).data) !== null && _a !== void 0 ? _a : (_c.data = -1);
+            (_b = (_d = recipe.source).count) !== null && _b !== void 0 ? _b : (_d.count = 1);
+            var recipeKey = this.getInputKey(recipe.inputFluid.name, recipe.source.id, recipe.source.data);
+            this.putRecipe(recipeKey, recipe);
+        };
+        FluidEnrichRecipeDictionary.prototype.getRecipe = function (fluid, source) {
+            return this.recipes[this.getInputKey(fluid, source.id, source.data)] ||
+                this.recipes[this.getInputKey(fluid, source.id, -1)] || null;
+        };
+        FluidEnrichRecipeDictionary.prototype.removeRecipe = function (fluid, source) {
+            var recipeKey = this.getInputKey(fluid, source.id, source.data);
+            return this.removeByKey(recipeKey);
+        };
+        FluidEnrichRecipeDictionary.prototype.getInputKey = function (fluid, sourceId, sourceData) {
+            return fluid + ":" + sourceId + ":" + sourceData;
+        };
+        FluidEnrichRecipeDictionary.prototype.addRecipe = function (input, inputFluid, outputFluid) {
+            this.register({ source: input, inputFluid: inputFluid, outputFluid: outputFluid });
+        };
+        return FluidEnrichRecipeDictionary;
+    }(MachineRecipe.RecipeDictionary));
+    MachineRecipe.FluidEnrichRecipeDictionary = FluidEnrichRecipeDictionary;
+})(MachineRecipe || (MachineRecipe = {}));
+/// <reference path="./SourceRecipeDictionary.ts" />
+var MachineRecipe;
+(function (MachineRecipe) {
+    var ProcessingRecipeDictionary = /** @class */ (function (_super) {
+        __extends(ProcessingRecipeDictionary, _super);
+        function ProcessingRecipeDictionary(defaultProccessTime) {
+            var _this = _super.call(this) || this;
+            _this.defaultProccessTime = defaultProccessTime;
+            return _this;
+        }
+        ProcessingRecipeDictionary.prototype.register = function (recipe) {
+            if (recipe.result.some(function (o) { return !o.id; })) {
+                Logger.Log("Invalid result id for ".concat(this.name, " recipe"), "ERROR");
+                return;
+            }
+            _super.prototype.register.call(this, recipe);
+        };
+        ProcessingRecipeDictionary.prototype.addRecipe = function (input, output, processTime) {
+            if (processTime === void 0) { processTime = this.defaultProccessTime; }
+            if (!Array.isArray(output)) {
+                output = [output];
+            }
+            this.register({ source: input, result: output, processTime: processTime });
+        };
+        return ProcessingRecipeDictionary;
+    }(MachineRecipe.SourceRecipeDictionary));
+    MachineRecipe.ProcessingRecipeDictionary = ProcessingRecipeDictionary;
+})(MachineRecipe || (MachineRecipe = {}));
+/// <reference path="./SourceRecipeDictionary.ts" />
+var MachineRecipe;
+(function (MachineRecipe) {
+    var ThermalCentrifugeRecipeDictionary = /** @class */ (function (_super) {
+        __extends(ThermalCentrifugeRecipeDictionary, _super);
+        function ThermalCentrifugeRecipeDictionary() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.defaultProccessTime = 500;
+            return _this;
+        }
+        ThermalCentrifugeRecipeDictionary.prototype.register = function (recipe) {
+            if (recipe.result.some(function (o) { return !o.id; })) {
+                Logger.Log("Invalid result id for ".concat(this.name, " recipe"), "ERROR");
+                return;
+            }
+            _super.prototype.register.call(this, recipe);
+        };
+        ThermalCentrifugeRecipeDictionary.prototype.addRecipe = function (input, output, heat, processTime) {
+            if (processTime === void 0) { processTime = this.defaultProccessTime; }
+            this.register({ source: input, result: output, heat: heat, processTime: processTime });
+        };
+        return ThermalCentrifugeRecipeDictionary;
+    }(MachineRecipe.SourceRecipeDictionary));
+    MachineRecipe.ThermalCentrifugeRecipeDictionary = ThermalCentrifugeRecipeDictionary;
+})(MachineRecipe || (MachineRecipe = {}));
+/// <reference path="./RecipeDictionary.ts" />
+var MachineRecipeRegistry;
+(function (MachineRecipeRegistry) {
+    MachineRecipeRegistry.recipeData = {};
+    MachineRecipeRegistry.fluidRecipeData = {};
+    MachineRecipeRegistry.dictionaries = {};
+    function registerDictionary(name, dictionary) {
+        if (MachineRecipeRegistry.dictionaries[name]) {
+            Logger.Log("Recipe dictionary for ".concat(name, " is overriden"), "ERROR");
+        }
+        MachineRecipeRegistry.dictionaries[name] = dictionary;
+        dictionary.name = name;
+        return dictionary;
+    }
+    MachineRecipeRegistry.registerDictionary = registerDictionary;
+    function getDictionary(name) {
+        return MachineRecipeRegistry.dictionaries[name];
+    }
+    MachineRecipeRegistry.getDictionary = getDictionary;
+    function registerRecipe(name, recipe) {
+        var dictionary = getDictionary(name);
+        if (!dictionary) {
+            Logger.Log("Cannot register recipe for \"".concat(name, "\", dictionary not found\""), "ERROR");
+            return;
+        }
+        dictionary.register(recipe);
+    }
+    MachineRecipeRegistry.registerRecipe = registerRecipe;
+    function registerRecipes(name, recipes) {
+        var dictionary = getDictionary(name);
+        if (!dictionary) {
+            Logger.Log("Cannot register recipes for \"".concat(name, "\", dictionary not found\""), "ERROR");
+            return;
+        }
+        recipes.forEach(function (recipe) { return dictionary.register(recipe); });
+    }
+    MachineRecipeRegistry.registerRecipes = registerRecipes;
+    /** @deprecated */
+    function registerRecipesFor(name, data, parseKeys) {
+        if (!parseKeys) {
+            MachineRecipeRegistry.recipeData[name] = data;
+            return;
+        }
+        var newData = {};
+        for (var key in data) {
+            var newKey = void 0;
+            if (key.includes(":")) {
+                var keyArray = key.split(":");
+                var stringID = keyArray[1];
+                switch (keyArray[0]) {
+                    case "minecraft":
+                        newKey = VanillaBlockID[stringID] || VanillaItemID[stringID];
+                        break;
+                    case "block":
+                        newKey = Block.getNumericId(stringID);
+                        break;
+                    case "item":
+                        newKey = Item.getNumericId(stringID);
+                        break;
+                    default:
+                        newKey = eval(keyArray[0]) + ":" + keyArray[1];
+                        break;
+                }
+                if (!newKey)
+                    continue;
+                if (keyArray.length > 2) {
+                    newKey += ":" + keyArray[2];
+                }
+            }
+            else {
+                newKey = eval(key);
+            }
+            if (newKey) {
+                newData[newKey] = data[key];
+            }
+        }
+        MachineRecipeRegistry.recipeData[name] = newData;
+    }
+    MachineRecipeRegistry.registerRecipesFor = registerRecipesFor;
+    /** @deprecated */
+    function addRecipeFor(name, input, result) {
+        var recipes = requireRecipesFor(name, true);
+        if (Array.isArray(recipes)) {
+            recipes.push({ input: input, result: result });
+        }
+        else {
+            recipes[input] = result;
+        }
+    }
+    MachineRecipeRegistry.addRecipeFor = addRecipeFor;
+    /** @deprecated */
+    function requireRecipesFor(name, createIfNotFound) {
+        if (!MachineRecipeRegistry.recipeData[name] && createIfNotFound) {
+            MachineRecipeRegistry.recipeData[name] = {};
+        }
+        return MachineRecipeRegistry.recipeData[name];
+    }
+    MachineRecipeRegistry.requireRecipesFor = requireRecipesFor;
+    /** @deprecated */
+    function getRecipeResult(name, key1, key2) {
+        var data = requireRecipesFor(name);
+        if (data && key1) {
+            return data[key1] || key2 !== undefined && data[key1 + ":" + key2];
+        }
+        return null;
+    }
+    MachineRecipeRegistry.getRecipeResult = getRecipeResult;
+    /** @deprecated */
+    function hasRecipeFor(name, key1, key2) {
+        return getRecipeResult(name, key1, key2);
+    }
+    MachineRecipeRegistry.hasRecipeFor = hasRecipeFor;
+    function registerFluidRecipes(name, data) {
+        MachineRecipeRegistry.fluidRecipeData[name] = data;
+    }
+    MachineRecipeRegistry.registerFluidRecipes = registerFluidRecipes;
+    function requireFluidRecipes(name) {
+        if (!MachineRecipeRegistry.fluidRecipeData[name]) {
+            MachineRecipeRegistry.fluidRecipeData[name] = {};
+        }
+        return MachineRecipeRegistry.fluidRecipeData[name];
+    }
+    MachineRecipeRegistry.requireFluidRecipes = requireFluidRecipes;
+    function addFluidRecipe(name, liquid, data) {
+        var recipes = requireFluidRecipes(name);
+        recipes[liquid] = data;
+    }
+    MachineRecipeRegistry.addFluidRecipe = addFluidRecipe;
+    function getFluidRecipe(name, liquid) {
+        var recipes = requireFluidRecipes(name);
+        return recipes[liquid];
+    }
+    MachineRecipeRegistry.getFluidRecipe = getFluidRecipe;
+})(MachineRecipeRegistry || (MachineRecipeRegistry = {}));
+SoundLib.Registry.setBasePath(__dir__ + "assets/sounds/");
+SoundLib.Registry.registerSound("GeneratorLoop.ogg", "Generators/GeneratorLoop.ogg");
+SoundLib.Registry.registerSound("GeothermalLoop.ogg", "Generators/GeothermalLoop.ogg");
+SoundLib.Registry.registerSound("WatermillLoop.ogg", "Generators/WatermillLoop.ogg");
+SoundLib.Registry.registerSound("WindGenLoop.ogg", "Generators/WindGenLoop.ogg");
+SoundLib.Registry.registerSound("MassFabLoop.ogg", "Generators/MassFabricator/MassFabLoop.ogg");
+SoundLib.Registry.registerSound("MassFabScrapSolo.ogg", "Generators/MassFabricator/MassFabScrapSolo.ogg");
+SoundLib.Registry.registerSound("GeigerHighEU.ogg", "Generators/NuclearReactor/GeigerHighEU.ogg");
+SoundLib.Registry.registerSound("GeigerLowEU.ogg", "Generators/NuclearReactor/GeigerLowEU.ogg");
+SoundLib.Registry.registerSound("GeigerMedEU.ogg", "Generators/NuclearReactor/GeigerMedEU.ogg");
+SoundLib.Registry.registerSound("NuclearReactorLoop.ogg", "Generators/NuclearReactor/NuclearReactorLoop.ogg");
+SoundLib.Registry.registerSound("CompressorOp.ogg", "Machines/CompressorOp.ogg");
+SoundLib.Registry.registerSound("ElectrolyzerLoop.ogg", "Machines/ElectrolyzerLoop.ogg");
+SoundLib.Registry.registerSound("ExtractorOp.ogg", "Machines/ExtractorOp.ogg");
+SoundLib.Registry.registerSound("InterruptOne.ogg", "Machines/InterruptOne.ogg");
+SoundLib.Registry.registerSound("IronFurnaceOp.ogg", "Machines/IronFurnaceOp.ogg");
+SoundLib.Registry.registerSound("MaceratorOp.ogg", "Machines/MaceratorOp.ogg");
+SoundLib.Registry.registerSound("MachineOverload.ogg", "Machines/MachineOverload.ogg");
+SoundLib.Registry.registerSound("MagnetizerLoop.ogg", "Machines/MagnetizerLoop.ogg");
+SoundLib.Registry.registerSound("MinerOp.ogg", "Machines/MinerOp.ogg");
+SoundLib.Registry.registerSound("PumpOp.ogg", "Machines/PumpOp.ogg");
+SoundLib.Registry.registerSound("RecyclerOp.ogg", "Machines/RecyclerOp.ogg");
+SoundLib.Registry.registerSound("TerraformerGenericloop.ogg", "Machines/TerraformerGenericloop.ogg");
+SoundLib.Registry.registerSound("ElectroFurnaceLoop.ogg", "Machines/Electro Furnace/ElectroFurnaceLoop.ogg");
+SoundLib.Registry.registerSound("ElectroFurnaceStart.ogg", "Machines/Electro Furnace/ElectroFurnaceStart.ogg");
+SoundLib.Registry.registerSound("ElectroFurnaceStop.ogg", "Machines/Electro Furnace/ElectroFurnaceStop.ogg");
+SoundLib.Registry.registerSound("InductionLoop.ogg", "Machines/Induction Furnace/InductionLoop.ogg");
+SoundLib.Registry.registerSound("InductionStart.ogg", "Machines/Induction Furnace/InductionStart.ogg");
+SoundLib.Registry.registerSound("InductionStop.ogg", "Machines/Induction Furnace/InductionStop.ogg");
+SoundLib.Registry.registerSound("TeleChargedLoop.ogg", "Machines/Teleporter/TeleChargedLoop.ogg");
+SoundLib.Registry.registerSound("TeleUse.ogg", "Machines/Teleporter/TeleUse.ogg");
+SoundLib.Registry.registerSound("BatteryUse.ogg", "Tools/BatteryUse.ogg");
+SoundLib.Registry.registerSound("dynamiteomote.ogg", "Tools/dynamiteomote.ogg");
+SoundLib.Registry.registerSound("eat.ogg", "Tools/eat.ogg");
+SoundLib.Registry.registerSound("InsulationCutters.ogg", "Tools/InsulationCutters.ogg");
+SoundLib.Registry.registerSound("Painter.ogg", "Tools/Painter.ogg");
+SoundLib.Registry.registerSound("JetpackLoop.ogg", "Tools/JetpackLoop.ogg");
+SoundLib.Registry.registerSound("NukeExplosion.ogg", "Tools/NukeExplosion.ogg");
+SoundLib.Registry.registerSound("ODScanner.ogg", "Tools/ODScanner.ogg");
+SoundLib.Registry.registerSound("Painter.ogg", "Tools/Painter.ogg");
+SoundLib.Registry.registerSound("RubberTrampoline.ogg", "Tools/RubberTrampoline.ogg");
+SoundLib.Registry.registerSound("Treetap.ogg", "Tools/Treetap.ogg");
+SoundLib.Registry.registerSound("Wrench.ogg", "Tools/Wrench.ogg");
+SoundLib.Registry.registerSound("ChainsawIdle.ogg", "Tools/Chainsaw/ChainsawIdle.ogg");
+SoundLib.Registry.registerSound("ChainsawStop.ogg", "Tools/Chainsaw/ChainsawStop.ogg");
+SoundLib.Registry.registerSound("ChainsawUseOne.ogg", "Tools/Chainsaw/ChainsawUseOne.ogg");
+SoundLib.Registry.registerSound("ChainsawUseTwo.ogg", "Tools/Chainsaw/ChainsawUseTwo.ogg");
+SoundLib.Registry.registerSound("DrillHard.ogg", "Tools/Drill/DrillHard.ogg");
+SoundLib.Registry.registerSound("DrillSoft.ogg", "Tools/Drill/DrillSoft.ogg");
+SoundLib.Registry.registerSound("DrillUseLoop.ogg", "Tools/Drill/DrillUseLoop.ogg");
+SoundLib.Registry.registerSound("MiningLaser.ogg", "Tools/MiningLaser/MiningLaser.ogg");
+SoundLib.Registry.registerSound("MiningLaserExplosive.ogg", "Tools/MiningLaser/MiningLaserExplosive.ogg");
+SoundLib.Registry.registerSound("MiningLaserLongRange.ogg", "Tools/MiningLaser/MiningLaserLongRange.ogg");
+SoundLib.Registry.registerSound("MiningLaserLowFocus.ogg", "Tools/MiningLaser/MiningLaserLowFocus.ogg");
+SoundLib.Registry.registerSound("MiningLaserScatter.ogg", "Tools/MiningLaser/MiningLaserScatter.ogg");
+SoundLib.Registry.registerSound("NanosaberIdle.ogg", "Tools/Nanosaber/NanosaberIdle.ogg");
+SoundLib.Registry.registerSound("NanosaberPowerup.ogg", "Tools/Nanosaber/NanosaberPowerup.ogg");
+SoundLib.Registry.registerMultiSound("NanosaberSwing.ogg", ["Tools/Nanosaber/NanosaberSwing1.ogg", "Tools/Nanosaber/NanosaberSwing2.ogg", "Tools/Nanosaber/NanosaberSwing3.ogg"]);
+SoundLib.Registry.registerSound("QuantumsuitBoots.ogg", "Tools/QuantumSuit/QuantumsuitBoots.ogg");
+// Init sounds in a callback to allow add-on sounds to be registered before loading
+Callback.addCallback("PreLoaded", function () {
+    if (IC2Config.soundEnabled) {
+        SoundLib.initClient(16);
+    }
+});
 var ICTool;
 (function (ICTool) {
     var wrenchData = {};
+    var handEquippedFuncs = {};
+    var lastCarriedItem = new ItemStack();
+    var lastSelectedSlot = 0;
+    var playerAudioSource;
     function registerWrench(id, properties) {
         wrenchData[id] = properties;
     }
@@ -3448,7 +4092,7 @@ var ICTool;
     function rotateMachine(tileEntity, side, item, player) {
         if (tileEntity.setFacing(side)) {
             useWrench(item, 1, player);
-            SoundManager.playSoundAtBlock(tileEntity, "Wrench.ogg", 1);
+            SoundLib.playSoundAtBlock(tileEntity, tileEntity.dimension, "Wrench.ogg");
         }
     }
     ICTool.rotateMachine = rotateMachine;
@@ -3456,11 +4100,9 @@ var ICTool;
         data.push({ id: tool, data: -1 });
         Recipes.addShapeless(result, data, function (api, field, result) {
             for (var i = 0; i < field.length; i++) {
-                if (field[i].id == tool) {
-                    field[i].data++;
-                    if (field[i].data >= Item.getMaxDamage(tool)) {
-                        field[i].id = field[i].count = field[i].data = 0;
-                    }
+                var slot = field[i];
+                if (slot.id == tool && slot.data + 1 < Item.getMaxDamage(tool)) {
+                    slot.set(slot.id, 1, slot.data + 1, slot.extra);
                 }
                 else {
                     api.decreaseFieldSlot(i);
@@ -3498,56 +4140,102 @@ var ICTool;
         return false;
     }
     ICTool.useElectricItem = useElectricItem;
-    /** @deprecated */
-    function registerElectricHoe(stringID) { }
-    ICTool.registerElectricHoe = registerElectricHoe;
-    /** @deprecated */
-    function registerElectricTreetap(stringID) { }
-    ICTool.registerElectricTreetap = registerElectricTreetap;
-    function setOnHandSound(itemID, idleSound, stopSound) {
-        Callback.addCallback("LocalTick", function () {
-            if (!IC2Config.soundEnabled) {
+    function onDemontage(client, coords) {
+        var player = client.getPlayerUid();
+        if (Entity.getDistanceToCoords(player, coords) <= 10) {
+            var region = WorldRegion.getForActor(player);
+            var blockID = region.getBlockId(coords);
+            if (!MachineRegistry.isMachine(blockID)) {
                 return;
             }
-            var item = Player.getCarriedItem();
-            var tool = ToolAPI.getToolData(item.id);
-            if (item.id == itemID && (!tool || !tool.energyPerUse || ChargeItemRegistry.getEnergyStored(item) >= tool.energyPerUse)) {
-                SoundManager.startPlaySound(SourceType.ENTITY, Player.get(), idleSound);
+            var item = new ItemStack(Entity.getCarriedItem(player));
+            if (!ICTool.isUseableWrench(item, 10)) {
+                return;
             }
-            else if (SoundManager.stopPlaySound(Player.get(), idleSound) && stopSound) {
-                SoundManager.playSound(stopSound);
+            var tileEntity = (region.getTileEntity(coords) || region.addTileEntity(coords));
+            if (!tileEntity) {
+                return;
             }
-        });
+            var drop = tileEntity.getDemontaged();
+            TileEntity.destroyTileEntity(tileEntity);
+            region.setBlock(coords, 0, 0);
+            region.dropAtBlock(coords.x, coords.y, coords.z, drop);
+            ICTool.useWrench(item, 10, player);
+            SoundLib.playSoundAtBlock(tileEntity, tileEntity.dimension, "Wrench.ogg");
+        }
     }
-    ICTool.setOnHandSound = setOnHandSound;
-    Callback.addCallback("DestroyBlockStart", function (coords, block) {
-        if (MachineRegistry.isMachine(block.id)) {
-            var item = Player.getCarriedItem();
-            if (ICTool.isUseableWrench(item, 10)) {
-                Network.sendToServer(IC2NetworkPackets.demontage, { x: coords.x, y: coords.y, z: coords.z });
-            }
+    ICTool.onDemontage = onDemontage;
+    function setOnHandEquipped(itemID, funcs) {
+        handEquippedFuncs[itemID] = funcs;
+    }
+    ICTool.setOnHandEquipped = setOnHandEquipped;
+    /**
+     * Client-side only
+     * @param soundName sound name
+     * @param looping true if sound is looped, false otherwise
+     * @param volume value from 0 to 1
+     */
+    function startPlaySound(soundName, looping, volume) {
+        if (volume === void 0) { volume = 1; }
+        if (!IC2Config.soundEnabled)
+            return;
+        var stream = playerAudioSource.getStream(soundName);
+        if (!stream) {
+            playerAudioSource.play(soundName, looping, volume);
+        }
+        else if (stream.volume != volume) {
+            stream.volume = volume;
+            stream.updateVolume(1);
+        }
+    }
+    ICTool.startPlaySound = startPlaySound;
+    function stopPlaySound(soundName) {
+        if (!IC2Config.soundEnabled)
+            return false;
+        var wasPlaying = playerAudioSource.isPlaying(soundName);
+        playerAudioSource.stop(soundName);
+        return wasPlaying;
+    }
+    ICTool.stopPlaySound = stopPlaySound;
+    Callback.addCallback("LocalLevelLoaded", function () {
+        if (IC2Config.soundEnabled) {
+            playerAudioSource = new AudioSourceEntityClient(Player.get());
+            Updatable.addLocalUpdatable(playerAudioSource);
         }
     });
-    Network.addServerPacket(IC2NetworkPackets.demontage, function (client, data) {
-        var player = client.getPlayerUid();
-        var region = WorldRegion.getForActor(player);
-        var blockID = region.getBlockId(data);
-        if (MachineRegistry.isMachine(blockID)) {
-            var item = new ItemStack(Entity.getCarriedItem(player));
-            if (ICTool.isUseableWrench(item, 10)) {
-                var tileEntity = (region.getTileEntity(data) || region.addTileEntity(data));
-                if (!tileEntity)
-                    return;
-                var drop = tileEntity.adjustDrop(new ItemStack(tileEntity.blockID, 1, 0));
-                TileEntity.destroyTileEntity(tileEntity);
-                region.setBlock(data, 0, 0);
-                region.dropAtBlock(data.x, data.y, data.z, drop);
-                ICTool.useWrench(item, 10, player);
-                SoundManager.playSoundAtBlock(tileEntity, "Wrench.ogg", 1);
+    Callback.addCallback("LocalLevelLeft", function () {
+        playerAudioSource === null || playerAudioSource === void 0 ? void 0 : playerAudioSource.unload();
+        lastCarriedItem = new ItemStack();
+        lastSelectedSlot = 0;
+    });
+    Callback.addCallback("LocalTick", function () {
+        var item = Player.getCarriedItem();
+        var selectedSlot = Player.getSelectedSlotId();
+        if (item.id != lastCarriedItem.id || selectedSlot != lastSelectedSlot) {
+            var handEquippedData_1 = handEquippedFuncs[lastCarriedItem.id];
+            if (handEquippedData_1 && 'onHandUnequippedLocal' in handEquippedData_1) {
+                handEquippedData_1.onHandUnequippedLocal(lastCarriedItem);
             }
         }
+        var handEquippedData = handEquippedFuncs[item.id];
+        if (handEquippedData && 'onHandEquippedLocal' in handEquippedData) {
+            handEquippedData.onHandEquippedLocal(item);
+        }
+        lastCarriedItem = item;
+        lastSelectedSlot = selectedSlot;
     });
 })(ICTool || (ICTool = {}));
+Callback.addCallback("DestroyBlockStart", function (coords, block) {
+    if (MachineRegistry.isMachine(block.id)) {
+        var item = Player.getCarriedItem();
+        if (ICTool.isUseableWrench(item, 10)) {
+            Network.sendToServer(IC2NetworkPackets.demontage, { x: coords.x, y: coords.y, z: coords.z });
+        }
+    }
+});
+Network.addServerPacket(IC2NetworkPackets.demontage, function (client, data) {
+    ICTool.onDemontage(client, data);
+});
 var ToolHUD;
 (function (ToolHUD) {
     Callback.addCallback("NativeGuiChanged", function (screenName) {
@@ -3585,11 +4273,6 @@ var ToolHUD;
         getButton(name).bindItem(id);
     }
     ToolHUD.setButtonFor = setButtonFor;
-    /** @deprecated */
-    function setArmorButton(id, name) {
-        setButtonFor(id, name);
-    }
-    ToolHUD.setArmorButton = setArmorButton;
     function onClick(name) {
         Network.sendToServer(IC2NetworkPackets.hudClick, { name: name });
     }
@@ -3704,6 +4387,7 @@ var ToolHUD;
                 scale: 50
             }) || this;
             _this.isTouched = false;
+            _this.jetpackSound = "JetpackLoop.ogg";
             return _this;
         }
         ButtonFly.prototype.onUpdate = function () {
@@ -3715,24 +4399,32 @@ var ToolHUD;
             }
             var armor = Player.getArmorSlot(1);
             var hoverMode = ((_a = armor.extra) === null || _a === void 0 ? void 0 : _a.getBoolean("hover")) || false;
-            var energyStored = ChargeItemRegistry.getEnergyStored(armor);
-            var posY = Player.getPosition().y;
-            if (energyStored >= 8 && posY < 256) {
+            var pos = Player.getPosition();
+            var playSound = false;
+            if (JetpackProvider.canBeFlying(armor, pos)) {
                 var vy = Player.getVelocity().y;
                 if (isFlying) {
-                    var maxVel = Math.min(32, 265 - posY) / 160; // max 0.2
-                    if (hoverMode) {
-                        if (vy < 0.2)
-                            Player.addVelocity(0, Math.min(maxVel, 0.2 - vy), 0);
+                    playSound = true;
+                    var maxVel = Math.min(32, 265 - pos.y) / 160; // max 0.2
+                    if (hoverMode && vy < 0.2) {
+                        Player.addVelocity(0, Math.min(maxVel, 0.2 - vy), 0);
                     }
-                    else if (vy < 0.67) {
+                    else if (!hoverMode && vy < 0.67) {
                         Player.addVelocity(0, Math.min(maxVel, 0.67 - vy), 0);
                     }
                 }
                 else if (hoverMode) {
-                    if (vy < -0.1)
+                    if (vy < -0.1) {
                         Player.addVelocity(0, Math.min(0.25, -0.1 - vy), 0);
+                    }
+                    playSound = true;
                 }
+            }
+            if (playSound) {
+                ICTool.startPlaySound(this.jetpackSound, true, hoverMode ? 0.8 : 1);
+            }
+            else {
+                ICTool.stopPlaySound(this.jetpackSound);
             }
         };
         return ButtonFly;
@@ -3762,7 +4454,7 @@ var ToolHUD;
         };
         ButtonHover.prototype.onClick = function (player) {
             var slot = Entity.getArmorSlot(player, 1);
-            if (!EntityHelper.isOnGround(player) && ChargeItemRegistry.getEnergyStored(slot) >= 8) {
+            if (!EntityHelper.isOnGround(player) && JetpackProvider.canBeFlying(slot, Entity.getPosition(player))) {
                 var client = Network.getClientForPlayer(player);
                 var extra = slot.extra || new ItemExtraData();
                 if (extra.getBoolean("hover")) {
@@ -3876,17 +4568,36 @@ var ToolHUD;
     ToolHUD.registerButton(new ToolHUD.ButtonNightvision());
     ToolHUD.registerButton(new ToolHUD.ButtonToolMode());
 })(ToolHUD || (ToolHUD = {}));
+/**
+ * API to manage machine upgrades.
+ */
 var UpgradeAPI;
 (function (UpgradeAPI) {
     var data = {};
+    /** Returns upgrade instance by item id. */
     function getUpgrade(id) {
         return data[id];
     }
     UpgradeAPI.getUpgrade = getUpgrade;
+    /** Checks if an item is an upgrade. */
     function isUpgrade(id) {
         return !!data[id];
     }
     UpgradeAPI.isUpgrade = isUpgrade;
+    /**
+     * Registers an upgrade.
+     * @param id item id
+     * @param upgrade upgrade data
+     */
+    function registerUpgrade(id, upgrade) {
+        data[id] = upgrade;
+    }
+    UpgradeAPI.registerUpgrade = registerUpgrade;
+    /**
+     * Checks if an upgrade is valid for a tile entity.
+     * @param id item id
+     * @param machine tile entity
+     */
     function isValidUpgrade(id, machine) {
         var upgrade = getUpgrade(id);
         var validUpgrades = machine["upgrades"];
@@ -3896,54 +4607,83 @@ var UpgradeAPI;
         return false;
     }
     UpgradeAPI.isValidUpgrade = isValidUpgrade;
-    function registerUpgrade(id, upgrade) {
-        data[id] = upgrade;
-    }
-    UpgradeAPI.registerUpgrade = registerUpgrade;
-    function useUpgrades(machine) {
+    /**
+     * Creates an UpgradeSet for provided tile entity.
+     * @param machine tile entity
+     * @returns empty UpgradeSet
+     */
+    function getUpgradeSet(machine) {
         return new UpgradeSet(machine);
     }
-    UpgradeAPI.useUpgrades = useUpgrades;
-    /** @deprecated */
-    function executeUpgrades(machine) {
-        var upgrades = useUpgrades(machine);
-        // reverse compatibility with Advanced Machines
-        var data = machine.data;
-        if ("power_tier" in data) {
-            data.power_tier = upgrades.getTier(data.power_tier);
-        }
-        if ("energy_storage" in data) {
-            data.energy_storage = upgrades.getEnergyStorage(data.energy_storage);
-        }
-        if ("isHeating" in data) {
-            data.isHeating = upgrades.getRedstoneInput(data.isHeating);
-        }
-        StorageInterface.checkHoppers(machine);
+    UpgradeAPI.getUpgradeSet = getUpgradeSet;
+    /**
+     * Creates an UpgradeSet and performs upgrades for provided tile entity.
+     * @param machine tile entity
+     * @returns UpgradeSet with applied modifiers
+     */
+    function useUpgrades(machine) {
+        var upgrades = getUpgradeSet(machine);
+        performUpgrades(upgrades);
         return upgrades;
     }
-    UpgradeAPI.executeUpgrades = executeUpgrades;
+    UpgradeAPI.useUpgrades = useUpgrades;
+    /**
+     * Fetches upgrades from tile entity container and performs them.
+     * @param upgrades upgrade set
+     * @param isInit if true, upgrades tick won't be called
+     * @returns UpgradeSet with applied modifiers
+     */
+    function performUpgrades(upgrades, isInit) {
+        upgrades.reset();
+        upgrades.getUpgrades();
+        upgrades.updateModifiers();
+        if (!isInit) {
+            upgrades.onTick();
+        }
+        return upgrades;
+    }
+    UpgradeAPI.performUpgrades = performUpgrades;
     var UpgradeSet = /** @class */ (function () {
         function UpgradeSet(tileEntity) {
             this.tileEntity = tileEntity;
-            this.resetRates();
-            this.useUpgrades();
+            this.reset();
         }
-        UpgradeSet.prototype.resetRates = function () {
+        UpgradeSet.prototype.reset = function () {
+            this.upgrades = [];
             this.speedModifier = 1;
             this.processTimeMultiplier = 1;
             this.energyDemandMultiplier = 1;
             this.extraEnergyStorage = 0;
             this.extraTier = 0;
+            this.invertRedstone = false;
         };
-        UpgradeSet.prototype.useUpgrades = function () {
+        UpgradeSet.prototype.getUpgrades = function () {
             var container = this.tileEntity.container;
             for (var slotName in container.slots) {
-                if (slotName.match(/Upgrade/)) {
+                if (slotName.includes("Upgrade")) {
                     var slot = container.getSlot(slotName);
                     var upgrade = getUpgrade(slot.id);
                     if (upgrade && this.isValidUpgrade(upgrade)) {
-                        this.executeUprade(upgrade, slot);
+                        this.upgrades.push({
+                            upgrade: upgrade,
+                            stack: slot
+                        });
                     }
+                }
+            }
+        };
+        UpgradeSet.prototype.updateModifiers = function () {
+            for (var i = 0; i < this.upgrades.length; i++) {
+                var upgradeData = this.upgrades[i];
+                this.applyUpgradeModifiers(upgradeData.upgrade, upgradeData.stack);
+            }
+        };
+        UpgradeSet.prototype.onTick = function () {
+            for (var i = 0; i < this.upgrades.length; i++) {
+                var upgradeData = this.upgrades[i];
+                var upgrade = upgradeData.upgrade;
+                if ("onTick" in upgrade) {
+                    upgrade.onTick(upgradeData.stack, this.tileEntity);
                 }
             }
         };
@@ -3951,7 +4691,7 @@ var UpgradeAPI;
             var validUpgrades = this.tileEntity["upgrades"];
             return (!validUpgrades || validUpgrades.indexOf(upgrade.type) != -1);
         };
-        UpgradeSet.prototype.executeUprade = function (upgrade, stack) {
+        UpgradeSet.prototype.applyUpgradeModifiers = function (upgrade, stack) {
             if (upgrade.type == "overclocker") {
                 this.speedModifier += upgrade.getSpeedModifier(stack, this.tileEntity) * stack.count;
                 this.processTimeMultiplier *= Math.pow(upgrade.getProcessTimeMultiplier(stack, this.tileEntity), stack.count);
@@ -3965,9 +4705,6 @@ var UpgradeAPI;
             }
             if (upgrade.type == "redstone") {
                 this.invertRedstone = true;
-            }
-            if ("onTick" in upgrade) {
-                upgrade.onTick(stack, this.tileEntity);
             }
         };
         UpgradeSet.prototype.getProcessTime = function (defaultLength) {
@@ -3994,9 +4731,140 @@ var UpgradeAPI;
 })(UpgradeAPI || (UpgradeAPI = {}));
 var WindSim;
 (function (WindSim) {
+    // Biome category sets for Bedrock Edition
+    var OCEAN_BIOMES = new Set([
+        0,
+        10,
+        24,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47, // deep_frozen_ocean
+    ]);
+    var FLAT_BIOMES = new Set([
+        1,
+        2,
+        6,
+        12,
+        14,
+        15,
+        16,
+        17,
+        25,
+        26,
+        35,
+        36,
+        129,
+        130,
+        134,
+        140, // ice_plains_spikes
+    ]);
+    var RIVER_BIOMES = new Set([
+        7,
+        11, // frozen_river
+    ]);
+    var FOREST_BIOMES = new Set([
+        4,
+        5,
+        18,
+        19,
+        27,
+        28,
+        29,
+        30,
+        31,
+        34,
+        132,
+        133,
+        155,
+        156,
+        157,
+        158,
+        162, // extreme_hills_plus_trees_mutated
+    ]);
+    var TALL_FOREST_BIOMES = new Set([
+        21,
+        22,
+        23,
+        32,
+        33,
+        48,
+        49,
+        149,
+        151,
+        160,
+        161, // redwood_taiga_hills_mutated
+    ]);
+    var MOUNTAIN_BIOMES = new Set([
+        3,
+        13,
+        20,
+        37,
+        38,
+        39,
+        131,
+        163,
+        164,
+        165,
+        166,
+        167, // mesa_plateau_mutated
+    ]);
     WindSim.windStrength = MathUtil.randomInt(5, 25);
-    function getWindAt(height) {
-        var windMultiplier = Math.max(1 - Math.pow(Math.abs((160 - height) / 96), 2), 0);
+    /**
+     * Returns the height with maximum wind strength based on biome ID
+     * @param biomeId - biome ID
+     */
+    function getWindStreamHeightByBiome(biomeId) {
+        if (OCEAN_BIOMES.has(biomeId))
+            return 120;
+        if (FLAT_BIOMES.has(biomeId) || RIVER_BIOMES.has(biomeId))
+            return 140;
+        if (FOREST_BIOMES.has(biomeId))
+            return 160;
+        if (TALL_FOREST_BIOMES.has(biomeId))
+            return 180;
+        if (MOUNTAIN_BIOMES.has(biomeId))
+            return 200;
+        return 160;
+    }
+    WindSim.getWindStreamHeightByBiome = getWindStreamHeightByBiome;
+    /**
+     * Returns height with maximum wind strength by coords
+     */
+    function getWindStreamHeight(blockSource, x, z) {
+        // Convert to block coords
+        x = Math.floor(x);
+        z = Math.floor(z);
+        // Calculate average of 5 points
+        var points = [
+            x, z,
+            x - 8, z - 8,
+            x + 7, z - 8,
+            x - 8, z + 7,
+            x + 7, z + 7
+        ];
+        var heightSum = 0;
+        for (var i = 0; i < points.length - 1; i += 2) {
+            var biomeId = blockSource.getBiome(points[i], points[i + 1]);
+            heightSum += getWindStreamHeightByBiome(biomeId);
+        }
+        return heightSum / 5;
+    }
+    WindSim.getWindStreamHeight = getWindStreamHeight;
+    /**
+     * Returns wind strength at coords
+     */
+    function getWindAt(blockSource, x, y, z) {
+        if (blockSource.getDimension() != 0)
+            return 0;
+        var windStreamHeight = getWindStreamHeight(blockSource, x, z);
+        var heightDiff = Math.abs(windStreamHeight - Math.floor(y));
+        var windAltitude = windStreamHeight - 62;
+        var windMultiplier = Math.max(1 - Math.pow((heightDiff / windAltitude), 2), 0);
         var wether = World.getWeather();
         if (wether.thunder)
             windMultiplier *= 1.5;
@@ -4006,9 +4874,8 @@ var WindSim;
     }
     WindSim.getWindAt = getWindAt;
     function updateWind() {
-        if (World.getThreadTime() % 128 != 0) {
+        if (World.getThreadTime() % 128 != 0)
             return;
-        }
         var upChance = 10;
         var downChance = 10;
         if (WindSim.windStrength > 20) {
@@ -4064,7 +4931,7 @@ var OreGenerator;
         maxHeight: IC2Config.getInt("uranium_ore.maxHeight")
     };
     OreGenerator.iridium = {
-        chance: IC2Config.getInt("iridium_ore.chance"),
+        chance: IC2Config.getFloat("iridium_ore.chance"),
         minHeight: IC2Config.getInt("iridium_ore.minHeight"),
         maxHeight: IC2Config.getInt("iridium_ore.maxHeight")
     };
@@ -4085,13 +4952,20 @@ var OreGenerator;
         return { x: x, y: y, z: z };
     }
     OreGenerator.randomCoords = randomCoords;
-    function generateOre(chunkX, chunkZ, blockID, properties, random) {
+    function generateOre(chunkX, chunkZ, blockId, properties, random) {
         for (var i = 0; i < properties.count; i++) {
             var coords = randomCoords(random, chunkX, chunkZ, properties.minHeight, properties.maxHeight);
-            GenerationUtils.generateOre(coords.x, coords.y, coords.z, blockID, 0, properties.size, false, random.nextInt());
+            GenerationUtils.generateOre(coords.x, coords.y, coords.z, blockId, 0, properties.size, false);
         }
     }
     OreGenerator.generateOre = generateOre;
+    function replaceWithOre(coords, blockId, replaceId) {
+        if (replaceId === void 0) { replaceId = 1; }
+        if (World.getBlockID(coords.x, coords.y, coords.z) == replaceId) {
+            World.setBlock(coords.x, coords.y, coords.z, blockId, 0);
+        }
+    }
+    OreGenerator.replaceWithOre = replaceWithOre;
 })(OreGenerator || (OreGenerator = {}));
 OreGenerator.addFlag("copper", "oreGenCopper");
 OreGenerator.addFlag("tin", "oreGenTin");
@@ -4112,8 +4986,13 @@ Callback.addCallback("GenerateChunk", function (chunkX, chunkZ, random) {
     }
     if (random.nextDouble() < OreGenerator.iridium.chance) {
         var coords = OreGenerator.randomCoords(random, chunkX, chunkZ, OreGenerator.iridium.minHeight, OreGenerator.iridium.maxHeight);
-        if (World.getBlockID(coords.x, coords.y, coords.z) == 1)
-            World.setBlock(coords.x, coords.y, coords.z, BlockID.oreIridium, 0);
+        OreGenerator.replaceWithOre(coords, BlockID.oreIridium);
+        var side = random.nextInt(12);
+        if (side < 6) {
+            var dir = World.getVectorByBlockSide(side);
+            var coords2 = { x: coords.x + dir.x, y: coords.y + dir.y, z: coords.z + dir.z };
+            OreGenerator.replaceWithOre(coords2, BlockID.oreIridium);
+        }
     }
 });
 var RubberTreeGenerator;
@@ -4217,6 +5096,81 @@ var RubberTreeGenerator;
         }
     }, "rubber_tree");
 })(RubberTreeGenerator || (RubberTreeGenerator = {}));
+var BlockRubberTreeLog = /** @class */ (function (_super) {
+    __extends(BlockRubberTreeLog, _super);
+    function BlockRubberTreeLog() {
+        var _this = _super.call(this, "rubberTreeLog", {
+            extends: "wood",
+            flameOdds: 5,
+            burnOdds: 5,
+        }) || this;
+        var name = "rubber_tree_log";
+        var texture_side = ["rubber_wood", 0];
+        var texture_side2 = ["rubber_wood", 2];
+        var texture_top = ["rubber_wood", 1];
+        _this.addVariation(name, [texture_top, texture_top, texture_side, texture_side, texture_side, texture_side], true);
+        _this.addVariation(name, [texture_side, texture_side, texture_top, texture_top, texture_side2, texture_side2]);
+        _this.addVariation(name, [texture_side2, texture_side2, texture_side2, texture_side2, texture_top, texture_top]);
+        _this.setCategory(ItemCategory.NATURE);
+        _this.setBlockMaterial("wood");
+        return _this;
+    }
+    BlockRubberTreeLog.prototype.getDrop = function (coords, block, level) {
+        return [[block.id, 1, 0]];
+    };
+    BlockRubberTreeLog.prototype.onPlace = function (coords, item, block, player, region) {
+        if (World.canTileBeReplaced(block.id, block.data)) {
+            var place = coords;
+            var rotation = 0;
+        }
+        else {
+            var place = coords.relative;
+            var rotation = Math.floor(coords.side / 2);
+        }
+        region.setBlock(place.x, place.y, place.z, item.id, rotation);
+        //World.playSound(place.x + .5, place.y + .5, place.z + .5, "dig.wood", 1, 0.8)
+    };
+    return BlockRubberTreeLog;
+}(BlockBase));
+var BlockRubberTreeLogLatex = /** @class */ (function (_super) {
+    __extends(BlockRubberTreeLogLatex, _super);
+    function BlockRubberTreeLogLatex() {
+        var _this = _super.call(this, "rubberTreeLogLatex", {
+            extends: "wood",
+            flameOdds: 5,
+            burnOdds: 5,
+        }) || this;
+        _this.addVariation("rubber_tree_log_latex", [["rubber_wood", 1], ["rubber_wood", 1], ["rubber_wood_latex", 0], ["rubber_wood", 0], ["rubber_wood", 0], ["rubber_wood", 0]]);
+        _this.addVariation("rubber_tree_log_latex", [["rubber_wood", 1], ["rubber_wood", 1], ["rubber_wood_latex", 1], ["rubber_wood", 0], ["rubber_wood", 0], ["rubber_wood", 0]]);
+        _this.setBlockMaterial("wood");
+        return _this;
+    }
+    BlockRubberTreeLogLatex.prototype.createBlock = function () {
+        Block.createBlockWithRotation(this.stringID, this.variations, this.blockType);
+        this.isDefined = true;
+    };
+    BlockRubberTreeLogLatex.prototype.getDrop = function () {
+        return [[BlockID.rubberTreeLog, 1, 0], [ItemID.latex, 1, 0]];
+    };
+    BlockRubberTreeLogLatex.prototype.onRandomTick = function (x, y, z, block, region) {
+        if (block.data < 4 && Math.random() < 1 / 7) {
+            // check that block is part of a grown tree
+            var checkY = y - 1;
+            while (checkY > 0) {
+                var blockId = region.getBlockId(x, checkY, z);
+                if (BlockRubberTreeSapling.PLACEABLE_TILES[blockId]) {
+                    region.setBlock(x, y, z, block.id, block.data + 4);
+                    break;
+                }
+                else if (blockId != BlockID.rubberTreeLog && blockId != BlockID.rubberTreeLogLatex) {
+                    break;
+                }
+                checkY--;
+            }
+        }
+    };
+    return BlockRubberTreeLogLatex;
+}(BlockBase));
 var BlockRubberTreeLeaves = /** @class */ (function (_super) {
     __extends(BlockRubberTreeLeaves, _super);
     function BlockRubberTreeLeaves() {
@@ -4229,8 +5183,8 @@ var BlockRubberTreeLeaves = /** @class */ (function (_super) {
         _this.setBlockMaterial("plant");
         return _this;
     }
-    BlockRubberTreeLeaves.prototype.getDrop = function (coords, block, level, enchant, item) {
-        if (level > 0 || enchant.silk || (item === null || item === void 0 ? void 0 : item.id) == 359) {
+    BlockRubberTreeLeaves.prototype.getDrop = function (coords, block, level, enchant, item, region) {
+        if (enchant.silk || (item === null || item === void 0 ? void 0 : item.id) == 359) {
             return [[block.id, 1, 2]];
         }
         var drop = [];
@@ -4289,7 +5243,7 @@ var BlockRubberTreeLeaves = /** @class */ (function (_super) {
             }
             region.setBlock(x, y, z, 0, 0);
             this.updateLeaves(x, y, z, region);
-            var drop = this.getDrop(new Vector3(x, y, z), block, 0, ToolAPI.getEnchantExtraData(), null);
+            var drop = this.getDrop(new Vector3(x, y, z), block, 0, ToolAPI.getEnchantExtraData(), null, region);
             for (var _i = 0, drop_2 = drop; _i < drop_2.length; _i++) {
                 var item = drop_2[_i];
                 region.spawnDroppedItem(x, y, z, item[0], item[1], item[2]);
@@ -4305,56 +5259,6 @@ var BlockRubberTreeLeaves = /** @class */ (function (_super) {
     };
     return BlockRubberTreeLeaves;
 }(BlockBase));
-BlockRegistry.registerBlock(new BlockRubberTreeLeaves());
-var BlockRubberTreeLog = /** @class */ (function (_super) {
-    __extends(BlockRubberTreeLog, _super);
-    function BlockRubberTreeLog() {
-        var _this = _super.call(this, "rubberTreeLog", "wood") || this;
-        var name = "rubber_tree_log";
-        var texture_side = ["rubber_wood", 0];
-        var texture_side2 = ["rubber_wood", 2];
-        var texture_top = ["rubber_wood", 1];
-        _this.addVariation(name, [texture_top, texture_top, texture_side, texture_side, texture_side, texture_side], true);
-        _this.addVariation(name, [texture_side, texture_side, texture_top, texture_top, texture_side2, texture_side2]);
-        _this.addVariation(name, [texture_side2, texture_side2, texture_side2, texture_side2, texture_top, texture_top]);
-        _this.setCategory(ItemCategory.NATURE);
-        _this.setBlockMaterial("wood");
-        return _this;
-    }
-    BlockRubberTreeLog.prototype.getDrop = function (coords, block, level) {
-        return [[block.id, 1, 0]];
-    };
-    BlockRubberTreeLog.prototype.onPlace = function (coords, item, block, player, region) {
-        if (World.canTileBeReplaced(block.id, block.data)) {
-            var place = coords;
-            var rotation = 0;
-        }
-        else {
-            var place = coords.relative;
-            var rotation = Math.floor(coords.side / 2);
-        }
-        region.setBlock(place.x, place.y, place.z, item.id, rotation);
-        //World.playSound(place.x + .5, place.y + .5, place.z + .5, "dig.wood", 1, 0.8)
-    };
-    return BlockRubberTreeLog;
-}(BlockBase));
-BlockRegistry.registerBlock(new BlockRubberTreeLog());
-Recipes.addFurnace(BlockID.rubberTreeLog, 17, 3);
-Recipes.addShapeless({ id: 5, count: 3, data: 3 }, [{ id: BlockID.rubberTreeLog, data: -1 }]);
-IDRegistry.genBlockID("rubberTreeLogLatex");
-Block.createBlockWithRotation("rubberTreeLogLatex", [
-    { name: "tile.rubberTreeLogLatex.name", texture: [["rubber_wood", 1], ["rubber_wood", 1], ["rubber_wood_latex", 0], ["rubber_wood", 0], ["rubber_wood", 0], ["rubber_wood", 0]], inCreative: false },
-    { name: "tile.rubberTreeLogLatex.name", texture: [["rubber_wood", 1], ["rubber_wood", 1], ["rubber_wood_latex", 1], ["rubber_wood", 0], ["rubber_wood", 0], ["rubber_wood", 0]], inCreative: false },
-], "wood");
-BlockRegistry.setBlockMaterial(BlockID.rubberTreeLogLatex, "wood");
-BlockRegistry.registerDrop("rubberTreeLogLatex", function (coords, blockID) {
-    return [[BlockID.rubberTreeLog, 1, 0], [ItemID.latex, 1, 0]];
-});
-Block.setRandomTickCallback(BlockID.rubberTreeLogLatex, function (x, y, z, id, data, region) {
-    if (data < 4 && Math.random() < 1 / 7) {
-        region.setBlock(x, y, z, id, data + 4);
-    }
-});
 var BlockRubberTreeSapling = /** @class */ (function (_super) {
     __extends(BlockRubberTreeSapling, _super);
     function BlockRubberTreeSapling() {
@@ -4363,11 +5267,6 @@ var BlockRubberTreeSapling = /** @class */ (function (_super) {
             destroyTime: 0,
             sound: "grass"
         }) || this;
-        _this.PLACEABLE_TILES = {
-            2: true,
-            3: true,
-            60: true
-        };
         _this.addVariation("rubber_tree_sapling", [["rubber_tree_sapling", 0]], true);
         _this.setCategory(ItemCategory.NATURE);
         _this.setBlockMaterial("plant");
@@ -4381,12 +5280,12 @@ var BlockRubberTreeSapling = /** @class */ (function (_super) {
         return [[BlockID.rubberTreeSapling, 1, 0]];
     };
     BlockRubberTreeSapling.prototype.onNeighbourChange = function (coords, block, changeCoords, region) {
-        if (changeCoords.y < coords.y && !this.PLACEABLE_TILES[region.getBlockId(coords.x, coords.y - 1, coords.z)]) {
+        if (changeCoords.y < coords.y && !BlockRubberTreeSapling.PLACEABLE_TILES[region.getBlockId(coords.x, coords.y - 1, coords.z)]) {
             region.destroyBlock(coords.x, coords.y, coords.z, true);
         }
     };
     BlockRubberTreeSapling.prototype.onRandomTick = function (x, y, z, block, region) {
-        if (!this.PLACEABLE_TILES[region.getBlockId(x, y - 1, z)]) {
+        if (!BlockRubberTreeSapling.PLACEABLE_TILES[region.getBlockId(x, y - 1, z)]) {
             region.destroyBlock(x, y, z, true);
         }
         else if (Math.random() < 0.05 && region.getLightLevel(x, y, z) >= 9) {
@@ -4413,13 +5312,17 @@ var BlockRubberTreeSapling = /** @class */ (function (_super) {
         var place = coords.relative;
         var tile1 = region.getBlock(place.x, place.y, place.z);
         var tile2 = region.getBlock(place.x, place.y - 1, place.z);
-        if (!World.canTileBeReplaced(tile1.id, tile1.data) || !this.PLACEABLE_TILES[tile2.id]) {
+        if (!World.canTileBeReplaced(tile1.id, tile1.data) || !BlockRubberTreeSapling.PLACEABLE_TILES[tile2.id]) {
             Game.prevent();
         }
     };
+    BlockRubberTreeSapling.PLACEABLE_TILES = {
+        2: true,
+        3: true,
+        60: true
+    };
     return BlockRubberTreeSapling;
 }(BlockBase));
-BlockRegistry.registerBlock(new BlockRubberTreeSapling());
 Network.addClientPacket("ic2.growPlantParticles", function (data) {
     for (var i = 0; i < 16; i++) {
         var px = data.x + Math.random();
@@ -4428,6 +5331,16 @@ Network.addClientPacket("ic2.growPlantParticles", function (data) {
         Particles.addParticle(ParticleType.happyVillager, px, py, pz, 0, 0, 0);
     }
 });
+/// <reference path="./types/RubberTree/BlockRubberTreeLog.ts" />
+/// <reference path="./types/RubberTree/BlockRubberTreeLogLatex.ts" />
+/// <reference path="./types/RubberTree/BlockRubberTreeLeaves.ts" />
+/// <reference path="./types/RubberTree/BlockRubberTreeSapling.ts" />
+BlockRegistry.registerBlock(new BlockRubberTreeLog());
+BlockRegistry.registerBlock(new BlockRubberTreeLogLatex());
+BlockRegistry.registerBlock(new BlockRubberTreeLeaves());
+BlockRegistry.registerBlock(new BlockRubberTreeSapling());
+Recipes.addFurnace(BlockID.rubberTreeLog, 17, 3);
+Recipes.addShapeless({ id: 5, count: 3, data: 3 }, [{ id: BlockID.rubberTreeLog, data: -1 }]);
 var BlockOre = /** @class */ (function (_super) {
     __extends(BlockOre, _super);
     function BlockOre(id, oreName, miningLevel) {
@@ -4440,24 +5353,35 @@ var BlockOre = /** @class */ (function (_super) {
     }
     return BlockOre;
 }(BlockBase));
+/// <reference path="./BlockOre.ts" />
+var BlockOreIridium = /** @class */ (function (_super) {
+    __extends(BlockOreIridium, _super);
+    function BlockOreIridium() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    BlockOreIridium.prototype.getDrop = function (coords, block, level, enchant, item) {
+        if (level > 3) {
+            if (enchant.silk) {
+                return [[block.id, 1, 0]];
+            }
+            var drop = [[ItemID.iridiumChunk, 1, 0]];
+            if (Math.random() < enchant.fortune / 6) {
+                drop.push(drop[0]);
+            }
+            ToolAPI.dropOreExp(coords, 12, 28, enchant.experience);
+            return drop;
+        }
+        return [];
+    };
+    return BlockOreIridium;
+}(BlockOre));
+/// <reference path="./types/BlockOre.ts" />
+/// <reference path="./types/BlockOreIridium.ts" />
 BlockRegistry.registerBlock(new BlockOre("oreCopper", "copper", 2));
 BlockRegistry.registerBlock(new BlockOre("oreTin", "tin", 2));
 BlockRegistry.registerBlock(new BlockOre("oreLead", "lead", 2));
 BlockRegistry.registerBlock(new BlockOre("oreUranium", "uranium", 3));
-BlockRegistry.registerBlock(new BlockOre("oreIridium", "iridium", 4));
-BlockRegistry.registerDrop("oreIridium", function (coords, blockID, blockData, level, enchant) {
-    if (level > 3) {
-        if (enchant.silk) {
-            return [[blockID, 1, 0]];
-        }
-        var drop = [[ItemID.iridiumChunk, 1, 0]];
-        if (Math.random() < enchant.fortune / 6)
-            drop.push(drop[0]);
-        ToolAPI.dropOreExp(coords, 12, 28, enchant.experience);
-        return drop;
-    }
-    return [];
-});
+BlockRegistry.registerBlock(new BlockOreIridium("oreIridium", "iridium", 4));
 Item.addCreativeGroup("ores", Translation.translate("Ores"), [
     BlockID.oreCopper,
     BlockID.oreTin,
@@ -4467,24 +5391,25 @@ Item.addCreativeGroup("ores", Translation.translate("Ores"), [
 ]);
 var BlockResource = /** @class */ (function (_super) {
     __extends(BlockResource, _super);
-    function BlockResource(id, resourceName, miningLevel) {
+    function BlockResource(id, resourceName, textures, miningLevel) {
         var _this = _super.call(this, id, "stone") || this;
         var name = resourceName + "_block";
-        var textureName = "block_" + resourceName;
-        _this.addVariation(name, [[textureName, 0]], true);
+        var textureList = textures.map(function (texture) { return [texture, 0]; });
+        _this.addVariation(name, textureList, true);
         _this.setBlockMaterial("stone", miningLevel);
         _this.setDestroyTime(5);
         return _this;
     }
     return BlockResource;
 }(BlockBase));
-BlockRegistry.registerBlock(new BlockResource("blockCopper", "copper", 2));
-BlockRegistry.registerBlock(new BlockResource("blockTin", "tin", 2));
-BlockRegistry.registerBlock(new BlockResource("blockBronze", "bronze", 2));
-BlockRegistry.registerBlock(new BlockResource("blockLead", "lead", 2));
-BlockRegistry.registerBlock(new BlockResource("blockSteel", "steel", 2));
-BlockRegistry.registerBlock(new BlockResource("blockSilver", "silver", 3));
-BlockRegistry.registerBlock(new BlockResource("blockUranium", "uranium", 3));
+/// <reference path="./types/BlockResource.ts" />
+BlockRegistry.registerBlock(new BlockResource("blockCopper", "copper", ["block_copper"], 2));
+BlockRegistry.registerBlock(new BlockResource("blockTin", "tin", ["block_tin"], 2));
+BlockRegistry.registerBlock(new BlockResource("blockBronze", "bronze", ["block_bronze"], 2));
+BlockRegistry.registerBlock(new BlockResource("blockLead", "lead", ["block_lead"], 2));
+BlockRegistry.registerBlock(new BlockResource("blockSteel", "steel", ["block_steel"], 2));
+BlockRegistry.registerBlock(new BlockResource("blockSilver", "silver", ["block_silver"], 3));
+BlockRegistry.registerBlock(new BlockResource("blockUranium", "uranium", ["block_uranium_top", "block_uranium_top", "block_uranium_side"], 3));
 Item.addCreativeGroup("blockResource", Translation.translate("Resource Blocks"), [
     BlockID.blockCopper,
     BlockID.blockTin,
@@ -4540,61 +5465,123 @@ Callback.addCallback("PreLoaded", function () {
 });
 var BlockStone = /** @class */ (function (_super) {
     __extends(BlockStone, _super);
-    function BlockStone(id, name, texture, miningLevel) {
-        if (miningLevel === void 0) { miningLevel = 1; }
-        var _this = _super.call(this, id, "stone") || this;
+    function BlockStone(id, name, texture, miningLevel, blockType) {
+        if (blockType === void 0) { blockType = "stone"; }
+        var _this = _super.call(this, id, blockType) || this;
         _this.addVariation(name, texture, true);
         _this.setBlockMaterial("stone", miningLevel);
-        _this.setDestroyTime(3);
         return _this;
     }
     return BlockStone;
 }(BlockBase));
-// legacy
-BlockRegistry.createBlockType("machine", {
-    extends: "stone",
-    destroyTime: 3
-});
-BlockRegistry.registerBlock(new BlockStone("machineBlockBasic", "machine_block", [["machine_top", 0]]));
-BlockRegistry.registerBlock(new BlockStone("machineBlockAdvanced", "advanced_machine_block", [["machine_advanced", 0]]));
-Callback.addCallback("PreLoaded", function () {
-    Recipes.addShaped({ id: BlockID.machineBlockBasic, count: 1, data: 0 }, [
-        "xxx",
-        "x x",
-        "xxx"
-    ], ['x', ItemID.plateIron, -1]);
-    Recipes.addShaped({ id: BlockID.machineBlockAdvanced, count: 1, data: 0 }, [
-        "scs",
-        "a#a",
-        "scs"
-    ], ['#', BlockID.machineBlockBasic, -1, 'c', ItemID.carbonPlate, -1, 'a', ItemID.plateAlloy, -1, 's', ItemID.plateSteel, -1]);
-    Recipes.addShaped({ id: BlockID.machineBlockAdvanced, count: 1, data: 0 }, [
-        "sas",
-        "c#c",
-        "sas"
-    ], ['#', BlockID.machineBlockBasic, -1, 'c', ItemID.carbonPlate, -1, 'a', ItemID.plateAlloy, -1, 's', ItemID.plateSteel, -1]);
-    Recipes.addShapeless({ id: ItemID.plateIron, count: 8, data: 0 }, [{ id: BlockID.machineBlockBasic, data: 0 }]);
-});
-BlockRegistry.createBlock("reinforcedStone", [
-    { name: "reinforced_stone", texture: [["reinforced_block", 0]], inCreative: true }
-], {
+var BlockReinforcedDoor = /** @class */ (function (_super) {
+    __extends(BlockReinforcedDoor, _super);
+    function BlockReinforcedDoor(id, bottomTexture, topTexture) {
+        var _this = _super.call(this, id, {
+            baseBlock: 1,
+            destroyTime: 25,
+            explosionResistance: 150,
+            renderLayer: 1,
+            sound: "stone"
+        }) || this;
+        var name = "reinforced_door";
+        for (var i = 0; i < 8; i++) {
+            _this.addVariation(name, bottomTexture);
+        }
+        for (var i = 8; i < 16; i++) {
+            _this.addVariation(name, topTexture);
+        }
+        for (var i = 0; i < 4; i++) {
+            _this.setShape({ x: 0, y: 0, z: 0 }, { x: 1, y: 1, z: 3 / 16 }, i * 4);
+            _this.setShape({ x: 0, y: 0, z: 13 / 16 }, { x: 1, y: 1, z: 1 }, i * 4 + 1);
+            _this.setShape({ x: 0, y: 0, z: 0 }, { x: 3 / 16, y: 1, z: 1 }, i * 4 + 2);
+            _this.setShape({ x: 13 / 16, y: 0, z: 0 }, { x: 1, y: 1, z: 1 }, i * 4 + 3);
+        }
+        _this.setBlockMaterial("stone", 2);
+        _this.setupAsRedstoneReceiver(false);
+        return _this;
+    }
+    BlockReinforcedDoor.prototype.getDrop = function (coords, block) {
+        if (block.data < 8) {
+            return [[Item.getNumericId(this.stringID), 1, 0]];
+        }
+        return [];
+    };
+    BlockReinforcedDoor.prototype.onNeighbourChange = function (coords, block, changeCoords, region) {
+        if (block.data < 8 && (changeCoords.y < coords.y || changeCoords.y > coords.y && region.getBlockId(changeCoords.x, changeCoords.y, changeCoords.z) !== block.id)
+            || block.data >= 8 && changeCoords.y < coords.y && region.getBlockId(changeCoords.x, changeCoords.y, changeCoords.z) !== block.id) {
+            region.destroyBlock(coords.x, coords.y, coords.z, true);
+        }
+    };
+    BlockReinforcedDoor.prototype.onRedstoneUpdate = function (coords, params, blockSource) {
+        var block = blockSource.getBlock(coords.x, coords.y, coords.z);
+        var dimensionId = blockSource.getDimension();
+        if (params.onLoad) {
+            VirtualBlockData.addBlockEntry({ signal: params.signal }, dimensionId, coords.x, coords.y, coords.z);
+            return;
+        }
+        var blockData = VirtualBlockData.getBlockEntry(dimensionId, coords.x, coords.y, coords.z);
+        if (!blockData) {
+            Debug.error("No data found for block ".concat(coords.x, ", ").concat(coords.y, ", ").concat(coords.z));
+            return;
+        }
+        var secondBlockData = block.data > 8 ?
+            VirtualBlockData.getBlockEntry(dimensionId, coords.x, coords.y - 1, coords.z) :
+            VirtualBlockData.getBlockEntry(dimensionId, coords.x, coords.y + 1, coords.z);
+        var secondBlockPowered = (secondBlockData === null || secondBlockData === void 0 ? void 0 : secondBlockData.signal) > 0;
+        var isPowered = params.signal > 0;
+        var wasPowered = blockData.signal > 0;
+        blockData.signal = params.signal;
+        var stateByData;
+        if (wasPowered && !(isPowered || secondBlockPowered)) { // close door
+            stateByData = [2, 3, 1, 0];
+            //Debug.m(`close door: ${coords.x},${coords.y},${coords.z}`);
+        }
+        else if (!(wasPowered || secondBlockPowered) && isPowered) { // open door
+            stateByData = [3, 2, 0, 1];
+            //Debug.m(`open door: ${coords.x},${coords.y},${coords.z}`);
+        }
+        else {
+            return;
+        }
+        var newData = stateByData[block.data % 4];
+        this.updateState(blockSource, coords, block, newData);
+    };
+    BlockReinforcedDoor.prototype.updateState = function (blockSource, coords, block, newData) {
+        // invert data for right sided doors
+        if (block.data >= 4 && block.data <= 7 || block.data >= 12 && block.data <= 15) {
+            newData ^= 1;
+        }
+        blockSource.setBlock(coords.x, coords.y, coords.z, block.id, this.getNewData(block.data, newData));
+        if (block.data >= 8) {
+            var secondBlockData = block.data - 8;
+            blockSource.setBlock(coords.x, coords.y - 1, coords.z, block.id, this.getNewData(secondBlockData, newData));
+        }
+        else {
+            var secondBlockData = block.data + 8;
+            blockSource.setBlock(coords.x, coords.y + 1, coords.z, block.id, this.getNewData(secondBlockData, newData));
+        }
+    };
+    BlockReinforcedDoor.prototype.getNewData = function (blockData, newData) {
+        return blockData - blockData % 4 + newData;
+    };
+    return BlockReinforcedDoor;
+}(BlockBase));
+/// <reference path="./types/BlockStone.ts" />
+/// <reference path="./types/BlockReinforcedDoor.ts" />
+BlockRegistry.registerBlock(new BlockStone("reinforcedStone", "reinforced_stone", ["reinforced_stone", 0], 2, {
     extends: "stone",
     destroyTime: 25,
     explosionResistance: 150,
-});
-BlockRegistry.setBlockMaterial(BlockID.reinforcedStone, "stone", 2);
-BlockRegistry.setDestroyLevel("reinforcedStone", 2);
-BlockRegistry.createBlock("reinforcedGlass", [
-    { name: "reinforced_glass", texture: [["reinforced_glass", 0]], inCreative: true }
-], {
+}));
+BlockRegistry.registerBlock(new BlockStone("reinforcedGlass", "reinforced_glass", ["reinforced_glass", 0], 2, {
     baseBlock: 1,
     destroyTime: 25,
     explosionResistance: 150,
     renderLayer: 1,
     sound: "stone"
-});
-BlockRegistry.setBlockMaterial(BlockID.reinforcedGlass, "stone", 2);
-BlockRegistry.setDestroyLevel("reinforcedGlass", 2);
+}));
+BlockRegistry.registerBlock(new BlockReinforcedDoor("reinforcedDoor", [["reinforced_door_bottom", 0]], [["reinforced_door_top", 0]]));
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.reinforcedStone, count: 8, data: 0 }, [
         "aaa",
@@ -4612,42 +5599,104 @@ Callback.addCallback("PreLoaded", function () {
         "aaa"
     ], ['x', ItemID.plateAlloy, 0, 'a', 20, 0]);
 });
+var BlockMiningPipe = /** @class */ (function (_super) {
+    __extends(BlockMiningPipe, _super);
+    function BlockMiningPipe(id, name, textureName) {
+        if (textureName === void 0) { textureName = name; }
+        var _this = _super.call(this, id, {
+            baseBlock: 1,
+            destroyTime: 2,
+            renderLayer: 3,
+            sound: "stone"
+        }) || this;
+        _this.addVariation(name, [[textureName, 0]], true);
+        _this.addVariation(name, [[textureName, 1]], false);
+        _this.setBlockMaterial("stone", 1);
+        _this.setShape({ x: 5 / 16, y: 0, z: 5 / 16 }, { x: 11 / 16, y: 1, z: 11 / 16 }, 0);
+        return _this;
+    }
+    return BlockMiningPipe;
+}(BlockBase));
+/// <reference path="./BlockStone.ts" />
+var BlockMachine = /** @class */ (function (_super) {
+    __extends(BlockMachine, _super);
+    function BlockMachine(id, name, texture, miningLevel) {
+        if (miningLevel === void 0) { miningLevel = 1; }
+        var _this = _super.call(this, id, name, texture, miningLevel) || this;
+        _this.setDestroyTime(3);
+        return _this;
+    }
+    return BlockMachine;
+}(BlockStone));
+// legacy
+BlockRegistry.createBlockType("machine", {
+    extends: "stone",
+    destroyTime: 3
+});
+/// <reference path="./types/BlockMiningPipe.ts" />
+/// <reference path="./types/BlockMachine.ts" />
+BlockRegistry.registerBlock(new BlockMiningPipe("miningPipe", "mining_pipe"));
+BlockRegistry.registerBlock(new BlockMachine("machineBlockBasic", "machine_block", ["block_basic_machine", 0]));
+BlockRegistry.registerBlock(new BlockMachine("machineBlockAdvanced", "advanced_machine_block", ["block_advanced_machine", 0]));
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: BlockID.miningPipe, count: 8, data: 0 }, [
+        "p p",
+        "p p",
+        "pxp",
+    ], ['x', ItemID.treetap, 0, 'p', ItemID.plateIron, 0]);
+    Recipes.addShaped({ id: BlockID.machineBlockBasic, count: 1, data: 0 }, [
+        "xxx",
+        "x x",
+        "xxx"
+    ], ['x', ItemID.plateIron, -1]);
+    Recipes.addShaped({ id: BlockID.machineBlockAdvanced, count: 1, data: 0 }, [
+        "scs",
+        "a#a",
+        "scs"
+    ], ['#', BlockID.machineBlockBasic, -1, 'c', ItemID.carbonPlate, -1, 'a', ItemID.plateAlloy, -1, 's', ItemID.plateSteel, -1]);
+    Recipes.addShaped({ id: BlockID.machineBlockAdvanced, count: 1, data: 0 }, [
+        "sas",
+        "c#c",
+        "sas"
+    ], ['#', BlockID.machineBlockBasic, -1, 'c', ItemID.carbonPlate, -1, 'a', ItemID.plateAlloy, -1, 's', ItemID.plateSteel, -1]);
+    Recipes.addShapeless({ id: ItemID.plateIron, count: 8, data: 0 }, [{ id: BlockID.machineBlockBasic, data: 0 }]);
+});
 BlockRegistry.createBlockType("cable", {
     destroyTime: 0.05,
     explosionResistance: 0.5,
     renderLayer: 1,
 });
 BlockRegistry.createBlock("cableTin0", [
-    { name: "tile.cableTin.name", texture: [["cable_tin", 0]], inCreative: false }
+    { name: "tin_cable_0", texture: [["cable_tin", 0]], inCreative: false }
 ], "cable");
-CableRegistry.createBlock("cableTin1", { name: "tile.cableTin.name", texture: "cable_tin1" }, "cable");
+CableRegistry.createBlock("cableTin1", { name: "tin_cable_1", texture: "cable_tin1" }, "cable");
 BlockRegistry.setBlockMaterial(BlockID.cableTin0, "stone");
 BlockRegistry.setBlockMaterial(BlockID.cableTin1, "stone");
 BlockRegistry.createBlock("cableCopper0", [
-    { name: "tile.cableCopper.name", texture: [["cable_copper", 0]], inCreative: false },
+    { name: "copper_cable_0", texture: [["cable_copper", 0]], inCreative: false },
 ], "cable");
-CableRegistry.createBlock("cableCopper1", { name: "tile.cableCopper.name", texture: "cable_copper1" }, "cable");
+CableRegistry.createBlock("cableCopper1", { name: "copper_cable_1", texture: "cable_copper1" }, "cable");
 BlockRegistry.setBlockMaterial(BlockID.cableCopper0, "stone");
 BlockRegistry.setBlockMaterial(BlockID.cableCopper1, "stone");
 BlockRegistry.createBlock("cableGold0", [
-    { name: "tile.cableGold.name", texture: [["cable_gold", 0]], inCreative: false },
+    { name: "gold_cable_0", texture: [["cable_gold", 0]], inCreative: false },
 ], "cable");
-CableRegistry.createBlock("cableGold1", { name: "tile.cableGold.name", texture: "cable_gold1" }, "cable");
-CableRegistry.createBlock("cableGold2", { name: "tile.cableGold.name", texture: "cable_gold2" }, "cable");
+CableRegistry.createBlock("cableGold1", { name: "gold_cable_1", texture: "cable_gold1" }, "cable");
+CableRegistry.createBlock("cableGold2", { name: "gold_cable_2", texture: "cable_gold2" }, "cable");
 BlockRegistry.setBlockMaterial(BlockID.cableGold0, "stone");
 BlockRegistry.setBlockMaterial(BlockID.cableGold1, "stone");
 BlockRegistry.setBlockMaterial(BlockID.cableGold2, "stone");
 BlockRegistry.createBlock("cableIron0", [
-    { name: "tile.cableIron.name", texture: [["cable_iron", 0]], inCreative: false },
+    { name: "iron_cable_0", texture: [["cable_iron", 0]], inCreative: false },
 ], "cable");
-CableRegistry.createBlock("cableIron1", { name: "tile.cableIron.name", texture: "cable_iron1" }, "cable");
-CableRegistry.createBlock("cableIron2", { name: "tile.cableIron.name", texture: "cable_iron2" }, "cable");
-CableRegistry.createBlock("cableIron3", { name: "tile.cableIron.name", texture: "cable_iron3" }, "cable");
+CableRegistry.createBlock("cableIron1", { name: "iron_cable_1", texture: "cable_iron1" }, "cable");
+CableRegistry.createBlock("cableIron2", { name: "iron_cable_2", texture: "cable_iron2" }, "cable");
+CableRegistry.createBlock("cableIron3", { name: "iron_cable_3", texture: "cable_iron3" }, "cable");
 BlockRegistry.setBlockMaterial(BlockID.cableIron0, "stone");
 BlockRegistry.setBlockMaterial(BlockID.cableIron1, "stone");
 BlockRegistry.setBlockMaterial(BlockID.cableIron2, "stone");
 BlockRegistry.setBlockMaterial(BlockID.cableIron3, "stone");
-CableRegistry.createBlock("cableOptic", { name: "tile.cableOptic.name", texture: "cable_glass" }, "cable");
+CableRegistry.createBlock("cableOptic", { name: "glass_cable", texture: "cable_glass" }, "cable");
 BlockRegistry.setBlockMaterial(BlockID.cableOptic, "stone");
 // energy net
 CableRegistry.registerCable("cableTin", 32, 1);
@@ -4668,20 +5717,6 @@ CableRegistry.setupModel(BlockID.cableIron1, 8 / 16);
 CableRegistry.setupModel(BlockID.cableIron2, 10 / 16);
 CableRegistry.setupModel(BlockID.cableIron3, 12 / 16);
 CableRegistry.setupModel(BlockID.cableOptic, 1 / 4);
-BlockRegistry.createBlock("miningPipe", [
-    { name: "mining_pipe", texture: [["mining_pipe", 0]], inCreative: true },
-    { name: "tile.mining_pipe.name", texture: [["mining_pipe", 1]], inCreative: false }
-], { baseBlock: 1, destroyTime: 2, renderLayer: 3, sound: "stone" });
-Block.setBlockShape(BlockID.miningPipe, { x: 5 / 16, y: 0, z: 5 / 16 }, { x: 11 / 16, y: 1, z: 11 / 16 }, 0);
-BlockRegistry.setBlockMaterial(BlockID.miningPipe, "stone", 1);
-BlockRegistry.setDestroyLevel("miningPipe", 1);
-Callback.addCallback("PreLoaded", function () {
-    Recipes.addShaped({ id: BlockID.miningPipe, count: 8, data: 0 }, [
-        "p p",
-        "p p",
-        "pxp",
-    ], ['x', ItemID.treetap, 0, 'p', ItemID.plateIron, 0]);
-});
 var Agriculture;
 (function (Agriculture) {
     var CropTile = /** @class */ (function (_super) {
@@ -4735,8 +5770,8 @@ var Agriculture;
             this.checkGround();
             var entities = this.region.listEntitiesInAABB(this.x, this.y, this.z, this.x + 1, this.y + 1, this.z + 1, 1, false);
             if (entities.length > 0) {
-                for (var _i = 0, entities_3 = entities; _i < entities_3.length; _i++) {
-                    var playerUid = entities_3[_i];
+                for (var _i = 0, entities_4 = entities; _i < entities_4.length; _i++) {
+                    var playerUid = entities_4[_i];
                     this.checkPlayerRunning(playerUid);
                 }
             }
@@ -4800,6 +5835,7 @@ var Agriculture;
                 var stack = new ItemStack(id, count, data, extra);
                 if (this.applyWeedEx(stack, true)) {
                     this.data.dirty = true;
+                    player.decreaseCarriedItem();
                     return;
                 }
                 if (!this.crop && !this.data.crossingBase && card) {
@@ -4822,10 +5858,12 @@ var Agriculture;
         CropTile.prototype.destroyBlock = function (coords, playerUid) {
             _super.prototype.destroyBlock.call(this, coords, playerUid);
             this.region.dropItem(this.x, this.y, this.z, ItemID.cropStick, 1, 0);
-            if (this.data.crossingBase)
+            if (this.data.crossingBase) {
                 this.region.dropItem(this.x, this.y, this.z, ItemID.cropStick, 1, 0);
-            if (this.crop)
+            }
+            if (this.crop) {
                 this.crop.onLeftClick(this, playerUid);
+            }
         };
         CropTile.prototype.updateRender = function () {
             var texture = ["stick", 0];
@@ -4902,10 +5940,12 @@ var Agriculture;
         };
         CropTile.prototype.updateTerrainHumidity = function () {
             var humidity = Agriculture.BiomeBonusesManager.getHumidityBiomeBonus(this.x, this.z);
-            if (this.region.getBlockData(this.x, this.y - 1, this.z) == 7)
+            if (this.region.getBlockData(this.x, this.y - 1, this.z) == 7) {
                 humidity += 2;
-            if (this.data.storageWater >= 5)
+            }
+            if (this.data.storageWater >= 5) {
                 humidity += 2;
+            }
             humidity += (this.data.storageWater + 24) / 25;
             this.data.terrainHumidity = humidity;
         };
@@ -4928,12 +5968,14 @@ var Agriculture;
             var fresh = 9;
             for (var x = this.x - 1; x < this.x + 2; x++) {
                 for (var z = this.z - 1; z < this.z + 2; z++) {
-                    if (this.region.getBlockId(x, this.y, z))
+                    if (this.region.getBlockId(x, this.y, z)) {
                         fresh--;
+                    }
                 }
             }
-            if (this.region.canSeeSky(this.x, this.y + 1, this.z))
+            if (this.region.canSeeSky(this.x, this.y + 1, this.z)) {
                 value += 2;
+            }
             value += Math.floor(fresh / 2);
             value += height;
             this.data.terrainAirQuality = value;
@@ -4968,9 +6010,9 @@ var Agriculture;
         CropTile.prototype.performWeedWork = function () {
             var relativeCropCoords = this.getRelativeCoords();
             var coords = relativeCropCoords[MathUtil.randomInt(0, 3)];
-            var preCoords = [this.x + coords[0], this.y + coords[0], this.z + coords[0]];
-            if (this.region.getBlockId(preCoords[0], preCoords[1], preCoords[2]) == BlockID.crop) {
-                var TE = this.region.getTileEntity(preCoords[0], preCoords[1], preCoords[2]);
+            var preCoords = new Vector3(this.x + coords[0], this.y + coords[0], this.z + coords[0]);
+            if (this.region.getBlockId(preCoords) == BlockID.crop) {
+                var TE = this.region.getTileEntity(preCoords);
                 if (!TE.crop || (!TE.crop.isWeed(this) && !TE.hasWeedEX() && MathUtil.randomInt(0, 32) >= TE.data.statResistance)) {
                     var newGrowth = Math.max(this.data.statGrowth, TE.data.statGrowth);
                     if (newGrowth < 31 && MathUtil.randomInt(0, 1))
@@ -4983,8 +6025,8 @@ var Agriculture;
                     TE.updateRender();
                 }
             }
-            else if (this.region.getBlockId(preCoords[0], preCoords[1] - 1, preCoords[2]) == 60) {
-                this.region.setBlock(preCoords[0], preCoords[1] - 1, preCoords[2], 2, 0);
+            else if (this.region.getBlockId(preCoords.x, preCoords.y - 1, preCoords.z) == 60) {
+                this.region.setBlock(preCoords.x, preCoords.y - 1, preCoords.z, 2, 0);
             }
         };
         CropTile.prototype.reset = function () {
@@ -5141,8 +6183,6 @@ var Agriculture;
                     return false;
                 var amount = manual ? 50 : 100;
                 this.data.storageWeedEX += amount;
-                if (manual)
-                    stack.applyDamage(1);
                 return true;
             }
             return false;
@@ -5224,8 +6264,9 @@ var Agriculture;
                 if (Math.random() <= chance)
                     dropCount++;
             }
-            else if (Math.random() <= firstchance * 1.5)
+            else if (Math.random() <= firstchance * 1.5) {
                 dropCount++;
+            }
             var item = this.crop.getSeeds(this);
             if (item) {
                 this.region.dropItem(this.x, this.y, this.z, item.id, dropCount, item.data, item.extra);
@@ -5287,12 +6328,12 @@ Block.registerDropFunctionForID(BlockID.crop, function (coords, id, data, diggin
 TileEntity.registerPrototype(BlockID.crop, new Agriculture.CropTile());
 /// <reference path="../Generator.ts" />
 BlockRegistry.createBlock("primalGenerator", [
-    { name: "Generator", texture: [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["generator", 0], ["machine_side", 0], ["machine_side", 0]], inCreative: true }
+    { name: "Generator", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["generator_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.primalGenerator, "stone", 1);
-ItemName.addTierTooltip(BlockID.primalGenerator, 1);
-TileRenderer.setStandardModelWithRotation(BlockID.primalGenerator, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["generator", 0], ["machine_side", 0], ["machine_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.primalGenerator, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["generator", 1], ["machine_side", 0], ["machine_side", 0]]);
+ItemName.addProductionTooltip(BlockID.primalGenerator, "EU", EnergyProductionModifiers.FuelGenerator);
+TileRenderer.setStandardModelWithRotation(BlockID.primalGenerator, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["generator_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.primalGenerator, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["generator_front_on", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.primalGenerator);
 Callback.addCallback("PreLoaded", function () {
     Item.addCreativeGroup("EUGenerators", Translation.translate("Electric Generators"), [
@@ -5318,22 +6359,26 @@ Callback.addCallback("PreLoaded", function () {
         " a "
     ], ['#', ItemID.plateIron, 0, 'a', BlockID.ironFurnace, -1, 'x', ItemID.storageBattery, -1]);
 });
-var guiGenerator = MachineRegistry.createInventoryWindow("Generator", {
-    drawing: [
-        { type: "bitmap", x: 530, y: 144, bitmap: "energy_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 450, y: 150, bitmap: "fire_background", scale: GUI_SCALE },
-    ],
-    elements: {
-        "energyScale": { type: "scale", x: 530 + GUI_SCALE * 4, y: 144, direction: 0, value: 0.5, bitmap: "energy_bar_scale", scale: GUI_SCALE },
-        "burningScale": { type: "scale", x: 450, y: 150, direction: 1, value: 0.5, bitmap: "fire_scale", scale: GUI_SCALE },
-        "slotEnergy": { type: "slot", x: 441, y: 75 },
-        "slotFuel": { type: "slot", x: 441, y: 212 },
-        "textInfo1": { type: "text", x: 642, y: 142, width: 300, height: 30, text: "0/" },
-        "textInfo2": { type: "text", x: 642, y: 172, width: 300, height: 30, text: "10000" }
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiGenerator = MachineRegistry.createInventoryWindow("Generator", {
+        drawing: [
+            { type: "bitmap", x: 530, y: 144, bitmap: "energy_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 450, y: 150, bitmap: "fire_background", scale: GUI_SCALE },
+        ],
+        elements: {
+            "energyScale": { type: "scale", x: 530 + GUI_SCALE * 4, y: 144, direction: 0, value: 0.5, bitmap: "energy_bar_scale", scale: GUI_SCALE },
+            "burningScale": { type: "scale", x: 450, y: 150, direction: 1, value: 0.5, bitmap: "fire_scale", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_generatorFuel");
+                    }
+                } },
+            "slotEnergy": { type: "slot", x: 441, y: 75 },
+            "slotFuel": { type: "slot", x: 441, y: 212 },
+            "textInfo1": { type: "text", x: 642, y: 142, width: 300, height: 30, text: "0/" },
+            "textInfo2": { type: "text", x: 642, y: 172, width: 300, height: 30, text: "10000" }
+        }
+    });
     var FuelGenerator = /** @class */ (function (_super) {
         __extends(FuelGenerator, _super);
         function FuelGenerator() {
@@ -5370,13 +6415,14 @@ var Machine;
         FuelGenerator.prototype.onTick = function () {
             StorageInterface.checkHoppers(this);
             var newActive = false;
-            var energyStorage = this.getEnergyStorage();
-            if (this.data.energy + 10 <= energyStorage) {
+            var energyCapacity = this.getEnergyCapacity();
+            var energyOutput = EnergyProductionModifiers.FuelGenerator;
+            if (this.data.energy + energyOutput <= energyCapacity) {
                 if (this.data.burn <= 0) {
                     this.data.burn = this.data.burnMax = this.consumeFuel("slotFuel") / 4;
                 }
                 if (this.data.burn > 0) {
-                    this.data.energy = Math.min(this.data.energy + 10, energyStorage);
+                    this.data.energy = Math.min(this.data.energy + energyOutput, energyCapacity);
                     this.data.burn--;
                     newActive = true;
                 }
@@ -5391,7 +6437,7 @@ var Machine;
         FuelGenerator.prototype.getOperationSound = function () {
             return "GeneratorLoop.ogg";
         };
-        FuelGenerator.prototype.getEnergyStorage = function () {
+        FuelGenerator.prototype.getEnergyCapacity = function () {
             return 10000;
         };
         FuelGenerator.prototype.canRotate = function (side) {
@@ -5409,12 +6455,12 @@ var Machine;
     });
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("geothermalGenerator", [
-    { name: "Geothermal Generator", texture: [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["geothermal_generator", 0], ["machine_side", 0], ["machine_side", 0]], inCreative: true }
+    { name: "Geothermal Generator", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["geo_generator_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.geothermalGenerator, "stone", 1);
-ItemName.addTierTooltip(BlockID.geothermalGenerator, 1);
-TileRenderer.setStandardModelWithRotation(BlockID.geothermalGenerator, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["geothermal_generator", 0], ["machine_side", 0], ["machine_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.geothermalGenerator, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["geothermal_generator", 1], ["machine_side", 0], ["machine_side", 0]]);
+ItemName.addProductionTooltip(BlockID.geothermalGenerator, "EU", EnergyProductionModifiers.GeothermalGenerator);
+TileRenderer.setStandardModelWithRotation(BlockID.geothermalGenerator, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["geo_generator_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.geothermalGenerator, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["geo_generator_front_on", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.geothermalGenerator);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.geothermalGenerator, count: 1, data: 0 }, [
@@ -5423,22 +6469,22 @@ Callback.addCallback("PreLoaded", function () {
         "b#b"
     ], ['#', BlockID.primalGenerator, -1, 'a', ItemID.cellEmpty, 0, 'b', ItemID.casingIron, 0, 'x', 20, -1]);
 });
-var guiGeothermalGenerator = MachineRegistry.createInventoryWindow("Geothermal Generator", {
-    drawing: [
-        { type: "bitmap", x: 702, y: 91, bitmap: "energy_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 581, y: 75, bitmap: "liquid_bar", scale: GUI_SCALE },
-        { type: "bitmap", x: 459, y: 139, bitmap: "liquid_bar_arrow", scale: GUI_SCALE }
-    ],
-    elements: {
-        "energyScale": { type: "scale", x: 702 + 4 * GUI_SCALE, y: 91, direction: 0, value: 0.5, bitmap: "energy_bar_scale", scale: GUI_SCALE },
-        "liquidScale": { type: "scale", x: 581 + 4 * GUI_SCALE, y: 75 + 4 * GUI_SCALE, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE },
-        "slot1": { type: "slot", x: 440, y: 75 },
-        "slot2": { type: "slot", x: 440, y: 183 },
-        "slotEnergy": { type: "slot", x: 725, y: 165 }
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiGeothermalGenerator = MachineRegistry.createInventoryWindow("Geothermal Generator", {
+        drawing: [
+            { type: "bitmap", x: 702, y: 91, bitmap: "energy_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 581, y: 75, bitmap: "liquid_bar", scale: GUI_SCALE },
+            { type: "bitmap", x: 459, y: 139, bitmap: "liquid_bar_arrow", scale: GUI_SCALE }
+        ],
+        elements: {
+            "energyScale": { type: "scale", x: 702 + 4 * GUI_SCALE, y: 91, direction: 0, value: 0.5, bitmap: "energy_bar_scale", scale: GUI_SCALE },
+            "liquidScale": { type: "scale", x: 581 + 4 * GUI_SCALE, y: 75 + 4 * GUI_SCALE, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE },
+            "slot1": { type: "slot", x: 440, y: 75 },
+            "slot2": { type: "slot", x: 440, y: 183 },
+            "slotEnergy": { type: "slot", x: 725, y: 165 }
+        }
+    });
     var GeothermalGenerator = /** @class */ (function (_super) {
         __extends(GeothermalGenerator, _super);
         function GeothermalGenerator() {
@@ -5452,8 +6498,8 @@ var Machine;
             StorageInterface.setSlotValidatePolicy(this.container, "slotEnergy", function (name, id) {
                 return ChargeItemRegistry.isValidItem(id, "Eu", 1);
             });
-            StorageInterface.setSlotValidatePolicy(this.container, "slot1", function (name, id, count, data) {
-                return LiquidItemRegistry.getItemLiquid(id, data) == "lava";
+            StorageInterface.setSlotValidatePolicy(this.container, "slot1", function (name, id, count, data, extra) {
+                return LiquidItemRegistry.getItemLiquid(id, data, extra) == "lava";
             });
             this.container.setSlotAddTransferPolicy("slot2", function () { return 0; });
         };
@@ -5471,8 +6517,9 @@ var Machine;
             var slot1 = this.container.getSlot("slot1");
             var slot2 = this.container.getSlot("slot2");
             this.liquidTank.getLiquidFromItem(slot1, slot2);
-            if (this.liquidTank.getAmount("lava") >= 1 && this.data.energy + 20 <= this.getEnergyStorage()) {
-                this.data.energy += 20;
+            var energyOutput = EnergyProductionModifiers.GeothermalGenerator;
+            if (this.liquidTank.getAmount("lava") >= 1 && this.data.energy + energyOutput <= this.getEnergyCapacity()) {
+                this.data.energy += energyOutput;
                 this.liquidTank.getLiquid(1);
                 this.setActive(true);
             }
@@ -5487,7 +6534,7 @@ var Machine;
         GeothermalGenerator.prototype.getOperationSound = function () {
             return "GeothermalLoop.ogg";
         };
-        GeothermalGenerator.prototype.getEnergyStorage = function () {
+        GeothermalGenerator.prototype.getEnergyCapacity = function () {
             return 10000;
         };
         GeothermalGenerator.prototype.canRotate = function (side) {
@@ -5497,22 +6544,22 @@ var Machine;
     }(Machine.Generator));
     Machine.GeothermalGenerator = GeothermalGenerator;
     MachineRegistry.registerPrototype(BlockID.geothermalGenerator, new GeothermalGenerator());
-    MachineRegistry.createStorageInterface(BlockID.geothermalGenerator, {
+    MachineRegistry.createFluidStorageInterface(BlockID.geothermalGenerator, {
         slots: {
             "slot1": { input: true },
             "slot2": { output: true }
         },
-        isValidInput: function (item) { return (LiquidItemRegistry.getItemLiquid(item.id, item.data) == "lava"); },
+        isValidInput: function (item) { return (LiquidItemRegistry.getItemLiquid(item.id, item.data, item.extra) == "lava"); },
         canTransportLiquid: function (liquid) { return false; }
     });
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("semifluidGenerator", [
-    { name: "Semifluid Generator", texture: [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["semifluid_generator_front", 0], ["semifluid_generator_side", 0], ["semifluid_generator_side", 0]], inCreative: true }
+    { name: "Semifluid Generator", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["semifluid_generator_front", 0], ["semifluid_generator_side", 0], ["semifluid_generator_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.semifluidGenerator, "stone", 1);
-ItemName.addTierTooltip(BlockID.semifluidGenerator, 1);
-TileRenderer.setStandardModelWithRotation(BlockID.semifluidGenerator, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["semifluid_generator_front", 0], ["semifluid_generator_side", 0], ["semifluid_generator_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.semifluidGenerator, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["semifluid_generator_front", 1], ["semifluid_generator_side", 1], ["semifluid_generator_side", 1]]);
+ItemName.addProductionTooltip(BlockID.semifluidGenerator, "EU", 8, 16);
+TileRenderer.setStandardModelWithRotation(BlockID.semifluidGenerator, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["semifluid_generator_front", 0], ["semifluid_generator_side", 0], ["semifluid_generator_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.semifluidGenerator, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["semifluid_generator_front_on", 0], ["semifluid_generator_side_on", 0], ["semifluid_generator_side_on", 0]]);
 TileRenderer.setRotationFunction(BlockID.semifluidGenerator);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.semifluidGenerator, count: 1, data: 0 }, [
@@ -5527,26 +6574,26 @@ MachineRecipeRegistry.registerFluidRecipes("fluidFuel", {
     "biogas": { power: 16, amount: 10 },
     "ethanol": { power: 16, amount: 10 },
 });
-var guiSemifluidGenerator = MachineRegistry.createInventoryWindow("Semifluid Generator", {
-    drawing: [
-        { type: "bitmap", x: 702, y: 91, bitmap: "energy_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 581, y: 75, bitmap: "liquid_bar", scale: GUI_SCALE }
-    ],
-    elements: {
-        "scaleArrow": { type: "image", x: 459, y: 139, bitmap: "liquid_bar_arrow", scale: GUI_SCALE, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_fluidFuel");
-                }
-            } },
-        "energyScale": { type: "scale", x: 702 + 4 * GUI_SCALE, y: 91, direction: 0, value: 0.5, bitmap: "energy_bar_scale", scale: GUI_SCALE },
-        "liquidScale": { type: "scale", x: 581 + 4 * GUI_SCALE, y: 75 + 4 * GUI_SCALE, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE },
-        "slot1": { type: "slot", x: 440, y: 75 },
-        "slot2": { type: "slot", x: 440, y: 183 },
-        "slotEnergy": { type: "slot", x: 725, y: 165 }
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiSemifluidGenerator = MachineRegistry.createInventoryWindow("Semifluid Generator", {
+        drawing: [
+            { type: "bitmap", x: 702, y: 91, bitmap: "energy_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 581, y: 75, bitmap: "liquid_bar", scale: GUI_SCALE }
+        ],
+        elements: {
+            "scaleArrow": { type: "image", x: 459, y: 139, bitmap: "liquid_bar_arrow", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_fluidFuel");
+                    }
+                } },
+            "energyScale": { type: "scale", x: 702 + 4 * GUI_SCALE, y: 91, direction: 0, value: 0.5, bitmap: "energy_bar_scale", scale: GUI_SCALE },
+            "liquidScale": { type: "scale", x: 581 + 4 * GUI_SCALE, y: 75 + 4 * GUI_SCALE, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE },
+            "slot1": { type: "slot", x: 440, y: 75 },
+            "slot2": { type: "slot", x: 440, y: 183 },
+            "slotEnergy": { type: "slot", x: 725, y: 165 }
+        }
+    });
     var FluidGenerator = /** @class */ (function (_super) {
         __extends(FluidGenerator, _super);
         function FluidGenerator() {
@@ -5567,11 +6614,9 @@ var Machine;
             StorageInterface.setSlotValidatePolicy(this.container, "slotEnergy", function (name, id) {
                 return ChargeItemRegistry.isValidItem(id, "Eu", 1);
             });
-            StorageInterface.setSlotValidatePolicy(this.container, "slot1", function (name, id, count, data) {
-                var empty = LiquidItemRegistry.getEmptyItem(id, data);
-                if (!empty)
-                    return false;
-                return MachineRecipeRegistry.hasRecipeFor("fluidFuel", empty.liquid);
+            StorageInterface.setSlotValidatePolicy(this.container, "slot1", function (name, id, count, data, extra) {
+                var liquid = LiquidItemRegistry.getItemLiquid(id, data, extra);
+                return liquid && !!MachineRecipeRegistry.getFluidRecipe("fluidFuel", liquid);
             });
             this.container.setSlotAddTransferPolicy("slot2", function () { return 0; });
         };
@@ -5595,7 +6640,7 @@ var Machine;
             if (this.data.fuel <= 0) {
                 var liquid = this.liquidTank.getLiquidStored();
                 var fuel = this.getFuel(liquid);
-                var freeCapacity = this.getEnergyStorage() - this.data.energy;
+                var freeCapacity = this.getEnergyCapacity() - this.data.energy;
                 if (fuel && this.liquidTank.getAmount() >= fuel.amount && fuel.power * fuel.amount <= freeCapacity) {
                     this.liquidTank.getLiquid(fuel.amount);
                     this.data.fuel = fuel.amount;
@@ -5620,7 +6665,7 @@ var Machine;
         FluidGenerator.prototype.getOperationSound = function () {
             return "GeothermalLoop.ogg";
         };
-        FluidGenerator.prototype.getEnergyStorage = function () {
+        FluidGenerator.prototype.getEnergyCapacity = function () {
             return 1000;
         };
         FluidGenerator.prototype.canRotate = function (side) {
@@ -5630,49 +6675,39 @@ var Machine;
     }(Machine.Generator));
     Machine.FluidGenerator = FluidGenerator;
     MachineRegistry.registerPrototype(BlockID.semifluidGenerator, new FluidGenerator());
-    MachineRegistry.createStorageInterface(BlockID.semifluidGenerator, {
+    MachineRegistry.createFluidStorageInterface(BlockID.semifluidGenerator, {
         slots: {
             "slot1": { input: true },
             "slot2": { output: true }
         },
         isValidInput: function (item) {
-            var empty = LiquidItemRegistry.getEmptyItem(item.id, item.data);
-            if (!empty)
-                return false;
-            return this.canReceiveLiquid(empty.liquid);
+            var liquid = LiquidItemRegistry.getItemLiquid(item.id, item.data, item.extra);
+            return liquid && !!MachineRecipeRegistry.getFluidRecipe("fluidFuel", liquid);
         },
         canTransportLiquid: function () { return false; }
     });
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("solarPanel", [
-    { name: "Solar Panel", texture: [["machine_bottom", 0], ["solar_panel", 0], ["machine", 0], ["machine", 0], ["machine", 0], ["machine", 0]], inCreative: true }
+    { name: "Solar Panel", texture: [["ic_machine_bottom", 0], ["solar_panel_top", 0], ["ic_machine", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.solarPanel, "stone", 1);
-ItemName.addTierTooltip(BlockID.solarPanel, 1);
+ItemName.addProductionTooltip(BlockID.solarPanel, "EU", EnergyProductionModifiers.SolarPanel);
 Callback.addCallback("PreLoaded", function () {
-    if (IC2Config.hardRecipes) {
-        Recipes.addShaped({ id: BlockID.solarPanel, count: 1, data: 0 }, [
-            "aaa",
-            "xxx",
-            "b#b"
-        ], ['#', BlockID.machineBlockBasic, 0, 'x', ItemID.dustLapis, 0, 'b', ItemID.circuitBasic, 0, 'a', 20, -1]);
-    }
-    else {
-        Recipes.addShaped({ id: BlockID.solarPanel, count: 1, data: 0 }, [
-            "aaa",
-            "xxx",
-            "b#b"
-        ], ['#', BlockID.machineBlockBasic, 0, 'x', ItemID.dustCoal, 0, 'b', ItemID.circuitBasic, 0, 'a', 20, -1]);
-    }
-});
-var guiSolarPanel = MachineRegistry.createInventoryWindow("Solar Panel", {
-    elements: {
-        "slotEnergy": { type: "slot", x: 600, y: 130 },
-        "sun": { type: "image", x: 608, y: 194, bitmap: "sun_off", scale: GUI_SCALE }
-    }
+    var dust = IC2Config.hardRecipes ? ItemID.dustLapis : ItemID.dustCoal;
+    Recipes.addShaped({ id: BlockID.solarPanel, count: 1, data: 0 }, [
+        "aaa",
+        "xxx",
+        "b#b"
+    ], ['#', BlockID.machineBlockBasic, 0, 'x', dust, 0, 'b', ItemID.circuitBasic, 0, 'a', 20, -1]);
 });
 var Machine;
 (function (Machine) {
+    var guiSolarPanel = MachineRegistry.createInventoryWindow("Solar Panel", {
+        elements: {
+            "slotEnergy": { type: "slot", x: 600, y: 130 },
+            "sun": { type: "image", x: 608, y: 194, bitmap: "sun_off", scale: GUI_SCALE }
+        }
+    });
     var SolarGenerator = /** @class */ (function (_super) {
         __extends(SolarGenerator, _super);
         function SolarGenerator() {
@@ -5688,6 +6723,7 @@ var Machine;
             return guiSolarPanel;
         };
         SolarGenerator.prototype.onInit = function () {
+            _super.prototype.onInit.call(this);
             this.data.canSeeSky = this.region.canSeeSky(this.x, this.y + 1, this.z);
         };
         SolarGenerator.prototype.setupContainer = function () {
@@ -5698,44 +6734,47 @@ var Machine;
                 this.data.canSeeSky = this.region.canSeeSky(this.x, this.y + 1, this.z);
             }
             if (this.data.canSeeSky && this.region.getLightLevel(this.x, this.y + 1, this.z) == 15) {
-                this.data.energy = 1;
+                this.data.energy = EnergyProductionModifiers.SolarPanel;
                 this.chargeSlot("slotEnergy");
-                this.container.sendEvent("setSolarElement", "on");
+                this.container.sendEvent("setSunElement", "on");
                 this.container.sendChanges();
             }
             else {
-                this.container.sendEvent("setSolarElement", "off");
+                this.data.energy = 0;
+                this.container.sendEvent("setSunElement", "off");
             }
         };
-        SolarGenerator.prototype.getEnergyStorage = function () {
-            return 1;
+        SolarGenerator.prototype.getEnergyCapacity = function () {
+            return 32;
         };
-        SolarGenerator.prototype.setSolarElement = function (container, window, content, data) {
+        SolarGenerator.prototype.onSetSunElement = function (container, window, content, data) {
             if (content) {
                 content.elements["sun"].bitmap = "sun_" + data;
             }
         };
         __decorate([
-            Machine.ContainerEvent(Side.Client)
-        ], SolarGenerator.prototype, "setSolarElement", null);
+            Machine.ContainerEvent(Side.Client, "setSunElement")
+        ], SolarGenerator.prototype, "onSetSunElement", null);
         return SolarGenerator;
     }(Machine.Generator));
     Machine.SolarGenerator = SolarGenerator;
     MachineRegistry.registerPrototype(BlockID.solarPanel, new SolarGenerator());
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("genWindmill", [
-    { name: "Wind Mill", texture: [["machine_bottom", 0], ["machine_top", 0], ["windmill", 0], ["windmill", 0], ["machine_side", 0], ["machine_side", 0]], inCreative: true }
+    { name: "Wind Mill", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["windmill", 0], ["windmill", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.genWindmill, "stone", 1);
-ItemName.addTierTooltip(BlockID.genWindmill, 1);
-TileRenderer.setStandardModelWithRotation(BlockID.genWindmill, 2, [["machine_bottom", 0], ["machine_top", 0], ["windmill", 0], ["windmill", 0], ["machine_side", 0], ["machine_side", 0]]);
+ItemName.addProductionTooltip(BlockID.genWindmill, "EU", 0, EnergyProductionModifiers.WindGenerator);
+TileRenderer.setStandardModelWithRotation(BlockID.genWindmill, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["windmill", 0], ["windmill", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.genWindmill, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["windmill_rotating", 0], ["windmill_rotating", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.genWindmill);
 Callback.addCallback("PreLoaded", function () {
+    var plate = IC2Config.hardRecipes ? ItemID.carbonPlate : ItemID.plateIron;
     Recipes.addShaped({ id: BlockID.genWindmill, count: 1, data: 0 }, [
         "x x",
         " # ",
         "xcx"
-    ], ['#', BlockID.primalGenerator, -1, 'x', ItemID.plateSteel, 0, 'c', ItemID.coil, 0]);
+    ], ['#', BlockID.primalGenerator, -1, 'x', plate, 0, 'c', ItemID.coil, 0]);
 });
 var Machine;
 (function (Machine) {
@@ -5763,20 +6802,26 @@ var Machine;
             this.data.blockCount = blockCount;
         };
         WindGenerator.prototype.onInit = function () {
-            if (this.dimension != 0)
+            _super.prototype.onInit.call(this);
+            if (this.dimension != 0) {
                 this.selfDestroy();
+            }
         };
-        WindGenerator.prototype.energyTick = function (type, src) {
+        WindGenerator.prototype.onTick = function () {
             if (++this.data.ticker % 128 == 0) {
                 if (this.data.ticker % 1024 == 0) {
                     this.updateBlockCount();
                 }
-                var wind = WindSim.getWindAt(this.y) * (1 - this.data.blockCount / 567);
-                if (wind < 0)
-                    wind = 0;
-                this.data.output = Math.round(wind / 3 * 10) / 10;
+                var wind = WindSim.getWindAt(this.blockSource, this.x, this.y, this.z) * (1 - this.data.blockCount / 567);
+                var rawOutput = wind / 30 * EnergyProductionModifiers.WindGenerator;
+                this.data.output = Math.round(rawOutput * 10) / 10;
             }
-            src.add(this.data.output);
+            this.setActive(this.data.output > 0);
+        };
+        WindGenerator.prototype.energyTick = function (type, src) {
+            if (this.data.output > 0) {
+                src.add(this.data.output);
+            }
         };
         WindGenerator.prototype.canRotate = function (side) {
             return side > 1;
@@ -5787,18 +6832,21 @@ var Machine;
     MachineRegistry.registerPrototype(BlockID.genWindmill, new WindGenerator());
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("genWatermill", [
-    { name: "Water Mill", texture: [["machine_bottom", 0], ["machine_top", 0], ["watermill_back", 0], ["watermill_front", 0], ["watermill_left", 0], ["watermill_right", 0]], inCreative: true }
+    { name: "Water Mill", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["watermill_back", 0], ["windmill", 0], ["watermill_left", 0], ["watermill_right", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.genWatermill, "stone", 1);
-ItemName.addTierTooltip(BlockID.genWatermill, 1);
-TileRenderer.setStandardModelWithRotation(BlockID.genWatermill, 2, [["machine_bottom", 0], ["machine_top", 0], ["watermill_back", 0], ["watermill_front", 0], ["watermill_left", 0], ["watermill_right", 0]]);
+ItemName.addProductionTooltip(BlockID.genWatermill, "EU", 0, EnergyProductionModifiers.WaterGenerator);
+TileRenderer.setStandardModelWithRotation(BlockID.genWatermill, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["watermill_back", 0], ["windmill", 0], ["watermill_left", 0], ["watermill_right", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.genWatermill, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["watermill_back", 0], ["windmill_rotating", 0], ["watermill_left", 0], ["watermill_right", 0]]);
 TileRenderer.setRotationFunction(BlockID.genWatermill);
 Callback.addCallback("PreLoaded", function () {
+    var plate = IC2Config.hardRecipes ? ItemID.plateSteel : ItemID.plateIron;
+    var casing = IC2Config.hardRecipes ? ItemID.casingSteel : ItemID.casingIron;
     Recipes.addShaped({ id: BlockID.genWatermill, count: 1, data: 0 }, [
         "x x",
         "a#a",
         "xcx"
-    ], ['#', BlockID.primalGenerator, -1, 'x', ItemID.plateSteel, 0, 'a', ItemID.casingSteel, 0, 'c', ItemID.coil, 0]);
+    ], ['#', BlockID.primalGenerator, -1, 'x', plate, 0, 'a', casing, 0, 'c', ItemID.coil, 0]);
 });
 var Machine;
 (function (Machine) {
@@ -5813,7 +6861,6 @@ var Machine;
                 ticker: -1,
                 blockCount: 0
             };
-            _this.BASE_POWER = 3;
             return _this;
         }
         WaterGenerator.prototype.isOcean = function (biome) {
@@ -5837,6 +6884,7 @@ var Machine;
             return -1;
         };
         WaterGenerator.prototype.onInit = function () {
+            _super.prototype.onInit.call(this);
             if (this.data.biome == null) {
                 this.data.biome = this.getBiome(this.x, this.z);
                 this.data.ticker = -1; // for old blocks
@@ -5860,10 +6908,10 @@ var Machine;
             }
             this.data.blockCount = blockCount;
         };
-        WaterGenerator.prototype.energyTick = function (type, src) {
+        WaterGenerator.prototype.onTick = function () {
             if (++this.data.ticker % 128 == 0) {
                 this.updateBlockCount();
-                var output = this.BASE_POWER;
+                var output = EnergyProductionModifiers.WaterGenerator;
                 if (this.isOcean(this.data.biome)) {
                     output *= 1.5 * Math.sin(World.getWorldTime() % 6000 / (6000 / Math.PI));
                 }
@@ -5876,10 +6924,15 @@ var Machine;
                         output *= 1.5;
                     }
                 }
-                output *= this.data.blockCount / 26;
+                output *= this.data.blockCount / 25;
                 this.data.output = Math.round(output * 10) / 10;
             }
-            src.add(this.data.output);
+            this.setActive(this.data.output > 0);
+        };
+        WaterGenerator.prototype.energyTick = function (type, src) {
+            if (this.data.output > 0) {
+                src.add(this.data.output);
+            }
         };
         WaterGenerator.prototype.canRotate = function (side) {
             return side > 1;
@@ -5890,12 +6943,12 @@ var Machine;
     MachineRegistry.registerPrototype(BlockID.genWatermill, new WaterGenerator());
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("rtGenerator", [
-    { name: "Radioisotope Thermoelectric Generator", texture: [["machine_bottom", 0], ["rt_generator_top", 0], ["rt_generator_side", 0], ["rt_generator_side", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]], inCreative: true },
+    { name: "Radioisotope Thermoelectric Generator", texture: [["ic_machine_bottom", 0], ["rt_generator_top", 0], ["rt_generator_side", 0], ["rt_generator_side", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]], inCreative: true },
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.rtGenerator, "stone", 1);
-ItemName.addTierTooltip(BlockID.rtGenerator, 1);
-TileRenderer.setStandardModel(BlockID.rtGenerator, 0, [["machine_bottom", 0], ["rt_generator_top", 0], ["rt_generator_side", 0], ["rt_generator_side", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]]);
-TileRenderer.registerRenderModel(BlockID.rtGenerator, 0, [["machine_bottom", 0], ["rt_generator_top", 1], ["rt_generator_side", 0], ["rt_generator_side", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]]);
+ItemName.addProductionTooltip(BlockID.rtGenerator, "EU", EnergyProductionModifiers.RTGenerator, 32 * EnergyProductionModifiers.RTGenerator);
+TileRenderer.setStandardModel(BlockID.rtGenerator, 0, [["ic_machine_bottom", 0], ["rt_generator_top", 0], ["rt_generator_side", 0], ["rt_generator_side", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]]);
+TileRenderer.registerRenderModel(BlockID.rtGenerator, 0, [["ic_machine_bottom", 0], ["rt_generator_top_on", 0], ["rt_generator_side", 0], ["rt_generator_side", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]]);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.rtGenerator, count: 1, data: 0 }, [
         "ccc",
@@ -5903,24 +6956,24 @@ Callback.addCallback("PreLoaded", function () {
         "cxc"
     ], ['#', BlockID.reactorChamber, 0, 'x', BlockID.primalGenerator, 0, 'c', ItemID.casingIron, 0]);
 });
-var guiRTGenerator = MachineRegistry.createInventoryWindow("Radioisotope Thermoelectric Generator", {
-    drawing: [
-        { type: "bitmap", x: 630, y: 150, bitmap: "energy_bar_background", scale: GUI_SCALE },
-    ],
-    elements: {
-        "slot0": { type: "slot", x: 420, y: 120 },
-        "slot1": { type: "slot", x: 480, y: 120 },
-        "slot2": { type: "slot", x: 540, y: 120 },
-        "slot3": { type: "slot", x: 420, y: 180 },
-        "slot4": { type: "slot", x: 480, y: 180 },
-        "slot5": { type: "slot", x: 540, y: 180 },
-        "energyScale": { type: "scale", x: 630 + GUI_SCALE * 4, y: 150, direction: 0, value: 0.5, bitmap: "energy_bar_scale", scale: GUI_SCALE },
-        "textInfo1": { type: "text", x: 742, y: 148, width: 300, height: 30, text: "0/" },
-        "textInfo2": { type: "text", x: 742, y: 178, width: 300, height: 30, text: "10000" }
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiRTGenerator = MachineRegistry.createInventoryWindow("Radioisotope Thermoelectric Generator", {
+        drawing: [
+            { type: "bitmap", x: 630, y: 150, bitmap: "energy_bar_background", scale: GUI_SCALE },
+        ],
+        elements: {
+            "slot0": { type: "slot", x: 420, y: 120 },
+            "slot1": { type: "slot", x: 480, y: 120 },
+            "slot2": { type: "slot", x: 540, y: 120 },
+            "slot3": { type: "slot", x: 420, y: 180 },
+            "slot4": { type: "slot", x: 480, y: 180 },
+            "slot5": { type: "slot", x: 540, y: 180 },
+            "energyScale": { type: "scale", x: 630 + GUI_SCALE * 4, y: 150, direction: 0, value: 0.5, bitmap: "energy_bar_scale", scale: GUI_SCALE },
+            "textInfo1": { type: "text", x: 742, y: 148, width: 300, height: 30, text: "0/" },
+            "textInfo2": { type: "text", x: 742, y: 178, width: 300, height: 30, text: "10000" }
+        }
+    });
     var RTGenerator = /** @class */ (function (_super) {
         __extends(RTGenerator, _super);
         function RTGenerator() {
@@ -5933,16 +6986,17 @@ var Machine;
             return guiRTGenerator;
         };
         RTGenerator.prototype.onTick = function () {
-            var output = 0.5;
+            var numberOfPellets = 0;
             for (var i = 0; i < 6; i++) {
                 var slot = this.container.getSlot("slot" + i);
                 if (slot.id == ItemID.rtgPellet) {
-                    output *= 2;
+                    numberOfPellets++;
                 }
             }
-            if (output >= 1) {
+            if (numberOfPellets > 0) {
                 this.setActive(true);
-                this.data.energy = Math.min(this.data.energy + output, this.getEnergyStorage());
+                var output = EnergyProductionModifiers.RTGenerator * 1 << (numberOfPellets - 1); // fast power of 2
+                this.data.energy = Math.min(this.data.energy + output, this.getEnergyCapacity());
             }
             else {
                 this.setActive(false);
@@ -5951,7 +7005,7 @@ var Machine;
             this.container.setText("textInfo1", this.data.energy + "/");
             this.container.sendChanges();
         };
-        RTGenerator.prototype.getEnergyStorage = function () {
+        RTGenerator.prototype.getEnergyCapacity = function () {
             return 10000;
         };
         return RTGenerator;
@@ -5961,11 +7015,11 @@ var Machine;
 })(Machine || (Machine = {}));
 /// <reference path="../IHeatConsumer.ts" />
 BlockRegistry.createBlock("stirlingGenerator", [
-    { name: "Stirling Generator", texture: [["machine_bottom", 0], ["machine_top", 0], ["stirling_generator", 0], ["heat_pipe", 0], ["machine_side", 0], ["machine_side", 0]], inCreative: true }
+    { name: "Stirling Generator", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["stirling_generator_back", 0], ["machine_heat_pipe", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.stirlingGenerator, "stone", 1);
-TileRenderer.setHandAndUiModel(BlockID.stirlingGenerator, 0, [["machine_bottom", 0], ["machine_top", 0], ["stirling_generator", 0], ["heat_pipe", 0], ["machine_side", 0], ["machine_side", 0]]);
-TileRenderer.setStandardModelWithRotation(BlockID.stirlingGenerator, 0, [["machine_bottom", 0], ["machine_top", 0], ["stirling_generator", 0], ["heat_pipe", 0], ["machine_side", 0], ["machine_side", 0]], true);
+TileRenderer.setHandAndUiModel(BlockID.stirlingGenerator, 0, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["stirling_generator_back", 0], ["machine_heat_pipe", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.stirlingGenerator, 0, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["stirling_generator_back", 0], ["machine_heat_pipe", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]], true);
 TileRenderer.setRotationFunction(BlockID.stirlingGenerator, true);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.stirlingGenerator, count: 1, data: 0 }, [
@@ -6005,6 +7059,9 @@ var Machine;
             }
             return 0;
         };
+        StirlingGenerator.prototype.getEnergyCapacity = function () {
+            return this.data.energy;
+        };
         StirlingGenerator.prototype.energyTick = function (type, src) {
             if (src.add(this.data.energy) < this.data.energy) {
                 this.data.energy = 0;
@@ -6016,12 +7073,13 @@ var Machine;
     MachineRegistry.registerPrototype(BlockID.stirlingGenerator, new StirlingGenerator());
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("electricHeatGenerator", [
-    { name: "Electric Heater", texture: [["machine_bottom", 0], ["ind_furnace_side", 0], ["heat_generator_side", 0], ["heat_pipe", 0], ["ind_furnace_side", 0], ["ind_furnace_side", 0]], inCreative: true },
+    { name: "Electric Heater", texture: [["ic_machine_bottom", 0], ["electric_heat_generator", 0], ["heat_generator_side", 0], ["machine_heat_pipe", 0], ["electric_heat_generator", 0], ["electric_heat_generator", 0]], inCreative: true },
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.electricHeatGenerator, "stone", 1);
 ItemName.addTierTooltip(BlockID.electricHeatGenerator, 4);
-TileRenderer.setStandardModelWithRotation(BlockID.electricHeatGenerator, 0, [["machine_bottom", 0], ["ind_furnace_side", 0], ["heat_generator_side", 0], ["heat_pipe", 0], ["ind_furnace_side", 0], ["ind_furnace_side", 0]], true);
-TileRenderer.registerModelWithRotation(BlockID.electricHeatGenerator, 0, [["machine_bottom", 0], ["ind_furnace_side", 1], ["heat_generator_side", 1], ["heat_pipe", 1], ["ind_furnace_side", 1], ["ind_furnace_side", 1]], true);
+ItemName.addProductionTooltip(BlockID.electricHeatGenerator, "HU", 1, 100);
+TileRenderer.setStandardModelWithRotation(BlockID.electricHeatGenerator, 0, [["ic_machine_bottom", 0], ["electric_heat_generator", 0], ["heat_generator_side", 0], ["machine_heat_pipe", 0], ["electric_heat_generator", 0], ["electric_heat_generator", 0]], true);
+TileRenderer.registerModelWithRotation(BlockID.electricHeatGenerator, 0, [["ic_machine_bottom", 0], ["electric_heat_generator_on", 0], ["heat_generator_side_on", 0], ["machine_heat_pipe_on", 0], ["electric_heat_generator_on", 0], ["electric_heat_generator_on", 0]], true);
 TileRenderer.setRotationFunction(BlockID.electricHeatGenerator, true);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.electricHeatGenerator, count: 1, data: 0 }, [
@@ -6030,30 +7088,30 @@ Callback.addCallback("PreLoaded", function () {
         "xax"
     ], ['#', ItemID.circuitBasic, 0, 'x', ItemID.casingIron, 0, 'a', ItemID.heatConductor, 0, 'b', ItemID.storageBattery, -1]);
 });
-var guiElectricHeatGenerator = MachineRegistry.createInventoryWindow("Electric Heater", {
-    drawing: [
-        { type: "bitmap", x: 342, y: 110, bitmap: "energy_small_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 461, y: 250, bitmap: "heat_generator_info", scale: GUI_SCALE }
-    ],
-    elements: {
-        "slot0": { type: "slot", x: 440, y: 120 },
-        "slot1": { type: "slot", x: 500, y: 120 },
-        "slot2": { type: "slot", x: 560, y: 120 },
-        "slot3": { type: "slot", x: 620, y: 120 },
-        "slot4": { type: "slot", x: 680, y: 120 },
-        "slot5": { type: "slot", x: 440, y: 180 },
-        "slot6": { type: "slot", x: 500, y: 180 },
-        "slot7": { type: "slot", x: 560, y: 180 },
-        "slot8": { type: "slot", x: 620, y: 180 },
-        "slot9": { type: "slot", x: 680, y: 180 },
-        "slotEnergy": { type: "slot", x: 340, y: 180 },
-        "energyScale": { type: "scale", x: 342, y: 110, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "textInfo1": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 530, y: 264, width: 300, height: 30, text: "0    /" },
-        "textInfo2": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 630, y: 264, width: 300, height: 30, text: "0" }
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiElectricHeatGenerator = MachineRegistry.createInventoryWindow("Electric Heater", {
+        drawing: [
+            { type: "bitmap", x: 399, y: 110, bitmap: "energy_small_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 511, y: 250, bitmap: "heat_generator_info", scale: GUI_SCALE }
+        ],
+        elements: {
+            "slot0": { type: "slot", x: 490, y: 120 },
+            "slot1": { type: "slot", x: 550, y: 120 },
+            "slot2": { type: "slot", x: 610, y: 120 },
+            "slot3": { type: "slot", x: 670, y: 120 },
+            "slot4": { type: "slot", x: 730, y: 120 },
+            "slot5": { type: "slot", x: 490, y: 180 },
+            "slot6": { type: "slot", x: 550, y: 180 },
+            "slot7": { type: "slot", x: 610, y: 180 },
+            "slot8": { type: "slot", x: 670, y: 180 },
+            "slot9": { type: "slot", x: 730, y: 180 },
+            "slotEnergy": { type: "slot", x: 390, y: 180 },
+            "energyScale": { type: "scale", x: 399, y: 110, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "textInfo1": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 580, y: 264, width: 300, height: 30, text: "0    /" },
+            "textInfo2": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 680, y: 264, width: 300, height: 30, text: "0" }
+        }
+    });
     var ElectricHeatGenerator = /** @class */ (function (_super) {
         __extends(ElectricHeatGenerator, _super);
         function ElectricHeatGenerator() {
@@ -6116,7 +7174,7 @@ var Machine;
             this.container.setText("textInfo2", maxOutput);
             this.container.sendChanges();
         };
-        ElectricHeatGenerator.prototype.getEnergyStorage = function () {
+        ElectricHeatGenerator.prototype.getEnergyCapacity = function () {
             return 2000;
         };
         ElectricHeatGenerator.prototype.canRotate = function () {
@@ -6128,16 +7186,17 @@ var Machine;
     MachineRegistry.registerPrototype(BlockID.electricHeatGenerator, new ElectricHeatGenerator());
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("fluidHeatGenerator", [
-    { name: "Liquid Fuel Firebox", texture: [["machine_bottom", 0], ["machine_top", 0], ["fluid_heat_generator_back", 0], ["heat_pipe", 0], ["fluid_heat_generator_side", 0], ["fluid_heat_generator_side", 0]], inCreative: true },
+    { name: "Liquid Fuel Firebox", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["fluid_heat_generator_back", 0], ["machine_heat_pipe", 0], ["fluid_heat_generator_side", 0], ["fluid_heat_generator_side", 0]], inCreative: true },
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.fluidHeatGenerator, "stone", 1);
-TileRenderer.setHandAndUiModel(BlockID.fluidHeatGenerator, 0, [["machine_bottom", 0], ["machine_top", 0], ["fluid_heat_generator_back", 0], ["heat_pipe", 0], ["fluid_heat_generator_side", 0], ["fluid_heat_generator_side", 0]]);
-TileRenderer.setStandardModel(BlockID.fluidHeatGenerator, 0, [["heat_pipe", 0], ["fluid_heat_generator_back", 0], ["machine_bottom", 0], ["machine_top", 0], ["fluid_heat_generator_side", 2], ["fluid_heat_generator_side", 2]]);
-TileRenderer.setStandardModel(BlockID.fluidHeatGenerator, 1, [["fluid_heat_generator_back", 0], ["heat_pipe", 0], ["machine_top", 0], ["machine_bottom", 0], ["fluid_heat_generator_side", 2], ["fluid_heat_generator_side", 2]]);
-TileRenderer.setStandardModelWithRotation(BlockID.fluidHeatGenerator, 2, [["machine_bottom", 0], ["machine_top", 0], ["fluid_heat_generator_back", 0], ["heat_pipe", 0], ["fluid_heat_generator_side", 0], ["fluid_heat_generator_side", 0]]);
-TileRenderer.registerRenderModel(BlockID.fluidHeatGenerator, 0, [["heat_pipe", 1], ["fluid_heat_generator_back", 0], ["machine_bottom", 0], ["machine_top", 0], ["fluid_heat_generator_side", 3], ["fluid_heat_generator_side", 3]]);
-TileRenderer.registerRenderModel(BlockID.fluidHeatGenerator, 1, [["fluid_heat_generator_back", 0], ["heat_pipe", 1], ["machine_top", 0], ["machine_bottom", 0], ["fluid_heat_generator_side", 3], ["fluid_heat_generator_side", 3]]);
-TileRenderer.registerModelWithRotation(BlockID.fluidHeatGenerator, 2, [["machine_bottom", 0], ["machine_top", 0], ["fluid_heat_generator_back", 1], ["heat_pipe", 1], ["fluid_heat_generator_side", 1], ["fluid_heat_generator_side", 1]]);
+ItemName.addProductionTooltip(BlockID.fluidHeatGenerator, "HU", 16, 32);
+TileRenderer.setHandAndUiModel(BlockID.fluidHeatGenerator, 0, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["fluid_heat_generator_back", 0], ["machine_heat_pipe", 0], ["fluid_heat_generator_side", 0], ["fluid_heat_generator_side", 0]]);
+TileRenderer.setStandardModel(BlockID.fluidHeatGenerator, 0, [["machine_heat_pipe", 0], ["fluid_heat_generator_back", 0], ["ic_machine_bottom", 0], ["ic_machine_top", 0], ["fluid_heat_generator_side", 1], ["fluid_heat_generator_side", 1]]);
+TileRenderer.setStandardModel(BlockID.fluidHeatGenerator, 1, [["fluid_heat_generator_back", 0], ["machine_heat_pipe", 0], ["ic_machine_top", 0], ["ic_machine_bottom", 0], ["fluid_heat_generator_side", 1], ["fluid_heat_generator_side", 1]]);
+TileRenderer.setStandardModelWithRotation(BlockID.fluidHeatGenerator, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["fluid_heat_generator_back", 0], ["machine_heat_pipe", 0], ["fluid_heat_generator_side", 0], ["fluid_heat_generator_side", 0]]);
+TileRenderer.registerRenderModel(BlockID.fluidHeatGenerator, 0, [["machine_heat_pipe_on", 0], ["fluid_heat_generator_back_on", 0], ["ic_machine_bottom", 0], ["ic_machine_top", 0], ["fluid_heat_generator_side_on", 1], ["fluid_heat_generator_side_on", 1]]);
+TileRenderer.registerRenderModel(BlockID.fluidHeatGenerator, 1, [["fluid_heat_generator_back_on", 0], ["machine_heat_pipe_on", 0], ["ic_machine_top", 0], ["ic_machine_bottom", 0], ["fluid_heat_generator_side_on", 1], ["fluid_heat_generator_side_on", 1]]);
+TileRenderer.registerModelWithRotation(BlockID.fluidHeatGenerator, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["fluid_heat_generator_back_on", 0], ["machine_heat_pipe_on", 0], ["fluid_heat_generator_side_on", 0], ["fluid_heat_generator_side_on", 0]]);
 TileRenderer.setRotationFunction(BlockID.fluidHeatGenerator, true);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.fluidHeatGenerator, count: 1, data: 0 }, [
@@ -6146,23 +7205,23 @@ Callback.addCallback("PreLoaded", function () {
         "pcp"
     ], ['x', ItemID.heatConductor, 0, 'c', ItemID.cellEmpty, 0, 'p', ItemID.casingIron, 0]);
 });
-var guiFluidHeatGenerator = MachineRegistry.createInventoryWindow("Liquid Fuel Firebox", {
-    drawing: [
-        { type: "bitmap", x: 581, y: 75, bitmap: "liquid_bar", scale: GUI_SCALE },
-        { type: "bitmap", x: 459, y: 139, bitmap: "liquid_bar_arrow", scale: GUI_SCALE },
-        { type: "bitmap", x: 660, y: 102, bitmap: "fluid_heat_generator_info", scale: GUI_SCALE },
-        { type: "bitmap", x: 660, y: 176, bitmap: "fluid_heat_generator_info", scale: GUI_SCALE }
-    ],
-    elements: {
-        "liquidScale": { type: "scale", x: 581 + 4 * GUI_SCALE, y: 75 + 4 * GUI_SCALE, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE },
-        "slot1": { type: "slot", x: 440, y: 75 },
-        "slot2": { type: "slot", x: 440, y: 183 },
-        "textInfo1": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 670, y: 112, width: 300, height: 30, text: "Emit: 0" },
-        "textInfo2": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 670, y: 186, width: 300, height: 30, text: "Max Emit: 0" }
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiFluidHeatGenerator = MachineRegistry.createInventoryWindow("Liquid Fuel Firebox", {
+        drawing: [
+            { type: "bitmap", x: 581, y: 75, bitmap: "liquid_bar", scale: GUI_SCALE },
+            { type: "bitmap", x: 459, y: 139, bitmap: "liquid_bar_arrow", scale: GUI_SCALE },
+            { type: "bitmap", x: 660, y: 102, bitmap: "fluid_heat_generator_info", scale: GUI_SCALE },
+            { type: "bitmap", x: 660, y: 176, bitmap: "fluid_heat_generator_info", scale: GUI_SCALE }
+        ],
+        elements: {
+            "liquidScale": { type: "scale", x: 581 + 4 * GUI_SCALE, y: 75 + 4 * GUI_SCALE, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE },
+            "slot1": { type: "slot", x: 440, y: 75 },
+            "slot2": { type: "slot", x: 440, y: 183 },
+            "textInfo1": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 670, y: 112, width: 300, height: 30, text: "Emit: 0" },
+            "textInfo2": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 670, y: 186, width: 300, height: 30, text: "Max Emit: 0" }
+        }
+    });
     var FluidHeatGenerator = /** @class */ (function (_super) {
         __extends(FluidHeatGenerator, _super);
         function FluidHeatGenerator() {
@@ -6180,11 +7239,9 @@ var Machine;
         FluidHeatGenerator.prototype.setupContainer = function () {
             var liquidFuel = MachineRecipeRegistry.requireFluidRecipes("fluidFuel");
             this.liquidTank = this.addLiquidTank("fluid", 10000, Object.keys(liquidFuel));
-            StorageInterface.setSlotValidatePolicy(this.container, "slot1", function (name, id, count, data) {
-                var empty = LiquidItemRegistry.getEmptyItem(id, data);
-                if (!empty)
-                    return false;
-                return MachineRecipeRegistry.hasRecipeFor("fluidFuel", empty.liquid);
+            StorageInterface.setSlotValidatePolicy(this.container, "slot1", function (name, id, count, data, extra) {
+                var liquid = LiquidItemRegistry.getItemLiquid(id, data, extra);
+                return liquid && !!MachineRecipeRegistry.getFluidRecipe("fluidFuel", liquid);
             });
             this.container.setSlotAddTransferPolicy("slot2", function () { return 0; });
         };
@@ -6257,27 +7314,26 @@ var Machine;
     }(Machine.MachineBase));
     Machine.FluidHeatGenerator = FluidHeatGenerator;
     MachineRegistry.registerPrototype(BlockID.fluidHeatGenerator, new FluidHeatGenerator());
-    MachineRegistry.createStorageInterface(BlockID.fluidHeatGenerator, {
+    MachineRegistry.createFluidStorageInterface(BlockID.fluidHeatGenerator, {
         slots: {
             "slot1": { input: true },
             "slot2": { output: true }
         },
         isValidInput: function (item) {
-            var empty = LiquidItemRegistry.getEmptyItem(item.id, item.data);
-            if (!empty)
-                return false;
-            return MachineRecipeRegistry.hasRecipeFor("fluidFuel", empty.liquid);
+            var liquid = LiquidItemRegistry.getItemLiquid(item.id, item.data, item.extra);
+            return liquid && !!MachineRecipeRegistry.getFluidRecipe("fluidFuel", liquid);
         },
         canTransportLiquid: function () { return false; }
     });
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("rtHeatGenerator", [
-    { name: "Radioisotope Heat Generator", texture: [["machine_bottom", 0], ["rt_heat_generator_top", 0], ["rt_generator_side", 0], ["heat_pipe", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]], inCreative: true },
+    { name: "Radioisotope Heat Generator", texture: [["ic_machine_bottom", 0], ["rt_heat_generator_top", 0], ["rt_generator_side", 0], ["machine_heat_pipe", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]], inCreative: true },
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.rtHeatGenerator, "stone", 1);
-TileRenderer.setHandAndUiModel(BlockID.rtHeatGenerator, 0, [["machine_bottom", 0], ["rt_heat_generator_top", 0], ["rt_generator_side", 0], ["heat_pipe", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]]);
-TileRenderer.setStandardModelWithRotation(BlockID.rtHeatGenerator, 0, [["machine_bottom", 0], ["rt_heat_generator_top", 0], ["rt_generator_side", 0], ["heat_pipe", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]], true);
-TileRenderer.registerModelWithRotation(BlockID.rtHeatGenerator, 0, [["machine_bottom", 0], ["rt_heat_generator_top", 1], ["rt_generator_side", 0], ["heat_pipe", 1], ["rt_generator_side", 0], ["rt_generator_side", 0]], true);
+ItemName.addProductionTooltip(BlockID.rtHeatGenerator, "HU", 2 * EnergyProductionModifiers.RTGenerator, 64 * EnergyProductionModifiers.RTGenerator);
+TileRenderer.setHandAndUiModel(BlockID.rtHeatGenerator, 0, [["ic_machine_bottom", 0], ["rt_heat_generator_top", 0], ["rt_generator_side", 0], ["machine_heat_pipe", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.rtHeatGenerator, 0, [["ic_machine_bottom", 0], ["rt_heat_generator_top", 0], ["rt_generator_side", 0], ["machine_heat_pipe", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]], true);
+TileRenderer.registerModelWithRotation(BlockID.rtHeatGenerator, 0, [["ic_machine_bottom", 0], ["rt_heat_generator_top_on", 0], ["rt_generator_side", 0], ["machine_heat_pipe_on", 0], ["rt_generator_side", 0], ["rt_generator_side", 0]], true);
 TileRenderer.setRotationFunction(BlockID.rtHeatGenerator, true);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.rtHeatGenerator, count: 1, data: 0 }, [
@@ -6286,23 +7342,23 @@ Callback.addCallback("PreLoaded", function () {
         "cxc"
     ], ['#', BlockID.reactorChamber, 0, 'x', ItemID.heatConductor, 0, 'c', ItemID.casingIron, 0]);
 });
-var guiRTHeatGenerator = MachineRegistry.createInventoryWindow("Radioisotope Heat Generator", {
-    drawing: [
-        { type: "bitmap", x: 380, y: 250, bitmap: "heat_generator_info", scale: GUI_SCALE }
-    ],
-    elements: {
-        "slot0": { type: "slot", x: 420, y: 100 },
-        "slot1": { type: "slot", x: 480, y: 100 },
-        "slot2": { type: "slot", x: 540, y: 100 },
-        "slot3": { type: "slot", x: 420, y: 160 },
-        "slot4": { type: "slot", x: 480, y: 160 },
-        "slot5": { type: "slot", x: 540, y: 160 },
-        "textInfo1": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 450, y: 264, width: 300, height: 30, text: "0     /" },
-        "textInfo2": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 550, y: 264, width: 300, height: 30, text: "0" }
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiRTHeatGenerator = MachineRegistry.createInventoryWindow("Radioisotope Heat Generator", {
+        drawing: [
+            { type: "bitmap", x: 380, y: 250, bitmap: "heat_generator_info", scale: GUI_SCALE }
+        ],
+        elements: {
+            "slot0": { type: "slot", x: 420, y: 100 },
+            "slot1": { type: "slot", x: 480, y: 100 },
+            "slot2": { type: "slot", x: 540, y: 100 },
+            "slot3": { type: "slot", x: 420, y: 160 },
+            "slot4": { type: "slot", x: 480, y: 160 },
+            "slot5": { type: "slot", x: 540, y: 160 },
+            "textInfo1": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 450, y: 264, width: 300, height: 30, text: "0     /" },
+            "textInfo2": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 550, y: 264, width: 300, height: 30, text: "0" }
+        }
+    });
     var RTHeatGenerator = /** @class */ (function (_super) {
         __extends(RTHeatGenerator, _super);
         function RTHeatGenerator() {
@@ -6315,14 +7371,14 @@ var Machine;
             StorageInterface.setGlobalValidatePolicy(this.container, function (name, id) { return (id == ItemID.rtgPellet); });
         };
         RTHeatGenerator.prototype.calculateOutput = function () {
-            var output = 1;
+            var numberOfPellets = 0;
             for (var i = 0; i < 6; i++) {
                 var slot = this.container.getSlot("slot" + i);
                 if (slot.id == ItemID.rtgPellet) {
-                    output *= 2;
+                    numberOfPellets++;
                 }
             }
-            return output > 1 ? output : 0;
+            return EnergyProductionModifiers.RTGenerator * 2 << (numberOfPellets - 1); // fast power of 2;
         };
         RTHeatGenerator.prototype.getOutputText = function (output) {
             var outputText = output.toString();
@@ -6361,16 +7417,17 @@ var Machine;
     MachineRegistry.registerPrototype(BlockID.rtHeatGenerator, new RTHeatGenerator());
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("solidHeatGenerator", [
-    { name: "Solid Fuel Firebox", texture: [["machine_bottom", 0], ["machine_top", 0], ["generator", 0], ["heat_pipe", 0], ["heat_generator_side", 0], ["heat_generator_side", 0]], inCreative: true },
+    { name: "Solid Fuel Firebox", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["solid_heat_generator_back", 0], ["machine_heat_pipe", 0], ["heat_generator_side", 0], ["heat_generator_side", 0]], inCreative: true },
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.solidHeatGenerator, "stone", 1);
-TileRenderer.setHandAndUiModel(BlockID.solidHeatGenerator, 0, [["machine_bottom", 0], ["machine_top", 0], ["generator", 0], ["heat_pipe", 0], ["heat_generator_side", 0], ["heat_generator_side", 0]]);
-TileRenderer.setStandardModel(BlockID.solidHeatGenerator, 0, [["heat_pipe", 0], ["generator", 0], ["machine_bottom", 0], ["machine_top", 0], ["heat_generator_side", 2], ["heat_generator_side", 2]]);
-TileRenderer.setStandardModel(BlockID.solidHeatGenerator, 1, [["generator", 0], ["heat_pipe", 0], ["machine_top", 0], ["machine_bottom", 0], ["heat_generator_side", 2], ["heat_generator_side", 2]]);
-TileRenderer.setStandardModelWithRotation(BlockID.solidHeatGenerator, 2, [["machine_bottom", 0], ["machine_top", 0], ["generator", 0], ["heat_pipe", 0], ["heat_generator_side", 0], ["heat_generator_side", 0]]);
-TileRenderer.registerRenderModel(BlockID.solidHeatGenerator, 0, [["heat_pipe", 1], ["generator", 0], ["machine_bottom", 0], ["machine_top", 0], ["heat_generator_side", 3], ["heat_generator_side", 3]]);
-TileRenderer.registerRenderModel(BlockID.solidHeatGenerator, 1, [["generator", 0], ["heat_pipe", 1], ["machine_top", 0], ["machine_bottom", 0], ["heat_generator_side", 3], ["heat_generator_side", 3]]);
-TileRenderer.registerModelWithRotation(BlockID.solidHeatGenerator, 2, [["machine_bottom", 0], ["machine_top", 0], ["generator", 1], ["heat_pipe", 1], ["heat_generator_side", 1], ["heat_generator_side", 1]]);
+ItemName.addProductionTooltip(BlockID.solidHeatGenerator, "HU", EnergyProductionModifiers.FuelGenerator * 2);
+TileRenderer.setHandAndUiModel(BlockID.solidHeatGenerator, 0, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["solid_heat_generator_back", 0], ["machine_heat_pipe", 0], ["heat_generator_side", 0], ["heat_generator_side", 0]]);
+TileRenderer.setStandardModel(BlockID.solidHeatGenerator, 0, [["machine_heat_pipe", 0], ["solid_heat_generator_back", 0], ["ic_machine_bottom", 0], ["ic_machine_top", 0], ["heat_generator_side", 1], ["heat_generator_side", 1]]);
+TileRenderer.setStandardModel(BlockID.solidHeatGenerator, 1, [["solid_heat_generator_back", 0], ["machine_heat_pipe", 0], ["ic_machine_top", 0], ["ic_machine_bottom", 0], ["heat_generator_side", 1], ["heat_generator_side", 1]]);
+TileRenderer.setStandardModelWithRotation(BlockID.solidHeatGenerator, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["solid_heat_generator_back", 0], ["machine_heat_pipe", 0], ["heat_generator_side", 0], ["heat_generator_side", 0]]);
+TileRenderer.registerRenderModel(BlockID.solidHeatGenerator, 0, [["machine_heat_pipe_on", 0], ["solid_heat_generator_back_on", 0], ["ic_machine_bottom", 0], ["ic_machine_top", 0], ["heat_generator_side_on", 1], ["heat_generator_side_on", 1]]);
+TileRenderer.registerRenderModel(BlockID.solidHeatGenerator, 1, [["solid_heat_generator_back_on", 0], ["machine_heat_pipe_on", 0], ["ic_machine_top", 0], ["ic_machine_bottom", 0], ["heat_generator_side_on", 1], ["heat_generator_side_on", 1]]);
+TileRenderer.registerModelWithRotation(BlockID.solidHeatGenerator, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["solid_heat_generator_back_on", 0], ["machine_heat_pipe_on", 0], ["heat_generator_side_on", 0], ["heat_generator_side_on", 0]]);
 TileRenderer.setRotationFunction(BlockID.solidHeatGenerator, true);
 Callback.addCallback("PreLoaded", function () {
     Item.addCreativeGroup("IC2HeatGenerators", Translation.translate("Heat Generators"), [
@@ -6390,22 +7447,22 @@ Callback.addCallback("PreLoaded", function () {
         " f "
     ], ['a', ItemID.heatConductor, 0, 'p', ItemID.plateIron, 0, 'f', BlockID.ironFurnace, 0]);
 });
-var guiSolidHeatGenerator = MachineRegistry.createInventoryWindow("Solid Fuel Firebox", {
-    drawing: [
-        { type: "bitmap", x: 450, y: 160, bitmap: "fire_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 521, y: 212, bitmap: "shovel_image", scale: GUI_SCALE + 1 },
-        { type: "bitmap", x: 441, y: 330, bitmap: "heat_generator_info", scale: GUI_SCALE }
-    ],
-    elements: {
-        "slotFuel": { type: "slot", x: 441, y: 212 },
-        "slotAshes": { type: "slot", x: 591, y: 212 },
-        "burningScale": { type: "scale", x: 450, y: 160, direction: 1, value: 0.5, bitmap: "fire_scale", scale: GUI_SCALE },
-        "textInfo1": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 500, y: 344, width: 300, height: 30, text: "0    /" },
-        "textInfo2": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 600, y: 344, width: 300, height: 30, text: "20" }
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiSolidHeatGenerator = MachineRegistry.createInventoryWindow("Solid Fuel Firebox", {
+        drawing: [
+            { type: "bitmap", x: 450, y: 160, bitmap: "fire_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 521, y: 212, bitmap: "shovel_image", scale: GUI_SCALE + 1 },
+            { type: "bitmap", x: 441, y: 330, bitmap: "heat_generator_info", scale: GUI_SCALE }
+        ],
+        elements: {
+            "slotFuel": { type: "slot", x: 441, y: 212 },
+            "slotAshes": { type: "slot", x: 591, y: 212 },
+            "burningScale": { type: "scale", x: 450, y: 160, direction: 1, value: 0.5, bitmap: "fire_scale", scale: GUI_SCALE },
+            "textInfo1": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 500, y: 344, width: 300, height: 30, text: "0    /" },
+            "textInfo2": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 600, y: 344, width: 300, height: 30, text: "" + EnergyProductionModifiers.FuelGenerator * 2 }
+        }
+    });
     var SolidHeatGenerator = /** @class */ (function (_super) {
         __extends(SolidHeatGenerator, _super);
         function SolidHeatGenerator() {
@@ -6440,7 +7497,8 @@ var Machine;
             var coords = StorageInterface.getRelativeCoords(this, side);
             var tile = this.region.getTileEntity(coords);
             if (tile && tile.canReceiveHeat && tile.canReceiveHeat(side ^ 1)) {
-                return this.data.output = tile.receiveHeat(20);
+                this.data.output = tile.receiveHeat(EnergyProductionModifiers.FuelGenerator * 2);
+                return this.data.output;
             }
             return 0;
         };
@@ -6493,27 +7551,27 @@ var Machine;
 })(Machine || (Machine = {}));
 /// <reference path="IReactor.ts" />
 BlockRegistry.createBlock("nuclearReactor", [
-    { name: "Nuclear Reactor", texture: [["machine_bottom", 0], ["nuclear_reactor_top", 0], ["nuclear_reactor_side", 0], ["nuclear_reactor_side", 0], ["nuclear_reactor_side", 0], ["nuclear_reactor_side", 0]], inCreative: true }
+    { name: "Nuclear Reactor", texture: [["ic_machine_bottom", 0], ["nuclear_reactor_top", 0], ["nuclear_reactor_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.nuclearReactor, "stone", 1);
 ItemRegistry.setRarity(BlockID.nuclearReactor, EnumRarity.UNCOMMON);
-TileRenderer.setStandardModel(BlockID.nuclearReactor, 0, [["machine_bottom", 0], ["nuclear_reactor_top", 0], ["nuclear_reactor_side", 0], ["nuclear_reactor_side", 0], ["nuclear_reactor_side", 0], ["nuclear_reactor_side", 0]]);
-TileRenderer.registerRenderModel(BlockID.nuclearReactor, 0, [["machine_bottom", 0], ["nuclear_reactor_top", 0], ["nuclear_reactor_side", 1], ["nuclear_reactor_side", 1], ["nuclear_reactor_side", 1], ["nuclear_reactor_side", 1]]);
-Block.registerPlaceFunction(BlockID.nuclearReactor, function (coords, item, block, player, region) {
-    var _a = coords.relative, x = _a.x, y = _a.y, z = _a.z;
+TileRenderer.setStandardModel(BlockID.nuclearReactor, 0, [["ic_machine_bottom", 0], ["nuclear_reactor_top", 0], ["nuclear_reactor_side", 0], ["nuclear_reactor_side", 0], ["nuclear_reactor_side", 0], ["nuclear_reactor_side", 0]]);
+TileRenderer.registerRenderModel(BlockID.nuclearReactor, 0, [["ic_machine_bottom", 0], ["nuclear_reactor_top", 0], ["nuclear_reactor_side_on", 0], ["nuclear_reactor_side_on", 0], ["nuclear_reactor_side_on", 0], ["nuclear_reactor_side_on", 0]]);
+Block.registerPlaceFunction(BlockID.nuclearReactor, function (coords, item, block, player, blockSource) {
+    var region = new WorldRegion(blockSource);
+    var place = World.canTileBeReplaced(block.id, block.data) ? coords : coords.relative;
     for (var i = 0; i < 6; i++) {
-        var c = World.getRelativeCoords(x, y, z, i);
+        var c = World.getRelativeCoords(place.x, place.y, place.z, i);
         if (region.getBlockId(c.x, c.y, c.z) == BlockID.reactorChamber) {
-            var tileEnt = World.getTileEntity(c.x, c.y, c.z, region);
+            var tileEnt = region.getTileEntity(c.x, c.y, c.z);
             if (tileEnt.core) {
-                item.count++;
+                item.count++; // prevent item consumption if not placed
                 return;
             }
         }
     }
-    region.setBlock(x, y, z, item.id, 0);
-    //World.playSound(x, y, z, "dig.stone", 1, 0.8)
-    World.addTileEntity(x, y, z, region);
+    region.setBlock(place, item.id, 0);
+    return place;
 });
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.nuclearReactor, count: 1, data: 0 }, [
@@ -6522,25 +7580,24 @@ Callback.addCallback("PreLoaded", function () {
         "x#x"
     ], ['#', BlockID.primalGenerator, 0, 'a', BlockID.reactorChamber, 0, 'x', ItemID.densePlateLead, 0, 'c', ItemID.circuitAdvanced, 0]);
 });
-var reactorElements = {
-    "heatScale": { type: "scale", x: 346, y: 376, direction: 0, value: 0.5, bitmap: "reactor_heat_scale", scale: 3 },
-    "textInfo": { type: "text", font: { size: 24, color: Color.GREEN }, x: 685, y: 382, width: 256, height: 42, text: Translation.translate("Generating: ") },
-};
-for (var y = 0; y < 6; y++) {
-    for (var x = 0; x < 9; x++) {
-        var i = x * 6 + y;
-        reactorElements["slot" + i] = { type: "slot", x: 400 + 54 * x, y: 40 + 54 * y, size: 54 };
-    }
-}
-var guiNuclearReactor = MachineRegistry.createInventoryWindow("Nuclear Reactor", {
-    drawing: [
-        { type: "bitmap", x: 340, y: 370, bitmap: "reactor_info", scale: GUI_SCALE },
-    ],
-    elements: reactorElements
-});
-var EUReactorModifier = 5;
 var Machine;
 (function (Machine) {
+    var reactorElements = {
+        "heatScale": { type: "scale", x: 346, y: 376, direction: 0, value: 0.5, bitmap: "reactor_heat_scale", scale: 3 },
+        "textInfo": { type: "text", font: { size: 24, color: Color.GREEN }, x: 685, y: 382, width: 256, height: 42, text: Translation.translate("Generating: ") },
+    };
+    for (var y = 0; y < 6; y++) {
+        for (var x = 0; x < 9; x++) {
+            var i = x * 6 + y;
+            reactorElements["slot" + i] = { type: "slot", x: 400 + 54 * x, y: 40 + 54 * y, size: 54 };
+        }
+    }
+    var guiNuclearReactor = MachineRegistry.createInventoryWindow("Nuclear Reactor", {
+        drawing: [
+            { type: "bitmap", x: 340, y: 370, bitmap: "reactor_info", scale: GUI_SCALE },
+        ],
+        elements: reactorElements
+    }, 450);
     var NuclearReactor = /** @class */ (function (_super) {
         __extends(NuclearReactor, _super);
         function NuclearReactor() {
@@ -6552,8 +7609,10 @@ var Machine;
                 heat: 0,
                 maxHeat: 10000,
                 hem: 1,
-                output: 0
+                output: 0,
+                updateTicker: 0
             };
+            _this.tickRate = 20;
             _this.chambers = [];
             return _this;
         }
@@ -6565,6 +7624,9 @@ var Machine;
             this.chambers = [];
             this.rebuildGrid();
             this.__initialized = true;
+            if (!this.data.updateTicker) {
+                this.data.updateTicker = MathUtil.randomInt(1, this.tickRate);
+            }
             for (var i = 0; i < 6; i++) {
                 var coords = StorageInterface.getRelativeCoords(this, i);
                 if (this.region.getBlockId(coords) == BlockID.reactorChamber) {
@@ -6625,9 +7687,9 @@ var Machine;
         NuclearReactor.prototype.onTick = function () {
             var reactorSize = this.getReactorSize();
             this.container.sendEvent("setFieldSize", { size: reactorSize });
-            if (World.getThreadTime() % 20 == 0) {
+            if (this.data.updateTicker++ % this.tickRate == 0) {
                 if (this.data.isEnabled) {
-                    this.data.maxHeat = 10000;
+                    this.data.maxHeat = this.defaultValues.maxHeat;
                     this.data.hem = 1;
                     this.data.output = 0;
                     this.processChambers();
@@ -6639,12 +7701,10 @@ var Machine;
                     return;
                 }
                 this.setActive(this.data.heat >= 1000 || this.data.output > 0);
-            }
-            if (this.data.output > 0) {
-                this.startPlaySound();
-            }
-            else {
-                this.stopPlaySound();
+                if (this.networkData.getDouble(NetworkDataKeys.powerOutput) !== this.data.output) {
+                    this.networkData.putDouble(NetworkDataKeys.powerOutput, this.data.output);
+                    this.networkData.sendChanges();
+                }
             }
             this.container.setScale("heatScale", this.data.heat / this.data.maxHeat);
             this.container.setText("textInfo", "Generating: " + this.getEnergyOutput() + " EU/t");
@@ -6667,39 +7727,7 @@ var Machine;
             this.updateSignal();
         };
         NuclearReactor.prototype.getEnergyOutput = function () {
-            return Math.floor(this.data.output * EUReactorModifier);
-        };
-        NuclearReactor.prototype.startPlaySound = function () {
-            if (!IC2Config.machineSoundEnabled || this.remove)
-                return;
-            if (!this.audioSource) {
-                this.audioSource = SoundManager.createSource(SourceType.TILEENTITY, this, "NuclearReactorLoop.ogg");
-            }
-            if (this.data.output < 40) {
-                var geigerSound = "GeigerLowEU.ogg";
-            }
-            else if (this.data.output < 80) {
-                var geigerSound = "GeigerMedEU.ogg";
-            }
-            else {
-                var geigerSound = "GeigerHighEU.ogg";
-            }
-            if (!this.audioSourceGeiger) {
-                this.audioSourceGeiger = SoundManager.createSource(SourceType.TILEENTITY, this, geigerSound);
-            }
-            else if (this.audioSourceGeiger.soundName != geigerSound) {
-                this.audioSourceGeiger.setSound(geigerSound);
-            }
-        };
-        NuclearReactor.prototype.stopPlaySound = function () {
-            if (this.audioSource) {
-                SoundManager.removeSource(this.audioSource);
-                this.audioSource = null;
-            }
-            if (this.audioSourceGeiger) {
-                SoundManager.removeSource(this.audioSourceGeiger);
-                this.audioSourceGeiger = null;
-            }
+            return Math.floor(this.data.output * EnergyProductionModifiers.EUReactor);
         };
         NuclearReactor.prototype.getHeat = function () {
             return this.data.heat;
@@ -6808,8 +7836,8 @@ var Machine;
             if (power >= 0.7 && World.getThreadTime() % 20 == 0) {
                 var pos = new Vector3(this.x + .5, this.y + .5, this.z + .5);
                 var entities = EntityHelper.getEntitiesInRadius(this.region, pos, 4);
-                for (var _i = 0, entities_4 = entities; _i < entities_4.length; _i++) {
-                    var ent = entities_4[_i];
+                for (var _i = 0, entities_5 = entities; _i < entities_5.length; _i++) {
+                    var ent = entities_5[_i];
                     if (EntityHelper.canTakeDamage(ent, DamageSource.radiation)) {
                         RadiationAPI.addEffect(ent, Math.floor(4 * this.data.hem));
                     }
@@ -6841,7 +7869,46 @@ var Machine;
         NuclearReactor.prototype.getRandCoord = function (rad) {
             return new Vector3(this.x + MathUtil.randomInt(-rad, rad), this.y + MathUtil.randomInt(-rad, rad), this.z + MathUtil.randomInt(-rad, rad));
         };
-        NuclearReactor.prototype.setFieldSize = function (container, window, content, data) {
+        // Client Prototype
+        NuclearReactor.prototype.clientTick = function () {
+            _super.prototype.clientTick.call(this);
+            if (!this.audioSource)
+                return;
+            var output = this.networkData.getDouble(NetworkDataKeys.powerOutput);
+            if (output > 0) {
+                this.audioSource.playSingle(this.getLoopSound(), true);
+                var geigerSound = this.getGeigerSound(output);
+                var geigerStream = this.audioSource.streams.find(function (a) { return a.name.startsWith("Geiger"); });
+                if (!geigerStream) {
+                    this.audioSource.play(geigerSound, true);
+                }
+                else if (geigerStream.name !== geigerSound) {
+                    geigerStream.stop();
+                    this.audioSource.play(geigerSound, true);
+                }
+            }
+            else {
+                this.audioSource.stopAll();
+            }
+        };
+        NuclearReactor.prototype.startPlaySound = function () { };
+        NuclearReactor.prototype.stopPlaySound = function () { };
+        NuclearReactor.prototype.getLoopSound = function () {
+            return "NuclearReactorLoop.ogg";
+        };
+        NuclearReactor.prototype.getGeigerSound = function (output) {
+            if (output == 0) {
+                return null;
+            }
+            if (output < 40) {
+                return "GeigerLowEU.ogg";
+            }
+            if (output < 80) {
+                return "GeigerMedEU.ogg";
+            }
+            return "GeigerHighEU.ogg";
+        };
+        NuclearReactor.prototype.onSetFieldSize = function (container, window, content, data) {
             if (content) {
                 for (var y = 0; y < 6; y++) {
                     for (var x = 0; x < 9; x++) {
@@ -6852,37 +7919,47 @@ var Machine;
             }
         };
         __decorate([
-            Machine.ContainerEvent(Side.Client)
-        ], NuclearReactor.prototype, "setFieldSize", null);
+            Machine.ClientSide
+        ], NuclearReactor.prototype, "startPlaySound", null);
+        __decorate([
+            Machine.ClientSide
+        ], NuclearReactor.prototype, "stopPlaySound", null);
+        __decorate([
+            Machine.ClientSide
+        ], NuclearReactor.prototype, "getLoopSound", null);
+        __decorate([
+            Machine.ClientSide
+        ], NuclearReactor.prototype, "getGeigerSound", null);
+        __decorate([
+            Machine.ContainerEvent(Side.Client, "setFieldSize")
+        ], NuclearReactor.prototype, "onSetFieldSize", null);
         return NuclearReactor;
     }(Machine.Generator));
     Machine.NuclearReactor = NuclearReactor;
     MachineRegistry.registerPrototype(BlockID.nuclearReactor, new NuclearReactor());
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("reactorChamber", [
-    { name: "Reactor Chamber", texture: [["machine_bottom", 0], ["machine_top", 0], ["reactor_chamber", 0], ["reactor_chamber", 0], ["reactor_chamber", 0], ["reactor_chamber", 0]], inCreative: true },
+    { name: "Reactor Chamber", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["reactor_chamber", 0]], inCreative: true },
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.reactorChamber, "stone", 1);
 ItemRegistry.setRarity(BlockID.reactorChamber, EnumRarity.UNCOMMON);
-Block.registerPlaceFunction(BlockID.reactorChamber, function (coords, item, block, player, region) {
-    var _a = coords.relative, x = _a.x, y = _a.y, z = _a.z;
-    var reactorConnect = 0;
+Block.registerPlaceFunction(BlockID.reactorChamber, function (coords, item, block, player, blockSource) {
+    var region = new WorldRegion(blockSource);
+    var place = World.canTileBeReplaced(block.id, block.data) ? coords : coords.relative;
+    var connectedReactors = 0;
     for (var i = 0; i < 6; i++) {
-        var c = World.getRelativeCoords(x, y, z, i);
+        var c = World.getRelativeCoords(place.x, place.y, place.z, i);
         if (region.getBlockId(c.x, c.y, c.z) == BlockID.nuclearReactor) {
-            reactorConnect++;
-            if (reactorConnect > 1)
+            connectedReactors++;
+            if (connectedReactors > 1)
                 break;
         }
     }
-    if (reactorConnect == 1) {
-        region.setBlock(x, y, z, item.id, 0);
-        //World.playSound(x, y, z, "dig.stone", 1, 0.8)
-        World.addTileEntity(x, y, z, region);
+    if (connectedReactors == 1) {
+        region.setBlock(place, item.id, 0);
+        return place;
     }
-    else {
-        item.count++;
-    }
+    item.count++; // prevent item consumption if not placed
 });
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.reactorChamber, count: 1, data: 0 }, [
@@ -6903,6 +7980,7 @@ var Machine;
                 signal: 0
             };
             _this.core = null;
+            _this.noupdate = true;
             return _this;
         }
         ReactorChamber.prototype.getTier = function () {
@@ -6915,19 +7993,20 @@ var Machine;
             return false;
         };
         ReactorChamber.prototype.onInit = function () {
+            _super.prototype.onInit.call(this);
             if (this.data.corePos && this.region.getBlockId(this.data.corePos) == BlockID.nuclearReactor) {
-                var tileEnt = this.region.getTileEntity(this.data.corePos);
-                if (tileEnt) {
-                    tileEnt.addChamber(this);
+                var tileEntity = this.region.getTileEntity(this.data.corePos);
+                if (tileEntity) {
+                    tileEntity.addChamber(this);
                 }
             }
             else
                 for (var i = 0; i < 6; i++) {
                     var coords = StorageInterface.getRelativeCoords(this, i);
                     if (this.region.getBlockId(coords) == BlockID.nuclearReactor) {
-                        var tileEnt = this.region.getTileEntity(coords);
-                        if (tileEnt) {
-                            tileEnt.addChamber(this);
+                        var tileEntity = this.region.getTileEntity(coords);
+                        if (tileEntity) {
+                            tileEntity.addChamber(this);
                             break;
                         }
                     }
@@ -6948,8 +8027,11 @@ var Machine;
         ReactorChamber.prototype.isConductor = function () {
             return true;
         };
+        ReactorChamber.prototype.canEmitEnergy = function () {
+            return true;
+        };
         return ReactorChamber;
-    }(Machine.Generator));
+    }(Machine.ElectricMachine));
     Machine.ReactorChamber = ReactorChamber;
     MachineRegistry.registerPrototype(BlockID.reactorChamber, new ReactorChamber());
 })(Machine || (Machine = {}));
@@ -6982,7 +8064,7 @@ var Machine;
                 return ChargeItemRegistry.isValidStorage(id, "Eu", _this.getTier());
             });
         };
-        BatteryBlock.prototype.canRotate = function () {
+        BatteryBlock.prototype.canRotate = function (side) {
             return true;
         };
         BatteryBlock.prototype.setFacing = function (side) {
@@ -6998,28 +8080,29 @@ var Machine;
             this.chargeSlot("slot1");
             this.container.setScale("energyScale", this.getRelativeEnergy());
             this.container.setText("textInfo1", Math.floor(this.data.energy) + "/");
-            this.container.setText("textInfo2", this.getEnergyStorage());
+            this.container.setText("textInfo2", this.getEnergyCapacity());
             this.container.sendChanges();
         };
         BatteryBlock.prototype.energyTick = function (type, src) {
             var output = this.getMaxPacketSize();
             if (this.data.energy >= output) {
-                this.data.energy += src.add(output) - output;
+                var accepted = output - src.add(output);
+                this.data.energy -= accepted;
             }
         };
-        BatteryBlock.prototype.getEnergyStorage = function () {
+        BatteryBlock.prototype.getEnergyCapacity = function () {
             return this.capacity;
         };
         BatteryBlock.prototype.canReceiveEnergy = function (side) {
             return side != this.getFacing();
         };
-        BatteryBlock.prototype.canExtractEnergy = function (side) {
+        BatteryBlock.prototype.canEmitEnergy = function (side) {
             return side == this.getFacing();
         };
-        BatteryBlock.prototype.adjustDrop = function (item) {
-            if (item.id == this.blockID && this.data.energy > 0) {
-                var extra = new ItemExtraData();
-                item.extra = extra.putInt("energy", this.data.energy);
+        BatteryBlock.prototype.getDemontaged = function () {
+            var item = new ItemStack(this.blockID, 1, 0);
+            if (this.data.energy > 0) {
+                item.extra = new ItemExtraData().putInt("energy", this.data.energy);
             }
             return item;
         };
@@ -7064,7 +8147,8 @@ var BatteryBlockInterface = {
 /// <reference path="./BatteryBlock.ts" />
 BlockRegistry.createBlock("storageBatBox", [
     { name: "BatBox", texture: [["batbox_bottom", 0], ["batbox_top", 0], ["batbox_back", 0], ["batbox_front", 0], ["batbox_side", 0], ["batbox_side", 0]], inCreative: true }
-], "machine");
+], "wood");
+Block.setDestroyTime(BlockID.storageBatBox, 3);
 BlockRegistry.setBlockMaterial(BlockID.storageBatBox, "wood");
 TileRenderer.setHandAndUiModel(BlockID.storageBatBox, 0, [["batbox_bottom", 0], ["batbox_top", 0], ["batbox_back", 0], ["batbox_front", 0], ["batbox_side", 0], ["batbox_side", 0]]);
 TileRenderer.setStandardModel(BlockID.storageBatBox, 0, [["batbox_front", 0], ["batbox_back", 0], ["batbox_top", 0], ["batbox_bottom", 0], ["batbox_side", 1], ["batbox_side", 2]]);
@@ -7073,7 +8157,7 @@ TileRenderer.setStandardModel(BlockID.storageBatBox, 2, [["batbox_bottom", 0], [
 TileRenderer.setStandardModel(BlockID.storageBatBox, 3, [["batbox_bottom", 0], ["batbox_top", 0], ["batbox_back", 0], ["batbox_front", 0], ["batbox_side", 0], ["batbox_side", 0]]);
 TileRenderer.setStandardModel(BlockID.storageBatBox, 4, [["batbox_bottom", 0], ["batbox_top", 1], ["batbox_side", 0], ["batbox_side", 0], ["batbox_front", 0], ["batbox_back", 0]]);
 TileRenderer.setStandardModel(BlockID.storageBatBox, 5, [["batbox_bottom", 0], ["batbox_top", 1], ["batbox_side", 0], ["batbox_side", 0], ["batbox_back", 0], ["batbox_front", 0]]);
-ItemName.addStorageBlockTooltip("storageBatBox", 1, "40K");
+ItemName.addStorageBlockTooltip("storageBatBox", 1, "40K", 32);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.storageBatBox, count: 1, data: 0 }, [
         "xax",
@@ -7081,17 +8165,18 @@ Callback.addCallback("PreLoaded", function () {
         "xxx"
     ], ['a', ItemID.cableTin1, 0, 'x', 5, -1, 'b', ItemID.storageBattery, -1]);
 });
-var guiBatBox = BatteryBlockWindow("BatBox");
 var Machine;
 (function (Machine) {
-    var BatBox = /** @class */ (function (_super) {
-        __extends(BatBox, _super);
-        function BatBox() {
+    var guiBatBox = BatteryBlockWindow("BatBox");
+    var StorageBatBox = /** @class */ (function (_super) {
+        __extends(StorageBatBox, _super);
+        function StorageBatBox() {
             return _super.call(this, 1, 40000, BlockID.storageBatBox, guiBatBox) || this;
         }
-        return BatBox;
+        return StorageBatBox;
     }(Machine.BatteryBlock));
-    MachineRegistry.registerPrototype(BlockID.storageBatBox, new BatBox());
+    Machine.StorageBatBox = StorageBatBox;
+    MachineRegistry.registerPrototype(BlockID.storageBatBox, new StorageBatBox());
     MachineRegistry.setStoragePlaceFunction("storageBatBox", true);
     StorageInterface.createInterface(BlockID.storageBatBox, BatteryBlockInterface);
 })(Machine || (Machine = {}));
@@ -7104,7 +8189,7 @@ TileRenderer.setHandAndUiModel(BlockID.storageCESU, 0, [["cesu_top", 0], ["cesu_
 TileRenderer.setStandardModel(BlockID.storageCESU, 0, [["cesu_front", 0], ["cesu_back", 0], ["cesu_top", 0], ["cesu_top", 0], ["cesu_side", 1], ["cesu_side", 1]]);
 TileRenderer.setStandardModel(BlockID.storageCESU, 1, [["cesu_back", 0], ["cesu_front", 0], ["cesu_top", 0], ["cesu_top", 0], ["cesu_side", 1], ["cesu_side", 1]]);
 TileRenderer.setStandardModelWithRotation(BlockID.storageCESU, 2, [["cesu_top", 0], ["cesu_top", 0], ["cesu_back", 0], ["cesu_front", 0], ["cesu_side", 0], ["cesu_side", 0]]);
-ItemName.addStorageBlockTooltip("storageCESU", 2, "300K");
+ItemName.addStorageBlockTooltip("storageCESU", 2, "300K", 128);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.storageCESU, count: 1, data: 0 }, [
         "bxb",
@@ -7112,30 +8197,31 @@ Callback.addCallback("PreLoaded", function () {
         "bbb"
     ], ['x', ItemID.cableCopper1, 0, 'a', ItemID.storageAdvBattery, -1, 'b', ItemID.plateBronze, 0]);
 });
-var guiCESU = BatteryBlockWindow("CESU");
 var Machine;
 (function (Machine) {
-    var CESU = /** @class */ (function (_super) {
-        __extends(CESU, _super);
-        function CESU() {
+    var guiCESU = BatteryBlockWindow("CESU");
+    var StorageCESU = /** @class */ (function (_super) {
+        __extends(StorageCESU, _super);
+        function StorageCESU() {
             return _super.call(this, 2, 300000, BlockID.storageCESU, guiCESU) || this;
         }
-        return CESU;
+        return StorageCESU;
     }(Machine.BatteryBlock));
-    MachineRegistry.registerPrototype(BlockID.storageCESU, new CESU());
+    Machine.StorageCESU = StorageCESU;
+    MachineRegistry.registerPrototype(BlockID.storageCESU, new StorageCESU());
     MachineRegistry.setStoragePlaceFunction("storageCESU", true);
     StorageInterface.createInterface(BlockID.storageCESU, BatteryBlockInterface);
 })(Machine || (Machine = {}));
 /// <reference path="./BatteryBlock.ts" />
 BlockRegistry.createBlock("storageMFE", [
-    { name: "MFE", texture: [["machine_top", 0], ["machine_top", 0], ["mfe_back", 0], ["mfe_front", 0], ["mfe_side", 0], ["mfe_side", 0]], inCreative: true }
+    { name: "MFE", texture: [["mfe_bottomtop", 0], ["mfe_bottomtop", 0], ["mfe_back", 0], ["mfe_front", 0], ["mfe_side", 0], ["mfe_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.storageMFE, "stone", 1);
-TileRenderer.setHandAndUiModel(BlockID.storageMFE, 0, [["machine_top", 0], ["machine_top", 0], ["mfe_back", 0], ["mfe_front", 0], ["mfe_side", 0], ["mfe_side", 0]]);
-TileRenderer.setStandardModel(BlockID.storageMFE, 0, [["mfe_front", 0], ["mfe_back", 0], ["machine_top", 0], ["machine_top", 0], ["mfe_side", 1], ["mfe_side", 1]]);
-TileRenderer.setStandardModel(BlockID.storageMFE, 1, [["mfe_back", 0], ["mfe_front", 0], ["machine_top", 0], ["machine_top", 0], ["mfe_side", 1], ["mfe_side", 1]]);
-TileRenderer.setStandardModelWithRotation(BlockID.storageMFE, 2, [["machine_top", 0], ["machine_top", 0], ["mfe_back", 0], ["mfe_front", 0], ["mfe_side", 0], ["mfe_side", 0]]);
-ItemName.addStorageBlockTooltip("storageMFE", 3, "4M");
+TileRenderer.setHandAndUiModel(BlockID.storageMFE, 0, [["mfe_bottomtop", 0], ["mfe_bottomtop", 0], ["mfe_back", 0], ["mfe_front", 0], ["mfe_side", 0], ["mfe_side", 0]]);
+TileRenderer.setStandardModel(BlockID.storageMFE, 0, [["mfe_front", 0], ["mfe_back", 0], ["mfe_bottomtop", 0], ["mfe_bottomtop", 0], ["mfe_side", 1], ["mfe_side", 1]]);
+TileRenderer.setStandardModel(BlockID.storageMFE, 1, [["mfe_back", 0], ["mfe_front", 0], ["mfe_bottomtop", 0], ["mfe_bottomtop", 0], ["mfe_side", 1], ["mfe_side", 1]]);
+TileRenderer.setStandardModelWithRotation(BlockID.storageMFE, 2, [["mfe_bottomtop", 0], ["mfe_bottomtop", 0], ["mfe_back", 0], ["mfe_front", 0], ["mfe_side", 0], ["mfe_side", 0]]);
+ItemName.addStorageBlockTooltip("storageMFE", 3, "4M", 512);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.storageMFE, count: 1, data: 0 }, [
         "bab",
@@ -7143,17 +8229,18 @@ Callback.addCallback("PreLoaded", function () {
         "bab"
     ], ['x', BlockID.machineBlockBasic, 0, 'a', ItemID.storageCrystal, -1, 'b', ItemID.cableGold2, -1]);
 });
-var guiMFE = BatteryBlockWindow("MFE");
 var Machine;
 (function (Machine) {
-    var MFE = /** @class */ (function (_super) {
-        __extends(MFE, _super);
-        function MFE() {
+    var guiMFE = BatteryBlockWindow("MFE");
+    var StorageMFE = /** @class */ (function (_super) {
+        __extends(StorageMFE, _super);
+        function StorageMFE() {
             return _super.call(this, 3, 4000000, BlockID.machineBlockBasic, guiMFE) || this;
         }
-        return MFE;
+        return StorageMFE;
     }(Machine.BatteryBlock));
-    MachineRegistry.registerPrototype(BlockID.storageMFE, new MFE());
+    Machine.StorageMFE = StorageMFE;
+    MachineRegistry.registerPrototype(BlockID.storageMFE, new StorageMFE());
     MachineRegistry.setStoragePlaceFunction("storageMFE", true);
     StorageInterface.createInterface(BlockID.storageMFE, BatteryBlockInterface);
 })(Machine || (Machine = {}));
@@ -7167,13 +8254,7 @@ TileRenderer.setStandardModel(BlockID.storageMFSU, 0, [["mfsu_front", 0], ["mfsu
 TileRenderer.setStandardModel(BlockID.storageMFSU, 1, [["mfsu_side", 0], ["mfsu_front", 0], ["mfsu_top", 0], ["mfsu_top", 0], ["mfsu_side", 1], ["mfsu_side", 1]]);
 TileRenderer.setStandardModelWithRotation(BlockID.storageMFSU, 2, [["mfsu_top", 0], ["mfsu_top", 0], ["mfsu_side", 0], ["mfsu_front", 0], ["mfsu_side", 0], ["mfsu_side", 0]]);
 ItemRegistry.setRarity(BlockID.storageMFSU, EnumRarity.UNCOMMON);
-ItemName.addStorageBlockTooltip("storageMFSU", 4, "60M");
-Item.addCreativeGroup("EUStorages", Translation.translate("Energy Storages"), [
-    BlockID.storageBatBox,
-    BlockID.storageCESU,
-    BlockID.storageMFE,
-    BlockID.storageMFSU
-]);
+ItemName.addStorageBlockTooltip("storageMFSU", 4, "60M", 2048);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.storageMFSU, count: 1, data: 0 }, [
         "aca",
@@ -7181,19 +8262,217 @@ Callback.addCallback("PreLoaded", function () {
         "aba"
     ], ['b', BlockID.storageMFE, -1, 'a', ItemID.storageLapotronCrystal, -1, 'x', BlockID.machineBlockAdvanced, 0, 'c', ItemID.circuitAdvanced, 0]);
 });
-var guiMFSU = BatteryBlockWindow("MFSU");
 var Machine;
 (function (Machine) {
-    var MFSU = /** @class */ (function (_super) {
-        __extends(MFSU, _super);
-        function MFSU() {
+    var guiMFSU = BatteryBlockWindow("MFSU");
+    var StorageMFSU = /** @class */ (function (_super) {
+        __extends(StorageMFSU, _super);
+        function StorageMFSU() {
             return _super.call(this, 4, 6e7, BlockID.machineBlockAdvanced, guiMFSU) || this;
         }
-        return MFSU;
+        return StorageMFSU;
     }(Machine.BatteryBlock));
-    MachineRegistry.registerPrototype(BlockID.storageMFSU, new MFSU());
+    Machine.StorageMFSU = StorageMFSU;
+    MachineRegistry.registerPrototype(BlockID.storageMFSU, new StorageMFSU());
     MachineRegistry.setStoragePlaceFunction("storageMFSU", true);
     StorageInterface.createInterface(BlockID.storageMFSU, BatteryBlockInterface);
+})(Machine || (Machine = {}));
+/// <reference path="./BatteryBlock.ts" />
+var Machine;
+(function (Machine) {
+    var ChargePad = /** @class */ (function (_super) {
+        __extends(ChargePad, _super);
+        function ChargePad(tier, capacity, defaultDrop, guiScreen, carriedOnly) {
+            if (carriedOnly === void 0) { carriedOnly = false; }
+            var _this = _super.call(this, tier, capacity, defaultDrop, guiScreen) || this;
+            _this.carriedOnly = carriedOnly;
+            return _this;
+        }
+        ChargePad.prototype.canRotate = function (side) {
+            return side > 1;
+        };
+        ChargePad.prototype.onTick = function () {
+            _super.prototype.onTick.call(this);
+            var threadTime = World.getThreadTime();
+            if (threadTime % 2 != 0)
+                return;
+            var newActive = false;
+            if (this.data.energy >= 1) {
+                var playerHeight = 1.62;
+                var players = this.region.listEntitiesInAABB(this.x - 0.5, this.y + 1 + playerHeight, this.z - 0.5, this.x + 1.5, this.y + 3, this.z + 1.5, EEntityType.PLAYER);
+                if (players.length > 0) {
+                    newActive = true;
+                    var chargeRate = 10;
+                    if (threadTime % chargeRate == 0) {
+                        this.chargePlayers(players, this.getMaxPacketSize() * chargeRate);
+                    }
+                }
+            }
+            this.setActive(newActive);
+        };
+        ChargePad.prototype.chargePlayers = function (players, energy) {
+            for (var _i = 0, players_1 = players; _i < players_1.length; _i++) {
+                var playerUid = players_1[_i];
+                var actor = new PlayerEntity(playerUid);
+                for (var i = 0; i < 4; i++) {
+                    var armorSlot = actor.getArmor(i);
+                    var added = ChargeItemRegistry.addEnergyTo(armorSlot, "Eu", Math.min(energy, this.data.energy), this.getTier(), true);
+                    if (added > 0) {
+                        actor.setArmor(i, armorSlot);
+                        this.data.energy -= added;
+                        if (this.data.energy < 1)
+                            return;
+                    }
+                }
+                var startSlot = this.carriedOnly ? actor.getSelectedSlot() : 0;
+                var endSlot = this.carriedOnly ? startSlot : 35;
+                for (var i = startSlot; i <= endSlot; i++) {
+                    var invSlot = actor.getInventorySlot(i);
+                    var added = ChargeItemRegistry.addEnergyTo(invSlot, "Eu", Math.min(energy, this.data.energy), this.getTier(), true);
+                    if (added > 0) {
+                        actor.setInventorySlot(i, invSlot);
+                        this.data.energy -= added;
+                        if (this.data.energy < 1)
+                            break;
+                    }
+                }
+            }
+        };
+        return ChargePad;
+    }(Machine.BatteryBlock));
+    Machine.ChargePad = ChargePad;
+})(Machine || (Machine = {}));
+/// <reference path="./ChargePad.ts" />
+BlockRegistry.createBlock("chargepadBatBox", [
+    { name: "Charge Pad (BatBox)", texture: [["chargepad_batbox_bottom", 0], ["chargepad_batbox_top", 0], ["chargepad_batbox_back", 0], ["chargepad_batbox_front", 0], ["chargepad_batbox_side", 0], ["chargepad_batbox_side", 0]], inCreative: true }
+], "wood");
+Block.setDestroyTime(BlockID.chargepadBatBox, 3);
+BlockRegistry.setBlockMaterial(BlockID.chargepadBatBox, "wood");
+TileRenderer.setHandAndUiModel(BlockID.chargepadBatBox, 0, [["chargepad_batbox_bottom", 0], ["chargepad_batbox_top", 0], ["chargepad_batbox_back", 0], ["chargepad_batbox_front", 0], ["chargepad_batbox_side", 0], ["chargepad_batbox_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.chargepadBatBox, 2, [["chargepad_batbox_bottom", 0], ["chargepad_batbox_top", 0], ["chargepad_batbox_back", 0], ["chargepad_batbox_front", 0], ["chargepad_batbox_side", 0], ["chargepad_batbox_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.chargepadBatBox, 2, [["chargepad_batbox_bottom", 0], ["chargepad_batbox_top_on", 0], ["chargepad_batbox_back", 0], ["chargepad_batbox_front", 0], ["chargepad_batbox_side", 0], ["chargepad_batbox_side", 0]]);
+ItemName.addStorageBlockTooltip("chargepadBatBox", 1, "40K", 32);
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: BlockID.chargepadBatBox, count: 1, data: 0 }, [
+        "cpc",
+        "r#r"
+    ], ['#', BlockID.storageBatBox, -1, 'c', ItemID.circuitBasic, -1, 'p', VanillaBlockID.stone_pressure_plate, -1, 'r', ItemID.rubber, -1]);
+});
+var Machine;
+(function (Machine) {
+    var guiChargepadBatBox = BatteryBlockWindow("Charge Pad (BatBox)");
+    var ChargePadBatbox = /** @class */ (function (_super) {
+        __extends(ChargePadBatbox, _super);
+        function ChargePadBatbox() {
+            return _super.call(this, 1, 40000, BlockID.chargepadBatBox, guiChargepadBatBox, true) || this;
+        }
+        return ChargePadBatbox;
+    }(Machine.ChargePad));
+    Machine.ChargePadBatbox = ChargePadBatbox;
+    MachineRegistry.registerPrototype(BlockID.chargepadBatBox, new ChargePadBatbox());
+    MachineRegistry.setStoragePlaceFunction("chargepadBatBox", false);
+    StorageInterface.createInterface(BlockID.chargepadBatBox, BatteryBlockInterface);
+})(Machine || (Machine = {}));
+/// <reference path="./ChargePad.ts" />
+BlockRegistry.createBlock("chargepadCESU", [
+    { name: "Charge Pad (CESU)", texture: [["chargepad_cesu_bottom", 0], ["chargepad_cesu_top", 0], ["chargepad_cesu_back", 0], ["chargepad_cesu_front", 0], ["chargepad_cesu_side", 0], ["chargepad_cesu_side", 0]], inCreative: true }
+], "machine");
+BlockRegistry.setBlockMaterial(BlockID.chargepadCESU, "stone", 1);
+TileRenderer.setHandAndUiModel(BlockID.chargepadCESU, 0, [["chargepad_cesu_bottom", 0], ["chargepad_cesu_top", 0], ["chargepad_cesu_back", 0], ["chargepad_cesu_front", 0], ["chargepad_cesu_side", 0], ["chargepad_cesu_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.chargepadCESU, 2, [["chargepad_cesu_bottom", 0], ["chargepad_cesu_top", 0], ["chargepad_cesu_back", 0], ["chargepad_cesu_front", 0], ["chargepad_cesu_side", 0], ["chargepad_cesu_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.chargepadCESU, 2, [["chargepad_cesu_bottom", 0], ["chargepad_cesu_top_on", 0], ["chargepad_cesu_back", 0], ["chargepad_cesu_front", 0], ["chargepad_cesu_side", 0], ["chargepad_cesu_side", 0]]);
+ItemName.addStorageBlockTooltip("chargepadCESU", 2, "300K", 128);
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: BlockID.chargepadCESU, count: 1, data: 0 }, [
+        "cpc",
+        "r#r"
+    ], ['#', BlockID.storageCESU, -1, 'c', ItemID.circuitBasic, -1, 'p', VanillaBlockID.stone_pressure_plate, -1, 'r', ItemID.rubber, -1]);
+});
+var Machine;
+(function (Machine) {
+    var guiChargepadCESU = BatteryBlockWindow("Charge Pad (CESU)");
+    var ChargepadCESU = /** @class */ (function (_super) {
+        __extends(ChargepadCESU, _super);
+        function ChargepadCESU() {
+            return _super.call(this, 2, 300000, BlockID.chargepadCESU, guiChargepadCESU) || this;
+        }
+        return ChargepadCESU;
+    }(Machine.ChargePad));
+    Machine.ChargepadCESU = ChargepadCESU;
+    MachineRegistry.registerPrototype(BlockID.chargepadCESU, new ChargepadCESU());
+    MachineRegistry.setStoragePlaceFunction("chargepadCESU", false);
+    StorageInterface.createInterface(BlockID.chargepadCESU, BatteryBlockInterface);
+})(Machine || (Machine = {}));
+/// <reference path="./BatteryBlock.ts" />
+BlockRegistry.createBlock("chargepadMFE", [
+    { name: "Charge Pad (MFE)", texture: [["chargepad_mfe_bottom", 0], ["chargepad_mfe_top", 0], ["chargepad_mfe_back", 0], ["chargepad_mfe_front", 0], ["chargepad_mfe_side", 0], ["chargepad_mfe_side", 0]], inCreative: true }
+], "machine");
+BlockRegistry.setBlockMaterial(BlockID.chargepadMFE, "stone", 1);
+TileRenderer.setHandAndUiModel(BlockID.chargepadMFE, 0, [["chargepad_mfe_bottom", 0], ["chargepad_mfe_top", 0], ["chargepad_mfe_back", 0], ["chargepad_mfe_front", 0], ["chargepad_mfe_side", 0], ["chargepad_mfe_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.chargepadMFE, 2, [["chargepad_mfe_bottom", 0], ["chargepad_mfe_top", 0], ["chargepad_mfe_back", 0], ["chargepad_mfe_front", 0], ["chargepad_mfe_side", 0], ["chargepad_mfe_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.chargepadMFE, 2, [["chargepad_mfe_bottom", 0], ["chargepad_mfe_top_on", 0], ["chargepad_mfe_back", 0], ["chargepad_mfe_front", 0], ["chargepad_mfe_side", 0], ["chargepad_mfe_side", 0]]);
+ItemName.addStorageBlockTooltip("chargepadMFE", 3, "4M", 512);
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: BlockID.chargepadMFE, count: 1, data: 0 }, [
+        "cpc",
+        "r#r"
+    ], ['#', BlockID.storageMFE, -1, 'c', ItemID.circuitAdvanced, -1, 'p', VanillaBlockID.stone_pressure_plate, -1, 'r', ItemID.rubber, -1]);
+});
+var Machine;
+(function (Machine) {
+    var guiChargepadMFE = BatteryBlockWindow("Charge Pad (MFE)");
+    var ChargepadMFE = /** @class */ (function (_super) {
+        __extends(ChargepadMFE, _super);
+        function ChargepadMFE() {
+            return _super.call(this, 3, 4000000, BlockID.machineBlockBasic, guiChargepadMFE) || this;
+        }
+        return ChargepadMFE;
+    }(Machine.ChargePad));
+    Machine.ChargepadMFE = ChargepadMFE;
+    MachineRegistry.registerPrototype(BlockID.chargepadMFE, new ChargepadMFE());
+    MachineRegistry.setStoragePlaceFunction("chargepadMFE", false);
+    StorageInterface.createInterface(BlockID.chargepadMFE, BatteryBlockInterface);
+})(Machine || (Machine = {}));
+/// <reference path="./BatteryBlock.ts" />
+BlockRegistry.createBlock("chargepadMFSU", [
+    { name: "Charge Pad (MFSU)", texture: [["chargepad_mfsu_bottom", 0], ["chargepad_mfsu_top", 0], ["chargepad_mfsu_side", 0], ["chargepad_mfsu_front", 0], ["chargepad_mfsu_side", 0], ["chargepad_mfsu_side", 0]], inCreative: true }
+], "machine");
+BlockRegistry.setBlockMaterial(BlockID.chargepadMFSU, "stone", 1);
+TileRenderer.setHandAndUiModel(BlockID.chargepadMFSU, 0, [["chargepad_mfsu_bottom", 0], ["chargepad_mfsu_top", 0], ["chargepad_mfsu_side", 0], ["chargepad_mfsu_front", 0], ["chargepad_mfsu_side", 0], ["chargepad_mfsu_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.chargepadMFSU, 2, [["chargepad_mfsu_bottom", 0], ["chargepad_mfsu_top", 0], ["chargepad_mfsu_side", 0], ["chargepad_mfsu_front", 0], ["chargepad_mfsu_side", 0], ["chargepad_mfsu_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.chargepadMFSU, 2, [["chargepad_mfsu_bottom", 0], ["chargepad_mfsu_top_on", 0], ["chargepad_mfsu_side", 0], ["chargepad_mfsu_front", 0], ["chargepad_mfsu_side", 0], ["chargepad_mfsu_side", 0]]);
+ItemRegistry.setRarity(BlockID.chargepadMFSU, EnumRarity.UNCOMMON);
+ItemName.addStorageBlockTooltip("chargepadMFSU", 4, "60M", 2048);
+Item.addCreativeGroup("EUStorages", Translation.translate("Energy Storages"), [
+    BlockID.storageBatBox,
+    BlockID.storageCESU,
+    BlockID.storageMFE,
+    BlockID.storageMFSU,
+    BlockID.chargepadBatBox,
+    BlockID.chargepadCESU,
+    BlockID.chargepadMFE,
+    BlockID.chargepadMFSU
+]);
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: BlockID.chargepadMFSU, count: 1, data: 0 }, [
+        "cpc",
+        "r#r"
+    ], ['#', BlockID.storageMFSU, -1, 'c', ItemID.circuitAdvanced, -1, 'p', VanillaBlockID.stone_pressure_plate, -1, 'r', ItemID.rubber, -1]);
+});
+var Machine;
+(function (Machine) {
+    var guiChargepadMFSU = BatteryBlockWindow("Charge Pad (MFSU)");
+    var ChargepadMFSU = /** @class */ (function (_super) {
+        __extends(ChargepadMFSU, _super);
+        function ChargepadMFSU() {
+            return _super.call(this, 4, 6e7, BlockID.machineBlockAdvanced, guiChargepadMFSU) || this;
+        }
+        return ChargepadMFSU;
+    }(Machine.ChargePad));
+    Machine.ChargepadMFSU = ChargepadMFSU;
+    MachineRegistry.registerPrototype(BlockID.chargepadMFSU, new ChargepadMFSU());
+    MachineRegistry.setStoragePlaceFunction("chargepadMFSU", false);
+    StorageInterface.createInterface(BlockID.chargepadMFSU, BatteryBlockInterface);
 })(Machine || (Machine = {}));
 /// <reference path="../ElectricMachine.ts" />
 var Machine;
@@ -7216,20 +8495,21 @@ var Machine;
         Transformer.prototype.getTier = function () {
             return this.tier;
         };
-        Transformer.prototype.getEnergyStorage = function () {
+        Transformer.prototype.getEnergyCapacity = function () {
             return this.getMaxPacketSize();
         };
         Transformer.prototype.energyTick = function (type, src) {
-            var maxVoltage = this.getMaxPacketSize();
+            var maxPacketSize = this.getMaxPacketSize();
             if (this.data.increaseMode) {
-                if (this.data.energy >= maxVoltage) {
-                    this.data.energy += src.add(maxVoltage, maxVoltage) - maxVoltage;
+                if (this.data.energy >= maxPacketSize) {
+                    var energyOut = maxPacketSize - src.add(maxPacketSize);
+                    this.data.energy -= energyOut;
                 }
             }
             else {
-                if (this.data.energy >= maxVoltage / 4) {
-                    var output = this.data.energy;
-                    this.data.energy += src.add(output, maxVoltage / 4) - output;
+                if (this.data.energy >= maxPacketSize / 4) {
+                    var energyOut = this.data.energy - src.add(this.data.energy, maxPacketSize / 4);
+                    this.data.energy -= energyOut;
                 }
             }
         };
@@ -7246,7 +8526,7 @@ var Machine;
             }
             return this.data.increaseMode;
         };
-        Transformer.prototype.canExtractEnergy = function (side) {
+        Transformer.prototype.canEmitEnergy = function (side) {
             if (side == this.getFacing()) {
                 return this.data.increaseMode;
             }
@@ -7271,9 +8551,12 @@ BlockRegistry.createBlock("transformerLV", [
     { name: "LV Transformer", texture: [["lv_transformer_side", 0], ["lv_transformer_side", 0], ["lv_transformer_side", 0], ["lv_transformer_front", 0], ["lv_transformer_side", 0], ["lv_transformer_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.transformerLV, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.transformerLV, 0, [["lv_transformer_side", 0], ["lv_transformer_side", 0], ["lv_transformer_side", 0], ["lv_transformer_front", 0], ["lv_transformer_side", 0], ["lv_transformer_side", 0]], true);
+TileRenderer.setHandAndUiModel(BlockID.transformerLV, 0, [["lv_transformer_side", 0], ["lv_transformer_side", 0], ["lv_transformer_side", 0], ["lv_transformer_front", 0], ["lv_transformer_side", 0], ["lv_transformer_side", 0]]);
+TileRenderer.setStandardModel(BlockID.transformerLV, 0, [["lv_transformer_front", 0], ["lv_transformer_side", 0], ["lv_transformer_side", 1], ["lv_transformer_side", 1], ["lv_transformer_side", 1], ["lv_transformer_side", 1]]);
+TileRenderer.setStandardModel(BlockID.transformerLV, 1, [["lv_transformer_side", 0], ["lv_transformer_front", 0], ["lv_transformer_side", 1], ["lv_transformer_side", 1], ["lv_transformer_side", 1], ["lv_transformer_side", 1]]);
+TileRenderer.setStandardModelWithRotation(BlockID.transformerLV, 2, [["lv_transformer_side", 0], ["lv_transformer_side", 0], ["lv_transformer_side", 0], ["lv_transformer_front", 0], ["lv_transformer_side", 0], ["lv_transformer_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.transformerLV, true);
-ItemName.addTooltip(BlockID.transformerLV, "Low: 32 EU/t High: 128 EU/t");
+ItemName.addTooltip(BlockID.transformerLV, "tooltip.transformer", 32, 128);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.transformerLV, count: 1, data: 0 }, [
         "aba",
@@ -7289,13 +8572,13 @@ BlockRegistry.createBlock("transformerMV", [
 BlockRegistry.setBlockMaterial(BlockID.transformerMV, "stone", 1);
 TileRenderer.setStandardModelWithRotation(BlockID.transformerMV, 0, [["mv_transformer_side", 0], ["mv_transformer_side", 0], ["mv_transformer_side", 0], ["mv_transformer_front", 0], ["mv_transformer_side", 0], ["mv_transformer_side", 0]], true);
 TileRenderer.setRotationFunction(BlockID.transformerMV, true);
-ItemName.addTooltip(BlockID.transformerMV, "Low: 128 EU/t High: 512 EU/t");
+ItemName.addTooltip(BlockID.transformerMV, "tooltip.transformer", 128, 512);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.transformerMV, count: 1, data: 0 }, [
-        "b",
-        "x",
-        "b"
-    ], ['x', BlockID.machineBlockBasic, 0, 'b', ItemID.cableCopper1, 0]);
+        " b ",
+        "oxo",
+        " b "
+    ], ['x', BlockID.machineBlockBasic, 0, 'o', ItemID.coil, 0, 'b', ItemID.cableCopper1, 0]);
 });
 MachineRegistry.registerPrototype(BlockID.transformerMV, new Machine.Transformer(3, BlockID.machineBlockBasic));
 /// <reference path="./Transformer.ts" />
@@ -7309,7 +8592,7 @@ TileRenderer.setStandardModel(BlockID.transformerHV, 1, [["hv_transformer_side",
 TileRenderer.setStandardModelWithRotation(BlockID.transformerHV, 2, [["hv_transformer_side", 0], ["hv_transformer_side", 0], ["hv_transformer_side", 0], ["hv_transformer_front", 0], ["hv_transformer_side", 0], ["hv_transformer_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.transformerHV, true);
 ItemRegistry.setRarity(BlockID.transformerHV, EnumRarity.UNCOMMON);
-ItemName.addTooltip(BlockID.transformerHV, "Low: 512 EU/t High: 2048 EU/t");
+ItemName.addTooltip(BlockID.transformerHV, "tooltip.transformer", 512, 2048);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.transformerHV, count: 1, data: 0 }, [
         " b ",
@@ -7329,7 +8612,7 @@ TileRenderer.setStandardModel(BlockID.transformerEV, 1, [["ev_transformer_side",
 TileRenderer.setStandardModelWithRotation(BlockID.transformerEV, 2, [["ev_transformer_side", 0], ["ev_transformer_side", 0], ["ev_transformer_side", 0], ["ev_transformer_front", 0], ["ev_transformer_side", 0], ["ev_transformer_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.transformerEV, true);
 ItemRegistry.setRarity(BlockID.transformerEV, EnumRarity.UNCOMMON);
-ItemName.addTooltip(BlockID.transformerEV, "Low: 2048 EU/t High: 8192 EU/t");
+ItemName.addTooltip(BlockID.transformerEV, "tooltip.transformer", 2048, 8192);
 Item.addCreativeGroup("EUTransformers", Translation.translate("Transformers"), [
     BlockID.transformerLV,
     BlockID.transformerMV,
@@ -7345,11 +8628,11 @@ Callback.addCallback("PreLoaded", function () {
 });
 MachineRegistry.registerPrototype(BlockID.transformerEV, new Machine.Transformer(5, BlockID.machineBlockBasic));
 BlockRegistry.createBlock("ironFurnace", [
-    { name: "Iron Furnace", texture: [["iron_furnace_bottom", 0], ["iron_furnace_top", 0], ["iron_furnace_side", 0], ["iron_furnace_front", 0], ["iron_furnace_side", 0], ["iron_furnace_side", 0]], inCreative: true }
+    { name: "Iron Furnace", texture: [["ic_iron_furnace_bottom", 0], ["ic_iron_furnace_top", 0], ["ic_iron_furnace_side", 0], ["ic_iron_furnace_front", 0], ["ic_iron_furnace_side", 0], ["ic_iron_furnace_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.ironFurnace, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.ironFurnace, 2, [["iron_furnace_bottom", 0], ["iron_furnace_top", 0], ["iron_furnace_side", 0], ["iron_furnace_front", 0], ["iron_furnace_side", 0], ["iron_furnace_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.ironFurnace, 2, [["iron_furnace_bottom", 0], ["iron_furnace_top", 0], ["iron_furnace_side", 0], ["iron_furnace_front", 1], ["iron_furnace_side", 0], ["iron_furnace_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.ironFurnace, 2, [["ic_iron_furnace_bottom", 0], ["ic_iron_furnace_top", 0], ["ic_iron_furnace_side", 0], ["ic_iron_furnace_front", 0], ["ic_iron_furnace_side", 0], ["ic_iron_furnace_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.ironFurnace, 2, [["ic_iron_furnace_bottom", 0], ["ic_iron_furnace_top", 0], ["ic_iron_furnace_side", 0], ["ic_iron_furnace_front_on", 0], ["ic_iron_furnace_side", 0], ["ic_iron_furnace_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.ironFurnace);
 Callback.addCallback("PreLoaded", function () {
     Item.addCreativeGroup("IC2ProcessingMachines", Translation.translate("Processing Machines"), [
@@ -7365,6 +8648,7 @@ Callback.addCallback("PreLoaded", function () {
         BlockID.metalFormer,
         BlockID.oreWasher,
         BlockID.thermalCentrifuge,
+        BlockID.blockCuttingMachine,
         BlockID.blastFurnace,
         BlockID.icFermenter,
         BlockID.massFabricator
@@ -7375,25 +8659,25 @@ Callback.addCallback("PreLoaded", function () {
         "x#x"
     ], ['#', 61, -1, 'x', ItemID.plateIron, 0]);
 });
-var guiIronFurnace = MachineRegistry.createInventoryWindow("Iron Furnace", {
-    drawing: [
-        { type: "bitmap", x: 530, y: 155, bitmap: "arrow_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 450, y: 155, bitmap: "fire_background", scale: GUI_SCALE }
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 530, y: 155, direction: 0, bitmap: "arrow_bar_scale", scale: GUI_SCALE, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("furnace");
-                }
-            } },
-        "burningScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "fire_scale", scale: GUI_SCALE },
-        "slotSource": { type: "slot", x: 441, y: 79 },
-        "slotFuel": { type: "slot", x: 441, y: 218 },
-        "slotResult": { type: "slot", x: 625, y: 148 },
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiIronFurnace = MachineRegistry.createInventoryWindow("Iron Furnace", {
+        drawing: [
+            { type: "bitmap", x: 530, y: 155, bitmap: "arrow_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 450, y: 155, bitmap: "fire_background", scale: GUI_SCALE }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 530, y: 155, direction: 0, bitmap: "arrow_bar_scale", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("furnace");
+                    }
+                } },
+            "burningScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "fire_scale", scale: GUI_SCALE },
+            "slotSource": { type: "slot", x: 441, y: 79 },
+            "slotFuel": { type: "slot", x: 441, y: 218 },
+            "slotResult": { type: "slot", x: 625, y: 148 },
+        }
+    });
     var IronFurnace = /** @class */ (function (_super) {
         __extends(IronFurnace, _super);
         function IronFurnace() {
@@ -7507,19 +8791,28 @@ var Machine;
             _this.defaultDrop = BlockID.machineBlockBasic;
             _this.defaultTier = 1;
             _this.defaultEnergyStorage = 1200;
+            _this.tier = _this.defaultTier;
             return _this;
         }
         ProcessingMachine.prototype.getTier = function () {
             return this.tier;
         };
-        ProcessingMachine.prototype.getEnergyStorage = function () {
-            return this.energyStorage;
+        ProcessingMachine.prototype.getEnergyCapacity = function () {
+            return this.energyCapacity;
+        };
+        ProcessingMachine.prototype.onInit = function () {
+            _super.prototype.onInit.call(this);
+            this.upgradeSet = UpgradeAPI.getUpgradeSet(this);
+            this.useUpgrades(true);
+        };
+        ProcessingMachine.prototype.isValidSource = function (id, data) {
+            return true;
         };
         ProcessingMachine.prototype.setupContainer = function () {
             var _this = this;
             StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data) {
                 if (name.startsWith("slotSource"))
-                    return !!_this.getRecipeResult(id, data);
+                    return _this.isValidSource(id, data);
                 if (name == "slotEnergy")
                     return ChargeItemRegistry.isValidStorage(id, "Eu", _this.getTier());
                 if (name.startsWith("slotUpgrade"))
@@ -7527,94 +8820,163 @@ var Machine;
                 return false;
             });
         };
-        ProcessingMachine.prototype.getRecipeResult = function (id, data) {
-            return null;
-        };
-        ProcessingMachine.prototype.useUpgrades = function () {
-            var upgrades = UpgradeAPI.useUpgrades(this);
+        ProcessingMachine.prototype.useUpgrades = function (isInit) {
+            var upgrades = UpgradeAPI.performUpgrades(this.upgradeSet, isInit);
             this.tier = upgrades.getTier(this.defaultTier);
-            this.energyStorage = upgrades.getEnergyStorage(this.defaultEnergyStorage);
+            this.energyCapacity = upgrades.getEnergyStorage(this.defaultEnergyStorage);
             this.energyDemand = upgrades.getEnergyDemand(this.defaultEnergyDemand);
-            this.processTime = upgrades.getProcessTime(this.defaultProcessTime);
+            this.processTimeMultiplier = upgrades.processTimeMultiplier;
             return upgrades;
         };
         ProcessingMachine.prototype.onTick = function () {
-            this.useUpgrades();
+            this.useUpgrades(false);
             StorageInterface.checkHoppers(this);
-            var newActive = false;
-            var sourceSlot = this.container.getSlot("slotSource");
-            var result = this.getRecipeResult(sourceSlot.id, sourceSlot.data);
-            if (result && (sourceSlot.count >= result.sourceCount || !result.sourceCount)) {
-                var resultSlot = this.container.getSlot("slotResult");
-                if (resultSlot.id == result.id && (!result.data || resultSlot.data == result.data) && resultSlot.count <= 64 - result.count || resultSlot.id == 0) {
-                    if (this.data.energy >= this.energyDemand) {
-                        this.data.energy -= this.energyDemand;
-                        this.data.progress += 1 / this.processTime;
-                        newActive = true;
-                    }
-                    if (+this.data.progress.toFixed(3) >= 1) {
-                        var sourceCount = result.sourceCount || 1;
-                        sourceSlot.setSlot(sourceSlot.id, sourceSlot.count - sourceCount, sourceSlot.data);
-                        sourceSlot.validate();
-                        resultSlot.setSlot(result.id, resultSlot.count + result.count, result.data || 0);
-                        this.data.progress = 0;
-                    }
-                }
-            }
-            else {
-                this.data.progress = 0;
-            }
-            this.setActive(newActive);
+            var isActive = this.performRecipe();
+            this.setActive(isActive);
             this.dischargeSlot("slotEnergy");
             this.container.setScale("progressScale", this.data.progress);
             this.container.setScale("energyScale", this.getRelativeEnergy());
             this.container.sendChanges();
         };
+        ProcessingMachine.prototype.performRecipe = function () {
+            return false;
+        };
+        ProcessingMachine.prototype.updateProgress = function (recipeProcessTime) {
+            if (recipeProcessTime === void 0) { recipeProcessTime = this.defaultProcessTime; }
+            var processTime = Math.max(Math.round(recipeProcessTime * this.processTimeMultiplier), 1);
+            this.data.progress += 1 / processTime;
+        };
+        ProcessingMachine.prototype.isCompletedProgress = function () {
+            return +this.data.progress.toFixed(3) >= 1;
+        };
         ProcessingMachine.prototype.canRotate = function (side) {
             return side > 1;
+        };
+        ProcessingMachine.prototype.onInterrupt = function () {
+            if (this.getInterruptSound()) {
+                this.playOnce(this.getInterruptSound());
+            }
+        };
+        ProcessingMachine.prototype.getInterruptSound = function () {
+            return null;
         };
         return ProcessingMachine;
     }(Machine.ElectricMachine));
     Machine.ProcessingMachine = ProcessingMachine;
 })(Machine || (Machine = {}));
-/// <reference path="ProcessingMachine.ts" />
+/// <reference path="./ProcessingMachine.ts" />
+var Machine;
+(function (Machine) {
+    var BasicProcessingMachine = /** @class */ (function (_super) {
+        __extends(BasicProcessingMachine, _super);
+        function BasicProcessingMachine() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        BasicProcessingMachine.prototype.getRecipeDictionary = function () {
+            return null;
+        };
+        BasicProcessingMachine.prototype.getRecipe = function (id, data) {
+            var dictionary = this.getRecipeDictionary();
+            return dictionary.getRecipe(id, data);
+        };
+        BasicProcessingMachine.prototype.isValidSource = function (id, data) {
+            return !!this.getRecipe(id, data);
+        };
+        BasicProcessingMachine.prototype.getOutputSlots = function () {
+            return ["slotResult"];
+        };
+        BasicProcessingMachine.prototype.performRecipe = function () {
+            var _a;
+            var sourceSlot = this.container.getSlot("slotSource");
+            var recipe = this.getRecipe(sourceSlot.id, sourceSlot.data);
+            // treat recipe.source as nullable for electric furnace and recycler recipes
+            if (recipe && (!recipe.source || recipe.source.count <= sourceSlot.count)) {
+                if (this.data.energy >= this.energyDemand && this.canPutResult(recipe.result)) {
+                    this.data.energy -= this.energyDemand;
+                    this.updateProgress(recipe.processTime);
+                    if (this.isCompletedProgress()) {
+                        this.decreaseSlot(sourceSlot, ((_a = recipe.source) === null || _a === void 0 ? void 0 : _a.count) || 1);
+                        this.putResult(recipe.result);
+                        this.data.progress = 0;
+                    }
+                    return true;
+                }
+                if (this.data.progress > 0 && this.networkData.getBoolean(NetworkDataKeys.isActive)) {
+                    this.onInterrupt(); // interrupt if machine stopped working while processing item
+                }
+            }
+            else if (this.data.progress > 0) {
+                this.data.progress = 0;
+                this.onInterrupt(); // interrupt when the source item is extracted
+            }
+            return false;
+        };
+        BasicProcessingMachine.prototype.canPutResult = function (result) {
+            var outputSlots = this.getOutputSlots();
+            for (var i = 0; i < Math.min(result.length, outputSlots.length); i++) {
+                var item = result[i];
+                var itemData = item.data || 0;
+                var resultSlot = this.container.getSlot(outputSlots[i]);
+                if (resultSlot.id != 0 && (resultSlot.id != item.id || resultSlot.data != itemData || resultSlot.count + item.count > 64)) {
+                    return false;
+                }
+            }
+            return true;
+        };
+        BasicProcessingMachine.prototype.putResult = function (result) {
+            var outputSlots = this.getOutputSlots();
+            for (var i = 0; i < Math.min(result.length, outputSlots.length); i++) {
+                var entry = result[i];
+                if (entry.chance != null && Math.random() >= entry.chance) {
+                    continue;
+                }
+                var resultSlot = this.container.getSlot(outputSlots[i]);
+                resultSlot.setSlot(entry.id, resultSlot.count + entry.count, entry.data || 0, entry.extra || null);
+            }
+        };
+        return BasicProcessingMachine;
+    }(Machine.ProcessingMachine));
+    Machine.BasicProcessingMachine = BasicProcessingMachine;
+})(Machine || (Machine = {}));
+/// <reference path="BasicProcessingMachine.ts" />
 BlockRegistry.createBlock("electricFurnace", [
-    { name: "Electric Furnace", texture: [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["electric_furnace", 0], ["machine_side", 0], ["machine_side", 0]], inCreative: true }
+    { name: "Electric Furnace", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["electric_furnace_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.electricFurnace, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.electricFurnace, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["electric_furnace", 0], ["machine_side", 0], ["machine_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.electricFurnace, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["electric_furnace", 1], ["machine_side", 0], ["machine_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.electricFurnace, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["electric_furnace_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.electricFurnace, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["electric_furnace_front_on", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.electricFurnace);
 ItemName.addTierTooltip("electricFurnace", 1);
+ItemName.addConsumptionTooltip("electricFurnace", "EU", 3);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.electricFurnace, count: 1, data: 0 }, [
         " a ",
         "x#x"
     ], ['#', BlockID.ironFurnace, -1, 'x', 331, 0, 'a', ItemID.circuitBasic, 0]);
 });
-var guiElectricFurnace = MachineRegistry.createInventoryWindow("Electric Furnace", {
-    drawing: [
-        { type: "bitmap", x: 530, y: 155, bitmap: "arrow_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE }
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 530, y: 155, direction: 0, bitmap: "arrow_bar_scale", scale: GUI_SCALE, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("furnace");
-                }
-            } },
-        "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "slotSource": { type: "slot", x: 441, y: 79 },
-        "slotEnergy": { type: "slot", x: 441, y: 218 },
-        "slotResult": { type: "slot", x: 625, y: 148 },
-        "slotUpgrade1": { type: "slot", x: 820, y: 60 },
-        "slotUpgrade2": { type: "slot", x: 820, y: 119 },
-        "slotUpgrade3": { type: "slot", x: 820, y: 178 },
-        "slotUpgrade4": { type: "slot", x: 820, y: 237 },
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiElectricFurnace = MachineRegistry.createInventoryWindow("Electric Furnace", {
+        drawing: [
+            { type: "bitmap", x: 530, y: 155, bitmap: "arrow_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 530, y: 155, direction: 0, bitmap: "arrow_bar_scale", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("furnace");
+                    }
+                } },
+            "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "slotSource": { type: "slot", x: 441, y: 79 },
+            "slotEnergy": { type: "slot", x: 441, y: 218 },
+            "slotResult": { type: "slot", x: 625, y: 148 },
+            "slotUpgrade1": { type: "slot", x: 820, y: 60 },
+            "slotUpgrade2": { type: "slot", x: 820, y: 119 },
+            "slotUpgrade3": { type: "slot", x: 820, y: 178 },
+            "slotUpgrade4": { type: "slot", x: 820, y: 237 },
+        }
+    });
     var ElectricFurnace = /** @class */ (function (_super) {
         __extends(ElectricFurnace, _super);
         function ElectricFurnace() {
@@ -7628,8 +8990,12 @@ var Machine;
         ElectricFurnace.prototype.getScreenByName = function () {
             return guiElectricFurnace;
         };
-        ElectricFurnace.prototype.getRecipeResult = function (id, data) {
-            return Recipes.getFurnaceRecipeResult(id, data, "iron");
+        ElectricFurnace.prototype.getRecipe = function (id, data) {
+            var result = Recipes.getFurnaceRecipeResult(id, data, "iron");
+            return result && { source: null, result: [result] };
+        };
+        ElectricFurnace.prototype.isValidSource = function (id, data) {
+            return !!Recipes.getFurnaceRecipeResult(id, data, "iron");
         };
         ElectricFurnace.prototype.getStartingSound = function () {
             return "ElectroFurnaceStart.ogg";
@@ -7637,11 +9003,11 @@ var Machine;
         ElectricFurnace.prototype.getOperationSound = function () {
             return "ElectroFurnaceLoop.ogg";
         };
-        ElectricFurnace.prototype.getInterruptSound = function () {
+        ElectricFurnace.prototype.getFinishingSound = function () {
             return "ElectroFurnaceStop.ogg";
         };
         return ElectricFurnace;
-    }(Machine.ProcessingMachine));
+    }(Machine.BasicProcessingMachine));
     Machine.ElectricFurnace = ElectricFurnace;
     MachineRegistry.registerPrototype(BlockID.electricFurnace, new ElectricFurnace());
     StorageInterface.createInterface(BlockID.electricFurnace, {
@@ -7649,21 +9015,22 @@ var Machine;
             "slotSource": { input: true },
             "slotResult": { output: true }
         },
-        isValidInput: function (item) {
-            return !!Recipes.getFurnaceRecipeResult(item.id, item.data, "iron");
+        isValidInput: function (item, side, tileEntity) {
+            return tileEntity.isValidSource(item.id, item.data);
         }
     });
 })(Machine || (Machine = {}));
 /// <reference path="ProcessingMachine.ts" />
 BlockRegistry.createBlock("inductionFurnace", [
-    { name: "Induction Furnace", texture: [["machine_advanced", 0], ["machine_advanced", 0], ["machine_back", 0], ["ind_furnace_front", 0], ["ind_furnace_side", 0], ["ind_furnace_side", 0]], inCreative: true }
+    { name: "Induction Furnace", texture: [["ic_machine_advanced_bottom", 0], ["ic_machine_advanced_top", 0], ["ic_machine_back", 0], ["ind_furnace_front", 0], ["ind_furnace_side", 0], ["ind_furnace_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.inductionFurnace, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.inductionFurnace, 2, [["machine_advanced", 0], ["machine_advanced", 0], ["machine_back", 0], ["ind_furnace_front", 0], ["ind_furnace_side", 0], ["ind_furnace_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.inductionFurnace, 2, [["machine_advanced", 0], ["machine_advanced", 0], ["machine_back", 0], ["ind_furnace_front", 1], ["ind_furnace_side", 1], ["ind_furnace_side", 1]]);
+TileRenderer.setStandardModelWithRotation(BlockID.inductionFurnace, 2, [["ic_machine_advanced_bottom", 0], ["ic_machine_advanced_top", 0], ["ic_machine_back", 0], ["ind_furnace_front", 0], ["ind_furnace_side", 0], ["ind_furnace_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.inductionFurnace, 2, [["ic_machine_advanced_bottom", 0], ["ic_machine_advanced_top", 0], ["ic_machine_back", 0], ["ind_furnace_front_on", 0], ["ind_furnace_side_on", 0], ["ind_furnace_side_on", 0]]);
 TileRenderer.setRotationFunction(BlockID.inductionFurnace);
 ItemRegistry.setRarity(BlockID.inductionFurnace, EnumRarity.UNCOMMON);
 ItemName.addTierTooltip("inductionFurnace", 2);
+ItemName.addConsumptionTooltip("inductionFurnace", "EU", 1, 16);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.inductionFurnace, count: 1, data: 0 }, [
         "xxx",
@@ -7671,32 +9038,32 @@ Callback.addCallback("PreLoaded", function () {
         "xax"
     ], ['#', BlockID.electricFurnace, -1, 'x', ItemID.ingotCopper, 0, 'a', BlockID.machineBlockAdvanced, 0]);
 });
-var guiInductionFurnace = MachineRegistry.createInventoryWindow("Induction Furnace", {
-    drawing: [
-        { type: "bitmap", x: 630, y: 146, bitmap: "arrow_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 550, y: 150, bitmap: "energy_small_background", scale: GUI_SCALE }
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 630, y: 146, direction: 0, bitmap: "arrow_bar_scale", scale: GUI_SCALE, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("furnace");
-                }
-            } },
-        "energyScale": { type: "scale", x: 550, y: 150, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "slotSource1": { type: "slot", x: 511, y: 75 },
-        "slotSource2": { type: "slot", x: 571, y: 75 },
-        "slotEnergy": { type: "slot", x: 541, y: 212 },
-        "slotResult1": { type: "slot", x: 725, y: 142 },
-        "slotResult2": { type: "slot", x: 785, y: 142 },
-        "slotUpgrade1": { type: "slot", x: 900, y: 80 },
-        "slotUpgrade2": { type: "slot", x: 900, y: 144 },
-        "slotUpgrade3": { type: "slot", x: 900, y: 208 },
-        "textInfo1": { type: "text", x: 402, y: 143, width: 100, height: 30, text: Translation.translate("Heat:") },
-        "textInfo2": { type: "text", x: 402, y: 173, width: 100, height: 30, text: "0%" },
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiInductionFurnace = MachineRegistry.createInventoryWindow("Induction Furnace", {
+        drawing: [
+            { type: "bitmap", x: 630, y: 146, bitmap: "arrow_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 550, y: 150, bitmap: "energy_small_background", scale: GUI_SCALE }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 630, y: 146, direction: 0, bitmap: "arrow_bar_scale", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("furnace");
+                    }
+                } },
+            "energyScale": { type: "scale", x: 550, y: 150, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "slotSource1": { type: "slot", x: 511, y: 75 },
+            "slotSource2": { type: "slot", x: 571, y: 75 },
+            "slotEnergy": { type: "slot", x: 541, y: 212 },
+            "slotResult1": { type: "slot", x: 725, y: 142 },
+            "slotResult2": { type: "slot", x: 785, y: 142 },
+            "slotUpgrade1": { type: "slot", x: 900, y: 80 },
+            "slotUpgrade2": { type: "slot", x: 900, y: 144 },
+            "slotUpgrade3": { type: "slot", x: 900, y: 208 },
+            "textInfo1": { type: "text", x: 402, y: 143, width: 100, height: 30, text: Translation.translate("Heat:") },
+            "textInfo2": { type: "text", x: 402, y: 173, width: 100, height: 30, text: "0%" },
+        }
+    });
     var InductionFurnace = /** @class */ (function (_super) {
         __extends(InductionFurnace, _super);
         function InductionFurnace() {
@@ -7709,6 +9076,7 @@ var Machine;
             _this.energyDemand = 16;
             _this.defaultTier = 2;
             _this.defaultEnergyStorage = 10000;
+            _this.maxHeat = 10000;
             _this.defaultDrop = BlockID.machineBlockAdvanced;
             _this.upgrades = ["transformer", "energyStorage", "redstone", "itemEjector", "itemPulling"];
             _this.isHeating = false;
@@ -7717,11 +9085,14 @@ var Machine;
         InductionFurnace.prototype.getScreenByName = function () {
             return guiInductionFurnace;
         };
+        InductionFurnace.prototype.isValidSource = function (id, data) {
+            return !!this.getRecipeResult(id, data);
+        };
         InductionFurnace.prototype.getRecipeResult = function (id, data) {
             return Recipes.getFurnaceRecipeResult(id, data, "iron");
         };
         InductionFurnace.prototype.checkResult = function (result, slot) {
-            return result && (slot.id == result.id && slot.data == result.data && slot.count < 64 || slot.id == 0);
+            return result && (slot.id == 0 || (slot.id == result.id && slot.data == result.data && slot.count < 64));
         };
         InductionFurnace.prototype.putResult = function (result, sourceSlot, resultSlot) {
             if (this.checkResult(result, resultSlot)) {
@@ -7729,15 +9100,15 @@ var Machine;
                 resultSlot.setSlot(result.id, resultSlot.count + 1, result.data);
             }
         };
-        InductionFurnace.prototype.useUpgrades = function () {
-            var upgrades = UpgradeAPI.useUpgrades(this);
+        InductionFurnace.prototype.useUpgrades = function (isInit) {
+            var upgrades = UpgradeAPI.performUpgrades(this.upgradeSet, isInit);
             this.tier = upgrades.getTier(this.defaultTier);
-            this.energyStorage = upgrades.getEnergyStorage(this.defaultEnergyStorage);
+            this.energyCapacity = upgrades.getEnergyStorage(this.defaultEnergyStorage);
             this.isHeating = upgrades.getRedstoneInput(this.isPowered);
             return upgrades;
         };
         InductionFurnace.prototype.onTick = function () {
-            this.useUpgrades();
+            this.useUpgrades(false);
             StorageInterface.checkHoppers(this);
             var newActive = false;
             var sourceSlot1 = this.container.getSlot("slotSource1");
@@ -7749,9 +9120,8 @@ var Machine;
             if (this.checkResult(result1, resultSlot1) || this.checkResult(result2, resultSlot2)) {
                 if (this.data.energy >= this.energyDemand && this.data.progress < 100) {
                     this.data.energy -= this.energyDemand;
-                    if (this.data.heat < 10000) {
+                    if (this.data.heat < this.maxHeat)
                         this.data.heat++;
-                    }
                     this.data.progress += this.data.heat / 1200;
                     newActive = true;
                 }
@@ -7764,9 +9134,8 @@ var Machine;
             else {
                 this.data.progress = 0;
                 if (this.isHeating && this.data.energy > 0) {
-                    if (this.data.heat < 10000) {
+                    if (this.data.heat < this.maxHeat)
                         this.data.heat++;
-                    }
                     this.data.energy--;
                 }
                 else {
@@ -7789,7 +9158,7 @@ var Machine;
         InductionFurnace.prototype.getOperationSound = function () {
             return "InductionLoop.ogg";
         };
-        InductionFurnace.prototype.getInterruptSound = function () {
+        InductionFurnace.prototype.getFinishingSound = function () {
             return "InductionStop.ogg";
         };
         return InductionFurnace;
@@ -7808,133 +9177,152 @@ var Machine;
         }
     });
 })(Machine || (Machine = {}));
-/// <reference path="ProcessingMachine.ts" />
+/// <reference path="BasicProcessingMachine.ts" />
 BlockRegistry.createBlock("macerator", [
-    { name: "Macerator", texture: [["machine_bottom", 0], ["macerator_top", 0], ["machine_side", 0], ["macerator_front", 0], ["machine_side", 0], ["machine_side", 0]], inCreative: true }
+    { name: "Macerator", texture: [["ic_machine_bottom", 0], ["macerator_top", 0], ["ic_machine_side", 0], ["macerator_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.macerator, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.macerator, 2, [["machine_bottom", 0], ["macerator_top", 0], ["machine_side", 0], ["macerator_front", 0], ["machine_side", 0], ["machine_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.macerator, 2, [["machine_bottom", 0], ["macerator_top", 1], ["machine_side", 0], ["macerator_front", 1], ["machine_side", 0], ["machine_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.macerator, 2, [["ic_machine_bottom", 0], ["macerator_top", 0], ["ic_machine_side", 0], ["macerator_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.macerator, 2, [["ic_machine_bottom", 0], ["macerator_top_on", 0], ["ic_machine_side", 0], ["macerator_front_on", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.macerator);
 ItemName.addTierTooltip("macerator", 1);
+ItemName.addConsumptionTooltip("macerator", "EU", 2);
 Callback.addCallback("PreLoaded", function () {
     if (IC2Config.hardRecipes) {
         Recipes.addShaped({ id: BlockID.macerator, count: 1, data: 0 }, [
-            "xxx",
+            "xfx",
             "b#b",
             " a "
-        ], ['#', BlockID.machineBlockBasic, -1, 'x', 264, -1, 'b', ItemID.circuitBasic, -1, 'a', ItemID.electricMotor, -1]);
+        ], ['#', BlockID.machineBlockBasic, -1, 'x', 264, -1, 'f', 318, -1, 'b', ItemID.circuitBasic, -1, 'a', ItemID.electricMotor, -1]);
     }
     else {
         Recipes.addShaped({ id: BlockID.macerator, count: 1, data: 0 }, [
             "xxx",
             "b#b",
             " a "
-        ], ['#', BlockID.machineBlockBasic, -1, 'x', 318, -1, 'b', 4, -1, 'a', ItemID.circuitBasic, -1]);
+        ], ['#', BlockID.machineBlockBasic, -1, 'x', 318, -1, 'b', ItemID.circuitBasic, -1, 'a', ItemID.electricMotor, -1]);
     }
-    MachineRecipeRegistry.registerRecipesFor("macerator", {
-        // ores
-        "minecraft:gold_ore": { id: ItemID.crushedGold, count: 2, data: 0 },
-        "minecraft:iron_ore": { id: ItemID.crushedIron, count: 2, data: 0 },
-        "BlockID.oreCopper": { id: ItemID.crushedCopper, count: 2, data: 0 },
-        "BlockID.oreTin": { id: ItemID.crushedTin, count: 2, data: 0 },
-        "BlockID.oreLead": { id: ItemID.crushedLead, count: 2, data: 0 },
-        "BlockID.oreSilver": { id: ItemID.crushedSilver, count: 2, data: 0 },
-        "BlockID.oreUranium": { id: ItemID.crushedUranium, count: 2, data: 0 },
-        // ingots
-        "minecraft:iron_ingot": { id: ItemID.dustIron, count: 1, data: 0 },
-        "minecraft:gold_ingot": { id: ItemID.dustGold, count: 1, data: 0 },
-        "ItemID.ingotCopper": { id: ItemID.dustCopper, count: 1, data: 0 },
-        "ItemID.ingotTin": { id: ItemID.dustTin, count: 1, data: 0 },
-        "ItemID.ingotBronze": { id: ItemID.dustBronze, count: 1, data: 0 },
-        "ItemID.ingotSteel": { id: ItemID.dustSteel, count: 1, data: 0 },
-        "ItemID.ingotLead": { id: ItemID.dustLead, count: 1, data: 0 },
-        "ItemID.ingotSilver": { id: ItemID.dustSilver, count: 1, data: 0 },
-        // plates
-        "ItemID.plateIron": { id: ItemID.dustIron, count: 1, data: 0 },
-        "ItemID.plateGold": { id: ItemID.dustGold, count: 1, data: 0 },
-        "ItemID.plateCopper": { id: ItemID.dustCopper, count: 1, data: 0 },
-        "ItemID.plateTin": { id: ItemID.dustTin, count: 1, data: 0 },
-        "ItemID.plateBronze": { id: ItemID.dustBronze, count: 1, data: 0 },
-        "ItemID.plateSteel": { id: ItemID.dustSteel, count: 1, data: 0 },
-        "ItemID.plateLead": { id: ItemID.dustLead, count: 1, data: 0 },
-        "ItemID.plateLapis": { id: ItemID.dustLapis, count: 1, data: 0 },
-        // dense plates
-        "ItemID.densePlateIron": { id: ItemID.dustIron, count: 9, data: 0 },
-        "ItemID.densePlateGold": { id: ItemID.dustGold, count: 9, data: 0 },
-        "ItemID.densePlateCopper": { id: ItemID.dustCopper, count: 9, data: 0 },
-        "ItemID.densePlateTin": { id: ItemID.dustTin, count: 9, data: 0 },
-        "ItemID.densePlateBronze": { id: ItemID.dustBronze, count: 9, data: 0 },
-        "ItemID.densePlateSteel": { id: ItemID.dustSteel, count: 9, data: 0 },
-        "ItemID.densePlateLead": { id: ItemID.dustLead, count: 9, data: 0 },
-        // other resources
-        "minecraft:lapis_block": { id: ItemID.dustLapis, count: 9, data: 0 },
-        "minecraft:coal_block": { id: ItemID.dustCoal, count: 9, data: 0 },
-        "minecraft:coal:0": { id: ItemID.dustCoal, count: 1, data: 0 },
-        "minecraft:diamond": { id: ItemID.dustDiamond, count: 1, data: 0 },
-        "minecraft:lapis_lazuli": { id: ItemID.dustLapis, count: 1, data: 0 },
-        "minecraft:spider_eye": { id: ItemID.grinPowder, count: 2, data: 0 },
-        "minecraft:poisonous_potato": { id: ItemID.grinPowder, count: 1, data: 0 },
-        // other materials
-        "minecraft:stone:0": { id: 4, count: 1, data: 0 },
-        "minecraft:cobblestone": { id: 12, count: 1, data: 0 },
-        "minecraft:gravel": { id: 318, count: 1, data: 0 },
-        "minecraft:sandstone": { id: 12, count: 2, data: 0 },
-        "minecraft:wool": { id: 287, count: 2, data: 0 },
-        "minecraft:ice": { id: 332, count: 4, data: 0 },
-        "minecraft:glowstone": { id: 348, count: 4, data: 0 },
-        "minecraft:redstone_block": { id: 331, count: 9, data: 0 },
-        "minecraft:quartz_block": { id: 406, count: 4, data: 0 },
-        "minecraft:quartz_stairs": { id: 406, count: 6, data: 0 },
-        "minecraft:sandstone_stairs": { id: 12, count: 3, data: 0 },
-        "minecraft:red_sandstone": { id: 12, count: 2, data: 1 },
-        "minecraft:red_sandstone_stairs": { id: 12, count: 3, data: 1 },
-        "minecraft:bone": IDConverter.getStack("bone_meal", 5),
-        "minecraft:blaze_rod": { id: 377, count: 5, data: 0 },
-        // plants
-        "minecraft:planks": { id: ItemID.bioChaff, count: 1, sourceCount: 4 },
-        "BlockID.rubberTreeSapling": { id: ItemID.bioChaff, count: 1, sourceCount: 4 },
-        "BlockID.rubberTreeLeaves": { id: ItemID.bioChaff, count: 1, sourceCount: 8 },
-        "minecraft:leaves": { id: ItemID.bioChaff, count: 1, sourceCount: 8 },
-        "minecraft:leaves2": { id: ItemID.bioChaff, count: 1, sourceCount: 8 },
-        "minecraft:deadbush": { id: ItemID.bioChaff, count: 1, sourceCount: 8 },
-        "minecraft:cactus": { id: ItemID.bioChaff, count: 1, sourceCount: 8 },
-        "minecraft:pumpkin": { id: ItemID.bioChaff, count: 1, sourceCount: 8 },
-        "minecraft:wheat": { id: ItemID.bioChaff, count: 1, sourceCount: 8 },
-        "minecraft:reeds": { id: ItemID.bioChaff, count: 1, sourceCount: 8 },
-        "minecraft:melon_slice": { id: ItemID.bioChaff, count: 1, sourceCount: 8 },
-        "minecraft:carrot": { id: ItemID.bioChaff, count: 1, sourceCount: 8 },
-        "minecraft:potato": { id: ItemID.bioChaff, count: 1, sourceCount: 8 },
-        "minecraft:pumpkin_seeds": { id: ItemID.bioChaff, count: 1, sourceCount: 16 },
-        "minecraft:melon_seeds": { id: ItemID.bioChaff, count: 1, sourceCount: 16 },
-        "ItemID.weed": { id: ItemID.bioChaff, count: 1, sourceCount: 32 },
-        "ItemID.bioChaff": { id: 3, count: 1, data: 0 },
-        "ItemID.coffeeBeans": { id: ItemID.coffeePowder, count: 3, data: 0 },
-    }, true);
-});
-var guiMacerator = MachineRegistry.createInventoryWindow("Macerator", {
-    drawing: [
-        { type: "bitmap", x: 530, y: 155, bitmap: "macerator_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE }
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 530, y: 155, direction: 0, bitmap: "macerator_bar_scale", scale: GUI_SCALE, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_macerator");
-                }
-            } },
-        "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "slotSource": { type: "slot", x: 441, y: 79 },
-        "slotEnergy": { type: "slot", x: 441, y: 218 },
-        "slotResult": { type: "slot", x: 625, y: 148 },
-        "slotUpgrade1": { type: "slot", x: 820, y: 60 },
-        "slotUpgrade2": { type: "slot", x: 820, y: 119 },
-        "slotUpgrade3": { type: "slot", x: 820, y: 178 },
-        "slotUpgrade4": { type: "slot", x: 820, y: 237 },
-    }
+    var dictionary = MachineRecipeRegistry.getDictionary("macerator");
+    // ores
+    dictionary.addRecipe({ id: VanillaBlockID.gold_ore }, { id: ItemID.crushedGold, count: 2 });
+    dictionary.addRecipe({ id: VanillaBlockID.iron_ore }, { id: ItemID.crushedIron, count: 2 });
+    dictionary.addRecipe({ id: BlockID.oreCopper }, { id: ItemID.crushedCopper, count: 2 });
+    dictionary.addRecipe({ id: BlockID.oreTin }, { id: ItemID.crushedTin, count: 2 });
+    dictionary.addRecipe({ id: BlockID.oreLead }, { id: ItemID.crushedLead, count: 2 });
+    dictionary.addRecipe({ id: BlockID.oreSilver }, { id: ItemID.crushedSilver, count: 2 });
+    dictionary.addRecipe({ id: BlockID.oreUranium }, { id: ItemID.crushedUranium, count: 2 });
+    // ingots
+    dictionary.addRecipe({ id: VanillaItemID.iron_ingot }, { id: ItemID.dustIron, count: 1 }, 200);
+    dictionary.addRecipe({ id: VanillaItemID.gold_ingot }, { id: ItemID.dustGold, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.ingotCopper }, { id: ItemID.dustCopper, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.ingotTin }, { id: ItemID.dustTin, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.ingotBronze }, { id: ItemID.dustBronze, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.ingotSteel }, { id: ItemID.dustSteel, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.ingotLead }, { id: ItemID.dustLead, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.ingotSilver }, { id: ItemID.dustSilver, count: 1 }, 200);
+    // plates
+    dictionary.addRecipe({ id: ItemID.plateIron }, { id: ItemID.dustIron, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.plateGold }, { id: ItemID.dustGold, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.plateCopper }, { id: ItemID.dustCopper, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.plateTin }, { id: ItemID.dustTin, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.plateBronze }, { id: ItemID.dustBronze, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.plateSteel }, { id: ItemID.dustSteel, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.plateLead }, { id: ItemID.dustLead, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.plateSilver }, { id: ItemID.dustSilver, count: 1 }, 200);
+    dictionary.addRecipe({ id: ItemID.plateLapis }, { id: ItemID.dustLapis, count: 1 }, 200);
+    // dense plates
+    dictionary.addRecipe({ id: ItemID.densePlateIron }, { id: ItemID.dustIron, count: 9 }, 400);
+    dictionary.addRecipe({ id: ItemID.densePlateGold }, { id: ItemID.dustGold, count: 9 }, 400);
+    dictionary.addRecipe({ id: ItemID.densePlateCopper }, { id: ItemID.dustCopper, count: 9 }, 400);
+    dictionary.addRecipe({ id: ItemID.densePlateTin }, { id: ItemID.dustTin, count: 9 }, 400);
+    dictionary.addRecipe({ id: ItemID.densePlateBronze }, { id: ItemID.dustBronze, count: 9 }, 400);
+    dictionary.addRecipe({ id: ItemID.densePlateSteel }, { id: ItemID.dustSteel, count: 9 }, 400);
+    dictionary.addRecipe({ id: ItemID.densePlateLead }, { id: ItemID.dustLead, count: 9 }, 400);
+    dictionary.addRecipe({ id: ItemID.densePlateSilver }, { id: ItemID.dustSilver, count: 9 }, 400);
+    // casings
+    dictionary.addRecipe({ id: ItemID.casingIron }, { id: ItemID.dustSmallIron, count: 4 }, 100);
+    dictionary.addRecipe({ id: ItemID.casingGold }, { id: ItemID.dustSmallGold, count: 4 }, 100);
+    dictionary.addRecipe({ id: ItemID.casingCopper }, { id: ItemID.dustSmallCopper, count: 4 }, 100);
+    dictionary.addRecipe({ id: ItemID.casingTin }, { id: ItemID.dustSmallTin, count: 4 }, 100);
+    dictionary.addRecipe({ id: ItemID.casingBronze }, { id: ItemID.dustSmallBronze, count: 4 }, 100);
+    dictionary.addRecipe({ id: ItemID.casingSteel }, { id: ItemID.dustSmallSteel, count: 4 }, 100);
+    dictionary.addRecipe({ id: ItemID.casingLead }, { id: ItemID.dustSmallLead, count: 4 }, 100);
+    dictionary.addRecipe({ id: ItemID.casingSilver }, { id: ItemID.dustSmallSilver, count: 4 }, 100);
+    // nuggets
+    dictionary.addRecipe({ id: VanillaItemID.iron_nugget }, { id: ItemID.dustSmallIron, count: 1 }, 25);
+    dictionary.addRecipe({ id: VanillaItemID.gold_nugget }, { id: ItemID.dustSmallGold, count: 1 }, 25);
+    // other resources
+    dictionary.addRecipe({ id: VanillaBlockID.lapis_block }, { id: ItemID.dustLapis, count: 9 }, 400);
+    dictionary.addRecipe({ id: VanillaBlockID.coal_block }, { id: ItemID.dustCoal, count: 9 }, 400);
+    dictionary.addRecipe({ id: VanillaItemID.coal, data: 0 }, { id: ItemID.dustCoal, count: 1 }, 200);
+    dictionary.addRecipe({ id: VanillaItemID.diamond }, { id: ItemID.dustDiamond, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.lapis_lazuli }, { id: ItemID.dustLapis, count: 1 }, 200);
+    dictionary.addRecipe({ id: VanillaBlockID.hardened_clay }, { id: ItemID.dustClay, count: 4 }, 300);
+    dictionary.addRecipe({ id: VanillaBlockID.stained_hardened_clay }, { id: ItemID.dustClay, count: 4 }, 300);
+    dictionary.addRecipe({ id: VanillaBlockID.obsidian }, { id: ItemID.dustObsidian, count: 4 }, 500);
+    dictionary.addRecipe({ id: VanillaItemID.spider_eye }, { id: ItemID.grinPowder, count: 2 }, 200);
+    dictionary.addRecipe({ id: VanillaItemID.poisonous_potato }, { id: ItemID.grinPowder, count: 1 }, 200);
+    // other materials
+    dictionary.addRecipe({ id: VanillaBlockID.stone, data: 0 }, { id: 4, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.cobblestone }, { id: 12, count: 1, data: 0 });
+    dictionary.addRecipe({ id: VanillaBlockID.gravel }, { id: 318, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.wool }, { id: 287, count: 2 });
+    dictionary.addRecipe({ id: VanillaBlockID.ice }, { id: 332, count: 4 });
+    dictionary.addRecipe({ id: VanillaBlockID.glowstone }, { id: 348, count: 4 });
+    dictionary.addRecipe({ id: VanillaBlockID.redstone_block }, { id: 331, count: 9 });
+    dictionary.addRecipe({ id: VanillaBlockID.quartz_block }, { id: 406, count: 4 });
+    dictionary.addRecipe({ id: VanillaBlockID.quartz_stairs }, { id: 406, count: 4 });
+    dictionary.addRecipe({ id: VanillaBlockID.sandstone }, { id: 12, count: 2, data: 0 });
+    dictionary.addRecipe({ id: VanillaBlockID.sandstone_stairs }, { id: 12, count: 2, data: 0 });
+    dictionary.addRecipe({ id: VanillaBlockID.red_sandstone }, { id: 12, count: 2, data: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.red_sandstone_stairs }, { id: 12, count: 2, data: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.bone }, { id: VanillaItemID.bone_meal, count: 5 }, 200);
+    dictionary.addRecipe({ id: VanillaItemID.blaze_rod }, { id: 377, count: 5 }, 200);
+    // plants
+    dictionary.addRecipe({ id: VanillaBlockID.planks, count: 4 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.warped_planks, count: 4 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.crimson_planks, count: 4 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: BlockID.rubberTreeSapling, count: 4 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: BlockID.rubberTreeLeaves, count: 8 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.leaves, count: 8 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.leaves2, count: 8 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.deadbush, count: 8 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.cactus, count: 8 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.pumpkin, count: 8 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.wheat, count: 8 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.reeds, count: 8 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.melon_slice, count: 8 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.carrot, count: 8 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.potato, count: 8 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.pumpkin_seeds, count: 16 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.melon_seeds, count: 16 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: ItemID.weed, count: 32 }, { id: ItemID.bioChaff, count: 1 });
+    dictionary.addRecipe({ id: ItemID.bioChaff }, { id: 3, count: 1 });
+    dictionary.addRecipe({ id: ItemID.coffeeBeans }, { id: ItemID.coffeePowder, count: 3, data: 0 });
 });
 var Machine;
 (function (Machine) {
+    var guiMacerator = MachineRegistry.createInventoryWindow("Macerator", {
+        drawing: [
+            { type: "bitmap", x: 530, y: 155, bitmap: "macerator_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 530, y: 155, direction: 0, bitmap: "macerator_bar_scale", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_macerator");
+                    }
+                } },
+            "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "slotSource": { type: "slot", x: 441, y: 79 },
+            "slotEnergy": { type: "slot", x: 441, y: 218 },
+            "slotResult": { type: "slot", x: 625, y: 148 },
+            "slotUpgrade1": { type: "slot", x: 820, y: 60 },
+            "slotUpgrade2": { type: "slot", x: 820, y: 119 },
+            "slotUpgrade3": { type: "slot", x: 820, y: 178 },
+            "slotUpgrade4": { type: "slot", x: 820, y: 237 },
+        }
+    });
     var Macerator = /** @class */ (function (_super) {
         __extends(Macerator, _super);
         function Macerator() {
@@ -7947,8 +9335,8 @@ var Machine;
         Macerator.prototype.getScreenByName = function () {
             return guiMacerator;
         };
-        Macerator.prototype.getRecipeResult = function (id, data) {
-            return MachineRecipeRegistry.getRecipeResult("macerator", id, data);
+        Macerator.prototype.getRecipeDictionary = function () {
+            return MachineRecipeRegistry.getDictionary("macerator");
         };
         Macerator.prototype.getOperationSound = function () {
             return "MaceratorOp.ogg";
@@ -7957,110 +9345,119 @@ var Machine;
             return "InterruptOne.ogg";
         };
         return Macerator;
-    }(Machine.ProcessingMachine));
+    }(Machine.BasicProcessingMachine));
     Machine.Macerator = Macerator;
     MachineRegistry.registerPrototype(BlockID.macerator, new Macerator());
+    MachineRecipeRegistry.registerDictionary("macerator", new MachineRecipe.ProcessingRecipeDictionary(300));
     StorageInterface.createInterface(BlockID.macerator, {
         slots: {
             "slotSource": { input: true },
             "slotResult": { output: true }
         },
-        isValidInput: function (item) {
-            return MachineRecipeRegistry.hasRecipeFor("macerator", item.id, item.data);
+        isValidInput: function (item, side, tileEntity) {
+            return tileEntity.isValidSource(item.id, item.data);
+            ;
         }
     });
 })(Machine || (Machine = {}));
-/// <reference path="ProcessingMachine.ts" />
+/// <reference path="BasicProcessingMachine.ts" />
 BlockRegistry.createBlock("compressor", [
-    { name: "Compressor", texture: [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["compressor", 0], ["machine_side", 0], ["machine_side", 0]], inCreative: true }
+    { name: "Compressor", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["compressor_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.compressor, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.compressor, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["compressor", 0], ["machine_side", 0], ["machine_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.compressor, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["compressor", 1], ["machine_side", 0], ["machine_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.compressor, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["compressor_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.compressor, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["compressor_front_on", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.compressor);
 ItemName.addTierTooltip("compressor", 1);
+ItemName.addConsumptionTooltip("compressor", "EU", 2);
 Callback.addCallback("PreLoaded", function () {
-    if (IC2Config.hardRecipes) {
-        Recipes.addShaped({ id: BlockID.compressor, count: 1, data: 0 }, [
-            "p#p",
-            "xax"
-        ], ['#', BlockID.machineBlockBasic, -1, 'x', ItemID.circuitBasic, -1, 'a', ItemID.electricMotor, -1, 'p', VanillaBlockID.piston, -1]);
-    }
-    else {
-        Recipes.addShaped({ id: BlockID.compressor, count: 1, data: 0 }, [
-            "x x",
-            "x#x",
-            "xax"
-        ], ['#', BlockID.machineBlockBasic, -1, 'x', 1, -1, 'a', ItemID.circuitBasic, -1]);
-    }
-    MachineRecipeRegistry.registerRecipesFor("compressor", {
-        // Blocks
-        "minecraft:snow": { id: 79, count: 1, data: 0 },
-        "minecraft:sand": { id: 24, count: 1, data: 0, sourceCount: 4 },
-        "minecraft:brick": { id: 45, count: 1, data: 0, sourceCount: 4 },
-        "minecraft:netherbrick": { id: 112, count: 1, data: 0, sourceCount: 4 },
-        "minecraft:glowstone_dust": { id: 89, count: 1, data: 0, sourceCount: 4 },
-        "minecraft:quartz": { id: 155, count: 1, data: 0, sourceCount: 4 },
-        // Items
-        "ItemID.dustEnergium": { id: ItemID.storageCrystal, count: 1, data: Item.getMaxDamage(ItemID.storageCrystal), sourceCount: 9 },
-        "ItemID.ingotAlloy": { id: ItemID.plateAlloy, count: 1, data: 0 },
-        "ItemID.carbonMesh": { id: ItemID.carbonPlate, count: 1, data: 0 },
-        "ItemID.coalBall": { id: ItemID.coalBlock, count: 1, data: 0 },
-        "ItemID.coalChunk": { id: 264, count: 1, data: 0 },
-        "ItemID.cellEmpty": { id: ItemID.cellAir, count: 1, data: 0 },
-        "ItemID.dustLapis": { id: ItemID.plateLapis, count: 1, data: 0 },
-        // Dense Plates
-        "ItemID.plateIron": { id: ItemID.densePlateIron, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.plateGold": { id: ItemID.densePlateGold, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.plateTin": { id: ItemID.densePlateTin, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.plateCopper": { id: ItemID.densePlateCopper, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.plateBronze": { id: ItemID.densePlateBronze, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.plateSteel": { id: ItemID.densePlateSteel, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.plateLead": { id: ItemID.densePlateLead, count: 1, data: 0, sourceCount: 9 },
-        // Compact
-        "minecraft:redstone": { id: 152, count: 1, data: 0, sourceCount: 9 },
-        "minecraft:lapis_lazuli": { id: 22, count: 1, data: 0, sourceCount: 9 },
-        "minecraft:diamond": { id: 57, count: 1, data: 0, sourceCount: 9 },
-        "minecraft:emerald": { id: 133, count: 1, data: 0, sourceCount: 9 },
-        "minecraft:iron_ingot": { id: 42, count: 1, data: 0, sourceCount: 9 },
-        "minecraft:gold_ingot": { id: 41, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.ingotCopper": { id: BlockID.blockCopper, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.ingotTin": { id: BlockID.blockTin, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.ingotLead": { id: BlockID.blockLead, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.ingotSteel": { id: BlockID.blockSteel, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.ingotBronze": { id: BlockID.blockBronze, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.dustSmallIron": { id: ItemID.dustIron, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.dustSmallGold": { id: ItemID.dustGold, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.dustSmallCopper": { id: ItemID.dustCopper, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.dustSmallTin": { id: ItemID.dustTin, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.dustSmallLead": { id: ItemID.dustLead, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.smallUranium235": { id: ItemID.uranium235, count: 1, data: 0, sourceCount: 9 },
-        "ItemID.smallPlutonium": { id: ItemID.plutonium, count: 1, data: 0, sourceCount: 9 }
-    }, true);
-});
-var guiCompressor = MachineRegistry.createInventoryWindow("Compressor", {
-    drawing: [
-        { type: "bitmap", x: 530, y: 155, bitmap: "compressor_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE },
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 530, y: 155, direction: 0, bitmap: "compressor_bar_scale", scale: GUI_SCALE, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_compressor");
-                }
-            } },
-        "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "slotSource": { type: "slot", x: 441, y: 79 },
-        "slotEnergy": { type: "slot", x: 441, y: 218 },
-        "slotResult": { type: "slot", x: 625, y: 148 },
-        "slotUpgrade1": { type: "slot", x: 820, y: 60, },
-        "slotUpgrade2": { type: "slot", x: 820, y: 119 },
-        "slotUpgrade3": { type: "slot", x: 820, y: 178 },
-        "slotUpgrade4": { type: "slot", x: 820, y: 237 },
-    }
+    Recipes.addShaped({ id: BlockID.compressor, count: 1, data: 0 }, [
+        "p#p",
+        "mcm"
+    ], ['#', BlockID.machineBlockBasic, -1, 'c', ItemID.circuitBasic, -1, 'm', ItemID.electricMotor, -1, 'p', VanillaBlockID.piston, -1]);
+    var dictionary = MachineRecipeRegistry.getDictionary("compressor");
+    // Blocks
+    dictionary.addRecipe({ id: VanillaBlockID.sand, count: 4, data: 0 }, { id: 24, count: 1, data: 0 });
+    dictionary.addRecipe({ id: VanillaBlockID.sand, count: 4, data: 1 }, { id: VanillaBlockID.red_sandstone, count: 1, data: 0 });
+    dictionary.addRecipe({ id: VanillaItemID.clay_ball, count: 4 }, { id: VanillaBlockID.clay, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.brick, count: 4 }, { id: 45, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.netherbrick, count: 4 }, { id: 112, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.glowstone_dust, count: 4 }, { id: 89, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.quartz, count: 4 }, { id: 155, count: 1, data: 0 });
+    dictionary.addRecipe({ id: VanillaItemID.snowball }, { id: VanillaBlockID.snow, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.snow }, { id: 79, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.ice, count: 9 }, { id: VanillaBlockID.packed_ice, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.packed_ice, count: 9 }, { id: VanillaBlockID.blue_ice, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.bone_meal, count: 9 }, { id: VanillaBlockID.bone_block, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.dried_kelp, count: 9 }, { id: VanillaBlockID.dried_kelp_block, count: 1 });
+    // Items
+    dictionary.addRecipe({ id: ItemID.dustEnergium, count: 9 }, { id: ItemID.storageCrystal, count: 1, data: Item.getMaxDamage(ItemID.storageCrystal) });
+    dictionary.addRecipe({ id: ItemID.ingotAlloy }, { id: ItemID.plateAlloy, count: 1 });
+    dictionary.addRecipe({ id: ItemID.carbonMesh }, { id: ItemID.carbonPlate, count: 1 });
+    dictionary.addRecipe({ id: ItemID.coalBall }, { id: ItemID.coalBlock, count: 1 });
+    dictionary.addRecipe({ id: ItemID.coalChunk }, { id: 264, count: 1 });
+    dictionary.addRecipe({ id: ItemID.cellEmpty }, { id: ItemID.cellAir, count: 1 });
+    dictionary.addRecipe({ id: ItemID.dustLapis }, { id: ItemID.plateLapis, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.blaze_powder, count: 5 }, { id: VanillaItemID.blaze_rod, count: 1 });
+    // Dense Plates
+    dictionary.addRecipe({ id: ItemID.plateIron, count: 9 }, { id: ItemID.densePlateIron, count: 1 });
+    dictionary.addRecipe({ id: ItemID.plateGold, count: 9 }, { id: ItemID.densePlateGold, count: 1 });
+    dictionary.addRecipe({ id: ItemID.plateTin, count: 9 }, { id: ItemID.densePlateTin, count: 1 });
+    dictionary.addRecipe({ id: ItemID.plateCopper, count: 9 }, { id: ItemID.densePlateCopper, count: 1 });
+    dictionary.addRecipe({ id: ItemID.plateBronze, count: 9 }, { id: ItemID.densePlateBronze, count: 1 });
+    dictionary.addRecipe({ id: ItemID.plateSteel, count: 9 }, { id: ItemID.densePlateSteel, count: 1 });
+    dictionary.addRecipe({ id: ItemID.plateLead, count: 9 }, { id: ItemID.densePlateLead, count: 1 });
+    dictionary.addRecipe({ id: ItemID.plateSilver, count: 9 }, { id: ItemID.densePlateSilver, count: 1 });
+    // Compact
+    dictionary.addRecipe({ id: VanillaItemID.redstone, count: 9 }, { id: 152, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.lapis_lazuli, count: 9 }, { id: 22, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.coal, count: 9 }, { id: VanillaBlockID.coal_block, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.diamond, count: 9 }, { id: 57, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.emerald, count: 9 }, { id: 133, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.iron_ingot, count: 9 }, { id: 42, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.gold_ingot, count: 9 }, { id: 41, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.netherite_ingot, count: 9 }, { id: VanillaBlockID.netherite_block, count: 1 });
+    dictionary.addRecipe({ id: ItemID.ingotCopper, count: 9 }, { id: BlockID.blockCopper, count: 1 });
+    dictionary.addRecipe({ id: ItemID.ingotTin, count: 9 }, { id: BlockID.blockTin, count: 1 });
+    dictionary.addRecipe({ id: ItemID.ingotLead, count: 9 }, { id: BlockID.blockLead, count: 1 });
+    dictionary.addRecipe({ id: ItemID.ingotSteel, count: 9 }, { id: BlockID.blockSteel, count: 1 });
+    dictionary.addRecipe({ id: ItemID.ingotBronze, count: 9 }, { id: BlockID.blockBronze, count: 1 });
+    dictionary.addRecipe({ id: ItemID.ingotSilver, count: 9 }, { id: BlockID.blockSilver, count: 1 });
+    dictionary.addRecipe({ id: ItemID.uranium238, count: 9 }, { id: BlockID.blockUranium, count: 1 });
+    dictionary.addRecipe({ id: ItemID.dustSmallCopper, count: 9 }, { id: ItemID.dustCopper, count: 1 }, 50);
+    dictionary.addRecipe({ id: ItemID.dustSmallTin, count: 9 }, { id: ItemID.dustTin, count: 1 }, 50);
+    dictionary.addRecipe({ id: ItemID.dustSmallBronze, count: 9 }, { id: ItemID.dustBronze, count: 1 }, 50);
+    dictionary.addRecipe({ id: ItemID.dustSmallIron, count: 9 }, { id: ItemID.dustIron, count: 1 }, 50);
+    dictionary.addRecipe({ id: ItemID.dustSmallGold, count: 9 }, { id: ItemID.dustGold, count: 1 }, 50);
+    dictionary.addRecipe({ id: ItemID.dustSmallLead, count: 9 }, { id: ItemID.dustLead, count: 1 }, 50);
+    dictionary.addRecipe({ id: ItemID.dustSmallSilver, count: 9 }, { id: ItemID.dustSilver, count: 1 }, 50);
+    dictionary.addRecipe({ id: ItemID.dustSmallSulfur, count: 9 }, { id: ItemID.dustSulfur, count: 1 }, 50);
+    dictionary.addRecipe({ id: ItemID.smallUranium235, count: 9 }, { id: ItemID.uranium235, count: 1 }, 50);
+    dictionary.addRecipe({ id: ItemID.smallPlutonium, count: 9 }, { id: ItemID.plutonium, count: 1 }, 50);
 });
 var Machine;
 (function (Machine) {
+    var guiCompressor = MachineRegistry.createInventoryWindow("Compressor", {
+        drawing: [
+            { type: "bitmap", x: 530, y: 155, bitmap: "compressor_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE },
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 530, y: 155, direction: 0, bitmap: "compressor_bar_scale", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_compressor");
+                    }
+                } },
+            "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "slotSource": { type: "slot", x: 441, y: 79 },
+            "slotEnergy": { type: "slot", x: 441, y: 218 },
+            "slotResult": { type: "slot", x: 625, y: 148 },
+            "slotUpgrade1": { type: "slot", x: 820, y: 60, },
+            "slotUpgrade2": { type: "slot", x: 820, y: 119 },
+            "slotUpgrade3": { type: "slot", x: 820, y: 178 },
+            "slotUpgrade4": { type: "slot", x: 820, y: 237 },
+        }
+    });
     var Compressor = /** @class */ (function (_super) {
         __extends(Compressor, _super);
         function Compressor() {
@@ -8073,8 +9470,8 @@ var Machine;
         Compressor.prototype.getScreenByName = function () {
             return guiCompressor;
         };
-        Compressor.prototype.getRecipeResult = function (id, data) {
-            return MachineRecipeRegistry.getRecipeResult("compressor", id, data);
+        Compressor.prototype.getRecipeDictionary = function () {
+            return MachineRecipeRegistry.getDictionary("compressor");
         };
         Compressor.prototype.getOperationSound = function () {
             return "CompressorOp.ogg";
@@ -8083,65 +9480,66 @@ var Machine;
             return "InterruptOne.ogg";
         };
         return Compressor;
-    }(Machine.ProcessingMachine));
+    }(Machine.BasicProcessingMachine));
     Machine.Compressor = Compressor;
     MachineRegistry.registerPrototype(BlockID.compressor, new Compressor());
+    MachineRecipeRegistry.registerDictionary("compressor", new MachineRecipe.ProcessingRecipeDictionary(400));
     StorageInterface.createInterface(BlockID.compressor, {
         slots: {
             "slotSource": { input: true },
             "slotResult": { output: true }
         },
-        isValidInput: function (item) {
-            return MachineRecipeRegistry.hasRecipeFor("compressor", item.id, item.data);
+        isValidInput: function (item, side, tileEntity) {
+            return tileEntity.isValidSource(item.id, item.data);
         }
     });
 })(Machine || (Machine = {}));
-/// <reference path="ProcessingMachine.ts" />
+/// <reference path="BasicProcessingMachine.ts" />
 BlockRegistry.createBlock("extractor", [
-    { name: "Extractor", texture: [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["extractor_front", 0], ["extractor_side", 0], ["extractor_side", 0]], inCreative: true }
+    { name: "Extractor", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["extractor_front", 0], ["extractor_side", 0], ["extractor_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.extractor, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.extractor, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["extractor_front", 0], ["extractor_side", 0], ["extractor_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.extractor, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["extractor_front", 1], ["extractor_side", 1], ["extractor_side", 1]]);
+TileRenderer.setStandardModelWithRotation(BlockID.extractor, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["extractor_front", 0], ["extractor_side", 0], ["extractor_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.extractor, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["extractor_front_on", 0], ["extractor_side_on", 0], ["extractor_side_on", 0]]);
 TileRenderer.setRotationFunction(BlockID.extractor);
 ItemName.addTierTooltip("extractor", 1);
+ItemName.addConsumptionTooltip("extractor", "EU", 2);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.extractor, count: 1, data: 0 }, [
         "x#x",
         "xax"
     ], ['#', BlockID.machineBlockBasic, -1, 'x', ItemID.treetap, 0, 'a', ItemID.circuitBasic, -1]);
-    MachineRecipeRegistry.registerRecipesFor("extractor", {
-        "ItemID.latex": { id: ItemID.rubber, count: 3 },
-        "BlockID.rubberTreeSapling": { id: ItemID.rubber, count: 1 },
-        "BlockID.rubberTreeLog": { id: ItemID.rubber, count: 1 },
-        "minecraft:wool": { id: 35, count: 1 },
-        "minecraft:gunpowder": { id: ItemID.dustSulfur, count: 1 },
-        "ItemID.tinCanFull": { id: ItemID.tinCanEmpty, count: 1 },
-    }, true);
-});
-var guiExtractor = MachineRegistry.createInventoryWindow("Extractor", {
-    drawing: [
-        { type: "bitmap", x: 530, y: 155, bitmap: "extractor_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE }
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 530, y: 155, direction: 0, bitmap: "extractor_bar_scale", scale: GUI_SCALE, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_extractor");
-                }
-            } },
-        "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "slotSource": { type: "slot", x: 441, y: 79 },
-        "slotEnergy": { type: "slot", x: 441, y: 218 },
-        "slotResult": { type: "slot", x: 625, y: 148 },
-        "slotUpgrade1": { type: "slot", x: 820, y: 60 },
-        "slotUpgrade2": { type: "slot", x: 820, y: 119 },
-        "slotUpgrade3": { type: "slot", x: 820, y: 178 },
-        "slotUpgrade4": { type: "slot", x: 820, y: 237 },
-    }
+    var dictionary = MachineRecipeRegistry.getDictionary("extractor");
+    dictionary.addRecipe({ id: ItemID.latex }, { id: ItemID.rubber, count: 3 });
+    dictionary.addRecipe({ id: BlockID.rubberTreeSapling }, { id: ItemID.rubber, count: 1 });
+    dictionary.addRecipe({ id: BlockID.rubberTreeLog }, { id: ItemID.rubber, count: 1 });
+    dictionary.addRecipe({ id: VanillaBlockID.wool }, { id: 35, count: 1 });
+    dictionary.addRecipe({ id: VanillaItemID.gunpowder }, { id: ItemID.dustSulfur, count: 1 });
+    dictionary.addRecipe({ id: ItemID.tinCanFull }, { id: ItemID.tinCanEmpty, count: 1 }, 100);
 });
 var Machine;
 (function (Machine) {
+    var guiExtractor = MachineRegistry.createInventoryWindow("Extractor", {
+        drawing: [
+            { type: "bitmap", x: 530, y: 155, bitmap: "extractor_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 530, y: 155, direction: 0, bitmap: "extractor_bar_scale", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_extractor");
+                    }
+                } },
+            "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "slotSource": { type: "slot", x: 441, y: 79 },
+            "slotEnergy": { type: "slot", x: 441, y: 218 },
+            "slotResult": { type: "slot", x: 625, y: 148 },
+            "slotUpgrade1": { type: "slot", x: 820, y: 60 },
+            "slotUpgrade2": { type: "slot", x: 820, y: 119 },
+            "slotUpgrade3": { type: "slot", x: 820, y: 178 },
+            "slotUpgrade4": { type: "slot", x: 820, y: 237 },
+        }
+    });
     var Extractor = /** @class */ (function (_super) {
         __extends(Extractor, _super);
         function Extractor() {
@@ -8154,8 +9552,8 @@ var Machine;
         Extractor.prototype.getScreenByName = function () {
             return guiExtractor;
         };
-        Extractor.prototype.getRecipeResult = function (id) {
-            return MachineRecipeRegistry.getRecipeResult("extractor", id);
+        Extractor.prototype.getRecipeDictionary = function () {
+            return MachineRecipeRegistry.getDictionary("extractor");
         };
         Extractor.prototype.getOperationSound = function () {
             return "ExtractorOp.ogg";
@@ -8164,101 +9562,112 @@ var Machine;
             return "InterruptOne.ogg";
         };
         return Extractor;
-    }(Machine.ProcessingMachine));
+    }(Machine.BasicProcessingMachine));
     Machine.Extractor = Extractor;
     MachineRegistry.registerPrototype(BlockID.extractor, new Extractor());
+    MachineRecipeRegistry.registerDictionary("extractor", new MachineRecipe.ProcessingRecipeDictionary(400));
     StorageInterface.createInterface(BlockID.extractor, {
         slots: {
             "slotSource": { input: true },
             "slotResult": { output: true }
         },
-        isValidInput: function (item) {
-            return MachineRecipeRegistry.hasRecipeFor("extractor", item.id);
+        isValidInput: function (item, side, tileEntity) {
+            return tileEntity.isValidSource(item.id, item.data);
         }
     });
 })(Machine || (Machine = {}));
+/// <reference path="./ProcessingMachine.ts" />
 BlockRegistry.createBlock("solidCanner", [
-    { name: "Solid Canning Machine", texture: [["machine_bottom", 0], ["machine_bottom", 0], ["machine_side", 0], ["solid_canner", 0], ["machine_side", 0], ["machine_side", 0]], inCreative: true }
+    { name: "Solid Canning Machine", texture: [["ic_machine_bottom", 0], ["ic_machine_bottom", 0], ["ic_machine_side", 0], ["solid_canner_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.solidCanner, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.solidCanner, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["solid_canner", 0], ["machine_side", 0], ["machine_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.solidCanner, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["solid_canner", 1], ["machine_side", 0], ["machine_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.solidCanner, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["solid_canner_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.solidCanner, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["solid_canner_front_on", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.solidCanner);
 ItemName.addTierTooltip("solidCanner", 1);
+ItemName.addConsumptionTooltip("solidCanner", "EU", 2);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.solidCanner, count: 1, data: 0 }, [
         "c#c",
         "cxc",
         "ccc"
     ], ['#', BlockID.machineBlockBasic, 0, 'x', ItemID.circuitBasic, 0, 'c', ItemID.casingTin, 0]);
-    MachineRecipeRegistry.registerRecipesFor("solidCanner", {
-        "ItemID.uranium": { can: ItemID.fuelRod, result: { id: ItemID.fuelRodUranium, count: 1, data: 0 } },
-        "ItemID.mox": { can: ItemID.fuelRod, result: { id: ItemID.fuelRodMOX, count: 1, data: 0 } },
-        "minecraft:cake": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 14, data: 0 } },
-        "minecraft:rabbit_stew": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 10, data: 0 } },
-        "minecraft:cooked_porkchop": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 8, data: 0 } },
-        "minecraft:cooked_beef": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 8, data: 0 } },
-        "minecraft:pumpkin_pie": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 8, data: 0 } },
-        "minecraft:mushroom_stew": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 6, data: 0 } },
-        "minecraft:cooked_chicken": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 6, data: 0 } },
-        "minecraft:golden_carrot": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 6, data: 0 } },
-        "minecraft:muttoncooked": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 6, data: 0 } },
-        "minecraft:beetroot_soup": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 6, data: 0 } },
-        "minecraft:cooked_salmon": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 6, data: 0 } },
-        "minecraft:bread": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 5, data: 0 } },
-        "minecraft:cooked_cod": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 5, data: 0 } },
-        "minecraft:baked_potato": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 5, data: 0 } },
-        "minecraft:cooked_rabbit": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 5, data: 0 } },
-        "minecraft:rotten_flesh": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 4, data: 1 } },
-        "minecraft:apple": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 4, data: 0 } },
-        "minecraft:porkchop": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 3, data: 0 } },
-        "minecraft:beef": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 3, data: 0 } },
-        "minecraft:carrot": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 3, data: 0 } },
-        "minecraft:rabbit": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 3, data: 0 } },
-        "minecraft:cookie": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 0 } },
-        "minecraft:melon_slice": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 0 } },
-        "minecraft:chicken": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 1 } },
-        "minecraft:spider_eye": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 2 } },
-        "minecraft:cod": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 0 } },
-        "minecraft:poisonous_potato": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 2 } },
-        "minecraft:muttonraw": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 0 } },
-        "minecraft:salmon": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 0 } },
-        "minecraft:potato": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 1, data: 0 } },
-        "minecraft:beetroot": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 1, data: 0 } },
-        "minecraft:tropical_fish": { can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 1, data: 0 } },
-    }, true);
-});
-var guiSolidCanner = MachineRegistry.createInventoryWindow("Solid Canning Machine", {
-    drawing: [
-        { type: "bitmap", x: 400 + 52 * GUI_SCALE, y: 50 + 33 * GUI_SCALE, bitmap: "solid_canner_arrow", scale: GUI_SCALE },
-        { type: "bitmap", x: 400 + 86 * GUI_SCALE, y: 50 + 34 * GUI_SCALE, bitmap: "arrow_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 416, y: 178, bitmap: "energy_small_background", scale: GUI_SCALE }
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 400 + 86 * GUI_SCALE, y: 50 + 34 * GUI_SCALE, direction: 0, bitmap: "arrow_bar_scale", scale: GUI_SCALE, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_solidCanner");
-                }
-            } },
-        "energyScale": { type: "scale", x: 416, y: 178, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "slotEnergy": { type: "slot", x: 400 + 3 * GUI_SCALE, y: 50 + 58 * GUI_SCALE },
-        "slotSource": { type: "slot", x: 400 + 32 * GUI_SCALE, y: 50 + 32 * GUI_SCALE },
-        "slotCan": { type: "slot", x: 400 + 63 * GUI_SCALE, y: 50 + 32 * GUI_SCALE },
-        "slotResult": { type: "slot", x: 400 + 111 * GUI_SCALE, y: 50 + 32 * GUI_SCALE },
-        "slotUpgrade1": { type: "slot", x: 870, y: 50 + 4 * GUI_SCALE },
-        "slotUpgrade2": { type: "slot", x: 870, y: 50 + 22 * GUI_SCALE },
-        "slotUpgrade3": { type: "slot", x: 870, y: 50 + 40 * GUI_SCALE },
-        "slotUpgrade4": { type: "slot", x: 870, y: 50 + 58 * GUI_SCALE },
-    }
+    MachineRecipeRegistry.registerRecipes("solidCanner", [
+        { source: { id: ItemID.uranium }, can: ItemID.fuelRod, result: { id: ItemID.fuelRodUranium, count: 1, data: 0 } },
+        { source: { id: ItemID.mox }, can: ItemID.fuelRod, result: { id: ItemID.fuelRodMOX, count: 1, data: 0 } },
+        { source: { id: VanillaBlockID.cake }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 14, data: 0 } },
+        { source: { id: VanillaItemID.rabbit_stew }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 10, data: 0 } },
+        { source: { id: VanillaItemID.cooked_porkchop }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 8, data: 0 } },
+        { source: { id: VanillaItemID.cooked_beef }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 8, data: 0 } },
+        { source: { id: VanillaItemID.pumpkin_pie }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 8, data: 0 } },
+        { source: { id: VanillaItemID.mushroom_stew }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 6, data: 0 } },
+        { source: { id: VanillaItemID.cooked_chicken }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 6, data: 0 } },
+        { source: { id: VanillaItemID.golden_carrot }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 6, data: 0 } },
+        { source: { id: VanillaItemID.muttoncooked }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 6, data: 0 } },
+        { source: { id: VanillaItemID.beetroot_soup }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 6, data: 0 } },
+        { source: { id: VanillaItemID.cooked_salmon }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 6, data: 0 } },
+        { source: { id: VanillaItemID.bread }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 5, data: 0 } },
+        { source: { id: VanillaItemID.cooked_cod }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 5, data: 0 } },
+        { source: { id: VanillaItemID.baked_potato }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 5, data: 0 } },
+        { source: { id: VanillaItemID.cooked_rabbit }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 5, data: 0 } },
+        { source: { id: VanillaItemID.rotten_flesh }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 4, data: 1 } },
+        { source: { id: VanillaItemID.apple }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 4, data: 0 } },
+        { source: { id: VanillaItemID.porkchop }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 3, data: 0 } },
+        { source: { id: VanillaItemID.beef }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 3, data: 0 } },
+        { source: { id: VanillaItemID.carrot }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 3, data: 0 } },
+        { source: { id: VanillaItemID.rabbit }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 3, data: 0 } },
+        { source: { id: VanillaItemID.cookie }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 0 } },
+        { source: { id: VanillaItemID.melon_slice }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 0 } },
+        { source: { id: VanillaItemID.chicken }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 1 } },
+        { source: { id: VanillaItemID.spider_eye }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 2 } },
+        { source: { id: VanillaItemID.cod }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 0 } },
+        { source: { id: VanillaItemID.poisonous_potato }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 2 } },
+        { source: { id: VanillaItemID.muttonraw }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 0 } },
+        { source: { id: VanillaItemID.salmon }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 2, data: 0 } },
+        { source: { id: VanillaItemID.potato }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 1, data: 0 } },
+        { source: { id: VanillaBlockID.beetroot }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 1, data: 0 } },
+        { source: { id: VanillaItemID.tropical_fish }, can: ItemID.tinCanEmpty, result: { id: ItemID.tinCanFull, count: 1, data: 0 } }
+    ]);
 });
 var Machine;
 (function (Machine) {
+    var SolidCannerRecipeDictionary = /** @class */ (function (_super) {
+        __extends(SolidCannerRecipeDictionary, _super);
+        function SolidCannerRecipeDictionary() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return SolidCannerRecipeDictionary;
+    }(MachineRecipe.SourceRecipeDictionary));
+    Machine.SolidCannerRecipeDictionary = SolidCannerRecipeDictionary;
+    var guiSolidCanner = MachineRegistry.createInventoryWindow("Solid Canning Machine", {
+        drawing: [
+            { type: "bitmap", x: 400 + 52 * GUI_SCALE, y: 50 + 33 * GUI_SCALE, bitmap: "solid_canner_arrow", scale: GUI_SCALE },
+            { type: "bitmap", x: 400 + 86 * GUI_SCALE, y: 50 + 34 * GUI_SCALE, bitmap: "arrow_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 416, y: 178, bitmap: "energy_small_background", scale: GUI_SCALE }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 400 + 86 * GUI_SCALE, y: 50 + 34 * GUI_SCALE, direction: 0, bitmap: "arrow_bar_scale", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_solidCanner");
+                    }
+                } },
+            "energyScale": { type: "scale", x: 416, y: 178, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "slotEnergy": { type: "slot", x: 400 + 3 * GUI_SCALE, y: 50 + 58 * GUI_SCALE },
+            "slotSource": { type: "slot", x: 400 + 32 * GUI_SCALE, y: 50 + 32 * GUI_SCALE },
+            "slotCan": { type: "slot", x: 400 + 63 * GUI_SCALE, y: 50 + 32 * GUI_SCALE },
+            "slotResult": { type: "slot", x: 400 + 111 * GUI_SCALE, y: 50 + 32 * GUI_SCALE },
+            "slotUpgrade1": { type: "slot", x: 870, y: 50 + 4 * GUI_SCALE },
+            "slotUpgrade2": { type: "slot", x: 870, y: 50 + 22 * GUI_SCALE },
+            "slotUpgrade3": { type: "slot", x: 870, y: 50 + 40 * GUI_SCALE },
+            "slotUpgrade4": { type: "slot", x: 870, y: 50 + 58 * GUI_SCALE },
+        }
+    });
     var SolidCanner = /** @class */ (function (_super) {
         __extends(SolidCanner, _super);
         function SolidCanner() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.defaultEnergyStorage = 800;
-            _this.defaultEnergyDemand = 1;
+            _this.defaultEnergyDemand = 2;
             _this.defaultProcessTime = 200;
             _this.upgrades = ["overclocker", "transformer", "energyStorage", "itemEjector", "itemPulling"];
             return _this;
@@ -8266,141 +9675,129 @@ var Machine;
         SolidCanner.prototype.getScreenByName = function () {
             return guiSolidCanner;
         };
+        SolidCanner.prototype.getRecipeDictionary = function () {
+            return MachineRecipeRegistry.getDictionary("solidCanner");
+        };
+        SolidCanner.prototype.isValidSource = function (id, data) {
+            return this.getRecipeDictionary().getRecipe(id, data) != null;
+        };
         SolidCanner.prototype.setupContainer = function () {
             var _this = this;
             StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data) {
                 if (name == "slotSource")
-                    return !!_this.getRecipeResult(id);
+                    return _this.isValidSource(id, data);
                 if (name == "slotEnergy")
                     return ChargeItemRegistry.isValidStorage(id, "Eu", _this.getTier());
                 if (name == "slotCan") {
-                    var recipes = MachineRecipeRegistry.requireRecipesFor("solidCanner");
-                    for (var i in recipes) {
-                        if (recipes[i].can == id)
-                            return true;
-                    }
-                    return false;
+                    var dictionary = _this.getRecipeDictionary();
+                    return !!dictionary.findRecipe(function (recipe) { return recipe.can == id; });
                 }
                 if (name.startsWith("slotUpgrade"))
                     return UpgradeAPI.isValidUpgrade(id, _this);
                 return false;
             });
         };
-        SolidCanner.prototype.getRecipeResult = function (id) {
-            return MachineRecipeRegistry.getRecipeResult("solidCanner", id);
-        };
-        SolidCanner.prototype.onTick = function () {
-            this.useUpgrades();
-            StorageInterface.checkHoppers(this);
+        SolidCanner.prototype.performRecipe = function () {
             var sourceSlot = this.container.getSlot("slotSource");
-            var resultSlot = this.container.getSlot("slotResult");
             var canSlot = this.container.getSlot("slotCan");
-            var newActive = false;
-            var recipe = this.getRecipeResult(sourceSlot.id);
-            if (recipe) {
-                var result = recipe.result;
-                if (canSlot.id == recipe.can && canSlot.count >= result.count && (resultSlot.id == result.id && resultSlot.data == result.data && resultSlot.count <= 64 - result.count || resultSlot.id == 0)) {
-                    if (this.data.energy >= this.energyDemand) {
-                        this.data.energy -= this.energyDemand;
-                        this.data.progress += 1 / this.processTime;
-                        newActive = true;
-                    }
-                    if (+this.data.progress.toFixed(3) >= 1) {
-                        sourceSlot.setSlot(sourceSlot.id, sourceSlot.count - 1, 0);
-                        canSlot.setSlot(canSlot.id, canSlot.count - result.count, 0);
-                        resultSlot.setSlot(result.id, resultSlot.count + result.count, result.data);
-                        this.container.validateAll();
+            var dictionary = this.getRecipeDictionary();
+            var recipe = dictionary.getRecipe(sourceSlot.id, sourceSlot.data);
+            if (recipe && canSlot.id == recipe.can && canSlot.count >= recipe.result.count) {
+                var resultSlot = this.container.getSlot("slotResult");
+                if (this.data.energy >= this.energyDemand && this.canStackBeMerged(recipe.result, resultSlot, 64)) {
+                    this.data.energy -= this.energyDemand;
+                    this.updateProgress();
+                    if (this.isCompletedProgress()) {
+                        this.decreaseSlot(sourceSlot, 1);
+                        this.decreaseSlot(canSlot, recipe.result.count);
+                        resultSlot.setSlot(recipe.result.id, resultSlot.count + recipe.result.count, recipe.result.data);
                         this.data.progress = 0;
                     }
+                    return true;
                 }
             }
             else {
                 this.data.progress = 0;
             }
-            this.setActive(newActive);
-            this.dischargeSlot("slotEnergy");
-            this.container.setScale("progressScale", this.data.progress);
-            this.container.setScale("energyScale", this.getRelativeEnergy());
-            this.container.sendChanges();
+            return false;
         };
         return SolidCanner;
     }(Machine.ProcessingMachine));
     Machine.SolidCanner = SolidCanner;
     MachineRegistry.registerPrototype(BlockID.solidCanner, new SolidCanner());
+    MachineRecipeRegistry.registerDictionary("solidCanner", new SolidCannerRecipeDictionary());
     StorageInterface.createInterface(BlockID.solidCanner, {
         slots: {
-            "slotSource": { input: true, isValid: function (item) {
-                    return MachineRecipeRegistry.hasRecipeFor("solidCanner", item.id);
+            "slotSource": { input: true, isValid: function (item, side, tileEntity) {
+                    return tileEntity.isValidSource(item.id, item.data);
                 } },
-            "slotCan": { input: true, isValid: function (item) {
-                    var recipes = MachineRecipeRegistry.requireRecipesFor("solidCanner");
-                    for (var i in recipes) {
-                        if (recipes[i].can == item.id)
-                            return true;
-                    }
-                    return false;
+            "slotCan": { input: true, isValid: function (item, side, tileEntity) {
+                    var dictionary = tileEntity.getRecipeDictionary();
+                    return !!dictionary.findRecipe(function (recipe) { return recipe.can == item.id; });
                 } },
             "slotResult": { output: true }
         }
     });
 })(Machine || (Machine = {}));
+/// <reference path="./ProcessingMachine.ts" />
 BlockRegistry.createBlock("canner", [
-    { name: "Fluid/Solid Canning Machine", texture: [["machine_bottom", 0], ["machine_bottom", 0], ["machine_side", 0], ["canner_front", 0], ["canner_side", 0], ["canner_side", 0]], inCreative: true }
+    { name: "Fluid/Solid Canning Machine", texture: [["ic_machine_bottom", 0], ["ic_machine_bottom", 0], ["ic_machine_side", 0], ["canner_front", 0], ["canner_side", 0], ["canner_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.canner, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.canner, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["canner_front", 0], ["canner_side", 0], ["canner_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.canner, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["canner_front", 1], ["canner_side", 1], ["canner_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.canner, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["canner_front", 0], ["canner_side", 0], ["canner_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.canner, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["canner_front_on", 0], ["canner_left_on", 0], ["canner_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.canner);
 ItemName.addTierTooltip("canner", 1);
+ItemName.addConsumptionTooltip("canner", "EU", 4);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.canner, count: 1, data: 0 }, [
         "c#c",
         "cxc",
     ], ['#', BlockID.solidCanner, 0, 'x', ItemID.circuitBasic, 0, 'c', ItemID.cellEmpty, 0]);
-    MachineRecipeRegistry.registerRecipesFor("fluidCanner", [
-        { input: ["water", { id: ItemID.bioChaff, count: 1 }], output: "biomass" },
-        { input: ["water", { id: ItemID.dustLapis, count: 1 }], output: "coolant" }
-    ]);
-});
-var guiCanner = MachineRegistry.createInventoryWindow("Fluid/Solid Canning Machine", {
-    drawing: [
-        { type: "bitmap", x: 406, y: 50 + 58 * GUI_SCALE_NEW, bitmap: "energy_small_background", scale: GUI_SCALE_NEW },
-        { type: "bitmap", x: 400 + 67 * GUI_SCALE_NEW, y: 50 + 18 * GUI_SCALE_NEW, bitmap: "extractor_bar_background", scale: GUI_SCALE_NEW },
-        { type: "bitmap", x: 496, y: 50 + 38 * GUI_SCALE_NEW, bitmap: "liquid_bar", scale: GUI_SCALE_NEW },
-        { type: "bitmap", x: 730, y: 50 + 38 * GUI_SCALE_NEW, bitmap: "liquid_bar", scale: GUI_SCALE_NEW }
-    ],
-    elements: {
-        "background": { type: "image", x: 400 + 51 * GUI_SCALE_NEW, y: 50 + 12 * GUI_SCALE_NEW, bitmap: "canner_background_0", scale: GUI_SCALE_NEW },
-        "liquidInputScale": { type: "scale", x: 496 + 4 * GUI_SCALE_NEW, y: 50 + 42 * GUI_SCALE_NEW, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE_NEW },
-        "liquidOutputScale": { type: "scale", x: 730 + 4 * GUI_SCALE_NEW, y: 50 + 42 * GUI_SCALE_NEW, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE_NEW },
-        "progressScale": { type: "scale", x: 400 + 67 * GUI_SCALE_NEW, y: 50 + 18 * GUI_SCALE_NEW, direction: 0, bitmap: "extractor_bar_scale", scale: GUI_SCALE_NEW, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_canner");
-                }
-            } },
-        "energyScale": { type: "scale", x: 406, y: 50 + 58 * GUI_SCALE_NEW, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE_NEW },
-        "slotEnergy": { type: "slot", x: 400, y: 50 + 75 * GUI_SCALE_NEW, size: 54 },
-        "slotSource": { type: "slot", x: 400 + 72 * GUI_SCALE_NEW, y: 50 + 39 * GUI_SCALE_NEW, size: 54, visual: false, bitmap: "canner_slot_source_0" },
-        "slotCan": { type: "slot", x: 400 + 33 * GUI_SCALE_NEW, y: 50 + 12 * GUI_SCALE_NEW, size: 54 },
-        "slotResult": { type: "slot", x: 400 + 111 * GUI_SCALE_NEW, y: 50 + 12 * GUI_SCALE_NEW, size: 54 },
-        "slotUpgrade1": { type: "slot", x: 850, y: 113, size: 54 },
-        "slotUpgrade2": { type: "slot", x: 850, y: 167, size: 54 },
-        "slotUpgrade3": { type: "slot", x: 850, y: 221, size: 54 },
-        "slotUpgrade4": { type: "slot", x: 850, y: 275, size: 54 },
-        "buttonSwitch": { type: "button", x: 400 + 70 * GUI_SCALE_NEW, y: 50 + 60 * GUI_SCALE_NEW, bitmap: "canner_switch_button", scale: GUI_SCALE_NEW, clicker: {
-                onClick: function (_, container) {
-                    container.sendEvent("switchTanks", {});
-                }
-            } },
-        "buttonMode": { type: "button", x: 400 + 54 * GUI_SCALE_NEW, y: 50 + 75 * GUI_SCALE_NEW, bitmap: "canner_mode_0", scale: GUI_SCALE_NEW, clicker: {
-                onClick: function (_, container) {
-                    container.sendEvent("switchMode", {});
-                }
-            } }
-    }
+    var dictionary = MachineRecipeRegistry.getDictionary("fluidCanner");
+    dictionary.addRecipe({ id: ItemID.bioChaff, count: 1 }, { name: "water", amount: 1000 }, { name: "biomass", amount: 1000 });
+    dictionary.addRecipe({ id: ItemID.dustLapis, count: 4 }, { name: "water", amount: 1000 }, { name: "coolant", amount: 1000 });
+    dictionary.addRecipe({ id: ItemID.dustLapis, count: 1 }, { name: "distilled_water", amount: 1000 }, { name: "coolant", amount: 1000 });
 });
 var Machine;
 (function (Machine) {
+    var guiCanner = MachineRegistry.createInventoryWindow("Fluid/Solid Canning Machine", {
+        drawing: [
+            { type: "bitmap", x: 406, y: 50 + 58 * GUI_SCALE_NEW, bitmap: "energy_small_background", scale: GUI_SCALE_NEW },
+            { type: "bitmap", x: 400 + 67 * GUI_SCALE_NEW, y: 50 + 18 * GUI_SCALE_NEW, bitmap: "extractor_bar_background", scale: GUI_SCALE_NEW },
+            { type: "bitmap", x: 496, y: 50 + 38 * GUI_SCALE_NEW, bitmap: "liquid_bar", scale: GUI_SCALE_NEW },
+            { type: "bitmap", x: 730, y: 50 + 38 * GUI_SCALE_NEW, bitmap: "liquid_bar", scale: GUI_SCALE_NEW }
+        ],
+        elements: {
+            "background": { type: "image", x: 400 + 51 * GUI_SCALE_NEW, y: 50 + 12 * GUI_SCALE_NEW, bitmap: "canner_background_0", scale: GUI_SCALE_NEW },
+            "liquidInputScale": { type: "scale", x: 496 + 4 * GUI_SCALE_NEW, y: 50 + 42 * GUI_SCALE_NEW, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE_NEW },
+            "liquidOutputScale": { type: "scale", x: 730 + 4 * GUI_SCALE_NEW, y: 50 + 42 * GUI_SCALE_NEW, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE_NEW },
+            "progressScale": { type: "scale", x: 400 + 67 * GUI_SCALE_NEW, y: 50 + 18 * GUI_SCALE_NEW, direction: 0, bitmap: "extractor_bar_scale", scale: GUI_SCALE_NEW, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_canner");
+                    }
+                } },
+            "energyScale": { type: "scale", x: 406, y: 50 + 58 * GUI_SCALE_NEW, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE_NEW },
+            "slotEnergy": { type: "slot", x: 400, y: 50 + 75 * GUI_SCALE_NEW, size: 54 },
+            "slotSource": { type: "slot", x: 400 + 72 * GUI_SCALE_NEW, y: 50 + 39 * GUI_SCALE_NEW, size: 54, visual: false, bitmap: "canner_slot_source_0" },
+            "slotCan": { type: "slot", x: 400 + 33 * GUI_SCALE_NEW, y: 50 + 12 * GUI_SCALE_NEW, size: 54 },
+            "slotResult": { type: "slot", x: 400 + 111 * GUI_SCALE_NEW, y: 50 + 12 * GUI_SCALE_NEW, size: 54 },
+            "slotUpgrade1": { type: "slot", x: 850, y: 113, size: 54 },
+            "slotUpgrade2": { type: "slot", x: 850, y: 167, size: 54 },
+            "slotUpgrade3": { type: "slot", x: 850, y: 221, size: 54 },
+            "slotUpgrade4": { type: "slot", x: 850, y: 275, size: 54 },
+            "buttonSwitch": { type: "button", x: 400 + 70 * GUI_SCALE_NEW, y: 50 + 60 * GUI_SCALE_NEW, bitmap: "canner_switch_button", scale: GUI_SCALE_NEW, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("switchTanks", {});
+                    }
+                } },
+            "buttonMode": { type: "button", x: 400 + 54 * GUI_SCALE_NEW, y: 50 + 75 * GUI_SCALE_NEW, bitmap: "canner_mode_0", scale: GUI_SCALE_NEW, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("switchMode", {});
+                    }
+                } }
+        }
+    });
     var Canner = /** @class */ (function (_super) {
         __extends(Canner, _super);
         function Canner() {
@@ -8408,10 +9805,10 @@ var Machine;
             _this.defaultValues = {
                 energy: 0,
                 progress: 0,
-                mode: 0
+                mode: 0 /* CannerMode.SolidCanning */
             };
             _this.defaultEnergyStorage = 1600;
-            _this.defaultEnergyDemand = 1;
+            _this.defaultEnergyDemand = 4;
             _this.defaultProcessTime = 200;
             _this.upgrades = ["overclocker", "transformer", "energyStorage", "itemEjector", "itemPulling", "fluidEjector", "fluidPulling"];
             return _this;
@@ -8419,45 +9816,43 @@ var Machine;
         Canner.prototype.getScreenByName = function () {
             return guiCanner;
         };
-        Canner.prototype.isValidSourceItem = function (id, data) {
-            if (this.data.mode == 0 && MachineRecipeRegistry.hasRecipeFor("solidCanner", id)) {
-                return true;
+        Canner.prototype.getSolidRecipeDictionary = function () {
+            return MachineRecipeRegistry.getDictionary("solidCanner");
+        };
+        Canner.prototype.getFluidRecipeDictionary = function () {
+            return MachineRecipeRegistry.getDictionary("fluidCanner");
+        };
+        Canner.prototype.isValidSource = function (id, data) {
+            if (this.data.mode == 0 /* CannerMode.SolidCanning */) {
+                return !!this.getSolidRecipeDictionary().getRecipe(id, data);
             }
-            if (this.data.mode == 3) {
-                var recipes = MachineRecipeRegistry.requireRecipesFor("fluidCanner");
-                for (var i in recipes) {
-                    if (recipes[i].input[1].id == id)
-                        return true;
-                }
+            if (this.data.mode == 3 /* CannerMode.FluidCanning */) {
+                return !!this.getFluidRecipeDictionary().findRecipe(function (recipe) { return recipe.source.id == id && (recipe.source.data == -1 || recipe.source.data == data); });
             }
             return false;
         };
-        Canner.prototype.isValidCan = function (id, data) {
+        Canner.prototype.isValidCan = function (id, data, extra) {
             switch (this.data.mode) {
-                case 0: {
-                    var recipes = MachineRecipeRegistry.requireRecipesFor("solidCanner");
-                    for (var i in recipes) {
-                        if (recipes[i].can == id)
-                            return true;
-                    }
-                    return false;
+                case 0 /* CannerMode.SolidCanning */: {
+                    var dictionary = this.getSolidRecipeDictionary();
+                    return !!dictionary.findRecipe(function (recipe) { return recipe.can == id; });
                 }
-                case 1:
-                case 3:
-                    return !!LiquidItemRegistry.getEmptyItem(id, data);
-                case 2:
-                    return !!LiquidItemRegistry.getFullItem(id, data, "water");
+                case 1 /* CannerMode.EmptyItem */:
+                case 3 /* CannerMode.FluidCanning */:
+                    return !!LiquidItemRegistry.getItemLiquid(id, data, extra);
+                case 2 /* CannerMode.FillItem */:
+                    return LiquidItemRegistry.canBeFilledWithLiquid(id, data, extra, this.inputTank.getLiquidStored() || "water");
             }
         };
         Canner.prototype.setupContainer = function () {
             var _this = this;
             this.inputTank = this.addLiquidTank("inputTank", 8000);
             this.outputTank = this.addLiquidTank("outputTank", 8000);
-            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data) {
+            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data, extra) {
                 if (name == "slotSource")
-                    return _this.isValidSourceItem(id, data);
+                    return _this.isValidSource(id, data);
                 if (name == "slotCan")
-                    return _this.isValidCan(id, data);
+                    return _this.isValidCan(id, data, extra);
                 if (name == "slotEnergy")
                     return ChargeItemRegistry.isValidStorage(id, "Eu", _this.getTier());
                 if (name.startsWith("slotUpgrade"))
@@ -8466,106 +9861,11 @@ var Machine;
             });
         };
         Canner.prototype.onTick = function () {
-            this.container.sendEvent("updateUI", { mode: this.data.mode });
-            this.useUpgrades();
+            this.container.sendEvent("updateUiMode", { mode: this.data.mode });
+            this.useUpgrades(false);
             StorageInterface.checkHoppers(this);
-            var sourceSlot = this.container.getSlot("slotSource");
-            var resultSlot = this.container.getSlot("slotResult");
-            var canSlot = this.container.getSlot("slotCan");
-            var newActive = false;
-            switch (this.data.mode) {
-                case 0:
-                    var recipe = MachineRecipeRegistry.getRecipeResult("solidCanner", sourceSlot.id);
-                    if (recipe) {
-                        var result = recipe.result;
-                        if (canSlot.id == recipe.can && canSlot.count >= result.count && (resultSlot.id == result.id && resultSlot.data == result.data && resultSlot.count <= 64 - result.count || resultSlot.id == 0)) {
-                            if (this.data.energy >= this.energyDemand) {
-                                this.data.energy -= this.energyDemand;
-                                this.data.progress += 1 / this.processTime;
-                                newActive = true;
-                            }
-                            if (+this.data.progress.toFixed(3) >= 1) {
-                                this.decreaseSlot(sourceSlot, 1);
-                                this.decreaseSlot(canSlot, result.count);
-                                resultSlot.setSlot(result.id, resultSlot.count + result.count, result.data);
-                                this.data.progress = 0;
-                            }
-                        }
-                    }
-                    else {
-                        this.data.progress = 0;
-                    }
-                    break;
-                case 1:
-                    var liquid = this.outputTank.getLiquidStored();
-                    var empty = LiquidItemRegistry.getEmptyItem(canSlot.id, canSlot.data);
-                    if (empty && (!liquid || empty.liquid == liquid) && !this.outputTank.isFull()) {
-                        if (this.data.energy >= this.energyDemand && (resultSlot.id == empty.id && resultSlot.data == empty.data && resultSlot.count < Item.getMaxStack(empty.id) || resultSlot.id == 0)) {
-                            this.data.energy -= this.energyDemand;
-                            this.data.progress += 1 / this.processTime;
-                            newActive = true;
-                        }
-                        if (+this.data.progress.toFixed(3) >= 1) {
-                            this.outputTank.getLiquidFromItem(canSlot, resultSlot);
-                            this.data.progress = 0;
-                        }
-                    }
-                    else {
-                        this.data.progress = 0;
-                    }
-                    break;
-                case 2:
-                    var resetProgress = true;
-                    liquid = this.inputTank.getLiquidStored();
-                    if (liquid) {
-                        var full = LiquidItemRegistry.getFullItem(canSlot.id, canSlot.data, liquid);
-                        if (full) {
-                            resetProgress = false;
-                            if (this.data.energy >= this.energyDemand && (resultSlot.id == full.id && resultSlot.data == full.data && resultSlot.count < Item.getMaxStack(full.id) || resultSlot.id == 0)) {
-                                this.data.energy -= this.energyDemand;
-                                this.data.progress += 1 / this.processTime;
-                                newActive = true;
-                            }
-                            if (+this.data.progress.toFixed(3) >= 1) {
-                                this.inputTank.addLiquidToItem(canSlot, resultSlot);
-                                this.data.progress = 0;
-                            }
-                        }
-                    }
-                    if (resetProgress) {
-                        this.data.progress = 0;
-                    }
-                    break;
-                case 3:
-                    var recipes = MachineRecipeRegistry.requireRecipesFor("fluidCanner");
-                    resetProgress = true;
-                    for (var i in recipes) {
-                        var recipe_1 = recipes[i];
-                        var liquid_1 = recipe_1.input[0];
-                        var source = recipe_1.input[1];
-                        if (this.inputTank.getAmount(liquid_1) >= 1000 && sourceSlot.id == source.id && sourceSlot.count >= source.count) {
-                            resetProgress = false;
-                            var outputLiquid = this.outputTank.getLiquidStored();
-                            if ((!outputLiquid || recipe_1.output == outputLiquid && this.outputTank.getAmount() <= 7000) && this.data.energy >= this.energyDemand) {
-                                this.data.energy -= this.energyDemand;
-                                this.data.progress += 1 / this.processTime;
-                                newActive = true;
-                            }
-                            if (+this.data.progress.toFixed(3) >= 1) {
-                                this.inputTank.getLiquid(1000);
-                                this.decreaseSlot(sourceSlot, source.count);
-                                this.outputTank.addLiquid(recipe_1.output, 1000);
-                                this.data.progress = 0;
-                            }
-                            break;
-                        }
-                    }
-                    if (resetProgress) {
-                        this.data.progress = 0;
-                    }
-                    break;
-            }
-            this.setActive(newActive);
+            var isActive = this.performRecipe();
+            this.setActive(isActive);
             this.dischargeSlot("slotEnergy");
             this.inputTank.updateUiScale("liquidInputScale");
             this.outputTank.updateUiScale("liquidOutputScale");
@@ -8573,20 +9873,145 @@ var Machine;
             this.container.setScale("energyScale", this.getRelativeEnergy());
             this.container.sendChanges();
         };
-        Canner.prototype.switchMode = function () {
-            if (this.data.progress == 0) {
-                this.data.mode = (this.data.mode + 1) % 4;
-                this.container.sendEvent("updateUI", { mode: this.data.mode });
+        Canner.prototype.performRecipe = function () {
+            var sourceSlot = this.container.getSlot("slotSource");
+            var resultSlot = this.container.getSlot("slotResult");
+            var canSlot = this.container.getSlot("slotCan");
+            switch (this.data.mode) {
+                case 0 /* CannerMode.SolidCanning */:
+                    return this.performSolidRecipe(sourceSlot, canSlot, resultSlot);
+                case 1 /* CannerMode.EmptyItem */:
+                    return this.emptyLiquidItem(canSlot, resultSlot);
+                case 2 /* CannerMode.FillItem */:
+                    return this.fillLiquidItem(canSlot, resultSlot);
+                case 3 /* CannerMode.FluidCanning */:
+                    return this.performFluidRecipe(sourceSlot);
+                default:
+                    return false;
             }
         };
-        Canner.prototype.switchTanks = function () {
+        Canner.prototype.performSolidRecipe = function (sourceSlot, canSlot, resultSlot) {
+            var dictionary = this.getSolidRecipeDictionary();
+            var recipe = dictionary.getRecipe(sourceSlot.id, sourceSlot.data);
+            if (recipe && canSlot.id == recipe.can && canSlot.count >= recipe.result.count) {
+                if (this.data.energy >= this.energyDemand && this.canStackBeMerged(recipe.result, resultSlot, 64)) {
+                    this.data.energy -= this.energyDemand;
+                    this.updateProgress();
+                    if (this.isCompletedProgress()) {
+                        this.decreaseSlot(sourceSlot, 1);
+                        this.decreaseSlot(canSlot, recipe.result.count);
+                        resultSlot.setSlot(recipe.result.id, resultSlot.count + recipe.result.count, recipe.result.data);
+                        this.data.progress = 0;
+                    }
+                    return true;
+                }
+            }
+            else {
+                this.data.progress = 0;
+            }
+            return false;
+        };
+        Canner.prototype.emptyLiquidItem = function (canSlot, resultSlot) {
+            var newActive = false;
+            var liquid = this.outputTank.getLiquidStored();
+            var emptyStack = LiquidItemRegistry.getEmptyStack(canSlot);
+            if (emptyStack && (!liquid || emptyStack.liquid == liquid) && !this.outputTank.isFull()) {
+                if (this.data.energy >= this.energyDemand && this.canStackBeMerged(emptyStack, resultSlot)) {
+                    this.data.energy -= this.energyDemand;
+                    this.updateProgress(this.defaultProcessTime / 5);
+                    newActive = true;
+                }
+                if (this.isCompletedProgress()) {
+                    this.outputTank.getLiquidFromItem(canSlot, resultSlot);
+                    this.data.progress = 0;
+                }
+            }
+            else {
+                this.data.progress = 0;
+            }
+            return newActive;
+        };
+        Canner.prototype.fillLiquidItem = function (canSlot, resultSlot) {
+            var newActive = false;
+            var resetProgress = true;
+            var liquid = this.inputTank.getLiquidStored();
+            if (liquid) {
+                var fullStack = LiquidItemRegistry.getFullStack(canSlot, liquid);
+                if (fullStack) {
+                    resetProgress = false;
+                    if (this.data.energy >= this.energyDemand && this.canStackBeMerged(fullStack, resultSlot)) {
+                        this.data.energy -= this.energyDemand;
+                        this.updateProgress(this.defaultProcessTime / 5);
+                        newActive = true;
+                    }
+                    if (this.isCompletedProgress()) {
+                        this.inputTank.addLiquidToItem(canSlot, resultSlot);
+                        this.data.progress = 0;
+                    }
+                }
+            }
+            if (resetProgress) {
+                this.data.progress = 0;
+            }
+            return newActive;
+        };
+        Canner.prototype.performFluidRecipe = function (sourceSlot) {
+            var newActive = false;
+            var resetProgress = true;
+            var inputLiquid = this.inputTank.getLiquidStored();
+            if (sourceSlot.id != 0 && inputLiquid) {
+                var dictionary = this.getFluidRecipeDictionary();
+                var recipe = dictionary.getRecipe(inputLiquid, sourceSlot);
+                if (recipe && sourceSlot.count >= recipe.source.count && this.inputTank.getAmount() >= recipe.inputFluid.amount) {
+                    var outputLiquid = this.outputTank.getLiquidStored();
+                    if ((!outputLiquid || recipe.outputFluid.name == outputLiquid) && this.outputTank.getLimit() - this.outputTank.getAmount() >= recipe.outputFluid.amount && this.data.energy >= this.energyDemand) {
+                        this.data.energy -= this.energyDemand;
+                        this.updateProgress();
+                        newActive = true;
+                        resetProgress = false;
+                    }
+                    if (this.isCompletedProgress()) {
+                        this.inputTank.getLiquid(1000);
+                        this.decreaseSlot(sourceSlot, recipe.source.count);
+                        this.outputTank.addLiquid(recipe.outputFluid.name, recipe.outputFluid.amount);
+                        this.data.progress = 0;
+                    }
+                }
+            }
+            if (resetProgress) {
+                this.data.progress = 0;
+            }
+            return newActive;
+        };
+        Canner.prototype.canRotate = function (side) {
+            return side > 1;
+        };
+        Canner.prototype.onItemUse = function (coords, item, player) {
+            if (Entity.getSneaking(player)) {
+                if (MachineRegistry.emptyTankOnClick(this.outputTank, item, player) ||
+                    MachineRegistry.fillTankOnClick(this.inputTank, item, player)) {
+                    this.preventClick();
+                    return true;
+                }
+            }
+            return _super.prototype.onItemUse.call(this, coords, item, player);
+        };
+        Canner.prototype.onSwitchMode = function () {
+            if (this.data.progress == 0) {
+                this.data.mode = (this.data.mode + 1) % 4;
+                this.container.sendEvent("updateUiMode", { mode: this.data.mode });
+            }
+        };
+        Canner.prototype.onSwitchTanks = function () {
             if (this.data.progress == 0) {
                 var liquidData = this.inputTank.data;
                 this.inputTank.data = this.outputTank.data;
                 this.outputTank.data = liquidData;
+                this.data[this.inputTank.name] = this.inputTank.data;
+                this.data[this.outputTank.name] = this.outputTank.data;
             }
         };
-        Canner.prototype.updateUI = function (container, window, content, data) {
+        Canner.prototype.onUpdateUiMode = function (container, window, content, data) {
             if (content) {
                 var element = content.elements["slotSource"];
                 var texture = "canner_slot_source_" + data.mode;
@@ -8598,80 +10023,80 @@ var Machine;
                 }
             }
         };
-        Canner.prototype.canRotate = function (side) {
-            return side > 1;
-        };
         __decorate([
-            Machine.ContainerEvent(Side.Server)
-        ], Canner.prototype, "switchMode", null);
+            Machine.ContainerEvent(Side.Server, "switchMode")
+        ], Canner.prototype, "onSwitchMode", null);
         __decorate([
-            Machine.ContainerEvent(Side.Server)
-        ], Canner.prototype, "switchTanks", null);
+            Machine.ContainerEvent(Side.Server, "switchTanks")
+        ], Canner.prototype, "onSwitchTanks", null);
         __decorate([
-            Machine.ContainerEvent(Side.Client)
-        ], Canner.prototype, "updateUI", null);
+            Machine.ContainerEvent(Side.Client, "updateUiMode")
+        ], Canner.prototype, "onUpdateUiMode", null);
         return Canner;
     }(Machine.ProcessingMachine));
     Machine.Canner = Canner;
     MachineRegistry.registerPrototype(BlockID.canner, new Canner());
-    MachineRegistry.createStorageInterface(BlockID.canner, {
+    MachineRecipeRegistry.registerDictionary("fluidCanner", new MachineRecipe.FluidEnrichRecipeDictionary());
+    MachineRegistry.createFluidStorageInterface(BlockID.canner, {
         slots: {
             "slotSource": { input: true,
                 isValid: function (item, side, tileEntity) {
-                    return tileEntity.isValidSourceItem(item.id, item.data);
+                    return tileEntity.isValidSource(item.id, item.data);
                 }
             },
             "slotCan": { input: true,
                 isValid: function (item, side, tileEntity) {
-                    return tileEntity.isValidCan(item.id, item.data);
+                    return tileEntity.isValidCan(item.id, item.data, item.extra);
                 }
             },
             "slotResult": { output: true }
         },
         canReceiveLiquid: function () { return true; },
-        getInputTank: function () {
-            return this.tileEntity.inputTank;
+        getInputTank: function (side, tileEntity) {
+            return tileEntity.inputTank;
         },
-        getOutputTank: function () {
-            return this.tileEntity.outputTank;
+        getOutputTank: function (side, tileEntity) {
+            return tileEntity.outputTank;
         }
     });
 })(Machine || (Machine = {}));
+/// <reference path="./BasicProcessingMachine.ts" />
 BlockRegistry.createBlock("recycler", [
-    { name: "Recycler", texture: [["machine_bottom", 0], ["macerator_top", 0], ["machine_side", 0], ["recycler_front", 0], ["machine_side", 0], ["machine_side", 0]], inCreative: true }
+    { name: "Recycler", texture: [["ic_machine_bottom", 0], ["macerator_top", 0], ["ic_machine_side", 0], ["recycler_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.recycler, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.recycler, 2, [["machine_bottom", 0], ["macerator_top", 0], ["machine_side", 0], ["recycler_front", 0], ["machine_side", 0], ["machine_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.recycler, 2, [["machine_bottom", 0], ["macerator_top", 1], ["machine_side", 0], ["recycler_front", 1], ["machine_side", 0], ["machine_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.recycler, 2, [["ic_machine_bottom", 0], ["macerator_top", 0], ["ic_machine_side", 0], ["recycler_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.recycler, 2, [["ic_machine_bottom", 0], ["macerator_top_on", 0], ["ic_machine_side", 0], ["recycler_front_on", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.recycler);
 ItemName.addTierTooltip("recycler", 1);
+ItemName.addConsumptionTooltip("recycler", "EU", 1);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.recycler, count: 1, data: 0 }, [
         " a ",
         "x#x",
         "bxb"
-    ], ['#', BlockID.compressor, -1, 'x', 3, -1, 'a', 348, 0, 'b', ItemID.ingotSteel, 0]);
-});
-var recyclerBlacklist = [102, 280, 78, 80, 332];
-var guiRecycler = MachineRegistry.createInventoryWindow("Recycler", {
-    drawing: [
-        { type: "bitmap", x: 530, y: 155, bitmap: "recycler_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE }
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 530, y: 155, direction: 0, value: 0.5, bitmap: "recycler_bar_scale", scale: GUI_SCALE },
-        "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "slotSource": { type: "slot", x: 441, y: 79 },
-        "slotEnergy": { type: "slot", x: 441, y: 218 },
-        "slotResult": { type: "slot", x: 625, y: 148 },
-        "slotUpgrade1": { type: "slot", x: 820, y: 60 },
-        "slotUpgrade2": { type: "slot", x: 820, y: 119 },
-        "slotUpgrade3": { type: "slot", x: 820, y: 178 },
-        "slotUpgrade4": { type: "slot", x: 820, y: 237 },
-    }
+    ], ['#', BlockID.compressor, -1, 'x', 3, -1, 'a', 348, 0, 'b', VanillaItemID.iron_ingot, 0]);
 });
 var Machine;
 (function (Machine) {
+    Machine.recyclerBlacklist = [102, 280, 78, 80, 332];
+    var guiRecycler = MachineRegistry.createInventoryWindow("Recycler", {
+        drawing: [
+            { type: "bitmap", x: 530, y: 155, bitmap: "recycler_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 530, y: 155, direction: 0, value: 0.5, bitmap: "recycler_bar_scale", scale: GUI_SCALE },
+            "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "slotSource": { type: "slot", x: 441, y: 79 },
+            "slotEnergy": { type: "slot", x: 441, y: 218 },
+            "slotResult": { type: "slot", x: 625, y: 148 },
+            "slotUpgrade1": { type: "slot", x: 820, y: 60 },
+            "slotUpgrade2": { type: "slot", x: 820, y: 119 },
+            "slotUpgrade3": { type: "slot", x: 820, y: 178 },
+            "slotUpgrade4": { type: "slot", x: 820, y: 237 },
+        }
+    });
     var Recycler = /** @class */ (function (_super) {
         __extends(Recycler, _super);
         function Recycler() {
@@ -8692,34 +10117,15 @@ var Machine;
             });
             this.container.setSlotAddTransferPolicy("slotResult", function () { return 0; });
         };
-        Recycler.prototype.onTick = function () {
-            this.useUpgrades();
-            StorageInterface.checkHoppers(this);
-            var newActive = false;
-            var sourceSlot = this.container.getSlot("slotSource");
-            var resultSlot = this.container.getSlot("slotResult");
-            if (sourceSlot.id != 0 && (resultSlot.id == ItemID.scrap && resultSlot.count < 64 || resultSlot.id == 0)) {
-                if (this.data.energy >= this.energyDemand) {
-                    this.data.energy -= this.energyDemand;
-                    this.data.progress += 1 / this.processTime;
-                    newActive = true;
-                }
-                if (+this.data.progress.toFixed(3) >= 1) {
-                    this.decreaseSlot(sourceSlot, 1);
-                    if (Math.random() < 0.125 && recyclerBlacklist.indexOf(sourceSlot.id) == -1) {
-                        resultSlot.setSlot(ItemID.scrap, resultSlot.count + 1, 0);
-                    }
-                    this.data.progress = 0;
-                }
-            }
-            else {
-                this.data.progress = 0;
-            }
-            this.setActive(newActive);
-            this.dischargeSlot("slotEnergy");
-            this.container.setScale("progressScale", this.data.progress);
-            this.container.setScale("energyScale", this.getRelativeEnergy());
-            this.container.sendChanges();
+        Recycler.prototype.getRecipe = function (id, data) {
+            if (id == 0)
+                return null;
+            var isBlackListed = Machine.recyclerBlacklist.indexOf(id) != -1;
+            var resultItem = { id: ItemID.scrap, count: 1, chance: isBlackListed ? 0 : 0.125 };
+            return { source: null, result: [resultItem] };
+        };
+        Recycler.prototype.isValidSource = function (id, data) {
+            return true;
         };
         Recycler.prototype.getOperationSound = function () {
             return "RecyclerOp.ogg";
@@ -8728,7 +10134,7 @@ var Machine;
             return "InterruptOne.ogg";
         };
         return Recycler;
-    }(Machine.ProcessingMachine));
+    }(Machine.BasicProcessingMachine));
     Machine.Recycler = Recycler;
     MachineRegistry.registerPrototype(BlockID.recycler, new Recycler());
     StorageInterface.createInterface(BlockID.recycler, {
@@ -8738,15 +10144,22 @@ var Machine;
         }
     });
 })(Machine || (Machine = {}));
-/// <reference path="ProcessingMachine.ts" />
+/// <reference path="BasicProcessingMachine.ts" />
 BlockRegistry.createBlock("metalFormer", [
-    { name: "Metal Former", texture: [["machine_bottom", 0], ["metal_former_top", 0], ["machine_side", 0], ["metal_former_front", 0], ["machine_side", 0], ["machine_side", 0]], inCreative: true }
+    { name: "Metal Former", texture: [["ic_machine_bottom", 0], ["metal_former_top", 0], ["ic_machine_side", 0], ["metal_former_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.metalFormer, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.metalFormer, 2, [["machine_bottom", 0], ["metal_former_top", 0], ["machine_side", 0], ["metal_former_front", 0], ["machine_side", 0], ["machine_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.metalFormer, 2, [["machine_bottom", 0], ["metal_former_top", 1], ["machine_side", 0], ["metal_former_front", 1], ["machine_side", 0], ["machine_side", 0]]);
+TileRenderer.setStandardModel(BlockID.metalFormer, 2, [["ic_machine_bottom", 0], ["metal_former_top", 0], ["metal_former_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.setStandardModel(BlockID.metalFormer, 3, [["ic_machine_bottom", 0], ["metal_former_top", 0], ["ic_machine_side", 0], ["metal_former_front", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.setStandardModel(BlockID.metalFormer, 4, [["ic_machine_bottom", 0], ["metal_former_top2", 0], ["ic_machine_side", 0], ["ic_machine_side", 0], ["metal_former_front", 0], ["ic_machine_side", 0]]);
+TileRenderer.setStandardModel(BlockID.metalFormer, 5, [["ic_machine_bottom", 0], ["metal_former_top2", 0], ["ic_machine_side", 0], ["ic_machine_side", 0], ["ic_machine_side", 0], ["metal_former_front", 0]]);
+TileRenderer.registerRenderModel(BlockID.metalFormer, 2, [["ic_machine_bottom", 0], ["metal_former_top_on", 0], ["metal_former_front_on", 0], ["ic_machine_side", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.registerRenderModel(BlockID.metalFormer, 3, [["ic_machine_bottom", 0], ["metal_former_top_on", 0], ["ic_machine_side", 0], ["metal_former_front_on", 0], ["ic_machine_side", 0], ["ic_machine_side", 0]]);
+TileRenderer.registerRenderModel(BlockID.metalFormer, 4, [["ic_machine_bottom", 0], ["metal_former_top2_on", 0], ["ic_machine_side", 0], ["ic_machine_side", 0], ["metal_former_front_on", 0], ["ic_machine_side", 0]]);
+TileRenderer.registerRenderModel(BlockID.metalFormer, 5, [["ic_machine_bottom", 0], ["metal_former_top2_on", 0], ["ic_machine_side", 0], ["ic_machine_side", 0], ["ic_machine_side", 0], ["metal_former_front_on", 0]]);
 TileRenderer.setRotationFunction(BlockID.metalFormer);
 ItemName.addTierTooltip("metalFormer", 1);
+ItemName.addConsumptionTooltip("metalFormer", "EU", 10);
 Callback.addCallback("PreLoaded", function () {
     function isToolboxEmpty(slot) {
         var container = BackpackRegistry.containers["d" + slot.data];
@@ -8773,70 +10186,66 @@ Callback.addCallback("PreLoaded", function () {
             result.id = result.count = 0;
         }
     });
-    // rolling
-    MachineRecipeRegistry.registerRecipesFor("metalFormer0", {
-        // ingots
-        "minecraft:iron_ingot": { id: ItemID.plateIron, count: 1 },
-        "minecraft:gold_ingot": { id: ItemID.plateGold, count: 1 },
-        "ItemID.ingotCopper": { id: ItemID.plateCopper, count: 1 },
-        "ItemID.ingotTin": { id: ItemID.plateTin, count: 1 },
-        "ItemID.ingotBronze": { id: ItemID.plateBronze, count: 1 },
-        "ItemID.ingotSteel": { id: ItemID.plateSteel, count: 1 },
-        "ItemID.ingotLead": { id: ItemID.plateLead, count: 1 },
-        // plates
-        "ItemID.plateIron": { id: ItemID.casingIron, count: 2 },
-        "ItemID.plateGold": { id: ItemID.casingGold, count: 2 },
-        "ItemID.plateTin": { id: ItemID.casingTin, count: 2 },
-        "ItemID.plateCopper": { id: ItemID.casingCopper, count: 2 },
-        "ItemID.plateBronze": { id: ItemID.casingBronze, count: 2 },
-        "ItemID.plateSteel": { id: ItemID.casingSteel, count: 2 },
-        "ItemID.plateLead": { id: ItemID.casingLead, count: 2 }
-    }, true);
-    // cutting
-    MachineRecipeRegistry.registerRecipesFor("metalFormer1", {
-        "ItemID.plateTin": { id: ItemID.cableTin0, count: 3 },
-        "ItemID.plateCopper": { id: ItemID.cableCopper0, count: 3 },
-        "ItemID.plateGold": { id: ItemID.cableGold0, count: 4 },
-        "ItemID.plateIron": { id: ItemID.cableIron0, count: 4 },
-    }, true);
-    // extruding
-    MachineRecipeRegistry.registerRecipesFor("metalFormer2", {
-        "ItemID.ingotTin": { id: ItemID.cableTin0, count: 3 },
-        "ItemID.ingotCopper": { id: ItemID.cableCopper0, count: 3 },
-        "minecraft:iron_ingot": { id: ItemID.cableIron0, count: 4 },
-        "minecraft:gold_ingot": { id: ItemID.cableGold0, count: 4 },
-        "ItemID.casingTin": { id: ItemID.tinCanEmpty, count: 1 },
-        "ItemID.plateIron": { id: ItemID.fuelRod, count: 1 },
-    }, true);
-});
-var guiMetalFormer = MachineRegistry.createInventoryWindow("Metal Former", {
-    drawing: [
-        { type: "bitmap", x: 530, y: 164, bitmap: "metalformer_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE },
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 530, y: 164, direction: 0, bitmap: "metalformer_bar_scale", scale: GUI_SCALE, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_metalFormer");
-                }
-            } },
-        "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "slotSource": { type: "slot", x: 441, y: 79 },
-        "slotEnergy": { type: "slot", x: 441, y: 218 },
-        "slotResult": { type: "slot", x: 717, y: 148 },
-        "slotUpgrade1": { type: "slot", x: 870, y: 60 },
-        "slotUpgrade2": { type: "slot", x: 870, y: 119 },
-        "slotUpgrade3": { type: "slot", x: 870, y: 178 },
-        "slotUpgrade4": { type: "slot", x: 870, y: 237 },
-        "button": { type: "button", x: 572, y: 210, bitmap: "metal_former_button_0", scale: GUI_SCALE, clicker: {
-                onClick: function (_, container) {
-                    container.sendEvent("switchMode", {});
-                }
-            } }
-    }
+    var rollingDictionary = MachineRecipeRegistry.getDictionary("metalRolling");
+    // ingots
+    rollingDictionary.addRecipe({ id: VanillaItemID.iron_ingot }, { id: ItemID.plateIron, count: 1 });
+    rollingDictionary.addRecipe({ id: VanillaItemID.gold_ingot }, { id: ItemID.plateGold, count: 1 });
+    rollingDictionary.addRecipe({ id: ItemID.ingotCopper }, { id: ItemID.plateCopper, count: 1 });
+    rollingDictionary.addRecipe({ id: ItemID.ingotTin }, { id: ItemID.plateTin, count: 1 });
+    rollingDictionary.addRecipe({ id: ItemID.ingotBronze }, { id: ItemID.plateBronze, count: 1 });
+    rollingDictionary.addRecipe({ id: ItemID.ingotSteel }, { id: ItemID.plateSteel, count: 1 });
+    rollingDictionary.addRecipe({ id: ItemID.ingotLead }, { id: ItemID.plateLead, count: 1 });
+    rollingDictionary.addRecipe({ id: ItemID.ingotSilver }, { id: ItemID.plateSilver, count: 1 });
+    // plates
+    rollingDictionary.addRecipe({ id: ItemID.plateIron }, { id: ItemID.casingIron, count: 2 });
+    rollingDictionary.addRecipe({ id: ItemID.plateGold }, { id: ItemID.casingGold, count: 2 });
+    rollingDictionary.addRecipe({ id: ItemID.plateTin }, { id: ItemID.casingTin, count: 2 });
+    rollingDictionary.addRecipe({ id: ItemID.plateCopper }, { id: ItemID.casingCopper, count: 2 });
+    rollingDictionary.addRecipe({ id: ItemID.plateBronze }, { id: ItemID.casingBronze, count: 2 });
+    rollingDictionary.addRecipe({ id: ItemID.plateSteel }, { id: ItemID.casingSteel, count: 2 });
+    rollingDictionary.addRecipe({ id: ItemID.plateLead }, { id: ItemID.casingLead, count: 2 });
+    rollingDictionary.addRecipe({ id: ItemID.plateSilver }, { id: ItemID.casingSilver, count: 2 });
+    var cuttingDictionary = MachineRecipeRegistry.getDictionary("metalCutting");
+    cuttingDictionary.addRecipe({ id: ItemID.plateTin }, { id: ItemID.cableTin0, count: 3 });
+    cuttingDictionary.addRecipe({ id: ItemID.plateCopper }, { id: ItemID.cableCopper0, count: 3 });
+    cuttingDictionary.addRecipe({ id: ItemID.plateGold }, { id: ItemID.cableGold0, count: 4 });
+    cuttingDictionary.addRecipe({ id: ItemID.plateIron }, { id: ItemID.cableIron0, count: 4 });
+    var extrudingDictionary = MachineRecipeRegistry.getDictionary("metalExtruding");
+    extrudingDictionary.addRecipe({ id: ItemID.ingotTin }, { id: ItemID.cableTin0, count: 3 });
+    extrudingDictionary.addRecipe({ id: ItemID.ingotCopper }, { id: ItemID.cableCopper0, count: 3 });
+    extrudingDictionary.addRecipe({ id: VanillaItemID.iron_ingot }, { id: ItemID.cableIron0, count: 4 });
+    extrudingDictionary.addRecipe({ id: VanillaItemID.gold_ingot }, { id: ItemID.cableGold0, count: 4 });
+    extrudingDictionary.addRecipe({ id: ItemID.casingTin }, { id: ItemID.tinCanEmpty, count: 1 });
+    extrudingDictionary.addRecipe({ id: ItemID.plateIron }, { id: ItemID.fuelRod, count: 1 });
 });
 var Machine;
 (function (Machine) {
+    var guiMetalFormer = MachineRegistry.createInventoryWindow("Metal Former", {
+        drawing: [
+            { type: "bitmap", x: 530, y: 164, bitmap: "icpe.metalformer_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE },
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 530, y: 164, direction: 0, bitmap: "icpe.metalformer_bar_scale", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_metalFormer");
+                    }
+                } },
+            "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "slotSource": { type: "slot", x: 441, y: 79 },
+            "slotEnergy": { type: "slot", x: 441, y: 218 },
+            "slotResult": { type: "slot", x: 717, y: 148 },
+            "slotUpgrade1": { type: "slot", x: 870, y: 60 },
+            "slotUpgrade2": { type: "slot", x: 870, y: 119 },
+            "slotUpgrade3": { type: "slot", x: 870, y: 178 },
+            "slotUpgrade4": { type: "slot", x: 870, y: 237 },
+            "button": { type: "button", x: 572, y: 210, bitmap: "icpe.metal_former_button_0", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("switchMode", {});
+                    }
+                } }
+        }
+    });
     var MetalFormer = /** @class */ (function (_super) {
         __extends(MetalFormer, _super);
         function MetalFormer() {
@@ -8844,7 +10253,7 @@ var Machine;
             _this.defaultValues = {
                 energy: 0,
                 progress: 0,
-                mode: 0
+                mode: 0 /* MetalFormerMode.Rolling */
             };
             _this.defaultEnergyStorage = 4000;
             _this.defaultEnergyDemand = 10;
@@ -8854,121 +10263,109 @@ var Machine;
         MetalFormer.prototype.getScreenByName = function () {
             return guiMetalFormer;
         };
-        MetalFormer.prototype.getRecipeResult = function (id) {
-            return MachineRecipeRegistry.getRecipeResult("metalFormer" + this.data.mode, id);
+        MetalFormer.prototype.getRecipeDictionary = function () {
+            return MachineRecipeRegistry.getDictionary(this.getRecipeCategory());
+        };
+        MetalFormer.prototype.getRecipeCategory = function () {
+            switch (this.data.mode) {
+                case 0 /* MetalFormerMode.Rolling */:
+                    return "metalRolling";
+                case 1 /* MetalFormerMode.Cutting */:
+                    return "metalCutting";
+                case 2 /* MetalFormerMode.Extruding */:
+                    return "metalExtruding";
+            }
         };
         MetalFormer.prototype.onTick = function () {
-            this.useUpgrades();
-            StorageInterface.checkHoppers(this);
-            var newActive = false;
-            var sourceSlot = this.container.getSlot("slotSource");
-            var resultSlot = this.container.getSlot("slotResult");
-            var result = this.getRecipeResult(sourceSlot.id);
-            if (result && (resultSlot.id == result.id && resultSlot.count <= 64 - result.count || resultSlot.id == 0)) {
-                if (this.data.energy >= this.energyDemand) {
-                    this.data.energy -= this.energyDemand;
-                    this.data.progress += 1 / this.processTime;
-                    newActive = true;
-                }
-                if (+this.data.progress.toFixed(3) >= 1) {
-                    this.decreaseSlot(sourceSlot, 1);
-                    resultSlot.setSlot(result.id, resultSlot.count + result.count, 0);
-                    this.data.progress = 0;
-                }
-            }
-            else {
-                this.data.progress = 0;
-            }
-            this.setActive(newActive);
-            this.dischargeSlot("slotEnergy");
-            this.container.setScale("progressScale", this.data.progress);
-            this.container.setScale("energyScale", this.getRelativeEnergy());
             this.container.sendEvent("setModeIcon", { mode: this.data.mode });
-            this.container.sendChanges();
+            _super.prototype.onTick.call(this);
         };
-        MetalFormer.prototype.switchMode = function () {
+        MetalFormer.prototype.onSwitchMode = function () {
             this.data.mode = (this.data.mode + 1) % 3;
+            this.data.progress = 0;
         };
-        MetalFormer.prototype.setModeIcon = function (container, window, content, data) {
+        MetalFormer.prototype.onSetModeIcon = function (container, window, content, data) {
             if (content) {
-                content.elements.button.bitmap = "metal_former_button_" + data.mode;
+                content.elements.button.bitmap = "icpe.metal_former_button_" + data.mode;
             }
         };
         __decorate([
-            Machine.ContainerEvent(Side.Server)
-        ], MetalFormer.prototype, "switchMode", null);
+            Machine.ContainerEvent(Side.Server, "switchMode")
+        ], MetalFormer.prototype, "onSwitchMode", null);
         __decorate([
-            Machine.ContainerEvent(Side.Client)
-        ], MetalFormer.prototype, "setModeIcon", null);
+            Machine.ContainerEvent(Side.Client, "setModeIcon")
+        ], MetalFormer.prototype, "onSetModeIcon", null);
         return MetalFormer;
-    }(Machine.ProcessingMachine));
+    }(Machine.BasicProcessingMachine));
     Machine.MetalFormer = MetalFormer;
     MachineRegistry.registerPrototype(BlockID.metalFormer, new MetalFormer());
+    MachineRecipeRegistry.registerDictionary("metalRolling", new MachineRecipe.ProcessingRecipeDictionary(200));
+    MachineRecipeRegistry.registerDictionary("metalCutting", new MachineRecipe.ProcessingRecipeDictionary(200));
+    MachineRecipeRegistry.registerDictionary("metalExtruding", new MachineRecipe.ProcessingRecipeDictionary(200));
     StorageInterface.createInterface(BlockID.metalFormer, {
         slots: {
             "slotSource": { input: true },
             "slotResult": { output: true }
         },
-        isValidInput: function (item) {
-            return MachineRecipeRegistry.hasRecipeFor("metalFormer0", item.id) ||
-                MachineRecipeRegistry.hasRecipeFor("metalFormer1", item.id) ||
-                MachineRecipeRegistry.hasRecipeFor("metalFormer2", item.id);
+        isValidInput: function (item, side, tileEntity) {
+            return tileEntity.isValidSource(item.id, item.data);
         }
     });
 })(Machine || (Machine = {}));
+/// <reference path="./BasicProcessingMachine.ts" />
 BlockRegistry.createBlock("oreWasher", [
-    { name: "Ore Washing Plant", texture: [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["ore_washer_front", 0], ["ore_washer_side", 0], ["ore_washer_side", 0]], inCreative: true }
+    { name: "Ore Washing Plant", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["ore_washer_front", 0], ["ore_washer_side", 0], ["ore_washer_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.oreWasher, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.oreWasher, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["ore_washer_front", 0], ["ore_washer_side", 0], ["ore_washer_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.oreWasher, 2, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["ore_washer_front", 1], ["ore_washer_side", 1], ["ore_washer_side", 1]]);
+TileRenderer.setStandardModelWithRotation(BlockID.oreWasher, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["ore_washer_front", 0], ["ore_washer_side", 0], ["ore_washer_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.oreWasher, 2, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["ore_washer_front_on", 0], ["ore_washer_side_on", 0], ["ore_washer_side_on", 0]]);
 TileRenderer.setRotationFunction(BlockID.oreWasher);
 ItemName.addTierTooltip("oreWasher", 1);
+ItemName.addConsumptionTooltip("oreWasher", "EU", 16);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.oreWasher, count: 1, data: 0 }, [
         "aaa",
         "b#b",
         "xcx"
     ], ['#', BlockID.machineBlockBasic, 0, 'x', ItemID.electricMotor, 0, 'a', ItemID.plateIron, 0, 'b', 325, 0, 'c', ItemID.circuitBasic, 0]);
-    MachineRecipeRegistry.registerRecipesFor("oreWasher", {
-        "ItemID.crushedCopper": [ItemID.crushedPurifiedCopper, 1, ItemID.dustSmallCopper, 2, ItemID.dustStone, 1],
-        "ItemID.crushedTin": [ItemID.crushedPurifiedTin, 1, ItemID.dustSmallTin, 2, ItemID.dustStone, 1],
-        "ItemID.crushedIron": [ItemID.crushedPurifiedIron, 1, ItemID.dustSmallIron, 2, ItemID.dustStone, 1],
-        "ItemID.crushedGold": [ItemID.crushedPurifiedGold, 1, ItemID.dustSmallGold, 2, ItemID.dustStone, 1],
-        "ItemID.crushedSilver": [ItemID.crushedPurifiedSilver, 1, ItemID.dustSmallSilver, 2, ItemID.dustStone, 1],
-        "ItemID.crushedLead": [ItemID.crushedPurifiedLead, 1, ItemID.dustSmallSulfur, 3, ItemID.dustStone, 1],
-        "ItemID.crushedUranium": [ItemID.crushedPurifiedUranium, 1, ItemID.dustSmallLead, 2, ItemID.dustStone, 1],
-        "minecraft:gravel": [318, 1, ItemID.dustStone, 1]
-    }, true);
-});
-var guiOreWasher = MachineRegistry.createInventoryWindow("Ore Washing Plant", {
-    drawing: [
-        { type: "bitmap", x: 400, y: 50, bitmap: "ore_washer_background", scale: GUI_SCALE_NEW },
-        { type: "bitmap", x: 415, y: 170, bitmap: "energy_small_background", scale: GUI_SCALE_NEW }
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 400 + 98 * GUI_SCALE_NEW, y: 50 + 35 * GUI_SCALE_NEW, direction: 0, bitmap: "ore_washer_bar_scale", scale: GUI_SCALE_NEW, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_oreWasher");
-                }
-            } },
-        "energyScale": { type: "scale", x: 415, y: 170, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE_NEW },
-        "liquidScale": { type: "scale", x: 400 + 60 * GUI_SCALE_NEW, y: 50 + 21 * GUI_SCALE_NEW, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE_NEW },
-        "slotEnergy": { type: "slot", x: 400 + 3 * GUI_SCALE_NEW, y: 50 + 58 * GUI_SCALE_NEW, size: 54 },
-        "slotLiquid1": { type: "slot", x: 400 + 33 * GUI_SCALE_NEW, y: 50 + 13 * GUI_SCALE_NEW, size: 54 },
-        "slotLiquid2": { type: "slot", x: 400 + 33 * GUI_SCALE_NEW, y: 50 + 58 * GUI_SCALE_NEW, size: 54 },
-        "slotSource": { type: "slot", x: 400 + 99 * GUI_SCALE_NEW, y: 50 + 13 * GUI_SCALE_NEW, size: 54 },
-        "slotResult1": { type: "slot", x: 400 + 81 * GUI_SCALE_NEW, y: 50 + 58 * GUI_SCALE_NEW, size: 54 },
-        "slotResult2": { type: "slot", x: 400 + 99 * GUI_SCALE_NEW, y: 50 + 58 * GUI_SCALE_NEW, size: 54 },
-        "slotResult3": { type: "slot", x: 400 + 117 * GUI_SCALE_NEW, y: 50 + 58 * GUI_SCALE_NEW, size: 54 },
-        "slotUpgrade1": { type: "slot", x: 860, y: 50 + 3 * GUI_SCALE_NEW, size: 54 },
-        "slotUpgrade2": { type: "slot", x: 860, y: 50 + 21 * GUI_SCALE_NEW, size: 54 },
-        "slotUpgrade3": { type: "slot", x: 860, y: 50 + 39 * GUI_SCALE_NEW, size: 54 },
-        "slotUpgrade4": { type: "slot", x: 860, y: 50 + 57 * GUI_SCALE_NEW, size: 54 },
-    }
+    var dictionary = MachineRecipeRegistry.getDictionary("oreWasher");
+    dictionary.addRecipe({ id: ItemID.crushedCopper }, [{ id: ItemID.crushedPurifiedCopper, count: 1 }, { id: ItemID.dustSmallCopper, count: 2 }, { id: ItemID.dustStone, count: 1 }]);
+    dictionary.addRecipe({ id: ItemID.crushedTin }, [{ id: ItemID.crushedPurifiedTin, count: 1 }, { id: ItemID.dustSmallTin, count: 2 }, { id: ItemID.dustStone, count: 1 }]);
+    dictionary.addRecipe({ id: ItemID.crushedIron }, [{ id: ItemID.crushedPurifiedIron, count: 1 }, { id: ItemID.dustSmallIron, count: 2 }, { id: ItemID.dustStone, count: 1 }]);
+    dictionary.addRecipe({ id: ItemID.crushedGold }, [{ id: ItemID.crushedPurifiedGold, count: 1 }, { id: ItemID.dustSmallGold, count: 2 }, { id: ItemID.dustStone, count: 1 }]);
+    dictionary.addRecipe({ id: ItemID.crushedSilver }, [{ id: ItemID.crushedPurifiedSilver, count: 1 }, { id: ItemID.dustSmallSilver, count: 2 }, { id: ItemID.dustStone, count: 1 }]);
+    dictionary.addRecipe({ id: ItemID.crushedLead }, [{ id: ItemID.crushedPurifiedLead, count: 1 }, { id: ItemID.dustSmallSulfur, count: 3 }, { id: ItemID.dustStone, count: 1 }]);
+    dictionary.addRecipe({ id: ItemID.crushedUranium }, [{ id: ItemID.crushedPurifiedUranium, count: 1 }, { id: ItemID.dustSmallLead, count: 2 }, { id: ItemID.dustStone, count: 1 }]);
+    dictionary.addRecipe({ id: VanillaBlockID.gravel }, [{ id: 318, count: 1 }, { id: ItemID.dustStone, count: 1 }]);
 });
 var Machine;
 (function (Machine) {
+    var guiOreWasher = MachineRegistry.createInventoryWindow("Ore Washing Plant", {
+        drawing: [
+            { type: "bitmap", x: 400, y: 50, bitmap: "ore_washer_background", scale: GUI_SCALE_NEW },
+            { type: "bitmap", x: 415, y: 170, bitmap: "energy_small_background", scale: GUI_SCALE_NEW }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 400 + 98 * GUI_SCALE_NEW, y: 50 + 35 * GUI_SCALE_NEW, direction: 0, bitmap: "ore_washer_bar_scale", scale: GUI_SCALE_NEW, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_oreWasher");
+                    }
+                } },
+            "energyScale": { type: "scale", x: 415, y: 170, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE_NEW },
+            "liquidScale": { type: "scale", x: 400 + 60 * GUI_SCALE_NEW, y: 50 + 21 * GUI_SCALE_NEW, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE_NEW },
+            "slotEnergy": { type: "slot", x: 400 + 3 * GUI_SCALE_NEW, y: 50 + 58 * GUI_SCALE_NEW, size: 54 },
+            "slotLiquid1": { type: "slot", x: 400 + 33 * GUI_SCALE_NEW, y: 50 + 13 * GUI_SCALE_NEW, size: 54 },
+            "slotLiquid2": { type: "slot", x: 400 + 33 * GUI_SCALE_NEW, y: 50 + 58 * GUI_SCALE_NEW, size: 54 },
+            "slotSource": { type: "slot", x: 400 + 99 * GUI_SCALE_NEW, y: 50 + 13 * GUI_SCALE_NEW, size: 54 },
+            "slotResult1": { type: "slot", x: 400 + 81 * GUI_SCALE_NEW, y: 50 + 58 * GUI_SCALE_NEW, size: 54 },
+            "slotResult2": { type: "slot", x: 400 + 99 * GUI_SCALE_NEW, y: 50 + 58 * GUI_SCALE_NEW, size: 54 },
+            "slotResult3": { type: "slot", x: 400 + 117 * GUI_SCALE_NEW, y: 50 + 58 * GUI_SCALE_NEW, size: 54 },
+            "slotUpgrade1": { type: "slot", x: 860, y: 50 + 3 * GUI_SCALE_NEW, size: 54 },
+            "slotUpgrade2": { type: "slot", x: 860, y: 50 + 21 * GUI_SCALE_NEW, size: 54 },
+            "slotUpgrade3": { type: "slot", x: 860, y: 50 + 39 * GUI_SCALE_NEW, size: 54 },
+            "slotUpgrade4": { type: "slot", x: 860, y: 50 + 57 * GUI_SCALE_NEW, size: 54 },
+        }
+    });
     var OreWasher = /** @class */ (function (_super) {
         __extends(OreWasher, _super);
         function OreWasher() {
@@ -8982,78 +10379,65 @@ var Machine;
         OreWasher.prototype.getScreenByName = function () {
             return guiOreWasher;
         };
+        OreWasher.prototype.getRecipeDictionary = function () {
+            return MachineRecipeRegistry.getDictionary("oreWasher");
+        };
+        OreWasher.prototype.getOutputSlots = function () {
+            return ["slotResult1", "slotResult2", "slotResult3"];
+        };
+        OreWasher.prototype.isValidSource = function (id, data) {
+            return !!this.getRecipeDictionary().getRecipe(id, data);
+        };
         OreWasher.prototype.setupContainer = function () {
             var _this = this;
             this.liquidTank = this.addLiquidTank("fluid", 8000, ["water"]);
-            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data) {
+            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data, extra) {
                 if (name == "slotSource")
-                    return !!_this.getRecipeResult(id);
+                    return _this.isValidSource(id, data);
                 if (name == "slotEnergy")
                     return ChargeItemRegistry.isValidStorage(id, "Eu", _this.getTier());
                 if (name == "slotLiquid1")
-                    return LiquidItemRegistry.getItemLiquid(id, data) == "water";
+                    return LiquidItemRegistry.getItemLiquid(id, data, extra) == "water";
                 if (name.startsWith("slotUpgrade"))
                     return UpgradeAPI.isValidUpgrade(id, _this);
                 return false;
             });
         };
-        OreWasher.prototype.checkResult = function (result) {
-            for (var i = 1; i < 4; i++) {
-                var id = result[(i - 1) * 2];
-                if (!id)
-                    return true;
-                var count = result[(i - 1) * 2 + 1];
-                var resultSlot = this.container.getSlot("slotResult" + i);
-                if (resultSlot.id != 0 && (resultSlot.id != id || resultSlot.count + count > 64)) {
-                    return false;
-                }
-            }
-            return true;
-        };
-        OreWasher.prototype.putResult = function (result) {
-            this.liquidTank.getLiquid(1000);
-            for (var i = 1; i < 4; i++) {
-                var id = result[(i - 1) * 2];
-                if (!id)
-                    break;
-                var count = result[(i - 1) * 2 + 1];
-                var resultSlot = this.container.getSlot("slotResult" + i);
-                resultSlot.setSlot(id, resultSlot.count + count, 0);
-            }
-        };
-        OreWasher.prototype.getRecipeResult = function (id) {
-            return MachineRecipeRegistry.getRecipeResult("oreWasher", id);
-        };
         OreWasher.prototype.onTick = function () {
-            this.useUpgrades();
+            this.useUpgrades(false);
             StorageInterface.checkHoppers(this);
             var slot1 = this.container.getSlot("slotLiquid1");
             var slot2 = this.container.getSlot("slotLiquid2");
             this.liquidTank.getLiquidFromItem(slot1, slot2);
-            var newActive = false;
-            var sourceSlot = this.container.getSlot("slotSource");
-            var result = this.getRecipeResult(sourceSlot.id);
-            if (result && this.checkResult(result) && this.liquidTank.getAmount("water") >= 1000) {
-                if (this.data.energy >= this.energyDemand) {
-                    this.data.energy -= this.energyDemand;
-                    this.data.progress += 1 / this.processTime;
-                    newActive = true;
-                }
-                if (+this.data.progress.toFixed(3) >= 1) {
-                    this.decreaseSlot(sourceSlot, 1);
-                    this.putResult(result);
-                    this.data.progress = 0;
-                }
-            }
-            else {
-                this.data.progress = 0;
-            }
-            this.setActive(newActive);
+            var isActive = this.performRecipe();
+            this.setActive(isActive);
             this.dischargeSlot("slotEnergy");
             this.liquidTank.updateUiScale("liquidScale");
             this.container.setScale("progressScale", this.data.progress);
             this.container.setScale("energyScale", this.getRelativeEnergy());
             this.container.sendChanges();
+        };
+        OreWasher.prototype.performRecipe = function () {
+            var sourceSlot = this.container.getSlot("slotSource");
+            var dictionary = this.getRecipeDictionary();
+            var recipe = dictionary.getRecipe(sourceSlot.id, sourceSlot.data);
+            if (recipe && this.liquidTank.getAmount("water") >= 1000) {
+                if (this.data.energy >= this.energyDemand && this.canPutResult(recipe.result)) {
+                    this.data.energy -= this.energyDemand;
+                    this.updateProgress(recipe.processTime);
+                    if (this.isCompletedProgress()) {
+                        this.decreaseSlot(sourceSlot, 1);
+                        this.liquidTank.getLiquid(1000);
+                        this.putResult(recipe.result);
+                        this.data.progress = 0;
+                    }
+                    return true;
+                }
+            }
+            else {
+                this.data.progress = 0;
+            }
+            return false;
         };
         OreWasher.prototype.onItemUse = function (coords, item, player) {
             if (Entity.getSneaking(player)) {
@@ -9065,16 +10449,17 @@ var Machine;
             return _super.prototype.onItemUse.call(this, coords, item, player);
         };
         return OreWasher;
-    }(Machine.ProcessingMachine));
+    }(Machine.BasicProcessingMachine));
     Machine.OreWasher = OreWasher;
     MachineRegistry.registerPrototype(BlockID.oreWasher, new OreWasher());
-    MachineRegistry.createStorageInterface(BlockID.oreWasher, {
+    MachineRecipeRegistry.registerDictionary("oreWasher", new MachineRecipe.ProcessingRecipeDictionary(200));
+    MachineRegistry.createFluidStorageInterface(BlockID.oreWasher, {
         slots: {
-            "slotSource": { input: true, isValid: function (item) {
-                    return MachineRecipeRegistry.hasRecipeFor("oreWasher", item.id, item.data);
+            "slotSource": { input: true, isValid: function (item, side, tileEntity) {
+                    return tileEntity.isValidSource(item.id, item.data);
                 } },
             "slotLiquid1": { input: true, isValid: function (item) {
-                    return LiquidItemRegistry.getItemLiquid(item.id, item.data) == "water";
+                    return LiquidItemRegistry.getItemLiquid(item.id, item.data, item.extra) == "water";
                 } },
             "slotLiquid2": { output: true },
             "slotResult1": { output: true },
@@ -9084,73 +10469,76 @@ var Machine;
         canTransportLiquid: function () { return false; }
     });
 })(Machine || (Machine = {}));
+/// <reference path="./BasicProcessingMachine.ts" />
 BlockRegistry.createBlock("thermalCentrifuge", [
-    { name: "Thermal Centrifuge", texture: [["machine_advanced", 0], ["thermal_centrifuge_top", 0], ["machine_back", 0], ["thermal_centrifuge_front", 0], ["thermal_centrifuge_side", 0], ["thermal_centrifuge_side", 0]], inCreative: true }
+    { name: "Thermal Centrifuge", texture: [["ic_machine_advanced_bottom", 0], ["thermal_centrifuge_top", 0], ["ic_machine_back", 0], ["thermal_centrifuge_front", 0], ["thermal_centrifuge_side", 0], ["thermal_centrifuge_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.thermalCentrifuge, "stone", 1);
-TileRenderer.setStandardModelWithRotation(BlockID.thermalCentrifuge, 2, [["machine_advanced", 0], ["thermal_centrifuge_top", 0], ["machine_side", 0], ["thermal_centrifuge_front", 0], ["thermal_centrifuge_side", 0], ["thermal_centrifuge_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.thermalCentrifuge, 2, [["machine_advanced", 0], ["thermal_centrifuge_top", 1], ["machine_side", 0], ["thermal_centrifuge_front", 1], ["thermal_centrifuge_side", 1], ["thermal_centrifuge_side", 1]]);
+TileRenderer.setStandardModelWithRotation(BlockID.thermalCentrifuge, 2, [["ic_machine_advanced_bottom", 0], ["thermal_centrifuge_top", 0], ["ic_machine_back", 0], ["thermal_centrifuge_front", 0], ["thermal_centrifuge_side", 0], ["thermal_centrifuge_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.thermalCentrifuge, 2, [["ic_machine_advanced_bottom", 0], ["thermal_centrifuge_top_on", 0], ["ic_machine_back", 0], ["thermal_centrifuge_front_on", 0], ["thermal_centrifuge_side_on", 0], ["thermal_centrifuge_side_on", 0]]);
 TileRenderer.setRotationFunction(BlockID.thermalCentrifuge);
 ItemName.addTierTooltip("thermalCentrifuge", 2);
+ItemName.addConsumptionTooltip("thermalCentrifuge", "EU", 48);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.thermalCentrifuge, count: 1, data: 0 }, [
         "cmc",
         "a#a",
         "axa"
     ], ['#', BlockID.machineBlockAdvanced, 0, 'x', ItemID.electricMotor, 0, 'a', 265, 0, 'm', ItemID.miningLaser, -1, 'c', ItemID.coil, 0]);
-    MachineRecipeRegistry.registerRecipesFor("thermalCentrifuge", {
-        //"minecraft:cobblestone": {result: [ItemID.dustStone, 1], heat: 100},
-        "ItemID.crushedCopper": { result: [ItemID.dustSmallTin, 1, ItemID.dustCopper, 1, ItemID.dustStone, 1], heat: 500 },
-        "ItemID.crushedTin": { result: [ItemID.dustSmallIron, 1, ItemID.dustTin, 1, ItemID.dustStone, 1], heat: 1000 },
-        "ItemID.crushedIron": { result: [ItemID.dustSmallGold, 1, ItemID.dustIron, 1, ItemID.dustStone, 1], heat: 1500 },
-        "ItemID.crushedSilver": { result: [ItemID.dustSmallLead, 1, ItemID.dustSilver, 1, ItemID.dustStone, 1], heat: 2000 },
-        "ItemID.crushedGold": { result: [ItemID.dustSmallSilver, 1, ItemID.dustGold, 1, ItemID.dustStone, 1], heat: 2000 },
-        "ItemID.crushedLead": { result: [ItemID.dustSmallSilver, 1, ItemID.dustLead, 1, ItemID.dustStone, 1], heat: 2000 },
-        "ItemID.crushedUranium": { result: [ItemID.smallUranium235, 1, ItemID.uranium238, 4, ItemID.dustStone, 1], heat: 3000 },
-        "ItemID.crushedPurifiedCopper": { result: [ItemID.dustSmallTin, 1, ItemID.dustCopper, 1], heat: 500 },
-        "ItemID.crushedPurifiedTin": { result: [ItemID.dustSmallIron, 1, ItemID.dustTin, 1], heat: 1000 },
-        "ItemID.crushedPurifiedIron": { result: [ItemID.dustSmallGold, 1, ItemID.dustIron, 1], heat: 1500 },
-        "ItemID.crushedPurifiedSilver": { result: [ItemID.dustSmallLead, 1, ItemID.dustSilver, 1], heat: 2000 },
-        "ItemID.crushedPurifiedGold": { result: [ItemID.dustSmallSilver, 1, ItemID.dustGold, 1], heat: 2000 },
-        "ItemID.crushedPurifiedLead": { result: [ItemID.dustSmallSilver, 1, ItemID.dustLead, 1], heat: 2000 },
-        "ItemID.crushedPurifiedUranium": { result: [ItemID.smallUranium235, 2, ItemID.uranium238, 5], heat: 3000 },
-        "ItemID.slag": { result: [ItemID.dustSmallGold, 1, ItemID.dustCoal, 1], heat: 1500 },
-        "ItemID.fuelRodDepletedUranium": { result: [ItemID.smallPlutonium, 1, ItemID.uranium238, 4, ItemID.dustIron, 1], heat: 4000 },
-        "ItemID.fuelRodDepletedUranium2": { result: [ItemID.smallPlutonium, 2, ItemID.uranium238, 8, ItemID.dustIron, 3], heat: 4000 },
-        "ItemID.fuelRodDepletedUranium4": { result: [ItemID.smallPlutonium, 4, ItemID.uranium238, 16, ItemID.dustIron, 6], heat: 4000 },
-        "ItemID.fuelRodDepletedMOX": { result: [ItemID.smallPlutonium, 1, ItemID.plutonium, 3, ItemID.dustIron, 1], heat: 5000 },
-        "ItemID.fuelRodDepletedMOX2": { result: [ItemID.smallPlutonium, 2, ItemID.plutonium, 6, ItemID.dustIron, 3], heat: 5000 },
-        "ItemID.fuelRodDepletedMOX4": { result: [ItemID.smallPlutonium, 4, ItemID.plutonium, 12, ItemID.dustIron, 6], heat: 5000 },
-        "ItemID.rtgPellet": { result: [ItemID.plutonium, 3, ItemID.dustIron, 54], heat: 5000 },
-    }, true);
-});
-var guiCentrifuge = MachineRegistry.createInventoryWindow("Thermal Centrifuge", {
-    drawing: [
-        { type: "bitmap", x: 400 + 36 * GUI_SCALE_NEW, y: 50 + 15 * GUI_SCALE_NEW, bitmap: "thermal_centrifuge_background", scale: GUI_SCALE_NEW },
-        { type: "bitmap", x: 400 + 8 * GUI_SCALE_NEW, y: 50 + 38 * GUI_SCALE_NEW, bitmap: "energy_small_background", scale: GUI_SCALE_NEW }
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 400 + 80 * GUI_SCALE_NEW, y: 50 + 22 * GUI_SCALE_NEW, direction: 1, value: 0.5, bitmap: "thermal_centrifuge_scale", scale: GUI_SCALE_NEW, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_thermalCentrifuge");
-                }
-            } },
-        "heatScale": { type: "scale", x: 400 + 64 * GUI_SCALE_NEW, y: 50 + 63 * GUI_SCALE_NEW, direction: 0, value: 0.5, bitmap: "heat_scale", scale: GUI_SCALE_NEW },
-        "energyScale": { type: "scale", x: 400 + 8 * GUI_SCALE_NEW, y: 50 + 38 * GUI_SCALE_NEW, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE_NEW },
-        "slotEnergy": { type: "slot", x: 400 + 6 * GUI_SCALE_NEW, y: 50 + 56 * GUI_SCALE_NEW, size: 54 },
-        "slotSource": { type: "slot", x: 400 + 6 * GUI_SCALE_NEW, y: 50 + 16 * GUI_SCALE_NEW, size: 54 },
-        "slotResult1": { type: "slot", x: 400 + 119 * GUI_SCALE_NEW, y: 50 + 13 * GUI_SCALE_NEW, size: 54 },
-        "slotResult2": { type: "slot", x: 400 + 119 * GUI_SCALE_NEW, y: 50 + 31 * GUI_SCALE_NEW, size: 54 },
-        "slotResult3": { type: "slot", x: 400 + 119 * GUI_SCALE_NEW, y: 50 + 49 * GUI_SCALE_NEW, size: 54 },
-        "slotUpgrade1": { type: "slot", x: 860, y: 50 + 3 * GUI_SCALE_NEW, size: 54 },
-        "slotUpgrade2": { type: "slot", x: 860, y: 50 + 21 * GUI_SCALE_NEW, size: 54 },
-        "slotUpgrade3": { type: "slot", x: 860, y: 50 + 39 * GUI_SCALE_NEW, size: 54 },
-        "slotUpgrade4": { type: "slot", x: 860, y: 50 + 57 * GUI_SCALE_NEW, size: 54 },
-        "indicator": { type: "image", x: 400 + 88 * GUI_SCALE_NEW, y: 50 + 59 * GUI_SCALE_NEW, bitmap: "indicator_red", scale: GUI_SCALE_NEW }
-    }
+    var dictionary = MachineRecipeRegistry.getDictionary("thermalCentrifuge");
+    dictionary.addRecipe({ id: VanillaBlockID.cobblestone }, [{ id: ItemID.dustStone, count: 1 }], 100);
+    dictionary.addRecipe({ id: ItemID.crushedCopper }, [{ id: ItemID.dustSmallTin, count: 1 }, { id: ItemID.dustCopper, count: 1 }, { id: ItemID.dustStone, count: 1 }], 500);
+    dictionary.addRecipe({ id: ItemID.crushedTin }, [{ id: ItemID.dustSmallIron, count: 1 }, { id: ItemID.dustTin, count: 1 }, { id: ItemID.dustStone, count: 1 }], 1000);
+    dictionary.addRecipe({ id: ItemID.crushedIron }, [{ id: ItemID.dustSmallGold, count: 1 }, { id: ItemID.dustIron, count: 1 }, { id: ItemID.dustStone, count: 1 }], 1500);
+    dictionary.addRecipe({ id: ItemID.crushedSilver }, [{ id: ItemID.dustSmallLead, count: 1 }, { id: ItemID.dustSilver, count: 1 }, { id: ItemID.dustStone, count: 1 }], 2000);
+    dictionary.addRecipe({ id: ItemID.crushedGold }, [{ id: ItemID.dustSmallSilver, count: 1 }, { id: ItemID.dustGold, count: 1 }, { id: ItemID.dustStone, count: 1 }], 2000);
+    dictionary.addRecipe({ id: ItemID.crushedLead }, [{ id: ItemID.dustSmallSilver, count: 1 }, { id: ItemID.dustLead, count: 1 }, { id: ItemID.dustStone, count: 1 }], 2000);
+    dictionary.addRecipe({ id: ItemID.crushedUranium }, [{ id: ItemID.smallUranium235, count: 1 }, { id: ItemID.uranium238, count: 4 }, { id: ItemID.dustStone, count: 1 }], 3000);
+    dictionary.addRecipe({ id: ItemID.crushedPurifiedCopper }, [{ id: ItemID.dustSmallTin, count: 1 }, { id: ItemID.dustCopper, count: 1 }], 500);
+    dictionary.addRecipe({ id: ItemID.crushedPurifiedTin }, [{ id: ItemID.dustSmallIron, count: 1 }, { id: ItemID.dustTin, count: 1 }], 1000);
+    dictionary.addRecipe({ id: ItemID.crushedPurifiedIron }, [{ id: ItemID.dustSmallGold, count: 1 }, { id: ItemID.dustIron, count: 1 }], 1500);
+    dictionary.addRecipe({ id: ItemID.crushedPurifiedSilver }, [{ id: ItemID.dustSmallLead, count: 1 }, { id: ItemID.dustSilver, count: 1 }], 2000);
+    dictionary.addRecipe({ id: ItemID.crushedPurifiedGold }, [{ id: ItemID.dustSmallSilver, count: 1 }, { id: ItemID.dustGold, count: 1 }], 2000);
+    dictionary.addRecipe({ id: ItemID.crushedPurifiedLead }, [{ id: ItemID.dustSmallSilver, count: 1 }, { id: ItemID.dustLead, count: 1 }], 2000);
+    dictionary.addRecipe({ id: ItemID.crushedPurifiedUranium }, [{ id: ItemID.smallUranium235, count: 2 }, { id: ItemID.uranium238, count: 5 }], 3000);
+    dictionary.addRecipe({ id: ItemID.slag }, [{ id: ItemID.dustSmallGold, count: 1 }, { id: ItemID.dustCoal, count: 1 }], 1500);
+    dictionary.addRecipe({ id: ItemID.fuelRodDepletedUranium }, [{ id: ItemID.smallPlutonium, count: 1 }, { id: ItemID.uranium238, count: 4 }, { id: ItemID.dustIron, count: 1 }], 4000);
+    dictionary.addRecipe({ id: ItemID.fuelRodDepletedUranium2 }, [{ id: ItemID.smallPlutonium, count: 2 }, { id: ItemID.uranium238, count: 8 }, { id: ItemID.dustIron, count: 3 }], 4000);
+    dictionary.addRecipe({ id: ItemID.fuelRodDepletedUranium4 }, [{ id: ItemID.smallPlutonium, count: 4 }, { id: ItemID.uranium238, count: 16 }, { id: ItemID.dustIron, count: 6 }], 4000);
+    dictionary.addRecipe({ id: ItemID.fuelRodDepletedMOX }, [{ id: ItemID.smallPlutonium, count: 1 }, { id: ItemID.plutonium, count: 3 }, { id: ItemID.dustIron, count: 1 }], 5000);
+    dictionary.addRecipe({ id: ItemID.fuelRodDepletedMOX2 }, [{ id: ItemID.smallPlutonium, count: 2 }, { id: ItemID.plutonium, count: 6 }, { id: ItemID.dustIron, count: 3 }], 5000);
+    dictionary.addRecipe({ id: ItemID.fuelRodDepletedMOX4 }, [{ id: ItemID.smallPlutonium, count: 4 }, { id: ItemID.plutonium, count: 12 }, { id: ItemID.dustIron, count: 6 }], 5000);
+    dictionary.addRecipe({ id: ItemID.rtgPellet }, [{ id: ItemID.plutonium, count: 3 }, { id: ItemID.dustIron, count: 54 }], 5000);
+    dictionary.addRecipe({ id: ItemID.dustBronze, count: 4 }, [{ id: ItemID.dustCopper, count: 3 }, { id: ItemID.dustTin, count: 1 }], 500);
+    dictionary.addRecipe({ id: ItemID.dustClay, count: 4 }, [{ id: ItemID.dustSiliconDioxide, count: 1 }], 250);
 });
 var Machine;
 (function (Machine) {
+    var guiCentrifuge = MachineRegistry.createInventoryWindow("Thermal Centrifuge", {
+        drawing: [
+            { type: "bitmap", x: 400 + 36 * GUI_SCALE_NEW, y: 50 + 15 * GUI_SCALE_NEW, bitmap: "thermal_centrifuge_background", scale: GUI_SCALE_NEW },
+            { type: "bitmap", x: 400 + 8 * GUI_SCALE_NEW, y: 50 + 38 * GUI_SCALE_NEW, bitmap: "energy_small_background", scale: GUI_SCALE_NEW }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 400 + 80 * GUI_SCALE_NEW, y: 50 + 22 * GUI_SCALE_NEW, direction: 1, value: 0.5, bitmap: "thermal_centrifuge_scale", scale: GUI_SCALE_NEW, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_thermalCentrifuge");
+                    }
+                } },
+            "heatScale": { type: "scale", x: 400 + 64 * GUI_SCALE_NEW, y: 50 + 63 * GUI_SCALE_NEW, direction: 0, value: 0.5, bitmap: "heat_scale", scale: GUI_SCALE_NEW },
+            "energyScale": { type: "scale", x: 400 + 8 * GUI_SCALE_NEW, y: 50 + 38 * GUI_SCALE_NEW, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE_NEW },
+            "slotEnergy": { type: "slot", x: 400 + 6 * GUI_SCALE_NEW, y: 50 + 56 * GUI_SCALE_NEW, size: 54 },
+            "slotSource": { type: "slot", x: 400 + 6 * GUI_SCALE_NEW, y: 50 + 16 * GUI_SCALE_NEW, size: 54 },
+            "slotResult1": { type: "slot", x: 400 + 119 * GUI_SCALE_NEW, y: 50 + 13 * GUI_SCALE_NEW, size: 54 },
+            "slotResult2": { type: "slot", x: 400 + 119 * GUI_SCALE_NEW, y: 50 + 31 * GUI_SCALE_NEW, size: 54 },
+            "slotResult3": { type: "slot", x: 400 + 119 * GUI_SCALE_NEW, y: 50 + 49 * GUI_SCALE_NEW, size: 54 },
+            "slotUpgrade1": { type: "slot", x: 860, y: 50 + 3 * GUI_SCALE_NEW, size: 54 },
+            "slotUpgrade2": { type: "slot", x: 860, y: 50 + 21 * GUI_SCALE_NEW, size: 54 },
+            "slotUpgrade3": { type: "slot", x: 860, y: 50 + 39 * GUI_SCALE_NEW, size: 54 },
+            "slotUpgrade4": { type: "slot", x: 860, y: 50 + 57 * GUI_SCALE_NEW, size: 54 },
+            "indicator": { type: "image", x: 400 + 88 * GUI_SCALE_NEW, y: 50 + 59 * GUI_SCALE_NEW, bitmap: "indicator_red", scale: GUI_SCALE_NEW }
+        }
+    });
     var ThermalCentrifuge = /** @class */ (function (_super) {
         __extends(ThermalCentrifuge, _super);
         function ThermalCentrifuge() {
@@ -9167,108 +10555,94 @@ var Machine;
             _this.defaultProcessTime = 500;
             _this.defaultDrop = BlockID.machineBlockAdvanced;
             _this.upgrades = ["overclocker", "transformer", "energyStorage", "redstone", "itemEjector", "itemPulling"];
+            _this.heatingEnergyDemand = 2;
             _this.isHeating = false;
             return _this;
         }
         ThermalCentrifuge.prototype.getScreenByName = function () {
             return guiCentrifuge;
         };
-        ThermalCentrifuge.prototype.useUpgrades = function () {
-            var upgrades = _super.prototype.useUpgrades.call(this);
+        ThermalCentrifuge.prototype.getRecipeDictionary = function () {
+            return MachineRecipeRegistry.getDictionary("thermalCentrifuge");
+        };
+        ThermalCentrifuge.prototype.getOutputSlots = function () {
+            return ["slotResult1", "slotResult2", "slotResult3"];
+        };
+        ThermalCentrifuge.prototype.useUpgrades = function (isInit) {
+            var upgrades = _super.prototype.useUpgrades.call(this, isInit);
             this.isHeating = upgrades.getRedstoneInput(this.isPowered);
             return upgrades;
         };
-        ThermalCentrifuge.prototype.getRecipeResult = function (id) {
-            return MachineRecipeRegistry.getRecipeResult("thermalCentrifuge", id);
-        };
-        ThermalCentrifuge.prototype.checkResult = function (result) {
-            for (var i = 1; i < 4; i++) {
-                var id = result[(i - 1) * 2];
-                var count = result[(i - 1) * 2 + 1];
-                var resultSlot = this.container.getSlot("slotResult" + i);
-                if ((resultSlot.id != id || resultSlot.count + count > 64) && resultSlot.id != 0) {
-                    return false;
-                }
-            }
-            return true;
-        };
-        ThermalCentrifuge.prototype.putResult = function (result) {
-            for (var i = 1; i < 4; i++) {
-                var id = result[(i - 1) * 2];
-                var count = result[(i - 1) * 2 + 1];
-                var resultSlot = this.container.getSlot("slotResult" + i);
-                if (id) {
-                    resultSlot.setSlot(id, resultSlot.count + count, 0);
-                }
-            }
-        };
         ThermalCentrifuge.prototype.onTick = function () {
-            this.useUpgrades();
+            this.useUpgrades(false);
             StorageInterface.checkHoppers(this);
             if (this.isHeating) {
                 this.data.maxHeat = 5000;
             }
-            var newActive = false;
-            var sourceSlot = this.container.getSlot("slotSource");
-            var recipe = this.getRecipeResult(sourceSlot.id);
-            if (recipe && this.checkResult(recipe.result) && this.data.energy > 0) {
-                this.data.maxHeat = recipe.heat;
-                if (this.data.heat < recipe.heat) {
-                    this.data.energy--;
-                    this.data.heat++;
-                }
-                else if (this.data.energy >= this.energyDemand) {
-                    this.data.energy -= this.energyDemand;
-                    this.data.progress += 1 / this.processTime;
-                    newActive = true;
-                }
-                if (+this.data.progress.toFixed(3) >= 1) {
-                    this.decreaseSlot(sourceSlot, 1);
-                    this.putResult(recipe.result);
-                    this.data.progress = 0;
-                }
-            }
-            else {
-                this.data.maxHeat = 5000;
+            var isActive = this.performRecipe();
+            if (!isActive) {
                 this.data.progress = 0;
-                if (this.isHeating && this.data.energy > 1) {
+                this.data.maxHeat = 5000;
+                if (this.isHeating && this.data.energy >= this.heatingEnergyDemand) {
                     if (this.data.heat < 5000) {
                         this.data.heat++;
                     }
-                    this.data.energy -= 2;
+                    this.data.energy -= this.heatingEnergyDemand;
                 }
                 else if (this.data.heat > 0) {
                     this.data.heat--;
                 }
             }
-            this.setActive(newActive);
+            this.setActive(isActive);
             this.dischargeSlot("slotEnergy");
-            if (this.data.heat >= this.data.maxHeat) {
-                this.container.sendEvent("setIndicator", "green");
-            }
-            else {
-                this.container.sendEvent("setIndicator", "red");
-            }
+            this.container.sendEvent("setIndicator", this.data.heat >= this.data.maxHeat ? "green" : "red");
             this.container.setScale("progressScale", this.data.progress);
             this.container.setScale("heatScale", this.data.heat / this.data.maxHeat);
             this.container.setScale("energyScale", this.getRelativeEnergy());
             this.container.sendChanges();
         };
+        ThermalCentrifuge.prototype.performRecipe = function () {
+            var sourceSlot = this.container.getSlot("slotSource");
+            var dictionary = this.getRecipeDictionary();
+            var recipe = dictionary.getRecipe(sourceSlot.id, sourceSlot.data);
+            if (!recipe)
+                return false;
+            this.data.maxHeat = recipe.heat;
+            if (this.data.energy >= this.heatingEnergyDemand && this.canPutResult(recipe.result)) {
+                if (this.data.heat < recipe.heat) {
+                    this.data.energy -= this.heatingEnergyDemand;
+                    this.data.heat++;
+                    return true;
+                }
+                if (this.data.energy >= this.energyDemand) {
+                    this.data.energy -= this.energyDemand;
+                    this.updateProgress(recipe.processTime);
+                    if (this.isCompletedProgress()) {
+                        this.decreaseSlot(sourceSlot, 1);
+                        this.putResult(recipe.result);
+                        this.data.progress = 0;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        };
         ThermalCentrifuge.prototype.onRedstoneUpdate = function (signal) {
             this.isPowered = signal > 0;
         };
-        ThermalCentrifuge.prototype.setIndicator = function (container, window, content, data) {
+        ThermalCentrifuge.prototype.onSetIndicator = function (container, window, content, data) {
             if (content) {
                 content.elements["indicator"].bitmap = "indicator_" + data;
             }
         };
         __decorate([
-            Machine.ContainerEvent(Side.Client)
-        ], ThermalCentrifuge.prototype, "setIndicator", null);
+            Machine.ContainerEvent(Side.Client, "setIndicator")
+        ], ThermalCentrifuge.prototype, "onSetIndicator", null);
         return ThermalCentrifuge;
-    }(Machine.ProcessingMachine));
+    }(Machine.BasicProcessingMachine));
     Machine.ThermalCentrifuge = ThermalCentrifuge;
     MachineRegistry.registerPrototype(BlockID.thermalCentrifuge, new ThermalCentrifuge());
+    MachineRecipeRegistry.registerDictionary("thermalCentrifuge", new MachineRecipe.ThermalCentrifugeRecipeDictionary());
     StorageInterface.createInterface(BlockID.thermalCentrifuge, {
         slots: {
             "slotSource": { input: true },
@@ -9276,69 +10650,282 @@ var Machine;
             "slotResult2": { output: true },
             "slotResult3": { output: true }
         },
-        isValidInput: function (item) {
-            return MachineRecipeRegistry.hasRecipeFor("thermalCentrifuge", item.id);
+        isValidInput: function (item, side, tileEntity) {
+            return tileEntity.isValidSource(item.id, item.data);
+        }
+    });
+})(Machine || (Machine = {}));
+/// <reference path="./ProcessingMachine.ts" />
+BlockRegistry.createBlock("blockCuttingMachine", [
+    { name: "Block Cutting Machine", texture: [["block_cutter_bottomtop", 0], ["block_cutter_bottomtop", 0], ["block_cutter_side", 0], ["block_cutter_back", 0], ["block_cutter_side", 0], ["block_cutter_side", 0]], inCreative: true }
+], "machine");
+BlockRegistry.setBlockMaterial(BlockID.blockCuttingMachine, "stone", 1);
+TileRenderer.setStandardModelWithRotation(BlockID.blockCuttingMachine, 2, [["block_cutter_bottomtop", 0], ["block_cutter_bottomtop", 0], ["block_cutter_back", 0], ["block_cutter_side", 0], ["block_cutter_side", 0], ["block_cutter_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.blockCuttingMachine, 2, [["block_cutter_bottomtop", 0], ["block_cutter_bottomtop", 0], ["block_cutter_back", 0], ["block_cutter_side_on", 0], ["block_cutter_side_on", 0], ["block_cutter_side_on", 0]]);
+TileRenderer.setRotationFunction(BlockID.blockCuttingMachine);
+ItemName.addTierTooltip("blockCuttingMachine", 2);
+ItemName.addConsumptionTooltip("blockCuttingMachine", "EU", 12);
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: BlockID.blockCuttingMachine, count: 1, data: 0 }, [
+        "a",
+        "#",
+        "b"
+    ], ['#', BlockID.machineBlockAdvanced, 0, 'a', ItemID.circuitAdvanced, 0, 'b', ItemID.electricMotor, 0]);
+    var dictionary = MachineRecipeRegistry.getDictionary("cuttingMachine");
+    // -- Iron blade or higher --
+    // Logs
+    dictionary.addRecipe({ id: VanillaBlockID.log, data: 0 }, { id: VanillaBlockID.planks, count: 6, data: 0 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.log, data: 1 }, { id: VanillaBlockID.planks, count: 6, data: 1 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.log, data: 2 }, { id: VanillaBlockID.planks, count: 6, data: 2 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.log, data: 3 }, { id: VanillaBlockID.planks, count: 6, data: 3 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.log2, data: 0 }, { id: VanillaBlockID.planks, count: 6, data: 4 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.log2, data: 1 }, { id: VanillaBlockID.planks, count: 6, data: 5 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.crimson_stem }, { id: VanillaBlockID.crimson_planks, count: 6, data: 0 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.warped_stem }, { id: VanillaBlockID.warped_planks, count: 6, data: 0 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.stripped_oak_log }, { id: VanillaBlockID.planks, count: 6, data: 0 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.stripped_spruce_log }, { id: VanillaBlockID.planks, count: 6, data: 1 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.stripped_birch_log }, { id: VanillaBlockID.planks, count: 6, data: 2 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.stripped_jungle_log }, { id: VanillaBlockID.planks, count: 6, data: 3 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.stripped_acacia_log }, { id: VanillaBlockID.planks, count: 6, data: 4 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.stripped_dark_oak_log }, { id: VanillaBlockID.planks, count: 6, data: 5 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.stripped_crimson_stem }, { id: VanillaBlockID.crimson_planks, count: 6, data: 0 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.stripped_warped_stem }, { id: VanillaBlockID.warped_planks, count: 6, data: 0 }, 1);
+    dictionary.addRecipe({ id: BlockID.rubberTreeLog }, { id: VanillaBlockID.planks, count: 6, data: 3 }, 1);
+    // Wood
+    dictionary.addRecipe({ id: VanillaBlockID.wood, data: 0 }, { id: VanillaBlockID.planks, count: 6, data: 0 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.wood, data: 1 }, { id: VanillaBlockID.planks, count: 6, data: 1 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.wood, data: 2 }, { id: VanillaBlockID.planks, count: 6, data: 2 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.wood, data: 3 }, { id: VanillaBlockID.planks, count: 6, data: 3 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.wood, data: 4 }, { id: VanillaBlockID.planks, count: 6, data: 4 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.wood, data: 5 }, { id: VanillaBlockID.planks, count: 6, data: 5 }, 1);
+    // Stripped wood
+    dictionary.addRecipe({ id: VanillaBlockID.wood, data: 8 }, { id: VanillaBlockID.planks, count: 6, data: 0 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.wood, data: 9 }, { id: VanillaBlockID.planks, count: 6, data: 1 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.wood, data: 10 }, { id: VanillaBlockID.planks, count: 6, data: 2 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.wood, data: 11 }, { id: VanillaBlockID.planks, count: 6, data: 3 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.wood, data: 12 }, { id: VanillaBlockID.planks, count: 6, data: 4 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.wood, data: 13 }, { id: VanillaBlockID.planks, count: 6, data: 5 }, 1);
+    // Other wood
+    dictionary.addRecipe({ id: VanillaBlockID.crimson_hyphae }, { id: VanillaBlockID.crimson_planks, count: 6, data: 0 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.warped_hyphae }, { id: VanillaBlockID.warped_planks, count: 6, data: 0 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.stripped_crimson_hyphae }, { id: VanillaBlockID.crimson_planks, count: 6, data: 0 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.stripped_warped_hyphae }, { id: VanillaBlockID.warped_planks, count: 6, data: 0 }, 1);
+    // Planks
+    dictionary.addRecipe({ id: VanillaBlockID.planks, count: 2 }, { id: VanillaItemID.stick, count: 6 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.crimson_planks, count: 2 }, { id: VanillaItemID.stick, count: 6 }, 1);
+    dictionary.addRecipe({ id: VanillaBlockID.warped_planks, count: 2 }, { id: VanillaItemID.stick, count: 6 }, 1);
+    // Resource blocks
+    dictionary.addRecipe({ id: BlockID.blockCopper }, { id: ItemID.plateCopper, count: 9 }, 2);
+    dictionary.addRecipe({ id: BlockID.blockTin }, { id: ItemID.plateTin, count: 9 }, 2);
+    dictionary.addRecipe({ id: BlockID.blockBronze }, { id: ItemID.plateBronze, count: 9 }, 2);
+    dictionary.addRecipe({ id: BlockID.blockLead }, { id: ItemID.plateLead, count: 9 }, 2);
+    dictionary.addRecipe({ id: VanillaBlockID.gold_block }, { id: ItemID.plateGold, count: 9 }, 2);
+    dictionary.addRecipe({ id: VanillaBlockID.lapis_block }, { id: ItemID.plateLapis, count: 9 }, 2);
+    // -- Steel blade or higher --
+    dictionary.addRecipe({ id: VanillaBlockID.iron_block }, { id: ItemID.plateIron, count: 9 }, 3);
+    // -- Diamond blade --
+    dictionary.addRecipe({ id: BlockID.blockSteel }, { id: ItemID.plateSteel, count: 9 }, 4);
+});
+var Machine;
+(function (Machine) {
+    var guiBlockCutter = MachineRegistry.createInventoryWindow("Block Cutting Machine", {
+        drawing: [
+            { type: "bitmap", x: 530, y: 148, bitmap: "icpe.cutting_machine_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 450, y: 155, bitmap: "energy_small_background", scale: GUI_SCALE }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 530, y: 148, direction: 0, bitmap: "icpe.cutting_machine_bar_scale", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container, tileEntity, position) {
+                        if (position.x < 14 / 46 || position.x > 32 / 46) {
+                            RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_cutting_machine");
+                        }
+                    }
+                } },
+            "energyScale": { type: "scale", x: 450, y: 155, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "slotSource": { type: "slot", x: 441, y: 79 },
+            "slotBlade": { type: "slot", x: 573, y: 148, z: 100, bitmap: "transparent_slot" },
+            "slotEnergy": { type: "slot", x: 441, y: 218 },
+            "slotResult": { type: "slot", x: 707, y: 148 },
+            "slotUpgrade1": { type: "slot", x: 820, y: 60 },
+            "slotUpgrade2": { type: "slot", x: 820, y: 119 },
+            "slotUpgrade3": { type: "slot", x: 820, y: 178 },
+            "slotUpgrade4": { type: "slot", x: 820, y: 237 },
+        }
+    });
+    var BlockCutter = /** @class */ (function (_super) {
+        __extends(BlockCutter, _super);
+        function BlockCutter() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.defaultTier = 2;
+            _this.defaultEnergyDemand = 12;
+            _this.defaultEnergyStorage = 10000;
+            _this.defaultProcessTime = 450;
+            _this.speedModifier = 1;
+            _this.upgrades = ["overclocker", "transformer", "energyStorage", "itemEjector", "itemPulling"];
+            return _this;
+        }
+        BlockCutter.prototype.getScreenByName = function () {
+            return guiBlockCutter;
+        };
+        BlockCutter.prototype.getRecipeDictionary = function () {
+            return MachineRecipeRegistry.getDictionary("cuttingMachine");
+        };
+        BlockCutter.prototype.isValidSource = function (id, data) {
+            return this.getRecipeDictionary().getRecipe(id, data) != null;
+        };
+        BlockCutter.prototype.setupContainer = function () {
+            var _this = this;
+            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data) {
+                if (name.startsWith("slotSource"))
+                    return _this.isValidSource(id, data);
+                if (name == "slotEnergy")
+                    return ChargeItemRegistry.isValidStorage(id, "Eu", _this.getTier());
+                if (name.startsWith("slotUpgrade"))
+                    return UpgradeAPI.isValidUpgrade(id, _this);
+                if (name == "slotBlade")
+                    return _this.getBladeLevel(id) > 0;
+                return false;
+            });
+        };
+        BlockCutter.prototype.getBladeLevel = function (bladeId) {
+            switch (bladeId) {
+                case ItemID.cuttingBladeIron:
+                    return 2;
+                case ItemID.cuttingBladeSteel:
+                    return 3;
+                case ItemID.cuttingBladeDiamond:
+                    return 4;
+                default:
+                    return 0;
+            }
+        };
+        BlockCutter.prototype.onTick = function () {
+            var bladeSlot = this.container.getSlot("slotBlade");
+            this.container.sendEvent("showWarning", { show: bladeSlot.id == 0 });
+            _super.prototype.onTick.call(this);
+        };
+        BlockCutter.prototype.performRecipe = function () {
+            var sourceSlot = this.container.getSlot("slotSource");
+            var dictionary = this.getRecipeDictionary();
+            var recipe = dictionary.getRecipe(sourceSlot.id, sourceSlot.data);
+            var bladeSlot = this.container.getSlot("slotBlade");
+            var bladeLevel = this.getBladeLevel(bladeSlot.id);
+            if (recipe && sourceSlot.count >= recipe.source.count && bladeLevel >= recipe.hardnessLevel) {
+                var resultSlot = this.container.getSlot("slotResult");
+                if (this.data.energy >= this.energyDemand && this.canStackBeMerged(recipe.result, resultSlot, 64)) {
+                    this.data.energy -= this.energyDemand;
+                    // apply 50% speed increase for each hardness level exceeding required
+                    var processTime = this.defaultProcessTime / (1 + (bladeLevel - recipe.hardnessLevel) * 0.5);
+                    this.updateProgress(processTime);
+                    if (this.isCompletedProgress()) {
+                        this.decreaseSlot(sourceSlot, recipe.source.count);
+                        resultSlot.setSlot(recipe.result.id, resultSlot.count + recipe.result.count, recipe.result.data || 0);
+                        this.data.progress = 0;
+                    }
+                    return true;
+                }
+                if (this.data.progress > 0 && this.networkData.getBoolean(NetworkDataKeys.isActive)) {
+                    this.onInterrupt(); // interrupt if machine stopped working while processing item
+                }
+            }
+            else if (this.data.progress > 0) {
+                this.data.progress = 0;
+                this.onInterrupt(); // interrupt when the source item is extracted
+            }
+            return false;
+        };
+        BlockCutter.prototype.getInterruptSound = function () {
+            return "InterruptOne.ogg";
+        };
+        BlockCutter.prototype.onShowWarning = function (container, window, content, data) {
+            if (content) {
+                if (!data.show) {
+                    content.elements["warningImage"] = null;
+                }
+                else if (!content.elements["warningImage"]) {
+                    content.elements["warningImage"] = { type: "image", x: 576, y: 223, bitmap: "icpe.warning", scale: GUI_SCALE };
+                }
+            }
+        };
+        __decorate([
+            Machine.ContainerEvent(Side.Client, "showWarning")
+        ], BlockCutter.prototype, "onShowWarning", null);
+        return BlockCutter;
+    }(Machine.ProcessingMachine));
+    Machine.BlockCutter = BlockCutter;
+    MachineRegistry.registerPrototype(BlockID.blockCuttingMachine, new BlockCutter());
+    MachineRecipeRegistry.registerDictionary("cuttingMachine", new MachineRecipe.BlockCutterRecipeDictionary());
+    StorageInterface.createInterface(BlockID.blockCuttingMachine, {
+        slots: {
+            "slotSource": { input: true },
+            "slotResult": { output: true }
+        },
+        isValidInput: function (item, side, tileEntity) {
+            return tileEntity.isValidSource(item.id, item.data);
         }
     });
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("blastFurnace", [
-    { name: "Blast Furnace", texture: [["machine_advanced", 0], ["ind_furnace_side", 0], ["machine_back", 0], ["heat_pipe", 0], ["ind_furnace_side", 0], ["ind_furnace_side", 0]], inCreative: true },
+    { name: "Industrial Blast Furnace", texture: [["ic_blast_furnace_bottom", 0], ["ic_blast_furnace_side", 0], ["ic_machine_back", 0], ["machine_heat_pipe", 0], ["ic_blast_furnace_side", 0], ["ic_blast_furnace_side", 0]], inCreative: true },
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.blastFurnace, "stone", 1);
-TileRenderer.setHandAndUiModel(BlockID.blastFurnace, 0, [["machine_advanced", 0], ["ind_furnace_side", 0], ["machine_back", 0], ["heat_pipe", 0], ["ind_furnace_side", 0], ["ind_furnace_side", 0]]);
-TileRenderer.setStandardModelWithRotation(BlockID.blastFurnace, 0, [["machine_advanced", 0], ["ind_furnace_side", 0], ["machine_back", 0], ["heat_pipe", 0], ["ind_furnace_side", 0], ["ind_furnace_side", 0]], true);
-TileRenderer.registerModelWithRotation(BlockID.blastFurnace, 0, [["machine_advanced", 0], ["ind_furnace_side", 1], ["machine_back", 0], ["heat_pipe", 1], ["ind_furnace_side", 1], ["ind_furnace_side", 1]], true);
+TileRenderer.setHandAndUiModel(BlockID.blastFurnace, 0, [["ic_blast_furnace_bottom", 0], ["ic_blast_furnace_side", 0], ["ic_machine_back", 0], ["machine_heat_pipe", 0], ["ic_blast_furnace_side", 0], ["ic_blast_furnace_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.blastFurnace, 0, [["ic_blast_furnace_bottom", 0], ["ic_blast_furnace_side", 0], ["ic_machine_back", 0], ["machine_heat_pipe", 0], ["ic_blast_furnace_side", 0], ["ic_blast_furnace_side", 0]], true);
+TileRenderer.registerModelWithRotation(BlockID.blastFurnace, 0, [["ic_blast_furnace_bottom", 0], ["ic_blast_furnace_side_on", 0], ["ic_machine_back", 0], ["machine_heat_pipe_on", 0], ["ic_blast_furnace_side_on", 0], ["ic_blast_furnace_side_on", 0]], true);
 TileRenderer.setRotationFunction(BlockID.blastFurnace, true);
+ItemName.addConsumptionTooltip("blastFurnace", "HU", 1, 100);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.blastFurnace, count: 1, data: 0 }, [
         "aaa",
         "asa",
         "axa"
     ], ['s', BlockID.machineBlockBasic, 0, 'a', ItemID.casingIron, 0, 'x', ItemID.heatConductor, 0]);
-    MachineRecipeRegistry.registerRecipesFor("blastFurnace", {
-        "minecraft:iron_ore": { result: [ItemID.ingotSteel, 1, ItemID.slag, 1], duration: 6000 },
-        "minecraft:iron_ingot": { result: [ItemID.ingotSteel, 1, ItemID.slag, 1], duration: 6000 },
-        "ItemID.dustIron": { result: [ItemID.ingotSteel, 1, ItemID.slag, 1], duration: 6000 },
-        "ItemID.crushedPurifiedIron": { result: [ItemID.ingotSteel, 1, ItemID.slag, 1], duration: 6000 },
-        "ItemID.crushedIron": { result: [ItemID.ingotSteel, 1, ItemID.slag, 1], duration: 6000 }
-    }, true);
-});
-var guiBlastFurnace = MachineRegistry.createInventoryWindow("Blast Furnace", {
-    drawing: [
-        { type: "bitmap", x: 450, y: 50, bitmap: "blast_furnace_background", scale: GUI_SCALE_NEW }
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 450 + 50 * GUI_SCALE_NEW, y: 50 + 27 * GUI_SCALE_NEW, direction: 1, value: 0.5, bitmap: "blast_furnace_scale", scale: GUI_SCALE_NEW, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_blastFurnace");
-                }
-            } },
-        "heatScale": { type: "scale", x: 450 + 46 * GUI_SCALE_NEW, y: 50 + 63 * GUI_SCALE_NEW, direction: 0, value: 0.5, bitmap: "heat_scale", scale: GUI_SCALE_NEW },
-        "slotSource": { type: "slot", x: 450 + 9 * GUI_SCALE_NEW, y: 50 + 25 * GUI_SCALE_NEW },
-        "slotResult1": { type: "slot", x: 450 + 108 * GUI_SCALE_NEW, y: 50 + 48 * GUI_SCALE_NEW, size: 54 },
-        "slotResult2": { type: "slot", x: 450 + 126 * GUI_SCALE_NEW, y: 50 + 48 * GUI_SCALE_NEW, size: 54 },
-        "slotAir1": { type: "slot", x: 450, y: 50 + 48 * GUI_SCALE_NEW, bitmap: "slot_black", size: 54 },
-        "slotAir2": { type: "slot", x: 450 + 18 * GUI_SCALE_NEW, y: 50 + 48 * GUI_SCALE_NEW, bitmap: "slot_black", size: 54 },
-        "slotUpgrade1": { type: "slot", x: 450 + 126 * GUI_SCALE_NEW, y: 50, size: 54 },
-        "slotUpgrade2": { type: "slot", x: 450 + 126 * GUI_SCALE_NEW, y: 50 + 18 * GUI_SCALE_NEW, size: 54 },
-        "indicator": { type: "image", x: 450 + 71 * GUI_SCALE_NEW, y: 50 + 59 * GUI_SCALE_NEW, bitmap: "indicator_red", scale: GUI_SCALE_NEW }
-    }
+    var dictionary = MachineRecipeRegistry.getDictionary("blastFurnace");
+    dictionary.addRecipe({ id: VanillaBlockID.iron_ore }, [{ id: ItemID.ingotSteel, count: 1 }, { id: ItemID.slag, count: 1 }], 120000);
+    dictionary.addRecipe({ id: VanillaItemID.iron_ingot }, [{ id: ItemID.ingotSteel, count: 1 }, { id: ItemID.slag, count: 1 }], 120000);
+    dictionary.addRecipe({ id: ItemID.dustIron }, [{ id: ItemID.ingotSteel, count: 1 }, { id: ItemID.slag, count: 1 }], 120000);
+    dictionary.addRecipe({ id: ItemID.crushedPurifiedIron }, [{ id: ItemID.ingotSteel, count: 1 }, { id: ItemID.slag, count: 1 }], 120000);
+    dictionary.addRecipe({ id: ItemID.crushedIron }, [{ id: ItemID.ingotSteel, count: 1 }, { id: ItemID.slag, count: 1 }], 120000);
 });
 var Machine;
 (function (Machine) {
+    var guiBlastFurnace = MachineRegistry.createInventoryWindow("Industrial Blast Furnace", {
+        drawing: [
+            { type: "bitmap", x: 450, y: 50, bitmap: "icpe.blast_furnace_background", scale: GUI_SCALE_NEW }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 450 + 50 * GUI_SCALE_NEW, y: 50 + 27 * GUI_SCALE_NEW, direction: 1, value: 0.5, bitmap: "icpe.blast_furnace_scale", scale: GUI_SCALE_NEW, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_blastFurnace");
+                    }
+                } },
+            "heatScale": { type: "scale", x: 450 + 46 * GUI_SCALE_NEW, y: 50 + 63 * GUI_SCALE_NEW, direction: 0, value: 0.5, bitmap: "heat_scale", scale: GUI_SCALE_NEW },
+            "slotSource": { type: "slot", x: 450 + 9 * GUI_SCALE_NEW, y: 50 + 25 * GUI_SCALE_NEW },
+            "slotResult1": { type: "slot", x: 450 + 108 * GUI_SCALE_NEW, y: 50 + 48 * GUI_SCALE_NEW, size: 54 },
+            "slotResult2": { type: "slot", x: 450 + 126 * GUI_SCALE_NEW, y: 50 + 48 * GUI_SCALE_NEW, size: 54 },
+            "slotAir1": { type: "slot", x: 450, y: 50 + 48 * GUI_SCALE_NEW, bitmap: "slot_black", size: 54 },
+            "slotAir2": { type: "slot", x: 450 + 18 * GUI_SCALE_NEW, y: 50 + 48 * GUI_SCALE_NEW, bitmap: "slot_black", size: 54 },
+            "slotUpgrade1": { type: "slot", x: 450 + 126 * GUI_SCALE_NEW, y: 50, size: 54 },
+            "slotUpgrade2": { type: "slot", x: 450 + 126 * GUI_SCALE_NEW, y: 50 + 18 * GUI_SCALE_NEW, size: 54 },
+            "indicator": { type: "image", x: 450 + 71 * GUI_SCALE_NEW, y: 50 + 59 * GUI_SCALE_NEW, bitmap: "indicator_red", scale: GUI_SCALE_NEW }
+        }
+    });
     var BlastFurnace = /** @class */ (function (_super) {
         __extends(BlastFurnace, _super);
         function BlastFurnace() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.defaultValues = {
                 progress: 0,
+                maxProgress: 0,
                 air: 0,
                 sourceID: 0,
                 heat: 0,
             };
+            _this.maxHeatConsumption = 100;
             _this.defaultDrop = BlockID.machineBlockBasic;
             _this.upgrades = ["redstone", "itemEjector", "itemPulling"];
             _this.isHeating = false;
+            _this.lastReceivedHeat = 0;
             return _this;
         }
         BlastFurnace.prototype.getScreenByName = function () {
@@ -9348,7 +10935,7 @@ var Machine;
             var _this = this;
             StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, count, data) {
                 if (name == "slotSource")
-                    return !!_this.getRecipeResult(id);
+                    return !!_this.getRecipe(id);
                 if (name == "slotAir1")
                     return id == ItemID.cellAir;
                 if (name.startsWith("slotUpgrade"))
@@ -9359,94 +10946,79 @@ var Machine;
         BlastFurnace.prototype.canRotate = function () {
             return true;
         };
-        BlastFurnace.prototype.getRecipeResult = function (id) {
-            return MachineRecipeRegistry.getRecipeResult("blastFurnace", id);
+        BlastFurnace.prototype.getRecipeDictionary = function () {
+            return MachineRecipeRegistry.getDictionary("blastFurnace");
+        };
+        BlastFurnace.prototype.getRecipe = function (id) {
+            return this.getRecipeDictionary().getRecipe(id, 0);
         };
         BlastFurnace.prototype.checkResult = function (result) {
-            for (var i = 1; i < 3; i++) {
-                var id = result[(i - 1) * 2];
-                if (!id)
-                    break;
-                var count = result[(i - 1) * 2 + 1];
-                var resultSlot = this.container.getSlot("slotResult" + i);
-                if (resultSlot.id != 0 && (resultSlot.id != id || resultSlot.count + count > 64)) {
+            for (var i = 0; i < result.length; i++) {
+                var entry = result[i];
+                var resultSlot = this.container.getSlot("slotResult" + (i + 1));
+                var itemData = entry.data || 0;
+                if (resultSlot.id != 0 && (resultSlot.id != entry.id || resultSlot.data != itemData || resultSlot.count + entry.count > 64)) {
                     return false;
                 }
             }
             return true;
         };
         BlastFurnace.prototype.putResult = function (result) {
-            for (var i = 1; i < 3; i++) {
-                var id = result[(i - 1) * 2];
-                if (!id)
-                    break;
-                var count = result[(i - 1) * 2 + 1];
-                var resultSlot = this.container.getSlot("slotResult" + i);
-                resultSlot.setSlot(id, resultSlot.count + count, 0);
+            for (var i = 0; i < result.length; i++) {
+                var entry = result[i];
+                if (entry.chance != null && Math.random() >= entry.chance) {
+                    continue;
+                }
+                var resultSlot = this.container.getSlot("slotResult" + (i + 1));
+                resultSlot.setSlot(entry.id, resultSlot.count + entry.count, entry.data || 0, entry.extra || null);
             }
         };
-        BlastFurnace.prototype.controlAir = function () {
+        BlastFurnace.prototype.controlAir = function (receivedHeat) {
             var slot1 = this.container.getSlot("slotAir1");
             var slot2 = this.container.getSlot("slotAir2");
-            if (this.data.air == 0) {
+            if (this.data.air < receivedHeat) {
                 if (slot1.id == ItemID.cellAir && (slot2.id == 0 || slot2.id == ItemID.cellEmpty && slot2.count < 64)) {
                     slot1.setSlot(slot1.id, slot1.count - 1, 0);
                     slot1.validate();
                     slot2.setSlot(ItemID.cellEmpty, slot2.count + 1, 0);
-                    this.data.air = 1000;
+                    this.data.air += 20000;
                 }
             }
-            if (this.data.air > 0) {
-                this.data.air--;
+            if (this.data.air >= receivedHeat) {
+                this.data.air -= receivedHeat;
                 return true;
             }
             return false;
         };
         BlastFurnace.prototype.useUpgrades = function () {
-            var upgrades = UpgradeAPI.useUpgrades(this);
-            this.isHeating = upgrades.getRedstoneInput(this.isPowered);
+            var upgrades = UpgradeAPI.performUpgrades(this.upgradeSet);
+            this.isHeating = upgrades.getRedstoneInput(this.isPowered) || this.data.sourceID > 0;
+        };
+        BlastFurnace.prototype.onInit = function () {
+            _super.prototype.onInit.call(this);
+            this.upgradeSet = UpgradeAPI.getUpgradeSet(this);
         };
         BlastFurnace.prototype.onTick = function () {
             this.useUpgrades();
             StorageInterface.checkHoppers(this);
+            if (this.lastReceivedHeat > 0) {
+                this.lastReceivedHeat = 0;
+            }
+            else if (this.data.heat > 0) {
+                this.data.heat--;
+            }
             var maxHeat = this.getMaxHeat();
             this.data.heat = Math.min(this.data.heat, maxHeat);
             this.container.setScale("heatScale", this.data.heat / maxHeat);
             if (this.data.heat >= maxHeat) {
                 this.container.sendEvent("setIndicator", "green");
-                var sourceSlot = this.container.getSlot("slotSource");
-                var source = this.data.sourceID || sourceSlot.id;
-                var recipe = this.getRecipeResult(source);
-                if (recipe && this.checkResult(recipe.result)) {
-                    if (this.controlAir()) {
-                        this.container.sendEvent("showAirImage", { show: false });
-                        this.data.progress++;
-                        this.container.setScale("progressScale", this.data.progress / recipe.duration);
-                        this.setActive(true);
-                        if (!this.data.sourceID) {
-                            this.data.sourceID = source;
-                            this.decreaseSlot(sourceSlot, 1);
-                        }
-                        if (this.data.progress >= recipe.duration) {
-                            this.putResult(recipe.result);
-                            this.data.progress = 0;
-                            this.data.sourceID = 0;
-                        }
-                    }
-                    else {
-                        this.container.sendEvent("showAirImage", { show: true });
-                    }
-                }
             }
             else {
                 this.container.sendEvent("setIndicator", "red");
                 this.setActive(false);
             }
-            if (this.data.heat > 0)
-                this.data.heat--;
-            if (this.data.sourceID == 0) {
-                this.container.setScale("progressScale", 0);
-            }
+            var relativeProgress = this.data.maxProgress > 0 ? this.data.progress / this.data.maxProgress : 0;
+            this.container.setScale("progressScale", relativeProgress);
             this.container.sendChanges();
         };
         BlastFurnace.prototype.getMaxHeat = function () {
@@ -9459,41 +11031,84 @@ var Machine;
             return side == this.getFacing();
         };
         BlastFurnace.prototype.receiveHeat = function (amount) {
+            var receivedHeat = 0;
             var slot = this.container.getSlot("slotSource");
-            if (this.data.isHeating || this.data.sourceID > 0 || this.getRecipeResult(slot.id)) {
-                amount = Math.min(this.getMaxHeat() - this.data.heat, amount);
-                this.data.heat += amount + 1;
-                return amount;
+            if (this.isHeating || this.getRecipe(slot.id)) {
+                amount = Math.min(this.maxHeatConsumption, amount);
+                var maxHeat = this.getMaxHeat();
+                var heatingAmount = Math.min(maxHeat - this.data.heat, amount);
+                if (heatingAmount > 0) {
+                    this.data.heat += heatingAmount;
+                    receivedHeat += heatingAmount;
+                    amount -= heatingAmount;
+                }
+                if (amount > 0 && this.data.heat >= maxHeat) {
+                    var progressAmount = this.performRecipe(amount);
+                    receivedHeat += progressAmount;
+                }
             }
-            return 0;
+            this.lastReceivedHeat += receivedHeat;
+            return receivedHeat;
         };
-        BlastFurnace.prototype.showAirImage = function (container, window, content, data) {
+        BlastFurnace.prototype.performRecipe = function (receivedHeat) {
+            var sourceSlot = this.container.getSlot("slotSource");
+            var sourceID = this.data.sourceID || sourceSlot.id;
+            var recipe = this.getRecipe(sourceID);
+            if (recipe && (this.data.sourceID || recipe.source.count <= sourceSlot.count && this.checkResult(recipe.result))) {
+                receivedHeat = Math.min(recipe.heatCost - this.data.progress, receivedHeat);
+                if (this.controlAir(receivedHeat)) {
+                    this.container.sendEvent("setAirImage", { show: false });
+                    this.data.progress += receivedHeat;
+                    this.data.maxProgress = recipe.heatCost;
+                    this.setActive(true);
+                    if (!this.data.sourceID) {
+                        this.data.sourceID = sourceID;
+                        this.isHeating = true;
+                        this.decreaseSlot(sourceSlot, recipe.source.count);
+                    }
+                    if (this.data.progress >= recipe.heatCost && this.checkResult(recipe.result)) {
+                        this.putResult(recipe.result);
+                        this.data.progress = 0;
+                        this.data.maxProgress = 0;
+                        this.data.sourceID = 0;
+                    }
+                    return receivedHeat;
+                }
+                this.container.sendEvent("setAirImage", { show: true });
+            }
+            this.setActive(false);
+            return 1;
+        };
+        BlastFurnace.prototype.onSetAirImage = function (container, window, content, data) {
             if (content) {
-                if (data.show && !content.elements["indicatorAir"])
+                if (data.show) {
                     content.elements["indicatorAir"] = { type: "image", x: 344 + 128 * GUI_SCALE_NEW, y: 53 + 20 * GUI_SCALE_NEW, bitmap: "no_air_image", scale: GUI_SCALE_NEW };
-                else
+                }
+                else if (content.elements["indicatorAir"]) {
                     content.elements["indicatorAir"] = null;
+                }
             }
         };
-        BlastFurnace.prototype.setIndicator = function (container, window, content, data) {
+        BlastFurnace.prototype.onSetIndicator = function (container, window, content, data) {
             if (content) {
                 content.elements["indicator"].bitmap = "indicator_" + data;
             }
         };
         __decorate([
-            Machine.ContainerEvent(Side.Client)
-        ], BlastFurnace.prototype, "showAirImage", null);
+            Machine.ContainerEvent(Side.Client, "setAirImage")
+        ], BlastFurnace.prototype, "onSetAirImage", null);
         __decorate([
-            Machine.ContainerEvent(Side.Client)
-        ], BlastFurnace.prototype, "setIndicator", null);
+            Machine.ContainerEvent(Side.Client, "setIndicator")
+        ], BlastFurnace.prototype, "onSetIndicator", null);
         return BlastFurnace;
     }(Machine.MachineBase));
     Machine.BlastFurnace = BlastFurnace;
     MachineRegistry.registerPrototype(BlockID.blastFurnace, new BlastFurnace());
+    MachineRecipeRegistry.registerDictionary("blastFurnace", new MachineRecipe.BlastFurnaceRecipeDictionary());
     StorageInterface.createInterface(BlockID.blastFurnace, {
         slots: {
-            "slotSource": { input: true, isValid: function (item) {
-                    return MachineRecipeRegistry.hasRecipeFor("blastFurnace", item.id);
+            "slotSource": { input: true, isValid: function (item, side, tileEntity) {
+                    return !!tileEntity.getRecipe(item.id);
                 } },
             "slotAir1": { input: true, isValid: function (item) { return item.id == ItemID.cellAir; } },
             "slotAir2": { output: true },
@@ -9503,13 +11118,14 @@ var Machine;
     });
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("icFermenter", [
-    { name: "Fermenter", texture: [["machine_bottom", 0], ["machine_top", 0], ["ic_fermenter_back", 0], ["heat_pipe", 0], ["ic_fermenter_side", 0], ["ic_fermenter_side", 0]], inCreative: true },
+    { name: "Fermenter", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_fermenter_back", 0], ["machine_heat_pipe", 0], ["ic_fermenter_side", 0], ["ic_fermenter_side", 0]], inCreative: true },
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.icFermenter, "stone", 1);
-TileRenderer.setHandAndUiModel(BlockID.icFermenter, 0, [["machine_bottom", 0], ["machine_top", 0], ["ic_fermenter_back", 0], ["heat_pipe", 0], ["ic_fermenter_side", 0], ["ic_fermenter_side", 0]]);
-TileRenderer.setStandardModelWithRotation(BlockID.icFermenter, 0, [["machine_bottom", 0], ["machine_top", 0], ["ic_fermenter_back", 0], ["heat_pipe", 0], ["ic_fermenter_side", 0], ["ic_fermenter_side", 0]], true);
-TileRenderer.registerModelWithRotation(BlockID.icFermenter, 0, [["machine_bottom", 0], ["machine_top", 0], ["ic_fermenter_back", 1], ["heat_pipe", 1], ["ic_fermenter_side", 1], ["ic_fermenter_side", 1]], true);
+TileRenderer.setHandAndUiModel(BlockID.icFermenter, 0, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_fermenter_back", 0], ["machine_heat_pipe", 0], ["ic_fermenter_side", 0], ["ic_fermenter_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.icFermenter, 0, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_fermenter_back", 0], ["machine_heat_pipe", 0], ["ic_fermenter_side", 0], ["ic_fermenter_side", 0]], true);
+TileRenderer.registerModelWithRotation(BlockID.icFermenter, 0, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_fermenter_back_on", 0], ["machine_heat_pipe_on", 0], ["ic_fermenter_side_on", 0], ["ic_fermenter_side_on", 0]], true);
 TileRenderer.setRotationFunction(BlockID.icFermenter, true);
+ItemName.addConsumptionTooltip("icFermenter", "HU", 1, 100);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.icFermenter, count: 1, data: 0 }, [
         "aaa",
@@ -9517,31 +11133,31 @@ Callback.addCallback("PreLoaded", function () {
         "axa"
     ], ['c', ItemID.cellEmpty, 0, 'a', ItemID.casingIron, 0, 'x', ItemID.heatConductor, 0]);
 });
-var guiFermenter = MachineRegistry.createInventoryWindow("Fermenter", {
-    drawing: [
-        { type: "bitmap", x: 390, y: 80, bitmap: "fermenter_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 758, y: 95, bitmap: "liquid_bar", scale: GUI_SCALE }
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 492, y: 150, direction: 0, value: .5, bitmap: "fermenter_progress_scale", scale: GUI_SCALE, clicker: {
-                onClick: function () {
-                    RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_fermenter");
-                }
-            } },
-        "fertilizerScale": { type: "scale", x: 480, y: 301, direction: 0, value: .5, bitmap: "fertilizer_progress_scale", scale: GUI_SCALE },
-        "biogasScale": { type: "scale", x: 771, y: 108, direction: 1, bitmap: "liquid_biogas", scale: GUI_SCALE },
-        "biomassScale": { type: "scale", x: 483, y: 179, direction: 1, bitmap: "biomass_scale", scale: GUI_SCALE },
-        "slotBiomass0": { type: "slot", x: 400, y: 162 },
-        "slotBiomass1": { type: "slot", x: 400, y: 222 },
-        "slotFertilizer": { type: "slot", x: 634, y: 282, bitmap: "slot_black" },
-        "slotBiogas0": { type: "slot", x: 832, y: 155 },
-        "slotBiogas1": { type: "slot", x: 832, y: 215 },
-        "slotUpgrade1": { type: "slot", x: 765, y: 290 },
-        "slotUpgrade2": { type: "slot", x: 825, y: 290 }
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiFermenter = MachineRegistry.createInventoryWindow("Fermenter", {
+        drawing: [
+            { type: "bitmap", x: 390, y: 80, bitmap: "icpe.fermenter_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 758, y: 95, bitmap: "liquid_bar", scale: GUI_SCALE }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 492, y: 150, direction: 0, value: .5, bitmap: "icpe.fermenter_progress_scale", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("icpe_fermenter");
+                    }
+                } },
+            "fertilizerScale": { type: "scale", x: 480, y: 301, direction: 0, value: .5, bitmap: "icpe.fertilizer_progress_scale", scale: GUI_SCALE },
+            "biogasScale": { type: "scale", x: 771, y: 108, direction: 1, bitmap: "liquid_biogas", scale: GUI_SCALE },
+            "biomassScale": { type: "scale", x: 483, y: 179, direction: 1, bitmap: "biomass_scale", scale: GUI_SCALE },
+            "slotBiomass0": { type: "slot", x: 400, y: 162 },
+            "slotBiomass1": { type: "slot", x: 400, y: 222 },
+            "slotFertilizer": { type: "slot", x: 634, y: 282, bitmap: "slot_black" },
+            "slotBiogas0": { type: "slot", x: 832, y: 155 },
+            "slotBiogas1": { type: "slot", x: 832, y: 215 },
+            "slotUpgrade1": { type: "slot", x: 765, y: 290 },
+            "slotUpgrade2": { type: "slot", x: 825, y: 290 }
+        }
+    });
     var Fermenter = /** @class */ (function (_super) {
         __extends(Fermenter, _super);
         function Fermenter() {
@@ -9561,11 +11177,11 @@ var Machine;
             var _this = this;
             this.inputTank = this.addLiquidTank("inputTank", 10000, ["biomass"]);
             this.outputTank = this.addLiquidTank("outputTank", 2000, ["biogas"]);
-            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, count, data) {
+            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, count, data, extra) {
                 if (name == "slotBiomass0")
-                    return LiquidItemRegistry.getItemLiquid(id, data) == "biomass";
+                    return LiquidItemRegistry.getItemLiquid(id, data, extra) == "biomass";
                 if (name == "slotBiogas0")
-                    return !!LiquidItemRegistry.getFullItem(id, data, "biogas");
+                    return LiquidItemRegistry.canBeFilledWithLiquid(id, data, extra, "biogas");
                 if (name.startsWith("slotUpgrade"))
                     return UpgradeAPI.isValidUpgrade(id, _this);
                 return false;
@@ -9629,30 +11245,35 @@ var Machine;
     }(Machine.MachineBase));
     Machine.Fermenter = Fermenter;
     MachineRegistry.registerPrototype(BlockID.icFermenter, new Fermenter());
-    MachineRegistry.createStorageInterface(BlockID.icFermenter, {
+    MachineRegistry.createFluidStorageInterface(BlockID.icFermenter, {
         slots: {
-            "slotBiomass0": { input: true },
+            "slotBiomass0": { input: true, isValid: function (item) {
+                    return LiquidItemRegistry.getItemLiquid(item.id, item.data, item.extra) == "biomass";
+                } },
             "slotBiomass1": { output: true },
-            "slotBiogas0": { input: true },
+            "slotBiogas0": { input: true, isValid: function (item) {
+                    return LiquidItemRegistry.canBeFilledWithLiquid(item.id, item.data, item.extra, "biogas");
+                } },
             "slotBiogas1": { output: true },
             "slotFertilizer": { output: true }
         },
-        getInputTank: function () {
-            return this.tileEntity.inputTank;
+        getInputTank: function (side, tileEntity) {
+            return tileEntity.inputTank;
         },
-        getOutputTank: function () {
-            return this.tileEntity.outputTank;
+        getOutputTank: function (side, tileEntity) {
+            return tileEntity.outputTank;
         }
     });
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("massFabricator", [
-    { name: "Mass Fabricator", texture: [["machine_advanced_bottom", 0], ["machine_advanced", 0], ["machine_advanced_side", 0], ["mass_fab_front", 0], ["machine_advanced_side", 0], ["machine_advanced_side", 0]], inCreative: true }
+    { name: "Mass Fabricator", texture: [["ic_machine_advanced_bottom", 0], ["ic_machine_advanced_top", 0], ["ic_machine_advanced_side", 0], ["mass_fab_front", 0], ["ic_machine_advanced_side", 0], ["ic_machine_advanced_side", 0]], inCreative: true }
 ], "machine");
-TileRenderer.setStandardModelWithRotation(BlockID.massFabricator, 2, [["machine_advanced_bottom", 0], ["machine_advanced", 0], ["machine_advanced_side", 0], ["mass_fab_front", 0], ["machine_advanced_side", 0], ["machine_advanced_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.massFabricator, 2, [["machine_advanced_bottom", 0], ["machine_advanced", 0], ["machine_advanced_side", 0], ["mass_fab_front", 1], ["machine_advanced_side", 0], ["machine_advanced_side", 0]]);
+BlockRegistry.setBlockMaterial(BlockID.massFabricator, "stone", 1);
+TileRenderer.setStandardModelWithRotation(BlockID.massFabricator, 2, [["ic_machine_advanced_bottom", 0], ["ic_machine_advanced_top", 0], ["ic_machine_advanced_side", 0], ["mass_fab_front", 0], ["ic_machine_advanced_side", 0], ["ic_machine_advanced_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.massFabricator, 2, [["ic_machine_advanced_bottom", 0], ["ic_machine_advanced_top", 0], ["ic_machine_advanced_side", 0], ["mass_fab_front_on", 0], ["ic_machine_advanced_side", 0], ["ic_machine_advanced_side", 0]]);
 TileRenderer.setRotationFunction(BlockID.massFabricator);
 ItemRegistry.setRarity(BlockID.massFabricator, EnumRarity.RARE);
-ItemName.addTierTooltip("massFabricator", 4);
+ItemName.addTierTooltip(BlockID.massFabricator, 4);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.massFabricator, count: 1, data: 0 }, [
         "xax",
@@ -9660,23 +11281,23 @@ Callback.addCallback("PreLoaded", function () {
         "xax"
     ], ['b', BlockID.machineBlockAdvanced, 0, 'x', 348, 0, 'a', ItemID.circuitAdvanced, 0, '#', ItemID.storageLapotronCrystal, -1]);
 });
-var ENERGY_PER_MATTER = 1000000;
-var guiMassFabricator = MachineRegistry.createInventoryWindow("Mass Fabricator", {
-    drawing: [
-        { type: "bitmap", x: 850, y: 190, bitmap: "energy_small_background", scale: GUI_SCALE }
-    ],
-    elements: {
-        "energyScale": { type: "scale", x: 850, y: 190, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "matterSlot": { type: "slot", x: 821, y: 75, size: 100 },
-        "catalyserSlot": { type: "slot", x: 841, y: 252 },
-        "textInfo1": { type: "text", x: 542, y: 142, width: 200, height: 30, text: "Progress:" },
-        "textInfo2": { type: "text", x: 542, y: 177, width: 200, height: 30, text: "0%" },
-        "textInfo3": { type: "text", x: 542, y: 212, width: 200, height: 30, text: " " },
-        "textInfo4": { type: "text", x: 542, y: 239, width: 200, height: 30, text: " " },
-    }
-});
 var Machine;
 (function (Machine) {
+    Machine.ENERGY_PER_MATTER = 1000000;
+    var guiMassFabricator = MachineRegistry.createInventoryWindow("Mass Fabricator", {
+        drawing: [
+            { type: "bitmap", x: 850, y: 190, bitmap: "energy_small_background", scale: GUI_SCALE }
+        ],
+        elements: {
+            "energyScale": { type: "scale", x: 850, y: 190, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "matterSlot": { type: "slot", x: 821, y: 75, size: 100 },
+            "catalyserSlot": { type: "slot", x: 841, y: 252 },
+            "textInfo1": { type: "text", x: 542, y: 142, width: 200, height: 30, text: "Progress:" },
+            "textInfo2": { type: "text", x: 542, y: 177, width: 200, height: 30, text: "0%" },
+            "textInfo3": { type: "text", x: 542, y: 212, width: 200, height: 30, text: " " },
+            "textInfo4": { type: "text", x: 542, y: 239, width: 200, height: 30, text: " " },
+        }
+    });
     var MassFabricator = /** @class */ (function (_super) {
         __extends(MassFabricator, _super);
         function MassFabricator() {
@@ -9704,7 +11325,8 @@ var Machine;
         };
         MassFabricator.prototype.onTick = function () {
             StorageInterface.checkHoppers(this);
-            if (this.data.isEnabled && this.data.energy > 0) {
+            var catalyserUsed = false;
+            if (this.data.isEnabled && this.data.energy > 0 && this.data.progress < Machine.ENERGY_PER_MATTER) {
                 this.setActive(true);
                 if (this.data.catalyser < Math.max(1000, this.data.energy)) {
                     var catalyserSlot = this.container.getSlot("catalyserSlot");
@@ -9717,33 +11339,32 @@ var Machine;
                 if (this.data.catalyser > 0) {
                     this.container.setText("textInfo3", "Catalyser:");
                     this.container.setText("textInfo4", Math.floor(this.data.catalyser));
-                    var transfer_1 = Math.min((ENERGY_PER_MATTER - this.data.progress) / 6, Math.min(this.data.catalyser, this.data.energy));
+                    var transfer_1 = Math.min((Machine.ENERGY_PER_MATTER - this.data.progress) / 6, Math.min(this.data.catalyser, this.data.energy));
                     this.data.progress += transfer_1 * 6;
                     this.data.energy -= transfer_1;
                     this.data.catalyser -= transfer_1;
-                    if (World.getThreadTime() % 40 == 0 && transfer_1 > 0) {
-                        SoundManager.playSoundAtBlock(this, "MassFabScrapSolo.ogg", 1);
-                    }
+                    catalyserUsed = true;
                 }
                 else {
                     this.container.setText("textInfo3", "");
                     this.container.setText("textInfo4", "");
                 }
-                var transfer = Math.min(ENERGY_PER_MATTER - this.data.progress, this.data.energy);
+                var transfer = Math.min(Machine.ENERGY_PER_MATTER - this.data.progress, this.data.energy);
                 this.data.progress += transfer;
                 this.data.energy -= transfer;
             }
             else {
                 this.setActive(false);
             }
-            if (this.data.progress >= ENERGY_PER_MATTER) {
+            this.setBoosted(catalyserUsed);
+            if (this.data.progress >= Machine.ENERGY_PER_MATTER) {
                 var matterSlot = this.container.getSlot("matterSlot");
                 if (matterSlot.id == ItemID.matter && matterSlot.count < 64 || matterSlot.id == 0) {
                     matterSlot.setSlot(ItemID.matter, matterSlot.count + 1, 0);
                     this.data.progress = 0;
                 }
             }
-            var relProgress = this.data.progress / ENERGY_PER_MATTER;
+            var relProgress = this.data.progress / Machine.ENERGY_PER_MATTER;
             this.container.setScale("energyScale", relProgress);
             this.container.setText("textInfo2", Math.floor(100 * relProgress) + "%");
             this.container.sendChanges();
@@ -9751,11 +11372,8 @@ var Machine;
         MassFabricator.prototype.onRedstoneUpdate = function (signal) {
             this.data.isEnabled = (signal == 0);
         };
-        MassFabricator.prototype.getOperationSound = function () {
-            return "MassFabLoop.ogg";
-        };
-        MassFabricator.prototype.getEnergyStorage = function () {
-            return ENERGY_PER_MATTER - this.data.progress;
+        MassFabricator.prototype.getEnergyCapacity = function () {
+            return Math.max(Machine.ENERGY_PER_MATTER - this.data.progress, 32768);
         };
         MassFabricator.prototype.getExplosionPower = function () {
             return 15;
@@ -9763,6 +11381,38 @@ var Machine;
         MassFabricator.prototype.canRotate = function (side) {
             return side > 1;
         };
+        MassFabricator.prototype.setBoosted = function (isBoosted) {
+            if (this.networkData.getBoolean(NetworkDataKeys.isBoosted) !== isBoosted) {
+                this.networkData.putBoolean(NetworkDataKeys.isBoosted, isBoosted);
+                this.networkData.sendChanges();
+            }
+        };
+        MassFabricator.prototype.clientTick = function () {
+            _super.prototype.clientTick.call(this);
+            this.updateBoostSound();
+        };
+        MassFabricator.prototype.updateBoostSound = function () {
+            var isBoosted = this.networkData.getBoolean(NetworkDataKeys.isBoosted);
+            var soundName = this.getBoostSound();
+            if (isBoosted && !this.audioSource.getStream(soundName)) { // repeating sound
+                this.audioSource.play(soundName, false);
+            }
+        };
+        MassFabricator.prototype.getOperationSound = function () {
+            return "MassFabLoop.ogg";
+        };
+        MassFabricator.prototype.getBoostSound = function () {
+            return "MassFabScrapSolo.ogg";
+        };
+        __decorate([
+            Machine.ClientSide
+        ], MassFabricator.prototype, "updateBoostSound", null);
+        __decorate([
+            Machine.ClientSide
+        ], MassFabricator.prototype, "getOperationSound", null);
+        __decorate([
+            Machine.ClientSide
+        ], MassFabricator.prototype, "getBoostSound", null);
         return MassFabricator;
     }(Machine.ElectricMachine));
     Machine.MassFabricator = MassFabricator;
@@ -9780,14 +11430,15 @@ var Machine;
 // rarity - 1
 // rarity - 1
 BlockRegistry.createBlock("pump", [
-    { name: "Pump", texture: [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["pump_bottom", 0], ["pump_side", 0], ["pump_side", 0]], inCreative: true }
+    { name: "Pump", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["pump_bottom", 0], ["pump_side", 0], ["pump_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.pump, "stone", 1);
-TileRenderer.setHandAndUiModel(BlockID.pump, 0, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["pump_bottom", 0], ["pump_side", 0], ["pump_side", 0]]);
-TileRenderer.setStandardModelWithRotation(BlockID.pump, 0, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["pump_bottom", 0], ["pump_side", 0], ["pump_side", 0]], true);
-TileRenderer.registerModelWithRotation(BlockID.pump, 0, [["machine_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["pump_bottom", 1], ["pump_side", 1], ["pump_side", 1]], true);
+TileRenderer.setHandAndUiModel(BlockID.pump, 0, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["pump_bottom", 0], ["pump_side", 0], ["pump_side", 0]]);
+TileRenderer.setStandardModelWithRotation(BlockID.pump, 0, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["pump_bottom", 0], ["pump_side", 0], ["pump_side", 0]], true);
+TileRenderer.registerModelWithRotation(BlockID.pump, 0, [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["pump_bottom_on", 0], ["pump_side_on", 0], ["pump_side_on", 0]], true);
 TileRenderer.setRotationFunction(BlockID.pump, true);
 ItemName.addTierTooltip("pump", 1);
+ItemName.addConsumptionTooltip("pump", "EU", 2);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.pump, count: 1, data: 0 }, [
         "cxc",
@@ -9795,28 +11446,28 @@ Callback.addCallback("PreLoaded", function () {
         "bab"
     ], ['#', BlockID.machineBlockBasic, 0, 'x', ItemID.circuitBasic, 0, 'a', ItemID.treetap, 0, 'b', BlockID.miningPipe, 0, 'c', ItemID.cellEmpty, 0]);
 });
-var guiPump = MachineRegistry.createInventoryWindow("Pump", {
-    drawing: [
-        { type: "bitmap", x: 493, y: 149, bitmap: "extractor_bar_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 407, y: 127, bitmap: "energy_small_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 602, y: 88, bitmap: "liquid_bar", scale: GUI_SCALE },
-        { type: "bitmap", x: 675, y: 152, bitmap: "pump_arrow", scale: GUI_SCALE },
-    ],
-    elements: {
-        "progressScale": { type: "scale", x: 493, y: 149, direction: 0, bitmap: "extractor_bar_scale", scale: GUI_SCALE },
-        "energyScale": { type: "scale", x: 407, y: 127, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "liquidScale": { type: "scale", x: 400 + 67 * GUI_SCALE, y: 50 + 16 * GUI_SCALE, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE },
-        "slotEnergy": { type: "slot", x: 400, y: 50 + 39 * GUI_SCALE },
-        "slotLiquid1": { type: "slot", x: 400 + 91 * GUI_SCALE, y: 50 + 12 * GUI_SCALE },
-        "slotLiquid2": { type: "slot", x: 400 + 125 * GUI_SCALE, y: 50 + 29 * GUI_SCALE },
-        "slotUpgrade1": { type: "slot", x: 880, y: 50 + 2 * GUI_SCALE },
-        "slotUpgrade2": { type: "slot", x: 880, y: 50 + 21 * GUI_SCALE },
-        "slotUpgrade3": { type: "slot", x: 880, y: 50 + 40 * GUI_SCALE },
-        "slotUpgrade4": { type: "slot", x: 880, y: 50 + 59 * GUI_SCALE },
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiPump = MachineRegistry.createInventoryWindow("Pump", {
+        drawing: [
+            { type: "bitmap", x: 493, y: 149, bitmap: "extractor_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 407, y: 127, bitmap: "energy_small_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 602, y: 88, bitmap: "liquid_bar", scale: GUI_SCALE },
+            { type: "bitmap", x: 675, y: 152, bitmap: "pump_arrow", scale: GUI_SCALE },
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 493, y: 149, direction: 0, bitmap: "extractor_bar_scale", scale: GUI_SCALE },
+            "energyScale": { type: "scale", x: 407, y: 127, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "liquidScale": { type: "scale", x: 400 + 67 * GUI_SCALE, y: 50 + 16 * GUI_SCALE, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE },
+            "slotEnergy": { type: "slot", x: 400, y: 50 + 39 * GUI_SCALE },
+            "slotLiquid1": { type: "slot", x: 400 + 91 * GUI_SCALE, y: 50 + 12 * GUI_SCALE },
+            "slotLiquid2": { type: "slot", x: 400 + 125 * GUI_SCALE, y: 50 + 29 * GUI_SCALE },
+            "slotUpgrade1": { type: "slot", x: 880, y: 50 + 2 * GUI_SCALE },
+            "slotUpgrade2": { type: "slot", x: 880, y: 50 + 21 * GUI_SCALE },
+            "slotUpgrade3": { type: "slot", x: 880, y: 50 + 40 * GUI_SCALE },
+            "slotUpgrade4": { type: "slot", x: 880, y: 50 + 59 * GUI_SCALE },
+        }
+    });
     var Pump = /** @class */ (function (_super) {
         __extends(Pump, _super);
         function Pump() {
@@ -9828,10 +11479,11 @@ var Machine;
             };
             _this.defaultTier = 1;
             _this.defaultEnergyStorage = 800;
-            _this.defaultEnergyDemand = 1;
+            _this.defaultEnergyDemand = 2;
             _this.defaultProcessTime = 20;
             _this.defaultDrop = BlockID.machineBlockBasic;
             _this.upgrades = ["overclocker", "transformer", "energyStorage", "itemEjector", "itemPulling", "fluidEjector"];
+            _this.tier = _this.defaultTier;
             return _this;
         }
         Pump.prototype.getScreenByName = function () {
@@ -9840,15 +11492,15 @@ var Machine;
         Pump.prototype.getTier = function () {
             return this.tier;
         };
-        Pump.prototype.getEnergyStorage = function () {
-            return this.energyStorage;
+        Pump.prototype.getEnergyCapacity = function () {
+            return this.energyCapacity;
         };
         Pump.prototype.setupContainer = function () {
             var _this = this;
             this.liquidTank = this.addLiquidTank("fluid", 8000);
-            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data) {
+            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data, extra) {
                 if (name == "slotLiquid1")
-                    return !!LiquidItemRegistry.getFullItem(id, data, "water");
+                    return LiquidItemRegistry.canBeFilledWithLiquid(id, data, extra, _this.liquidTank.getLiquidStored() || "water");
                 if (name == "slotLiquid2")
                     return false;
                 if (name == "slotEnergy")
@@ -9856,15 +11508,20 @@ var Machine;
                 return UpgradeAPI.isValidUpgrade(id, _this);
             });
         };
-        Pump.prototype.useUpgrades = function () {
-            var upgrades = UpgradeAPI.useUpgrades(this);
+        Pump.prototype.onInit = function () {
+            _super.prototype.onInit.call(this);
+            this.upgradeSet = UpgradeAPI.getUpgradeSet(this);
+            this.useUpgrades(true);
+        };
+        Pump.prototype.useUpgrades = function (isInit) {
+            var upgrades = UpgradeAPI.performUpgrades(this.upgradeSet, isInit);
             this.tier = upgrades.getTier(this.defaultTier);
-            this.energyStorage = upgrades.getEnergyStorage(this.defaultEnergyStorage);
+            this.energyCapacity = upgrades.getEnergyStorage(this.defaultEnergyStorage);
             this.energyDemand = upgrades.getEnergyDemand(this.defaultEnergyDemand);
             this.processTime = upgrades.getProcessTime(this.defaultProcessTime);
         };
         Pump.prototype.onTick = function () {
-            this.useUpgrades();
+            this.useUpgrades(false);
             StorageInterface.checkHoppers(this);
             this.extractLiquid();
             var slot1 = this.container.getSlot("slotLiquid1");
@@ -9888,11 +11545,10 @@ var Machine;
                     this.data.energy -= this.energyDemand;
                     this.data.progress += 1 / this.processTime;
                     if (+this.data.progress.toFixed(3) >= 1) {
-                        var coords = this.data.coords;
-                        var block = this.region.getBlock(coords);
+                        var block = this.region.getBlock(this.data.coords);
                         liquid = this.getLiquidType(liquid, block);
                         if (liquid && block.data == 0) {
-                            this.region.setBlock(coords, 0, 0);
+                            this.region.setBlock(this.data.coords, 0, 0);
                             this.liquidTank.addLiquid(liquid, 1000);
                         }
                         this.data.progress = 0;
@@ -9956,12 +11612,12 @@ var Machine;
     }(Machine.ElectricMachine));
     Machine.Pump = Pump;
     MachineRegistry.registerPrototype(BlockID.pump, new Pump());
-    MachineRegistry.createStorageInterface(BlockID.pump, {
+    MachineRegistry.createFluidStorageInterface(BlockID.pump, {
         slots: {
             "slotLiquid1": { input: true },
             "slotLiquid2": { output: true }
         },
-        isValidInput: function (item) { return (!!LiquidItemRegistry.getFullItem(item.id, item.data, "water")); },
+        isValidInput: function (item, side, tileEntity) { return (LiquidItemRegistry.canBeFilledWithLiquid(item.id, item.data, item.extra, tileEntity.liquidTank.getLiquidStored() || "water")); },
         canReceiveLiquid: function () { return false; }
     });
 })(Machine || (Machine = {}));
@@ -9980,25 +11636,25 @@ Callback.addCallback("PreLoaded", function () {
         "c"
     ], ['#', BlockID.machineBlockBasic, 0, 'a', ItemID.upgradeFluidPulling, 0, 'c', ItemID.cellEmpty, 0]);
 });
-var guiFluidDistributor = MachineRegistry.createInventoryWindow("Fluid Distributor", {
-    drawing: [
-        { type: "bitmap", x: 400 + 3 * GUI_SCALE, y: 146, bitmap: "fluid_distributor_background", scale: GUI_SCALE }
-    ],
-    elements: {
-        "liquidScale": { type: "scale", x: 480, y: 50 + 34 * GUI_SCALE, direction: 1, bitmap: "fluid_dustributor_bar", scale: GUI_SCALE },
-        "slot1": { type: "slot", x: 400 + 3 * GUI_SCALE, y: 50 + 47 * GUI_SCALE },
-        "slot2": { type: "slot", x: 400 + 3 * GUI_SCALE, y: 50 + 66 * GUI_SCALE },
-        "button_switch": { type: "button", x: 400 + 112 * GUI_SCALE, y: 50 + 53 * GUI_SCALE, bitmap: "fluid_distributor_button", scale: GUI_SCALE, clicker: {
-                onClick: function (_, container) {
-                    container.sendEvent("invertMode", {});
-                }
-            } },
-        "text1": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 400 + 107 * GUI_SCALE, y: 50 + 42 * GUI_SCALE, width: 128, height: 48, text: Translation.translate("Mode:") },
-        "text2": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 400 + 92 * GUI_SCALE, y: 50 + 66 * GUI_SCALE, width: 256, height: 48, text: Translation.translate("Distribute") },
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiFluidDistributor = MachineRegistry.createInventoryWindow("Fluid Distributor", {
+        drawing: [
+            { type: "bitmap", x: 400 + 3 * GUI_SCALE, y: 146, bitmap: "icpe.fluid_distributor_background", scale: GUI_SCALE }
+        ],
+        elements: {
+            "liquidScale": { type: "scale", x: 480, y: 50 + 34 * GUI_SCALE, direction: 1, bitmap: "fluid_dustributor_bar", scale: GUI_SCALE },
+            "slot1": { type: "slot", x: 400 + 3 * GUI_SCALE, y: 50 + 47 * GUI_SCALE },
+            "slot2": { type: "slot", x: 400 + 3 * GUI_SCALE, y: 50 + 66 * GUI_SCALE },
+            "button_switch": { type: "button", x: 400 + 112 * GUI_SCALE, y: 50 + 53 * GUI_SCALE, bitmap: "icpe.fluid_distributor_button", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("invertMode", {});
+                    }
+                } },
+            "text1": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 400 + 107 * GUI_SCALE, y: 50 + 42 * GUI_SCALE, width: 128, height: 48, text: Translation.translate("Mode:") },
+            "text2": { type: "text", font: { size: 24, color: Color.parseColor("#57c4da") }, x: 400 + 92 * GUI_SCALE, y: 50 + 66 * GUI_SCALE, width: 256, height: 48, text: Translation.translate("Distribute") },
+        }
+    });
     var FluidDistributor = /** @class */ (function (_super) {
         __extends(FluidDistributor, _super);
         function FluidDistributor() {
@@ -10020,9 +11676,10 @@ var Machine;
             this.setActive(this.data.inverted);
         };
         FluidDistributor.prototype.setupContainer = function () {
+            var _this = this;
             this.liquidTank = this.addLiquidTank("fluid", 1000);
-            StorageInterface.setSlotValidatePolicy(this.container, "slot1", function (name, id, amount, data) {
-                return !!LiquidItemRegistry.getFullItem(id, data, "water");
+            StorageInterface.setSlotValidatePolicy(this.container, "slot1", function (name, id, amount, data, extra) {
+                return LiquidItemRegistry.canBeFilledWithLiquid(id, data, extra, _this.liquidTank.getLiquidStored() || "water");
             });
             this.container.setSlotAddTransferPolicy("slotLiquid2", function () { return 0; });
         };
@@ -10054,33 +11711,32 @@ var Machine;
                 }
             }
         };
-        FluidDistributor.prototype.invertMode = function () {
+        FluidDistributor.prototype.onInvertMode = function () {
             this.data.inverted = !this.data.inverted;
             this.setActive(this.data.inverted);
         };
         __decorate([
-            Machine.ContainerEvent(Side.Server)
-        ], FluidDistributor.prototype, "invertMode", null);
+            Machine.ContainerEvent(Side.Server, "invertMode")
+        ], FluidDistributor.prototype, "onInvertMode", null);
         return FluidDistributor;
     }(Machine.MachineBase));
     Machine.FluidDistributor = FluidDistributor;
     MachineRegistry.registerPrototype(BlockID.fluidDistributor, new FluidDistributor());
-    MachineRegistry.createStorageInterface(BlockID.fluidDistributor, {
+    MachineRegistry.createFluidStorageInterface(BlockID.fluidDistributor, {
         slots: {
             "slot1": { input: true },
             "slot2": { output: true }
         },
-        isValidInput: function (item) {
-            return !!LiquidItemRegistry.getFullItem(item.id, item.data, "water");
+        isValidInput: function (item, side, tileEntity) {
+            return LiquidItemRegistry.canBeFilledWithLiquid(item.id, item.data, item.extra, tileEntity.liquidTank.getLiquidStored() || "water");
         },
-        canReceiveLiquid: function (liquid, side) {
-            var data = this.tileEntity.data;
-            return (side == this.tileEntity.getFacing()) != data.inverted;
+        canReceiveLiquid: function (liquid, side, tileEntity) {
+            return (side == tileEntity.getFacing()) != tileEntity.data.inverted;
         }
     });
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("tank", [
-    { name: "Tank", texture: [["machine_bottom", 0], ["machine_top", 0], ["tank_side", 0], ["tank_side", 0], ["tank_side", 0], ["tank_side", 0]], inCreative: true }
+    { name: "Tank", texture: [["ic_machine_bottom", 0], ["ic_machine_top", 0], ["tank_side", 0], ["tank_side", 0], ["tank_side", 0], ["tank_side", 0]], inCreative: true }
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.tank, "stone", 1);
 Callback.addCallback("PreLoaded", function () {
@@ -10090,24 +11746,24 @@ Callback.addCallback("PreLoaded", function () {
         " c "
     ], ['#', BlockID.machineBlockBasic, 0, 'c', ItemID.cellEmpty, 0]);
 });
-var guiTank = MachineRegistry.createInventoryWindow("Tank", {
-    drawing: [
-        { type: "bitmap", x: 400 + 46 * GUI_SCALE, y: 50 + 12 * GUI_SCALE, bitmap: "liquid_bar", scale: GUI_SCALE },
-        { type: "bitmap", x: 400 + 80 * GUI_SCALE, y: 159, bitmap: "liquid_bar_arrow", scale: GUI_SCALE }
-    ],
-    elements: {
-        "liquidScale": { type: "scale", x: 400 + 50 * GUI_SCALE, y: 50 + 16 * GUI_SCALE, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE },
-        "slotLiquid1": { type: "slot", x: 400 + 74 * GUI_SCALE, y: 95 },
-        "slotLiquid2": { type: "slot", x: 400 + 74 * GUI_SCALE, y: 203 },
-        "slotOutput": { type: "slot", x: 400 + 106 * GUI_SCALE, y: 149 },
-        "slotUpgrade1": { type: "slot", x: 870, y: 50 + 4 * GUI_SCALE },
-        "slotUpgrade2": { type: "slot", x: 870, y: 50 + 22 * GUI_SCALE },
-        "slotUpgrade3": { type: "slot", x: 870, y: 50 + 40 * GUI_SCALE },
-        "slotUpgrade4": { type: "slot", x: 870, y: 50 + 58 * GUI_SCALE },
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiTank = MachineRegistry.createInventoryWindow("Tank", {
+        drawing: [
+            { type: "bitmap", x: 400 + 46 * GUI_SCALE, y: 50 + 12 * GUI_SCALE, bitmap: "liquid_bar", scale: GUI_SCALE },
+            { type: "bitmap", x: 400 + 80 * GUI_SCALE, y: 159, bitmap: "liquid_bar_arrow", scale: GUI_SCALE }
+        ],
+        elements: {
+            "liquidScale": { type: "scale", x: 400 + 50 * GUI_SCALE, y: 50 + 16 * GUI_SCALE, direction: 1, bitmap: "gui_water_scale", overlay: "gui_liquid_storage_overlay", scale: GUI_SCALE },
+            "slotLiquid1": { type: "slot", x: 400 + 74 * GUI_SCALE, y: 95 },
+            "slotLiquid2": { type: "slot", x: 400 + 74 * GUI_SCALE, y: 203 },
+            "slotOutput": { type: "slot", x: 400 + 106 * GUI_SCALE, y: 149 },
+            "slotUpgrade1": { type: "slot", x: 870, y: 50 + 4 * GUI_SCALE },
+            "slotUpgrade2": { type: "slot", x: 870, y: 50 + 22 * GUI_SCALE },
+            "slotUpgrade3": { type: "slot", x: 870, y: 50 + 40 * GUI_SCALE },
+            "slotUpgrade4": { type: "slot", x: 870, y: 50 + 58 * GUI_SCALE },
+        }
+    });
     var FluidTank = /** @class */ (function (_super) {
         __extends(FluidTank, _super);
         function FluidTank() {
@@ -10120,12 +11776,12 @@ var Machine;
         };
         FluidTank.prototype.setupContainer = function () {
             var _this = this;
-            this.liquidTank = this.addLiquidTank("fluid", 16000);
-            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data) {
+            this.liquidTank = this.addLiquidTank("fluid", 24000);
+            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data, extra) {
                 if (name == "slotLiquid1")
-                    return !!LiquidItemRegistry.getEmptyItem(id, data);
+                    return !!LiquidItemRegistry.getItemLiquid(id, data, extra);
                 if (name == "slotLiquid2")
-                    return !!LiquidRegistry.getFullItem(id, data, "water");
+                    return LiquidItemRegistry.canBeFilledWithLiquid(id, data, extra, _this.liquidTank.getLiquidStored() || "water");
                 if (name == "slotOutput")
                     return false;
                 return UpgradeAPI.isValidUpgrade(id, _this);
@@ -10133,7 +11789,8 @@ var Machine;
         };
         FluidTank.prototype.onItemUse = function (coords, item, player) {
             if (Entity.getSneaking(player)) {
-                if (MachineRegistry.fillTankOnClick(this.liquidTank, item, player)) {
+                if (MachineRegistry.emptyTankOnClick(this.liquidTank, item, player) ||
+                    MachineRegistry.fillTankOnClick(this.liquidTank, item, player)) {
                     this.preventClick();
                     return true;
                 }
@@ -10156,25 +11813,158 @@ var Machine;
     Machine.FluidTank = FluidTank;
     MachineRegistry.registerPrototype(BlockID.tank, new FluidTank());
 })(Machine || (Machine = {}));
-MachineRegistry.createStorageInterface(BlockID.tank, {
+MachineRegistry.createFluidStorageInterface(BlockID.tank, {
     slots: {
         "slotLiquid1": { input: true, isValid: function (item) {
-                return !!LiquidItemRegistry.getEmptyItem(item.id, item.data);
+                return !!LiquidItemRegistry.getItemLiquid(item.id, item.data, item.extra);
             } },
-        "slotLiquid2": { input: true, isValid: function (item) {
-                return !!LiquidItemRegistry.getFullItem(item.id, item.data, "water");
+        "slotLiquid2": { input: true, isValid: function (item, side, tileEntity) {
+                return LiquidItemRegistry.canBeFilledWithLiquid(item.id, item.data, item.extra, tileEntity.liquidTank.getLiquidStored() || "water");
             } },
         "slotOutput": { output: true }
     },
     canReceiveLiquid: function () { return true; }
 });
-BlockRegistry.createBlock("miner", [
-    { name: "Miner", texture: [["miner_bottom", 0], ["machine_top", 0], ["machine_side", 0], ["miner_front", 0], ["miner_side", 0], ["miner_side", 0]], inCreative: true }
+BlockRegistry.createBlock("solarDistiller", [
+    { name: "Solar Distiller", texture: [["ic_machine_bottom", 0], ["solar_distiller", 0], ["solar_distiller", 0], ["solar_distiller", 0], ["solar_distiller", 0], ["solar_distiller", 0]], inCreative: true }
 ], "machine");
-TileRenderer.setStandardModelWithRotation(BlockID.miner, 2, [["miner_bottom", 1], ["machine_top", 0], ["machine_side", 0], ["miner_front", 0], ["miner_side", 0], ["miner_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.miner, 2, [["miner_bottom", 1], ["machine_top", 0], ["machine_side", 0], ["miner_front", 1], ["miner_side", 1], ["miner_side", 1]]);
+BlockRegistry.setBlockMaterial(BlockID.solarDistiller, "stone", 1);
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: BlockID.solarDistiller, count: 1, data: 0 }, [
+        "aaa",
+        "a a",
+        "c#c"
+    ], ['#', BlockID.machineBlockBasic, 0, 'a', 20, -1, 'c', ItemID.cellEmpty, 0]);
+});
+var Machine;
+(function (Machine) {
+    var guiSolarDistiller = MachineRegistry.createInventoryWindow("Solar Distiller", {
+        drawing: [
+            { type: "bitmap", x: 360 + 34 * GUI_SCALE_NEW, y: 50 + 26 * GUI_SCALE_NEW, bitmap: "icpe.solar_distiller_background", scale: GUI_SCALE_NEW }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 360 + 36 * GUI_SCALE_NEW, y: 50 + 26 * GUI_SCALE_NEW, direction: 0, bitmap: "icpe.solar_distiller_progress_bar", scale: GUI_SCALE_NEW },
+            "liquidInputScale": { type: "scale", x: 360 + 37 * GUI_SCALE_NEW, y: 50 + 43 * GUI_SCALE_NEW, direction: 1, bitmap: "icpe.solar_distiller_input_scale", scale: GUI_SCALE_NEW },
+            "liquidOutputScale": { type: "scale", x: 360 + 115 * GUI_SCALE_NEW, y: 50 + 55 * GUI_SCALE_NEW, direction: 1, bitmap: "icpe.solar_distiller_output_scale", scale: GUI_SCALE_NEW },
+            "slotInput1": { type: "slot", x: 360 + 16 * GUI_SCALE_NEW, y: 50 + 26 * GUI_SCALE_NEW, size: 54 },
+            "slotOutput1": { type: "slot", x: 360 + 16 * GUI_SCALE_NEW, y: 50 + 44 * GUI_SCALE_NEW, size: 54 },
+            "slotInput2": { type: "slot", x: 360 + 135 * GUI_SCALE_NEW, y: 50 + 63 * GUI_SCALE_NEW, size: 54 },
+            "slotOutput2": { type: "slot", x: 360 + 135 * GUI_SCALE_NEW, y: 50 + 81 * GUI_SCALE_NEW, size: 54 },
+            "slotUpgrade1": { type: "slot", x: 360 + 151 * GUI_SCALE_NEW, y: 50 + 7 * GUI_SCALE_NEW, size: 54 },
+            "slotUpgrade2": { type: "slot", x: 360 + 151 * GUI_SCALE_NEW, y: 50 + 25 * GUI_SCALE_NEW, size: 54 }
+        }
+    });
+    var SolarDistiller = /** @class */ (function (_super) {
+        __extends(SolarDistiller, _super);
+        function SolarDistiller() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.defaultValues = {
+                updateTicker: 0,
+                progress: 0,
+                isActive: false,
+                tickRate: 72 // default (normal biome)
+            };
+            _this.defaultDrop = BlockID.machineBlockBasic;
+            _this.upgrades = ["itemEjector", "itemPulling", "fluidPulling", "fluidEjector"];
+            return _this;
+        }
+        SolarDistiller.prototype.getScreenByName = function () {
+            return guiSolarDistiller;
+        };
+        SolarDistiller.prototype.onInit = function () {
+            _super.prototype.onInit.call(this);
+            this.upgradeSet = UpgradeAPI.getUpgradeSet(this);
+            // Randomize initial progress
+            this.data.tickRate = this.getTickRate();
+            this.data.updateTicker = Math.floor(Math.random() * this.data.tickRate);
+        };
+        SolarDistiller.prototype.setupContainer = function () {
+            var _this = this;
+            this.inputTank = this.addLiquidTank("inputTank", 10000, ["water"]);
+            this.outputTank = this.addLiquidTank("outputTank", 10000, ["distilled_water"]);
+            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data, extra) {
+                if (name == "slotInput1")
+                    return LiquidItemRegistry.getItemLiquid(id, data, extra) == "water";
+                if (name == "slotInput2")
+                    return LiquidItemRegistry.canBeFilledWithLiquid(id, data, extra, "distilled_water");
+                if (name.startsWith("slotUpgrade"))
+                    return UpgradeAPI.isValidUpgrade(id, _this);
+                return false;
+            });
+        };
+        SolarDistiller.prototype.getTickRate = function () {
+            var biomeTemp = this.region.getBiomeTemperatureAt(this.x, this.y, this.z);
+            if (biomeTemp > 0.9)
+                return 36;
+            if (biomeTemp < 0.15)
+                return 144;
+            return 72;
+        };
+        SolarDistiller.prototype.canWork = function () {
+            return this.region.canSeeSky(this.x, this.y + 1, this.z) &&
+                this.region.getLightLevel(this.x, this.y + 1, this.z) == 15 &&
+                this.inputTank.getAmount() >= 1 &&
+                this.outputTank.getAmount() <= this.outputTank.getLimit() - 1;
+        };
+        SolarDistiller.prototype.onTick = function () {
+            UpgradeAPI.performUpgrades(this.upgradeSet);
+            StorageInterface.checkHoppers(this);
+            var slotInput1 = this.container.getSlot("slotInput1");
+            var slotOutput1 = this.container.getSlot("slotOutput1");
+            this.inputTank.getLiquidFromItem(slotInput1, slotOutput1);
+            var slotInput2 = this.container.getSlot("slotInput2");
+            var slotOutput2 = this.container.getSlot("slotOutput2");
+            this.outputTank.addLiquidToItem(slotInput2, slotOutput2);
+            if (++this.data.updateTicker >= this.data.tickRate) {
+                var isActive = false;
+                if (this.canWork()) {
+                    this.inputTank.getLiquid("water", 1);
+                    this.outputTank.addLiquid("distilled_water", 1);
+                    isActive = true;
+                    this.data.progress++;
+                    if (this.data.progress >= 1000) {
+                        this.data.progress = 0;
+                    }
+                }
+                this.data.isActive = isActive;
+                this.data.updateTicker = 0;
+            }
+            // Progress bar
+            this.container.setScale("progressScale", this.data.isActive ? 1 : 0);
+            this.inputTank.updateUiScale("liquidInputScale");
+            this.outputTank.updateUiScale("liquidOutputScale");
+            this.container.sendChanges();
+        };
+        return SolarDistiller;
+    }(Machine.MachineBase));
+    Machine.SolarDistiller = SolarDistiller;
+    MachineRegistry.registerPrototype(BlockID.solarDistiller, new SolarDistiller());
+    MachineRegistry.createFluidStorageInterface(BlockID.solarDistiller, {
+        slots: {
+            "slotInput1": { input: true, isValid: function (item) { return LiquidItemRegistry.getItemLiquid(item.id, item.data, item.extra) == "water"; } },
+            "slotInput2": { input: true, isValid: function (item) { return LiquidItemRegistry.canBeFilledWithLiquid(item.id, item.data, item.extra, "distilled_water"); } },
+            "slotOutput1": { output: true },
+            "slotOutput2": { output: true }
+        },
+        getInputTank: function (side, tileEntity) {
+            return tileEntity.inputTank;
+        },
+        getOutputTank: function (side, tileEntity) {
+            return tileEntity.outputTank;
+        },
+        canReceiveLiquid: function (liquid) {
+            return liquid == "water";
+        }
+    });
+})(Machine || (Machine = {}));
+BlockRegistry.createBlock("miner", [
+    { name: "Miner", texture: [["miner_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["miner_front", 0], ["miner_side", 0], ["miner_side", 0]], inCreative: true }
+], "machine");
+BlockRegistry.setBlockMaterial(BlockID.miner, "stone", 1);
+TileRenderer.setStandardModelWithRotation(BlockID.miner, 2, [["miner_bottom", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["miner_front", 0], ["miner_side", 0], ["miner_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.miner, 2, [["miner_bottom_on", 0], ["ic_machine_top", 0], ["ic_machine_side", 0], ["miner_front_on", 0], ["miner_side_on", 0], ["miner_side_on", 0]]);
 TileRenderer.setRotationFunction(BlockID.miner);
-ItemName.addTierTooltip("miner", 2);
+ItemName.addTierTooltip(BlockID.miner, 2);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.miner, count: 1, data: 0 }, [
         "x#x",
@@ -10182,20 +11972,20 @@ Callback.addCallback("PreLoaded", function () {
         " b "
     ], ['#', BlockID.machineBlockBasic, 0, 'x', ItemID.circuitBasic, 0, 'b', BlockID.miningPipe, 0]);
 });
-var guiMiner = MachineRegistry.createInventoryWindow("Miner", {
-    drawing: [
-        { type: "bitmap", x: 550, y: 150, bitmap: "energy_small_background", scale: GUI_SCALE }
-    ],
-    elements: {
-        "energyScale": { type: "scale", x: 550, y: 150, direction: 1, value: 1, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "slotDrill": { type: "slot", x: 441, y: 75, bitmap: "slot_drill" },
-        "slotPipe": { type: "slot", x: 541, y: 75 },
-        "slotScanner": { type: "slot", x: 641, y: 75, bitmap: "slot_scanner" },
-        "slotEnergy": { type: "slot", x: 541, y: 212 },
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiMiner = MachineRegistry.createInventoryWindow("Miner", {
+        drawing: [
+            { type: "bitmap", x: 550, y: 150, bitmap: "energy_small_background", scale: GUI_SCALE }
+        ],
+        elements: {
+            "energyScale": { type: "scale", x: 550, y: 150, direction: 1, value: 1, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "slotDrill": { type: "slot", x: 441, y: 75, bitmap: "slot_drill" },
+            "slotPipe": { type: "slot", x: 541, y: 75 },
+            "slotScanner": { type: "slot", x: 641, y: 75, bitmap: "slot_scanner" },
+            "slotEnergy": { type: "slot", x: 541, y: 212 },
+        }
+    });
     var Miner = /** @class */ (function (_super) {
         __extends(Miner, _super);
         function Miner() {
@@ -10233,10 +12023,10 @@ var Machine;
                 return ChargeItemRegistry.isValidStorage(id, "Eu", _this.getTier());
             });
         };
-        Miner.prototype.getMiningValues = function (tool) {
-            if (tool == ItemID.drill)
+        Miner.prototype.getMiningValues = function (toolId) {
+            if (toolId == ItemID.drill)
                 return { energy: 6, time: 100 };
-            if (tool == ItemID.diamondDrill)
+            if (toolId == ItemID.diamondDrill)
                 return { energy: 20, time: 50 };
             return null;
         };
@@ -10250,7 +12040,7 @@ var Machine;
                 if (this.data.z > this.z + r)
                     break;
                 var blockID = this.region.getBlockId(this.data.x, this.data.scanY, this.data.z);
-                if (ore_blocks.indexOf(blockID) != -1 && level >= ToolAPI.getBlockDestroyLevel(blockID)) {
+                if (scannerOreBlocks.indexOf(blockID) != -1 && level >= ToolAPI.getBlockDestroyLevel(blockID)) {
                     return true;
                 }
                 this.data.x++;
@@ -10435,7 +12225,7 @@ var Machine;
         Miner.prototype.getOperationSound = function () {
             return "MinerOp.ogg";
         };
-        Miner.prototype.getEnergyStorage = function () {
+        Miner.prototype.getEnergyCapacity = function () {
             return 10000;
         };
         Miner.prototype.canRotate = function (side) {
@@ -10447,10 +12237,11 @@ var Machine;
     MachineRegistry.registerPrototype(BlockID.miner, new Miner());
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("advancedMiner", [
-    { name: "Advanced Miner", texture: [["teleporter_top", 0], ["machine_advanced_top", 0], ["machine_advanced_side", 0], ["machine_advanced_side", 0], ["miner_side", 0], ["miner_side", 0]], inCreative: true }
+    { name: "Advanced Miner", texture: [["teleporter_top", 0], ["ic_machine_advanced_top", 0], ["ic_machine_advanced_side", 0], ["ic_machine_advanced_side", 0], ["miner_side", 0], ["miner_side", 0]], inCreative: true }
 ], "machine");
-TileRenderer.setStandardModelWithRotation(BlockID.advancedMiner, 2, [["teleporter_top", 0], ["machine_advanced_top", 0], ["machine_advanced_side", 0], ["machine_advanced_side", 0], ["miner_side", 0], ["miner_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.advancedMiner, 2, [["teleporter_top", 1], ["machine_advanced_top", 0], ["machine_advanced_side", 0], ["machine_advanced_side", 0], ["miner_side", 1], ["miner_side", 1]]);
+BlockRegistry.setBlockMaterial(BlockID.advancedMiner, "stone", 1);
+TileRenderer.setStandardModelWithRotation(BlockID.advancedMiner, 2, [["teleporter_top", 0], ["ic_machine_advanced_top", 0], ["ic_machine_advanced_side", 0], ["ic_machine_advanced_side", 0], ["miner_side", 0], ["miner_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.advancedMiner, 2, [["teleporter_top_on", 0], ["ic_machine_advanced_top", 0], ["ic_machine_advanced_side", 0], ["ic_machine_advanced_side", 0], ["miner_side_on", 0], ["miner_side_on", 0]]);
 MachineRegistry.setStoragePlaceFunction("advancedMiner");
 ItemRegistry.setRarity(BlockID.advancedMiner, EnumRarity.RARE);
 ItemName.addStorageBlockTooltip("advancedMiner", 3, "4M");
@@ -10461,54 +12252,54 @@ Callback.addCallback("PreLoaded", function () {
         "pmp"
     ], ['#', BlockID.machineBlockAdvanced, 0, 'a', BlockID.teleporter, 0, 'e', BlockID.storageMFE, -1, 'm', BlockID.miner, -1, 'p', ItemID.plateAlloy, 0]);
 });
-var guiAdvancedMiner = MachineRegistry.createInventoryWindow("Advanced Miner", {
-    drawing: [
-        { type: "bitmap", x: 400 + 2 * GUI_SCALE, y: 50 + 49 * GUI_SCALE, bitmap: "energy_small_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 400 + 28 * GUI_SCALE, y: 50 + 21 * GUI_SCALE, bitmap: "miner_mode", scale: GUI_SCALE },
-        { type: "bitmap", x: 400, y: 50 + 98 * GUI_SCALE, bitmap: "miner_info", scale: GUI_SCALE },
-    ],
-    elements: {
-        "energyScale": { type: "scale", x: 400 + 2 * GUI_SCALE, y: 50 + 49 * GUI_SCALE, direction: 1, value: 1, bitmap: "energy_small_scale", scale: GUI_SCALE },
-        "slotScanner": { type: "slot", x: 400, y: 50 + 19 * GUI_SCALE, bitmap: "slot_scanner" },
-        "slotEnergy": { type: "slot", x: 400, y: 290 },
-        "slot1": { type: "slot", x: 400 + 28 * GUI_SCALE, y: 50 + 37 * GUI_SCALE },
-        "slot2": { type: "slot", x: 400 + 47 * GUI_SCALE, y: 50 + 37 * GUI_SCALE },
-        "slot3": { type: "slot", x: 400 + 66 * GUI_SCALE, y: 50 + 37 * GUI_SCALE },
-        "slot4": { type: "slot", x: 400 + 85 * GUI_SCALE, y: 50 + 37 * GUI_SCALE },
-        "slot5": { type: "slot", x: 400 + 104 * GUI_SCALE, y: 50 + 37 * GUI_SCALE },
-        "slot6": { type: "slot", x: 400 + 28 * GUI_SCALE, y: 50 + 56 * GUI_SCALE },
-        "slot7": { type: "slot", x: 400 + 47 * GUI_SCALE, y: 50 + 56 * GUI_SCALE },
-        "slot8": { type: "slot", x: 400 + 66 * GUI_SCALE, y: 50 + 56 * GUI_SCALE },
-        "slot9": { type: "slot", x: 400 + 85 * GUI_SCALE, y: 50 + 56 * GUI_SCALE },
-        "slot10": { type: "slot", x: 400 + 104 * GUI_SCALE, y: 50 + 56 * GUI_SCALE },
-        "slot11": { type: "slot", x: 400 + 28 * GUI_SCALE, y: 290 },
-        "slot12": { type: "slot", x: 400 + 47 * GUI_SCALE, y: 290 },
-        "slot13": { type: "slot", x: 400 + 66 * GUI_SCALE, y: 290 },
-        "slot14": { type: "slot", x: 400 + 85 * GUI_SCALE, y: 290 },
-        "slot15": { type: "slot", x: 400 + 104 * GUI_SCALE, y: 290 },
-        "slotUpgrade1": { type: "slot", x: 871, y: 50 + 37 * GUI_SCALE },
-        "slotUpgrade2": { type: "slot", x: 871, y: 50 + 56 * GUI_SCALE },
-        "button_switch": { type: "button", x: 400 + 116 * GUI_SCALE, y: 50 + 21 * GUI_SCALE, bitmap: "miner_button_switch", scale: GUI_SCALE, clicker: {
-                onClick: function (_, container) {
-                    container.sendEvent("switchWhitelist", {});
-                }
-            } },
-        "button_restart": { type: "button", x: 400 + 125 * GUI_SCALE, y: 50 + 98 * GUI_SCALE, bitmap: "miner_button_restart", scale: GUI_SCALE, clicker: {
-                onClick: function (_, container) {
-                    container.sendEvent("restart", {});
-                }
-            } },
-        "button_silk": { type: "button", x: 400 + 126 * GUI_SCALE, y: 50 + 41 * GUI_SCALE, bitmap: "miner_button_silk_0", scale: GUI_SCALE, clicker: {
-                onClick: function (_, container) {
-                    container.sendEvent("switchSilktouch", {});
-                }
-            } },
-        "textInfoMode": { type: "text", font: { size: 24, color: Color.GREEN }, x: 400 + 32 * GUI_SCALE, y: 50 + 24 * GUI_SCALE, width: 256, height: 42, text: Translation.translate("Mode: Blacklist") },
-        "textInfoXYZ": { type: "text", font: { size: 24, color: Color.GREEN }, x: 400 + 4 * GUI_SCALE, y: 50 + 101 * GUI_SCALE, width: 100, height: 42, text: "" },
-    }
-});
 var Machine;
 (function (Machine) {
+    var guiAdvancedMiner = MachineRegistry.createInventoryWindow("Advanced Miner", {
+        drawing: [
+            { type: "bitmap", x: 400 + 2 * GUI_SCALE, y: 49 * GUI_SCALE, bitmap: "energy_small_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 400 + 28 * GUI_SCALE, y: 21 * GUI_SCALE, bitmap: "miner_mode", scale: GUI_SCALE },
+            { type: "bitmap", x: 400, y: 98 * GUI_SCALE, bitmap: "miner_info", scale: GUI_SCALE },
+        ],
+        elements: {
+            "energyScale": { type: "scale", x: 400 + 2 * GUI_SCALE, y: 49 * GUI_SCALE, direction: 1, value: 1, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "slotScanner": { type: "slot", x: 400, y: 19 * GUI_SCALE, bitmap: "slot_scanner" },
+            "slotEnergy": { type: "slot", x: 400, y: 75 * GUI_SCALE },
+            "slot1": { type: "slot", x: 400 + 28 * GUI_SCALE, y: 37 * GUI_SCALE },
+            "slot2": { type: "slot", x: 400 + 47 * GUI_SCALE, y: 37 * GUI_SCALE },
+            "slot3": { type: "slot", x: 400 + 66 * GUI_SCALE, y: 37 * GUI_SCALE },
+            "slot4": { type: "slot", x: 400 + 85 * GUI_SCALE, y: 37 * GUI_SCALE },
+            "slot5": { type: "slot", x: 400 + 104 * GUI_SCALE, y: 37 * GUI_SCALE },
+            "slot6": { type: "slot", x: 400 + 28 * GUI_SCALE, y: 56 * GUI_SCALE },
+            "slot7": { type: "slot", x: 400 + 47 * GUI_SCALE, y: 56 * GUI_SCALE },
+            "slot8": { type: "slot", x: 400 + 66 * GUI_SCALE, y: 56 * GUI_SCALE },
+            "slot9": { type: "slot", x: 400 + 85 * GUI_SCALE, y: 56 * GUI_SCALE },
+            "slot10": { type: "slot", x: 400 + 104 * GUI_SCALE, y: 56 * GUI_SCALE },
+            "slot11": { type: "slot", x: 400 + 28 * GUI_SCALE, y: 75 * GUI_SCALE },
+            "slot12": { type: "slot", x: 400 + 47 * GUI_SCALE, y: 75 * GUI_SCALE },
+            "slot13": { type: "slot", x: 400 + 66 * GUI_SCALE, y: 75 * GUI_SCALE },
+            "slot14": { type: "slot", x: 400 + 85 * GUI_SCALE, y: 75 * GUI_SCALE },
+            "slot15": { type: "slot", x: 400 + 104 * GUI_SCALE, y: 75 * GUI_SCALE },
+            "slotUpgrade1": { type: "slot", x: 871, y: 37 * GUI_SCALE },
+            "slotUpgrade2": { type: "slot", x: 871, y: 56 * GUI_SCALE },
+            "button_switch": { type: "button", x: 400 + 116 * GUI_SCALE, y: 21 * GUI_SCALE, bitmap: "miner_button_switch", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("switchWhitelist", {});
+                    }
+                } },
+            "button_restart": { type: "button", x: 400 + 125 * GUI_SCALE, y: 98 * GUI_SCALE, bitmap: "miner_button_restart", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("restart", {});
+                    }
+                } },
+            "button_silk": { type: "button", x: 400 + 126 * GUI_SCALE, y: 41 * GUI_SCALE, bitmap: "miner_button_silk_0", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("switchSilktouch", {});
+                    }
+                } },
+            "textInfoMode": { type: "text", font: { size: 24, color: Color.GREEN }, x: 400 + 32 * GUI_SCALE, y: 24 * GUI_SCALE, width: 256, height: 42, text: Translation.translate("Mode: Blacklist") },
+            "textInfoXYZ": { type: "text", font: { size: 24, color: Color.GREEN }, x: 400 + 4 * GUI_SCALE, y: 101 * GUI_SCALE, width: 100, height: 42, text: "" },
+        }
+    });
     var AdvancedMiner = /** @class */ (function (_super) {
         __extends(AdvancedMiner, _super);
         function AdvancedMiner() {
@@ -10525,6 +12316,7 @@ var Machine;
             _this.defaultTier = 3;
             _this.defaultDrop = BlockID.machineBlockAdvanced;
             _this.upgrades = ["overclocker", "transformer"];
+            _this.tier = _this.defaultTier;
             return _this;
         }
         AdvancedMiner.prototype.getScreenByName = function () {
@@ -10533,7 +12325,7 @@ var Machine;
         AdvancedMiner.prototype.getTier = function () {
             return this.tier;
         };
-        AdvancedMiner.prototype.getEnergyStorage = function () {
+        AdvancedMiner.prototype.getEnergyCapacity = function () {
             return 4000000;
         };
         AdvancedMiner.prototype.setupContainer = function () {
@@ -10547,6 +12339,11 @@ var Machine;
             StorageInterface.setSlotValidatePolicy(this.container, "slotUpgrade1", function (name, id) { return UpgradeAPI.isValidUpgrade(id, _this); });
             StorageInterface.setSlotValidatePolicy(this.container, "slotUpgrade2", function (name, id) { return UpgradeAPI.isValidUpgrade(id, _this); });
         };
+        AdvancedMiner.prototype.onInit = function () {
+            _super.prototype.onInit.call(this);
+            this.upgradeSet = UpgradeAPI.getUpgradeSet(this);
+            this.applyUpgradeModifiers();
+        };
         AdvancedMiner.prototype.getScanRadius = function (itemID) {
             if (itemID == ItemID.scanner)
                 return 16;
@@ -10554,13 +12351,13 @@ var Machine;
                 return 32;
             return 0;
         };
-        AdvancedMiner.prototype.setUpgradeStats = function () {
-            var upgrades = UpgradeAPI.useUpgrades(this);
+        AdvancedMiner.prototype.applyUpgradeModifiers = function () {
+            var upgrades = UpgradeAPI.performUpgrades(this.upgradeSet);
             this.tier = upgrades.getTier(this.defaultTier);
             this.maxScanCount = 5 * upgrades.speedModifier;
         };
         AdvancedMiner.prototype.onTick = function () {
-            this.setUpgradeStats();
+            this.applyUpgradeModifiers();
             this.operate();
             this.chargeSlot("slotScanner");
             this.dischargeSlot("slotEnergy");
@@ -10669,70 +12466,73 @@ var Machine;
                 }
             }
         };
-        AdvancedMiner.prototype.adjustDrop = function (item) {
-            if (item.id == this.blockID && this.data.energy > 0) {
-                var extra = new ItemExtraData();
-                item.extra = extra.putInt("energy", this.data.energy);
+        AdvancedMiner.prototype.getDemontaged = function () {
+            var item = new ItemStack(this.blockID, 1, 0);
+            if (this.data.energy > 0) {
+                item.extra = new ItemExtraData().putInt("energy", this.data.energy);
             }
             return item;
         };
         AdvancedMiner.prototype.onRedstoneUpdate = function (signal) {
             this.data.isEnabled = (signal == 0);
         };
-        AdvancedMiner.prototype.switchWhitelist = function () {
+        AdvancedMiner.prototype.canRotate = function (side) {
+            return side > 1;
+        };
+        AdvancedMiner.prototype.onSwitchWhitelist = function () {
             this.data.whitelist = !this.data.whitelist;
         };
-        AdvancedMiner.prototype.switchSilktouch = function () {
+        AdvancedMiner.prototype.onSwitchSilktouch = function () {
             this.data.silk_touch = !this.data.silk_touch;
         };
-        AdvancedMiner.prototype.restart = function () {
+        AdvancedMiner.prototype.onRestart = function () {
             this.data.x = this.data.y = this.data.z = 0;
         };
-        AdvancedMiner.prototype.setSilktouchIcon = function (container, window, content, data) {
+        AdvancedMiner.prototype.onSetSilktouchIcon = function (container, window, content, data) {
             if (content) {
                 var iconIndex = data.mode ? 1 : 0;
                 content.elements.button_silk.bitmap = "miner_button_silk_" + iconIndex;
             }
         };
-        AdvancedMiner.prototype.canRotate = function (side) {
-            return side > 1;
-        };
         __decorate([
-            Machine.ContainerEvent(Side.Server)
-        ], AdvancedMiner.prototype, "switchWhitelist", null);
+            Machine.ContainerEvent(Side.Server, "switchWhitelist")
+        ], AdvancedMiner.prototype, "onSwitchWhitelist", null);
         __decorate([
-            Machine.ContainerEvent(Side.Server)
-        ], AdvancedMiner.prototype, "switchSilktouch", null);
+            Machine.ContainerEvent(Side.Server, "switchSilktouch")
+        ], AdvancedMiner.prototype, "onSwitchSilktouch", null);
         __decorate([
-            Machine.ContainerEvent(Side.Server)
-        ], AdvancedMiner.prototype, "restart", null);
+            Machine.ContainerEvent(Side.Server, "restart")
+        ], AdvancedMiner.prototype, "onRestart", null);
         __decorate([
-            Machine.ContainerEvent(Side.Client)
-        ], AdvancedMiner.prototype, "setSilktouchIcon", null);
+            Machine.ContainerEvent(Side.Client, "setSilktouchIcon")
+        ], AdvancedMiner.prototype, "onSetSilktouchIcon", null);
         return AdvancedMiner;
     }(Machine.ElectricMachine));
     Machine.AdvancedMiner = AdvancedMiner;
     MachineRegistry.registerPrototype(BlockID.advancedMiner, new AdvancedMiner());
 })(Machine || (Machine = {}));
-var cropHarvesterGuiElements = {
-    "energyScale": { type: "scale", x: 409, y: 167, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-    "slotEnergy": { type: "slot", x: 400, y: 230 },
-    "slotUpgrade0": { type: "slot", x: 880, y: 110 },
-    "slotUpgrade1": { type: "slot", x: 880, y: 170 },
-    "slotUpgrade2": { type: "slot", x: 880, y: 230 }
-};
-for (var i = 0; i < 15; i++) {
-    var x = i % 5;
-    var y = Math.floor(i / 5) + 1;
-    cropHarvesterGuiElements["outSlot" + i] = { type: "slot", x: 520 + x * 60, y: 50 + y * 60 };
-}
-;
-var guiCropHarvester = MachineRegistry.createInventoryWindow("Crop Harvester", {
-    drawing: [
-        { type: "bitmap", x: 409, y: 167, bitmap: "energy_small_background", scale: GUI_SCALE }
-    ],
-    elements: cropHarvesterGuiElements
-});
+var Machine;
+(function (Machine) {
+    var cropHarvesterGuiElements = {
+        "energyScale": { type: "scale", x: 409, y: 167, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+        "slotEnergy": { type: "slot", x: 400, y: 230 },
+        "slotUpgrade0": { type: "slot", x: 880, y: 110 },
+        "slotUpgrade1": { type: "slot", x: 880, y: 170 },
+        "slotUpgrade2": { type: "slot", x: 880, y: 230 }
+    };
+    for (var i = 0; i < 15; i++) {
+        var x = i % 5;
+        var y = Math.floor(i / 5) + 1;
+        cropHarvesterGuiElements["outSlot" + i] = { type: "slot", x: 520 + x * 60, y: 50 + y * 60 };
+    }
+    ;
+    Machine.guiCropHarvester = MachineRegistry.createInventoryWindow("Crop Harvester", {
+        drawing: [
+            { type: "bitmap", x: 409, y: 167, bitmap: "energy_small_background", scale: GUI_SCALE }
+        ],
+        elements: cropHarvesterGuiElements
+    });
+})(Machine || (Machine = {}));
 /// <reference path="./CropHarvesterGUI.ts" />
 var Machine;
 (function (Machine) {
@@ -10752,21 +12552,22 @@ var Machine;
             _this.defaultEnergyStorage = 10000;
             _this.defaultDrop = BlockID.machineBlockBasic;
             _this.upgrades = ["transformer", "energyStorage", "itemEjector"];
+            _this.tier = _this.defaultTier;
             return _this;
         }
         CropHarvester.prototype.getScreenByName = function () {
-            return guiCropHarvester;
+            return Machine.guiCropHarvester;
         };
         CropHarvester.prototype.getTier = function () {
             return this.tier;
         };
-        CropHarvester.prototype.getEnergyStorage = function () {
-            return this.energyStorage;
+        CropHarvester.prototype.getEnergyCapacity = function () {
+            return this.energyCapacity;
         };
-        CropHarvester.prototype.useUpgrades = function () {
-            var upgrades = UpgradeAPI.useUpgrades(this);
+        CropHarvester.prototype.useUpgrades = function (isInit) {
+            var upgrades = UpgradeAPI.performUpgrades(this.upgradeSet, isInit);
             this.tier = upgrades.getTier(this.defaultTier);
-            this.energyStorage = upgrades.getEnergyStorage(this.defaultEnergyStorage);
+            this.energyCapacity = upgrades.getEnergyStorage(this.defaultEnergyStorage);
         };
         CropHarvester.prototype.setupContainer = function () {
             var _this = this;
@@ -10776,8 +12577,13 @@ var Machine;
                 return UpgradeAPI.isValidUpgrade(id, _this);
             });
         };
+        CropHarvester.prototype.onInit = function () {
+            _super.prototype.onInit.call(this);
+            this.upgradeSet = UpgradeAPI.getUpgradeSet(this);
+            this.useUpgrades(true);
+        };
         CropHarvester.prototype.onTick = function () {
-            this.useUpgrades();
+            this.useUpgrades(false);
             StorageInterface.checkHoppers(this);
             if (this.data.energy > 100)
                 this.scan();
@@ -10844,15 +12650,16 @@ var Machine;
 })(Machine || (Machine = {}));
 /// <reference path="./TileCropHarvester.ts" />
 BlockRegistry.createBlock("cropHarvester", [
-    { name: "Crop Harvester", texture: [["machine_bottom", 0], ["crop_harvester", 0]], inCreative: true }
+    { name: "Crop Harvester", texture: [["ic_machine_bottom", 0], ["crop_harvester", 0]], inCreative: true }
 ], "machine");
-ItemName.addTierTooltip("cropHarvester", 1);
+BlockRegistry.setBlockMaterial(BlockID.cropHarvester, "stone", 1);
+ItemName.addTierTooltip(BlockID.cropHarvester, 1);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.cropHarvester, count: 1, data: 0 }, [
         "zcz",
         "s#s",
         "pap"
-    ], ['#', BlockID.machineBlockBasic, 0, 'z', ItemID.circuitBasic, 0, 'c', 54, -1, 'a', ItemID.agriculturalAnalyzer, 0, 'p', ItemID.plateIron, 0, 's', 359, 0]);
+    ], ['#', BlockID.machineBlockBasic, 0, 'z', ItemID.circuitBasic, 0, 'c', 54, -1, 'a', ItemID.agriculturalAnalyzer, -1, 'p', ItemID.plateIron, 0, 's', 359, 0]);
 });
 MachineRegistry.registerPrototype(BlockID.cropHarvester, new Machine.CropHarvester());
 StorageInterface.createInterface(BlockID.cropHarvester, {
@@ -10860,28 +12667,31 @@ StorageInterface.createInterface(BlockID.cropHarvester, {
         "outSlot^0-14": { output: true }
     }
 });
-var сropMatronGuiElements = {
-    "energyScale": { type: "scale", x: 870, y: 270, direction: 1, value: .5, bitmap: "energy_small_scale", scale: GUI_SCALE },
-    "liquidScale": { type: "scale", x: 572, y: 256, direction: 1, bitmap: "water_storage_scale", scale: GUI_SCALE },
-    "slotEnergy": { type: "slot", x: 804, y: 265 },
-    "slotFertilizer0": { type: "slot", x: 441, y: 75, bitmap: "slot_dust" },
-    "slotWeedEx0": { type: "slot", x: 441, y: 155, bitmap: "slot_weedEx" },
-    "slotWaterIn": { type: "slot", x: 441, y: 235, bitmap: "slot_cell" },
-    "slotWaterOut": { type: "slot", x: 441, y: 295 }
-};
-for (var i = 1; i < 7; i++) {
-    сropMatronGuiElements["slotWeedEx" + i] = { type: "slot", x: 441 + 60 * i, y: 155 };
-}
-for (var i = 1; i < 7; i++) {
-    сropMatronGuiElements["slotFertilizer" + i] = { type: "slot", x: 441 + 60 * i, y: 75 };
-}
-var guiCropMatron = MachineRegistry.createInventoryWindow("Crop Matron", {
-    drawing: [
-        { type: "bitmap", x: 870, y: 270, bitmap: "energy_small_background", scale: GUI_SCALE },
-        { type: "bitmap", x: 511, y: 243, bitmap: "water_storage_background", scale: GUI_SCALE }
-    ],
-    elements: сropMatronGuiElements
-});
+var Machine;
+(function (Machine) {
+    var сropMatronGuiElements = {
+        "energyScale": { type: "scale", x: 870, y: 270, direction: 1, value: .5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+        "liquidScale": { type: "scale", x: 572, y: 256, direction: 1, bitmap: "water_storage_scale", scale: GUI_SCALE },
+        "slotEnergy": { type: "slot", x: 804, y: 265 },
+        "slotFertilizer0": { type: "slot", x: 441, y: 75, bitmap: "slot_dust" },
+        "slotWeedEx0": { type: "slot", x: 441, y: 155, bitmap: "slot_weedEx" },
+        "slotWaterIn": { type: "slot", x: 441, y: 235, bitmap: "slot_cell" },
+        "slotWaterOut": { type: "slot", x: 441, y: 295 }
+    };
+    for (var i = 1; i < 7; i++) {
+        сropMatronGuiElements["slotWeedEx" + i] = { type: "slot", x: 441 + 60 * i, y: 155 };
+    }
+    for (var i = 1; i < 7; i++) {
+        сropMatronGuiElements["slotFertilizer" + i] = { type: "slot", x: 441 + 60 * i, y: 75 };
+    }
+    Machine.guiCropMatron = MachineRegistry.createInventoryWindow("Crop Matron", {
+        drawing: [
+            { type: "bitmap", x: 870, y: 270, bitmap: "energy_small_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 511, y: 243, bitmap: "water_storage_background", scale: GUI_SCALE }
+        ],
+        elements: сropMatronGuiElements
+    });
+})(Machine || (Machine = {}));
 /// <reference path="./CropMatronGUI.ts" />
 var Machine;
 (function (Machine) {
@@ -10898,16 +12708,16 @@ var Machine;
             return _this;
         }
         CropMatron.prototype.getScreenByName = function () {
-            return guiCropMatron;
+            return Machine.guiCropMatron;
         };
         CropMatron.prototype.setupContainer = function () {
             var _this = this;
             this.liquidTank = this.addLiquidTank("fluid", 2000, ["water"]);
-            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data) {
+            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data, extra) {
                 if (name == "slotEnergy")
                     return ChargeItemRegistry.isValidStorage(id, "Eu", _this.getTier());
                 if (name == "slotWaterIn")
-                    return LiquidItemRegistry.getItemLiquid(id, data) == "water";
+                    return LiquidItemRegistry.getItemLiquid(id, data, extra) == "water";
                 if (name.startsWith("slotFertilizer"))
                     return id == ItemID.fertilizer;
                 if (name.startsWith("slotWeedEx"))
@@ -10987,7 +12797,7 @@ var Machine;
             }
             return null;
         };
-        CropMatron.prototype.getEnergyStorage = function () {
+        CropMatron.prototype.getEnergyCapacity = function () {
             return 10000;
         };
         CropMatron.prototype.canRotate = function (side) {
@@ -10999,282 +12809,714 @@ var Machine;
 })(Machine || (Machine = {}));
 /// <reference path="./TileCropMatron.ts" />
 BlockRegistry.createBlock("cropMatron", [
-    { name: "Crop Matron", texture: [["machine_bottom", 0], ["cropmatron_top", 0], ["cropmatron_side", 0], ["cropmatron_side", 0], ["cropmatron_side", 0], ["cropmatron_side", 0]], inCreative: true }
+    { name: "Crop Matron", texture: [["ic_machine_bottom", 0], ["cropmatron_top", 0], ["cropmatron_side", 0], ["cropmatron_side", 0], ["cropmatron_side", 0], ["cropmatron_side", 0]], inCreative: true }
 ], "machine");
-TileRenderer.setStandardModelWithRotation(BlockID.cropMatron, 2, [["machine_bottom", 0], ["cropmatron_top", 0], ["cropmatron_side", 0], ["cropmatron_side", 0], ["cropmatron_side", 0], ["cropmatron_side", 0]]);
-TileRenderer.registerModelWithRotation(BlockID.cropMatron, 2, [["machine_bottom", 0], ["cropmatron_top", 0], ["cropmatron_side", 3], ["cropmatron_side", 1], ["cropmatron_side", 2], ["cropmatron_side", 2]]);
+BlockRegistry.setBlockMaterial(BlockID.cropMatron, "stone", 1);
+TileRenderer.setStandardModelWithRotation(BlockID.cropMatron, 2, [["ic_machine_bottom", 0], ["cropmatron_top", 0], ["cropmatron_side", 0], ["cropmatron_side", 0], ["cropmatron_side", 0], ["cropmatron_side", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.cropMatron, 2, [["ic_machine_bottom", 0], ["cropmatron_top", 0], ["cropmatron_side", 3], ["cropmatron_side", 1], ["cropmatron_side", 2], ["cropmatron_side", 2]]);
 TileRenderer.setRotationFunction(BlockID.cropMatron, true);
-ItemName.addTierTooltip("cropMatron", 1);
+ItemName.addTierTooltip(BlockID.cropMatron, 1);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.cropMatron, count: 1, data: 0 }, [
         "cxc",
         "a#a",
-        "nnn"
-    ], ['#', BlockID.machineBlockBasic, 0, 'x', 54, -1, 'c', ItemID.circuitBasic, 0, 'a', ItemID.cellEmpty, 0, 'n', ItemID.cropStick, 0]);
+        "php"
+    ], ['#', BlockID.machineBlockBasic, 0, 'x', 54, -1, 'c', ItemID.circuitBasic, 0, 'a', ItemID.cellEmpty, 0, 'p', ItemID.plateIron, 0, 'h', VanillaItemID.iron_hoe, 0]);
 });
 MachineRegistry.registerPrototype(BlockID.cropMatron, new Machine.CropMatron());
-MachineRegistry.createStorageInterface(BlockID.cropMatron, {
+MachineRegistry.createFluidStorageInterface(BlockID.cropMatron, {
     slots: {
         "slotFertilizer^0-6": { input: true, isValid: function (item) { return item.id == ItemID.fertilizer; } },
         "slotWeedEx^0-6": { input: true, isValid: function (item) { return item.id == ItemID.weedEx; } },
         "slotWaterIn": {
             input: true, isValid: function (item) {
-                return LiquidItemRegistry.getItemLiquid(item.id, item.data) == "water";
+                return LiquidItemRegistry.getItemLiquid(item.id, item.data, item.extra) == "water";
             }
         },
         "slotWaterOut": { output: true }
     },
     canReceiveLiquid: function (liquid) { return liquid == "water"; }
 });
-BlockRegistry.createBlock("luminator", [
-    { name: "tile.luminator.name", texture: [["luminator", 0]], inCreative: false },
-    { name: "Luminator", texture: [["luminator", 0]], inCreative: true },
-    { name: "tile.luminator.name", texture: [["luminator", 0]], inCreative: false },
-    { name: "tile.luminator.name", texture: [["luminator", 0]], inCreative: false },
-    { name: "tile.luminator.name", texture: [["luminator", 0]], inCreative: false },
-    { name: "tile.luminator.name", texture: [["luminator", 0]], inCreative: false }
-], { destroyTime: 2, explosionResistance: 0.5, renderLayer: 7 });
-Block.setBlockShape(BlockID.luminator, { x: 0, y: 15 / 16, z: 0 }, { x: 1, y: 1, z: 1 }, 0);
-Block.setBlockShape(BlockID.luminator, { x: 0, y: 0, z: 0 }, { x: 1, y: 1 / 16, z: 1 }, 1);
-Block.setBlockShape(BlockID.luminator, { x: 0, y: 0, z: 15 / 16 }, { x: 1, y: 1, z: 1 }, 2);
-Block.setBlockShape(BlockID.luminator, { x: 0, y: 0, z: 0 }, { x: 1, y: 1, z: 1 / 16 }, 3);
-Block.setBlockShape(BlockID.luminator, { x: 15 / 16, y: 0, z: 0 }, { x: 1, y: 1, z: 1 }, 4);
-Block.setBlockShape(BlockID.luminator, { x: 0, y: 0, z: 0 }, { x: 1 / 16, y: 1, z: 1 }, 5);
-BlockRegistry.registerDrop("luminator", function (coords, blockID, blockData, level, enchant) {
-    return [[blockID, 1, 1]];
-});
-BlockRegistry.createBlock("luminator_on", [
-    { name: "tile.luminator_on.name", texture: [["luminator", 1]], inCreative: false },
-    { name: "tile.luminator_on.name", texture: [["luminator", 1]], inCreative: false },
-    { name: "tile.luminator_on.name", texture: [["luminator", 1]], inCreative: false },
-    { name: "tile.luminator_on.name", texture: [["luminator", 1]], inCreative: false },
-    { name: "tile.luminator_on.name", texture: [["luminator", 1]], inCreative: false },
-    { name: "tile.luminator_on.name", texture: [["luminator", 1]], inCreative: false }
-], {
-    destroyTime: 2,
-    explosionResistance: 0.5,
-    lightLevel: 15,
-    renderLayer: 7
-});
-Block.setBlockShape(BlockID.luminator_on, { x: 0, y: 15 / 16, z: 0 }, { x: 1, y: 1, z: 1 }, 0);
-Block.setBlockShape(BlockID.luminator_on, { x: 0, y: 0, z: 0 }, { x: 1, y: 1 / 16, z: 1 }, 1);
-Block.setBlockShape(BlockID.luminator_on, { x: 0, y: 0, z: 15 / 16 }, { x: 1, y: 1, z: 1 }, 2);
-Block.setBlockShape(BlockID.luminator_on, { x: 0, y: 0, z: 0 }, { x: 1, y: 1, z: 1 / 16 }, 3);
-Block.setBlockShape(BlockID.luminator_on, { x: 15 / 16, y: 0, z: 0 }, { x: 1, y: 1, z: 1 }, 4);
-Block.setBlockShape(BlockID.luminator_on, { x: 0, y: 0, z: 0 }, { x: 1 / 16, y: 1, z: 1 }, 5);
-BlockRegistry.registerDrop("luminator_on", function (coords, blockID, blockData, level, enchant) {
-    return [[BlockID.luminator, 1, 1]];
-});
-Callback.addCallback("PreLoaded", function () {
-    Recipes.addShaped({ id: BlockID.luminator, count: 8, data: 1 }, [
-        "cxc",
-        "aba",
-        "aaa",
-    ], ['a', 20, 0, 'x', ItemID.cableCopper1, 0, 'b', ItemID.cableTin0, 0, 'c', ItemID.casingIron, 0]);
-});
-var Machine;
-(function (Machine) {
-    var Lamp = /** @class */ (function (_super) {
-        __extends(Lamp, _super);
-        function Lamp() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.defaultValues = {
-                isActive: false,
-                energy: 0
-            };
-            return _this;
-        }
-        Lamp.prototype.getEnergyStorage = function () {
-            return 100;
-        };
-        Lamp.prototype.onItemUse = function () {
-            this.data.isActive = true;
-            return true;
-        };
-        Lamp.prototype.setBlock = function (blockID) {
-            this.selfDestroy();
-            var blockData = this.region.getBlockData(this);
-            this.region.setBlock(this, blockID, blockData);
-            var tile = this.region.addTileEntity(this);
-            tile.data = this.data;
-        };
-        Lamp.prototype.onTick = function () {
-            if (this.data.isActive && this.data.energy >= 0.25) {
-                this.setBlock(BlockID.luminator_on);
-            }
-        };
-        return Lamp;
-    }(Machine.ElectricMachine));
-    var LampOn = /** @class */ (function (_super) {
-        __extends(LampOn, _super);
-        function LampOn() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        LampOn.prototype.onItemUse = function () {
-            this.data.isActive = false;
-            this.setBlock(BlockID.luminator);
-            return true;
-        };
-        LampOn.prototype.onTick = function () {
-            if (this.data.energy < 0.25) {
-                this.setBlock(BlockID.luminator);
-            }
-            else {
-                this.data.energy -= 0.25;
-            }
-        };
-        return LampOn;
-    }(Lamp));
-    MachineRegistry.registerPrototype(BlockID.luminator, new Lamp());
-    MachineRegistry.registerPrototype(BlockID.luminator_on, new LampOn());
-})(Machine || (Machine = {}));
-Block.registerPlaceFunction("luminator", function (coords, item, block, player, region) {
-    var x = coords.relative.x;
-    var y = coords.relative.y;
-    var z = coords.relative.z;
-    var blockID = region.getBlockId(x, y, z);
-    if (GenerationUtils.isTransparentBlock(blockID)) {
-        region.setBlock(x, y, z, item.id, coords.side);
-        //World.playSound(x, y, z, "dig.stone", 1, 0.8)
-        World.addTileEntity(x, y, z, region);
-    }
-});
-BlockRegistry.createBlock("nuke", [
-    { name: "Nuke", texture: [["nuke_bottom", 0], ["nuke_top", 0], ["nuke_sides", 0], ["nuke_sides", 0], ["nuke_sides", 0], ["nuke_sides", 0]], inCreative: true }
+BlockRegistry.createBlockWithRotation("industrialCrafter", [
+    { name: "Industrial Workbench", texture: [["industrial_workbench_bottom", 0], ["industrial_workbench_top", 0], ["industrial_workbench_back", 0], ["industrial_workbench_front", 0], ["industrial_workbench_left", 0], ["industrial_workbench_right", 0]], inCreative: true },
 ], "machine");
-BlockRegistry.setBlockMaterial(BlockID.nuke, "stone", 1);
-ItemRegistry.setRarity(BlockID.nuke, EnumRarity.UNCOMMON);
-TileRenderer.setStandardModel(BlockID.nuke, 0, [["nuke_bottom", 0], ["nuke_top", 0], ["nuke_sides", 0], ["nuke_sides", 0], ["nuke_sides", 0], ["nuke_sides", 0]]);
-TileRenderer.registerRenderModel(BlockID.nuke, 0, [["tnt_active", 0]]);
+BlockRegistry.setBlockMaterial(BlockID.industrialCrafter, "stone", 1);
 Callback.addCallback("PreLoaded", function () {
-    Recipes.addShaped({ id: BlockID.nuke, count: 1, data: 0 }, [
-        "ncn",
-        "x#x",
-        "ncn"
-    ], ['#', 46, -1, 'x', ItemID.uranium235, 0, 'c', ItemID.circuitAdvanced, 0, 'n', ItemID.neutronReflectorThick, 0]);
-    Recipes.addShaped({ id: BlockID.nuke, count: 1, data: 0 }, [
-        "ncn",
-        "x#x",
-        "ncn"
-    ], ['#', 46, -1, 'x', ItemID.plutonium, 0, 'c', ItemID.circuitAdvanced, 0, 'n', ItemID.neutronReflectorThick, 0]);
+    Recipes.addShaped({ id: BlockID.industrialCrafter, count: 1, data: 0 }, [
+        " c ",
+        "a#b"
+    ], ['#', BlockID.machineBlockBasic, 0, 'a', ItemID.craftingHammer, 0, 'b', ItemID.cutter, 0, 'c', VanillaBlockID.crafting_table, 0]);
 });
 var Machine;
 (function (Machine) {
-    var Nuke = /** @class */ (function (_super) {
-        __extends(Nuke, _super);
-        function Nuke() {
+    var guiIndustrialWorkbench = MachineRegistry.createInventoryWindow("Industrial Workbench", {
+        elements: {
+            "progressArrow": { type: "button", x: 565, y: 104, bitmap: "arrow_bar_background", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("workbench");
+                    }
+                } },
+            "slotInput0": { type: "slot", x: 370, y: 40 },
+            "slotInput1": { type: "slot", x: 430, y: 40 },
+            "slotInput2": { type: "slot", x: 490, y: 40 },
+            "slotInput3": { type: "slot", x: 370, y: 100 },
+            "slotInput4": { type: "slot", x: 430, y: 100 },
+            "slotInput5": { type: "slot", x: 490, y: 100 },
+            "slotInput6": { type: "slot", x: 370, y: 160 },
+            "slotInput7": { type: "slot", x: 430, y: 160 },
+            "slotInput8": { type: "slot", x: 490, y: 160 },
+            "slotResult": { type: "slot", x: 650, y: 100, visual: true, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("craft", { allAtOnce: false });
+                    },
+                    onLongClick: function (_, container) {
+                        container.sendEvent("craft", { allAtOnce: true });
+                    }
+                } },
+            "buttonClear": { type: "button", x: 555, y: 40, bitmap: "icpe.clear_button", bitmap2: "icpe.clear_button_touched", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("clearGrid", {});
+                    }
+                } },
+            "slot0": { type: 'slot', x: 370, y: 250 },
+            "slot1": { type: 'slot', x: 430, y: 250 },
+            "slot2": { type: 'slot', x: 490, y: 250 },
+            "slot3": { type: 'slot', x: 550, y: 250 },
+            "slot4": { type: 'slot', x: 610, y: 250 },
+            "slot5": { type: 'slot', x: 670, y: 250 },
+            "slot6": { type: 'slot', x: 730, y: 250 },
+            "slot7": { type: 'slot', x: 790, y: 250 },
+            "slot8": { type: 'slot', x: 850, y: 250 },
+            "slot9": { type: 'slot', x: 370, y: 310 },
+            "slot10": { type: 'slot', x: 430, y: 310 },
+            "slot11": { type: 'slot', x: 490, y: 310 },
+            "slot12": { type: 'slot', x: 550, y: 310 },
+            "slot13": { type: 'slot', x: 610, y: 310 },
+            "slot14": { type: 'slot', x: 670, y: 310 },
+            "slot15": { type: 'slot', x: 730, y: 310 },
+            "slot16": { type: 'slot', x: 790, y: 310 },
+            "slot17": { type: 'slot', x: 850, y: 310 },
+            "slotPatternResult0": { type: "slot", x: 730, y: 40, bitmap: "icpe.locked_slot", visual: true, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("usePattern", { index: 0 });
+                    }
+                } },
+            "slotPatternResult1": { type: "slot", x: 790, y: 40, bitmap: "icpe.locked_slot", visual: true, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("usePattern", { index: 1 });
+                    }
+                } },
+            "slotPatternResult2": { type: "slot", x: 850, y: 40, bitmap: "icpe.locked_slot", visual: true, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("usePattern", { index: 2 });
+                    }
+                } },
+            "slotPatternResult3": { type: "slot", x: 730, y: 100, bitmap: "icpe.locked_slot", visual: true, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("usePattern", { index: 3 });
+                    }
+                } },
+            "slotPatternResult4": { type: "slot", x: 790, y: 100, bitmap: "icpe.locked_slot", visual: true, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("usePattern", { index: 4 });
+                    }
+                } },
+            "slotPatternResult5": { type: "slot", x: 850, y: 100, bitmap: "icpe.locked_slot", visual: true, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("usePattern", { index: 5 });
+                    }
+                } },
+            "slotPatternResult6": { type: "slot", x: 730, y: 160, bitmap: "icpe.locked_slot", visual: true, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("usePattern", { index: 6 });
+                    }
+                } },
+            "slotPatternResult7": { type: "slot", x: 790, y: 160, bitmap: "icpe.locked_slot", visual: true, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("usePattern", { index: 7 });
+                    }
+                } },
+            "slotPatternResult8": { type: "slot", x: 850, y: 160, bitmap: "icpe.locked_slot", visual: true, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("usePattern", { index: 8 });
+                    }
+                } },
+            "buttonPlus": { type: "button", x: 910, y: 40, bitmap: "icpe.plus_button", bitmap2: "icpe.plus_button_touched", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("addPattern", {});
+                    }
+                } },
+            "buttonMinus": { type: "button", x: 910, y: 75, bitmap: "icpe.minus_button", bitmap2: "icpe.minus_button_touched", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("removePattern", {});
+                    }
+                } }
+        }
+    });
+    var IndustrialWorkbench = /** @class */ (function (_super) {
+        __extends(IndustrialWorkbench, _super);
+        function IndustrialWorkbench() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.defaultValues = {
-                activated: false,
-                timer: 300
+                recipeChecked: false,
+                patterns: {}
             };
+            _this.defaultDrop = BlockID.machineBlockBasic;
             return _this;
         }
-        Nuke.prototype.getScreenName = function () {
-            return null;
+        IndustrialWorkbench.prototype.getScreenByName = function () {
+            return guiIndustrialWorkbench;
         };
-        Nuke.prototype.explode = function (radius) {
-            SoundManager.playSound("NukeExplosion.ogg");
-            var damageRad = radius * 1.5;
-            var epicenter = new Vector3(this.x + .5, this.y + .5, this.z + .5);
-            var entities = EntityHelper.getEntitiesInRadius(this.region, epicenter, damageRad);
-            for (var _i = 0, entities_5 = entities; _i < entities_5.length; _i++) {
-                var ent = entities_5[_i];
-                var dist = Entity.getDistanceBetweenCoords(epicenter, Entity.getPosition(ent));
-                var damage = Math.ceil(damageRad * damageRad * 25 / (dist * dist));
-                if (damage >= 100) {
-                    Entity.damageEntity(ent, damage);
+        IndustrialWorkbench.prototype.onInit = function () {
+            var _a;
+            var _b;
+            _super.prototype.onInit.call(this);
+            (_a = (_b = this.data).patterns) !== null && _a !== void 0 ? _a : (_b.patterns = {});
+        };
+        IndustrialWorkbench.prototype.setupContainer = function () {
+            var _this = this;
+            StorageInterface.setGlobalValidatePolicy(this.container, function (name, id, amount, data) {
+                if (name.match(/slotInput[0-8]/)) {
+                    _this.data.recipeChecked = false;
+                }
+                return true;
+            });
+            this.container.setGlobalGetTransferPolicy(function (container, name, id, amount, data) {
+                if (name.match(/slotInput[0-8]/)) {
+                    _this.data.recipeChecked = false;
+                }
+                return amount;
+            });
+            this.container.setWorkbenchFieldPrefix("slotInput");
+        };
+        IndustrialWorkbench.prototype.onTick = function () {
+            StorageInterface.checkHoppers(this);
+            if (!this.data.recipeChecked) {
+                var result = Recipes.getRecipeResult(this.container);
+                if (result) {
+                    this.container.setSlot("slotResult", result.id, result.count, result.data, result.extra);
                 }
                 else {
-                    Entity.damageEntity(ent, damage, 11);
+                    this.container.setSlot("slotResult", 0, 0, 0);
                 }
+                this.data.recipeChecked = true;
             }
-            var height = radius / 2;
-            for (var dx = -radius; dx <= radius; dx++)
-                for (var dy = -height; dy <= height; dy++)
-                    for (var dz = -radius; dz <= radius; dz++) {
-                        if (Math.sqrt(dx * dx + dy * dy * 4 + dz * dz) <= radius) {
-                            var xx = this.x + dx, yy = this.y + dy, zz = this.z + dz;
-                            var block = this.blockSource.getBlock(xx, yy, zz);
-                            if (block.id > 0 && Block.getExplosionResistance(block.id) < 10000) {
-                                if (Math.random() < 0.01) {
-                                    var drop = this.blockSource.breakBlockForJsResult(xx, yy, zz, -1, new ItemStack());
-                                    for (var _a = 0, _b = drop.items; _a < _b.length; _a++) {
-                                        var item = _b[_a];
-                                        this.blockSource.spawnDroppedItem(xx + .5, yy + .5, zz + .5, item.id, item.count, item.data, item.extra || null);
-                                    }
-                                }
-                                else {
-                                    this.blockSource.setBlock(xx, yy, zz, 0, 0);
-                                }
-                            }
-                        }
-                    }
-            RadiationAPI.addRadiationSource(epicenter.x, epicenter.y, epicenter.z, this.dimension, radius * 2, 300);
-            this.sendPacket("explodeAnimation", { rad: radius });
+            this.container.sendChanges();
         };
-        Nuke.prototype.onTick = function () {
-            if (this.data.activated) {
-                if (this.data.timer <= 0) {
-                    this.explode(20);
-                    this.selfDestroy();
-                    return;
-                }
-                if (this.data.timer % 10 < 5) {
-                    this.sendPacket("renderLitModel", { lit: true });
-                }
-                else {
-                    this.sendPacket("renderLitModel", { lit: false });
-                }
-                this.data.timer--;
+        IndustrialWorkbench.prototype.destroy = function () {
+            this.container.clearSlot("slotResult");
+            for (var i = 0; i < 9; i++) {
+                this.container.clearSlot("slotPatternResult" + i);
             }
-        };
-        Nuke.prototype.onRedstoneUpdate = function (signal) {
-            if (signal > 0) {
-                this.data.activated = true;
-            }
-        };
-        Nuke.prototype.destroy = function () {
-            BlockRenderer.unmapAtCoords(this.x, this.y, this.z);
             return false;
         };
-        Nuke.prototype.explodeAnimation = function (data) {
-            var radius = data.rad;
-            var count = radius * radius * radius / 25;
-            for (var i = 0; i < count; i++) {
-                var dx = MathUtil.randomInt(-radius, radius);
-                var dy = MathUtil.randomInt(-radius / 2, radius / 2);
-                var dz = MathUtil.randomInt(-radius, radius);
-                if (Math.sqrt(dx * dx + dy * dy * 4 + dz * dz) <= radius) {
-                    Particles.addParticle(ParticleType.hugeexplosionSeed, this.x + dx, this.y + dy, this.z + dz, 0, 0, 0);
+        IndustrialWorkbench.prototype.provideRecipe = function (playerUid, allAtOnce) {
+            var recipe = Recipes.getRecipeByField(this.container, "");
+            while (recipe) {
+                var result = Recipes.provideRecipeForPlayer(this.container, "", playerUid);
+                if (result) {
+                    new PlayerActor(playerUid).addItemToInventory(result.id, result.count, result.data !== -1 ? result.data : 0, result.extra || null, true);
+                    this.refillItems();
+                }
+                var newRecipe = Recipes.getRecipeByField(this.container, "");
+                if (newRecipe !== recipe) {
+                    if (newRecipe) {
+                        var result_1 = newRecipe.getResult();
+                        this.container.setSlot("slotResult", result_1.id, result_1.count, result_1.data, result_1.extra);
+                    }
+                    else {
+                        this.container.setSlot("slotResult", 0, 0, 0);
+                    }
+                    break;
+                }
+                if (!allAtOnce) {
+                    break;
+                }
+            }
+            this.container.sendChanges();
+        };
+        IndustrialWorkbench.prototype.refillItems = function () {
+            for (var i = 0; i < 9; i++) {
+                var inputSlot = this.container.getSlot("slotInput" + i);
+                if (inputSlot.id != 0 && inputSlot.count < Item.getMaxStack(inputSlot.id, inputSlot.data)) {
+                    for (var j = 0; j < 18; j++) {
+                        var slot = this.container.getSlot("slot" + j);
+                        if (slot.id == inputSlot.id && (slot.data == inputSlot.data ||
+                            inputSlot.count == 0 && (inputSlot.data == -1 || inputSlot.data > 0 && Item.getMaxDamage(slot.id) > 0)) // allow damaged items to be replaced
+                        ) {
+                            inputSlot.setSlot(slot.id, inputSlot.count + 1, slot.data, slot.extra);
+                            slot.count--;
+                            slot.validate();
+                            slot.markDirty();
+                            break;
+                        }
+                    }
+                }
+                inputSlot.validate();
+                inputSlot.markDirty();
+            }
+        };
+        IndustrialWorkbench.prototype.clearGridForPlayer = function (playerUid) {
+            this.container.clearSlot("slotResult");
+            var player;
+            for (var i = 0; i < 9; i++) {
+                var inputSlot = this.container.getSlot("slotInput" + i);
+                if (inputSlot.id == 0)
+                    continue;
+                this.addItemToBuffer(inputSlot);
+                if (inputSlot.count > 0) {
+                    player !== null && player !== void 0 ? player : (player = new PlayerActor(playerUid));
+                    player.addItemToInventory(inputSlot.id, inputSlot.count, inputSlot.data, inputSlot.extra || null, true);
+                }
+                inputSlot.clear();
+            }
+        };
+        IndustrialWorkbench.prototype.clearPattern = function (index) {
+            this.container.getSlot("slotPatternResult" + index).clear();
+            delete this.data.patterns["_" + index];
+        };
+        IndustrialWorkbench.prototype.savePattern = function (result, index) {
+            var entryArray = this.getRecipeEntries();
+            if (!entryArray)
+                return;
+            this.container.setSlot("slotPatternResult" + index, result.id, result.count, result.data, result.extra);
+            var pattern = {};
+            var _loop_1 = function (j) {
+                var inputSlot = this_1.container.getSlot("slotInput" + j);
+                var entry = entryArray.find(function (e) { return e.id == inputSlot.id && (e.data == inputSlot.data || e.data == -1); });
+                if (entry) {
+                    pattern["_" + j] = { id: entry.id, data: entry.data };
+                }
+            };
+            var this_1 = this;
+            for (var j = 0; j < 9; j++) {
+                _loop_1(j);
+            }
+            this.data.patterns["_" + index] = pattern;
+            this.container.sendChanges();
+        };
+        IndustrialWorkbench.prototype.addItemToBuffer = function (item) {
+            // merge stacks first, than fill empty slots
+            for (var j = 0; j < 18; j++) {
+                var bufferSlot = this.container.getSlot("slot" + j);
+                if (bufferSlot.id == item.id && bufferSlot.data == item.data) {
+                    StorageInterface.addItemToSlot(item, bufferSlot);
+                    bufferSlot.markDirty();
+                    if (item.count == 0)
+                        break;
+                }
+            }
+            if (item.count == 0)
+                return;
+            for (var j = 0; j < 18; j++) {
+                var bufferSlot = this.container.getSlot("slot" + j);
+                if (bufferSlot.id == 0) {
+                    StorageInterface.addItemToSlot(item, bufferSlot);
+                    bufferSlot.markDirty();
+                    if (item.count == 0)
+                        break;
                 }
             }
         };
-        Nuke.prototype.renderLitModel = function (data) {
-            if (data.lit) {
-                TileRenderer.mapAtCoords(this.x, this.y, this.z, BlockID.nuke, 0);
+        IndustrialWorkbench.prototype.getRecipeEntries = function () {
+            var recipe = Recipes.getRecipeByField(this.container, "");
+            if (!recipe)
+                return null;
+            var javaEntries = recipe.getEntryCollection().toArray();
+            var entryArray = [];
+            for (var i = 0; i < javaEntries.length; i++) {
+                entryArray.push(javaEntries[i]);
             }
-            else {
-                BlockRenderer.unmapAtCoords(this.x, this.y, this.z);
+            return entryArray;
+        };
+        IndustrialWorkbench.prototype.onCraft = function (packetData, client) {
+            this.provideRecipe(client.getPlayerUid(), packetData.allAtOnce);
+        };
+        IndustrialWorkbench.prototype.onClearGrid = function (packetData, client) {
+            this.clearGridForPlayer(client.getPlayerUid());
+            this.container.sendChanges();
+        };
+        IndustrialWorkbench.prototype.onAddPattern = function (packetData, client) {
+            var resultSlot = this.container.getSlot("slotResult");
+            if (resultSlot.id == 0)
+                return;
+            for (var i = 0; i < 9; i++) {
+                var patternResultSlot = this.container.getSlot("slotPatternResult" + i);
+                if (patternResultSlot.id == 0) {
+                    this.savePattern(resultSlot, i);
+                    break;
+                }
+            }
+        };
+        IndustrialWorkbench.prototype.onRemovePattern = function (packetData, client) {
+            var resultSlot = this.container.getSlot("slotResult");
+            var lastSeenIndex = -1;
+            // Remove the pattern matching the result slot, or the last one if none match
+            for (var i = 0; i < 9; i++) {
+                var patternResultSlot = this.container.getSlot("slotPatternResult" + i);
+                if (patternResultSlot.id != 0) {
+                    lastSeenIndex = i;
+                }
+                if (resultSlot.id != 0 && patternResultSlot.id == resultSlot.id && patternResultSlot.count == resultSlot.count && patternResultSlot.data == resultSlot.data) {
+                    this.clearPattern(i);
+                    return;
+                }
+            }
+            if (lastSeenIndex != -1) {
+                this.clearPattern(lastSeenIndex);
+            }
+        };
+        IndustrialWorkbench.prototype.onUsePattern = function (_a, client) {
+            var index = _a.index;
+            var pattern = this.data.patterns["_" + index];
+            if (pattern) {
+                this.clearGridForPlayer(client.getPlayerUid());
+                for (var j in pattern) {
+                    this.container.setSlot("slotInput" + j[1], pattern[j].id, 0, pattern[j].data);
+                }
+                this.refillItems();
+                this.data.recipeChecked = false;
+                this.container.sendChanges();
             }
         };
         __decorate([
-            Machine.NetworkEvent(Side.Client)
-        ], Nuke.prototype, "explodeAnimation", null);
+            Machine.ContainerEvent(Side.Server, "craft")
+        ], IndustrialWorkbench.prototype, "onCraft", null);
         __decorate([
-            Machine.NetworkEvent(Side.Client)
-        ], Nuke.prototype, "renderLitModel", null);
-        return Nuke;
-    }(TileEntityBase));
-    MachineRegistry.registerPrototype(BlockID.nuke, new Nuke());
+            Machine.ContainerEvent(Side.Server, "clearGrid")
+        ], IndustrialWorkbench.prototype, "onClearGrid", null);
+        __decorate([
+            Machine.ContainerEvent(Side.Server, "addPattern")
+        ], IndustrialWorkbench.prototype, "onAddPattern", null);
+        __decorate([
+            Machine.ContainerEvent(Side.Server, "removePattern")
+        ], IndustrialWorkbench.prototype, "onRemovePattern", null);
+        __decorate([
+            Machine.ContainerEvent(Side.Server, "usePattern")
+        ], IndustrialWorkbench.prototype, "onUsePattern", null);
+        return IndustrialWorkbench;
+    }(Machine.MachineBase));
+    Machine.IndustrialWorkbench = IndustrialWorkbench;
+    MachineRegistry.registerPrototype(BlockID.industrialCrafter, new IndustrialWorkbench());
+    StorageInterface.createInterface(BlockID.industrialCrafter, {
+        slots: {
+            "slot^0-17": { input: true }
+        }
+    });
+})(Machine || (Machine = {}));
+BlockRegistry.createBlock("autoCrafter", [
+    { name: "Automatic Crafter", texture: [["autocrafter_bottom", 0], ["autocrafter_top", 0], ["autocrafter_back", 0], ["autocrafter_front", 0], ["autocrafter_left", 0], ["autocrafter_right", 0]], inCreative: true },
+], "machine");
+BlockRegistry.setBlockMaterial(BlockID.autoCrafter, "stone", 1);
+ItemName.addTierTooltip(BlockID.autoCrafter, 2);
+ItemName.addConsumptionTooltip(BlockID.autoCrafter, "EU", 16);
+TileRenderer.setStandardModelWithRotation(BlockID.autoCrafter, 2, [["autocrafter_bottom", 0], ["autocrafter_top", 0], ["autocrafter_back", 0], ["autocrafter_front", 0], ["autocrafter_left", 0], ["autocrafter_right", 0]]);
+TileRenderer.registerModelWithRotation(BlockID.autoCrafter, 2, [["autocrafter_bottom", 0], ["autocrafter_top_on", 0], ["autocrafter_back", 0], ["autocrafter_front", 0], ["autocrafter_left", 0], ["autocrafter_right", 0]]);
+TileRenderer.setRotationFunction(BlockID.autoCrafter);
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: BlockID.autoCrafter, count: 1, data: 0 }, [
+        " w ",
+        "x#x",
+        " e "
+    ], ['#', BlockID.machineBlockAdvanced, 0, 'w', BlockID.industrialCrafter, 0, 'x', ItemID.circuitAdvanced, 0, 'e', ItemID.electricWrench, -1]);
+});
+var Machine;
+(function (Machine) {
+    var guiAutoCrafter = MachineRegistry.createInventoryWindow("Automatic Crafter", {
+        drawing: [
+            { type: "bitmap", x: 691, y: 139, bitmap: "arrow_bar_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 379, y: 135, bitmap: "energy_small_background", scale: GUI_SCALE }
+        ],
+        elements: {
+            "progressScale": { type: "scale", x: 691, y: 139, direction: 0, bitmap: "arrow_bar_scale", scale: GUI_SCALE, clicker: {
+                    onClick: function () {
+                        RV === null || RV === void 0 ? void 0 : RV.RecipeTypeRegistry.openRecipePage("workbench");
+                    }
+                } },
+            "energyScale": { type: "scale", x: 379, y: 135, direction: 1, value: 0.5, bitmap: "energy_small_scale", scale: GUI_SCALE },
+            "slotGrid0": { type: "slot", x: 490, y: 75 },
+            "slotGrid1": { type: "slot", x: 550, y: 75 },
+            "slotGrid2": { type: "slot", x: 610, y: 75 },
+            "slotGrid3": { type: "slot", x: 490, y: 135 },
+            "slotGrid4": { type: "slot", x: 550, y: 135 },
+            "slotGrid5": { type: "slot", x: 610, y: 135 },
+            "slotGrid6": { type: "slot", x: 490, y: 195 },
+            "slotGrid7": { type: "slot", x: 550, y: 195 },
+            "slotGrid8": { type: "slot", x: 610, y: 195 },
+            "slot0": { type: "slot", x: 370, y: 300 },
+            "slot1": { type: "slot", x: 430, y: 300 },
+            "slot2": { type: "slot", x: 490, y: 300 },
+            "slot3": { type: "slot", x: 550, y: 300 },
+            "slot4": { type: "slot", x: 610, y: 300 },
+            "slot5": { type: "slot", x: 670, y: 300 },
+            "slot6": { type: "slot", x: 730, y: 300 },
+            "slot7": { type: "slot", x: 790, y: 300 },
+            "slot8": { type: "slot", x: 850, y: 300 },
+            "slotEnergy": { type: "slot", x: 370, y: 195 },
+            "slotResult": { type: "slot", x: 780, y: 131, size: 68 },
+            "slotUpgrade1": { type: "slot", x: 880, y: 75 },
+            "slotUpgrade2": { type: "slot", x: 880, y: 135 },
+            "slotUpgrade3": { type: "slot", x: 880, y: 195 },
+            "slotPreviewResult": { type: "slot", x: 700, y: 75, bitmap: "transparent_slot", visual: true }
+        }
+    });
+    var AutoCrafter = /** @class */ (function (_super) {
+        __extends(AutoCrafter, _super);
+        function AutoCrafter() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.defaultValues = {
+                energy: 0,
+                progress: 0,
+                recipeChecked: false,
+                inputChecked: false
+            };
+            _this.defaultEnergyDemand = 16;
+            _this.defaultTier = 2;
+            _this.defaultEnergyStorage = 10000;
+            _this.defaultProcessTime = 40;
+            _this.defaultDrop = BlockID.machineBlockAdvanced;
+            _this.upgrades = ["overclocker", "transformer", "energyStorage", "itemEjector", "itemPulling"];
+            return _this;
+        }
+        AutoCrafter.prototype.getScreenByName = function () {
+            return guiAutoCrafter;
+        };
+        AutoCrafter.prototype.setupContainer = function () {
+            var _this = this;
+            this.container.setGlobalAddTransferPolicy(function (container, name, id, amount, data) {
+                if (name == "slotEnergy")
+                    return ChargeItemRegistry.isValidStorage(id, "Eu", _this.getTier()) ? amount : 0;
+                if (name.startsWith("slotUpgrade"))
+                    return UpgradeAPI.isValidUpgrade(id, _this) ? amount : 0;
+                if (name == "slotResult")
+                    return 0;
+                if (name.match(/slotGrid[0-8]/)) {
+                    var slot = _this.container.getSlot(name);
+                    if (slot.id == 0) {
+                        _this.data.recipeChecked = false;
+                        return 1;
+                    }
+                    return 0;
+                }
+                return amount;
+            });
+            this.container.setGlobalGetTransferPolicy(function (container, name, id, amount, data) {
+                if (name.match(/slotGrid[0-8]/)) {
+                    _this.data.recipeChecked = false;
+                }
+                else if (name.match(/slot[0-8]/)) {
+                    _this.data.inputChecked = false;
+                }
+                return amount;
+            });
+            this.container.setWorkbenchFieldPrefix("slotGrid");
+        };
+        // Pattern slots have a max stack of 1
+        // Before starting the machine checks that buffer slots have enough items for the recipe in the grid
+        // Each time crafting is complete, items from the buffer are transferred to the grid, just like in an industrial workbench.
+        // Buffer slots accept only items presented in the grid, up to the number of slots in the grid that can hold them
+        // This way we ensure that the buffer will not fill up with useless items or only one type of item
+        AutoCrafter.prototype.onTick = function () {
+            this.useUpgrades(false);
+            StorageInterface.checkHoppers(this);
+            if (!this.data.recipeChecked) {
+                var result = Recipes.getRecipeResult(this.container);
+                if (result) {
+                    this.container.setSlot("slotPreviewResult", result.id, result.count, result.data, result.extra);
+                }
+                else {
+                    this.resetRecipe();
+                    if (this.data.progress > 0) {
+                        this.data.progress = 0;
+                        this.playOnce(this.getInterruptSound());
+                    }
+                }
+                this.data.recipeChecked = true;
+            }
+            var newActive = false;
+            if (this.data.energy >= this.energyDemand) {
+                if (!this.data.inputChecked) {
+                    var previewSlot = this.container.getSlot("slotPreviewResult");
+                    var resultSlot = this.container.getSlot("slotResult");
+                    if (previewSlot.id != 0 && this.validateResult(previewSlot, resultSlot) && this.hasEnoughItems()) {
+                        this.data.inputChecked = true; // cache input buffer check for optimization
+                    }
+                    else if (this.data.progress > 0) {
+                        this.data.progress = 0;
+                        this.playOnce(this.getInterruptSound());
+                    }
+                }
+                if (this.data.inputChecked) {
+                    newActive = true;
+                    this.data.energy -= this.energyDemand;
+                    this.updateProgress();
+                    if (this.isCompletedProgress()) {
+                        var recipe = Recipes.getRecipeByField(this.container);
+                        if (recipe) {
+                            this.provideRecipe(recipe);
+                        }
+                        this.data.progress = 0;
+                        this.data.inputChecked = false;
+                    }
+                }
+            }
+            this.setActive(newActive);
+            this.dischargeSlot("slotEnergy");
+            this.container.setScale("progressScale", this.data.progress);
+            this.container.setScale("energyScale", this.getRelativeEnergy());
+            this.container.sendChanges();
+        };
+        AutoCrafter.prototype.validateResult = function (item, resultSlot) {
+            return item && (resultSlot.id == 0 || resultSlot.id == item.id &&
+                (item.data == -1 || resultSlot.data == item.data) &&
+                resultSlot.count + item.count <= Item.getMaxStack(item.id, item.data));
+        };
+        AutoCrafter.prototype.provideRecipe = function (recipe) {
+            var result = recipe.getResult();
+            var resultSlot = this.container.getSlot("slotResult");
+            if (!this.validateResult(result, resultSlot) || !this.hasEnoughItems())
+                return false;
+            result = Recipes.provideRecipeForPlayer(this.container, "", -1);
+            if (result) {
+                resultSlot.setSlot(result.id, resultSlot.count + result.count, Math.max(result.data, 0), result.extra);
+                this.refillItems();
+                return true;
+            }
+            this.data.recipeChecked = false;
+            return false;
+        };
+        AutoCrafter.prototype.destroy = function () {
+            this.resetRecipe();
+            return false;
+        };
+        AutoCrafter.prototype.getInterruptSound = function () {
+            return "InterruptOne.ogg";
+        };
+        AutoCrafter.prototype.hasEnoughItems = function () {
+            var _this = this;
+            var requiredItems = [];
+            var _loop_2 = function (i) {
+                var slot = this_2.container.getSlot("slotGrid" + i);
+                if (slot.id == 0)
+                    return "continue";
+                var item = requiredItems.find(function (it) { return _this.canStackBeReplaced(it, slot); });
+                if (item) {
+                    item.count++;
+                }
+                else {
+                    requiredItems.push({ id: slot.id, data: slot.data, count: 1, extra: slot.extra });
+                }
+            };
+            var this_2 = this;
+            for (var i = 0; i < 9; i++) {
+                _loop_2(i);
+            }
+            for (var i = 0; i < 9; i++) {
+                var slot = this.container.getSlot("slot" + i);
+                if (slot.id == 0)
+                    continue;
+                for (var _i = 0, requiredItems_1 = requiredItems; _i < requiredItems_1.length; _i++) {
+                    var item = requiredItems_1[_i];
+                    if (this.canStackBeReplaced(item, slot)) {
+                        item.count -= slot.count;
+                        break;
+                    }
+                }
+            }
+            return requiredItems.every(function (it) { return it.count <= 0; });
+        };
+        AutoCrafter.prototype.refillItems = function () {
+            for (var i = 0; i < 9; i++) {
+                var inputSlot = this.container.getSlot("slotGrid" + i);
+                if (inputSlot.id != 0 && inputSlot.count < Item.getMaxStack(inputSlot.id, inputSlot.data)) {
+                    for (var j = 0; j < 9; j++) {
+                        var slot = this.container.getSlot("slot" + j);
+                        if (inputSlot.count == 0 && this.canStackBeReplaced(inputSlot, slot)) {
+                            inputSlot.setSlot(slot.id, inputSlot.count + 1, slot.data, slot.extra);
+                            slot.count--;
+                            slot.validate();
+                            slot.markDirty();
+                            break;
+                        }
+                    }
+                }
+                inputSlot.validate();
+                inputSlot.markDirty();
+            }
+        };
+        AutoCrafter.prototype.canStackBeReplaced = function (item, slot) {
+            return slot.id == item.id && (slot.data == item.data || Item.getMaxDamage(item.id) > 0);
+        };
+        AutoCrafter.prototype.resetRecipe = function () {
+            this.container.setSlot("slotPreviewResult", 0, 0, 0);
+            for (var i = 0; i < 9; i++) {
+                var slot = this.container.getSlot("slot" + i);
+                slot.validate();
+            }
+        };
+        return AutoCrafter;
+    }(Machine.ProcessingMachine));
+    Machine.AutoCrafter = AutoCrafter;
+    MachineRegistry.registerPrototype(BlockID.autoCrafter, new AutoCrafter());
+    var AutoCrafterStorageInterface = /** @class */ (function (_super) {
+        __extends(AutoCrafterStorageInterface, _super);
+        function AutoCrafterStorageInterface() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        AutoCrafterStorageInterface.prototype.isValidInput = function (item, side, tileEntity) {
+            return this.getRecipeEntriesCount(item) > 0;
+        };
+        AutoCrafterStorageInterface.prototype.getRecipeEntriesCount = function (item) {
+            var count = 0;
+            for (var i = 0; i < 9; i++) {
+                var slot = this.container.getSlot("slotGrid" + i);
+                if (this.tileEntity.canStackBeReplaced(item, slot)) {
+                    count++;
+                }
+            }
+            return count;
+        };
+        AutoCrafterStorageInterface.prototype.addItem = function (item, side, maxCount) {
+            if (side === void 0) { side = -1; }
+            if (maxCount === void 0) { maxCount = 64; }
+            var maxItemSlots = this.getRecipeEntriesCount(item);
+            if (maxItemSlots == 0)
+                return 0;
+            var count = 0;
+            var slots = this.getInputSlots(side);
+            for (var _i = 0, slots_1 = slots; _i < slots_1.length; _i++) { // try add to existing stacks first
+                var slotName = slots_1[_i];
+                var slot = this.container.getSlot(slotName);
+                if (this.tileEntity.canStackBeReplaced(item, slot)) {
+                    count += this.addItemToSlot(slotName, item, maxCount - count);
+                    maxItemSlots--;
+                    if (item.count == 0 || count >= maxCount || maxItemSlots == 0) {
+                        break;
+                    }
+                }
+            }
+            if (item.count > 0 && maxItemSlots > 0) {
+                count += _super.prototype.addItem.call(this, item, side, maxCount - count);
+            }
+            return count;
+        };
+        return AutoCrafterStorageInterface;
+    }(StorageInterface.TileEntityInterface));
+    Machine.AutoCrafterStorageInterface = AutoCrafterStorageInterface;
+    StorageInterface.createInterface(BlockID.autoCrafter, {
+        slots: {
+            "slot^0-8": { input: true },
+            "slotResult": { output: true }
+        },
+    }, AutoCrafterStorageInterface);
 })(Machine || (Machine = {}));
 BlockRegistry.createBlock("teleporter", [
-    { name: "Teleporter", texture: [["machine_advanced_bottom", 0], ["teleporter_top", 0], ["teleporter_side", 0], ["teleporter_side", 0], ["teleporter_side", 0], ["teleporter_side", 0]], inCreative: true },
+    { name: "Teleporter", texture: [["ic_machine_advanced_bottom", 0], ["teleporter_top", 0], ["teleporter_side", 0], ["teleporter_side", 0], ["teleporter_side", 0], ["teleporter_side", 0]], inCreative: true },
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.teleporter, "stone", 1);
 ItemRegistry.setRarity(BlockID.teleporter, EnumRarity.RARE);
-TileRenderer.setStandardModel(BlockID.teleporter, 0, [["machine_advanced_bottom", 0], ["teleporter_top", 0], ["teleporter_side", 0], ["teleporter_side", 0], ["teleporter_side", 0], ["teleporter_side", 0]]);
-TileRenderer.registerRenderModel(BlockID.teleporter, 0, [["machine_advanced_bottom", 0], ["teleporter_top", 1], ["teleporter_side", 1], ["teleporter_side", 1], ["teleporter_side", 1], ["teleporter_side", 1]]);
+TileRenderer.setStandardModel(BlockID.teleporter, 0, [["ic_machine_advanced_bottom", 0], ["teleporter_top", 0], ["teleporter_side", 0], ["teleporter_side", 0], ["teleporter_side", 0], ["teleporter_side", 0]]);
+TileRenderer.registerRenderModel(BlockID.teleporter, 0, [["ic_machine_advanced_bottom", 0], ["teleporter_top_on", 0], ["teleporter_side_on", 0], ["teleporter_side_on", 0], ["teleporter_side_on", 0], ["teleporter_side_on", 0]]);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.teleporter, count: 1, data: 0 }, [
         "xax",
@@ -11348,8 +13590,8 @@ var Machine;
                                 if (energyNeed <= 0)
                                     break;
                             }
-                            SoundManager.playSoundAt(this.x + .5, this.y + 1, this.z + .5, "TeleUse.ogg");
-                            SoundManager.playSoundAt(receive.x + .5, receive.y + 1, receive.z + .5, "TeleUse.ogg");
+                            SoundLib.playSoundAt(this.x + .5, this.y + 1, this.z + .5, this.dimension, "TeleUse.ogg");
+                            SoundLib.playSoundAt(receive.x + .5, receive.y + 1, receive.z + .5, this.dimension, "TeleUse.ogg");
                             Entity.setPosition(ent, receive.x + .5, receive.y + 3, receive.z + .5);
                         }
                     }
@@ -11361,22 +13603,136 @@ var Machine;
             this.data.isActive = isActive;
             this.setActive(isActive);
         };
+        Teleporter.prototype.getOperationSound = function () {
+            return "TeleChargedLoop.ogg";
+        };
+        __decorate([
+            Machine.ClientSide
+        ], Teleporter.prototype, "getOperationSound", null);
         return Teleporter;
     }(Machine.MachineBase));
     Machine.Teleporter = Teleporter;
     MachineRegistry.registerPrototype(BlockID.teleporter, new Teleporter());
 })(Machine || (Machine = {}));
+BlockRegistry.createBlock("nuke", [
+    { name: "Nuke", texture: [["nuke_bottom", 0], ["nuke_top", 0], ["nuke_sides", 0], ["nuke_sides", 0], ["nuke_sides", 0], ["nuke_sides", 0]], inCreative: true },
+    { name: "Nuke", texture: [["nuke_bottom_active", 0], ["nuke_top_active", 0], ["nuke_sides_active", 0], ["nuke_sides_active", 0], ["nuke_sides_active", 0], ["nuke_sides_active", 0]], inCreative: false },
+], "machine");
+BlockRegistry.setBlockMaterial(BlockID.nuke, "stone", 1);
+ItemRegistry.setRarity(BlockID.nuke, EnumRarity.UNCOMMON);
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: BlockID.nuke, count: 1, data: 0 }, [
+        "ncn",
+        "x#x",
+        "ncn"
+    ], ['#', 46, -1, 'x', ItemID.uranium235, 0, 'c', ItemID.circuitAdvanced, 0, 'n', ItemID.neutronReflectorThick, 0]);
+    Recipes.addShaped({ id: BlockID.nuke, count: 1, data: 0 }, [
+        "ncn",
+        "x#x",
+        "ncn"
+    ], ['#', 46, -1, 'x', ItemID.plutonium, 0, 'c', ItemID.circuitAdvanced, 0, 'n', ItemID.neutronReflectorThick, 0]);
+});
+var Machine;
+(function (Machine) {
+    var Nuke = /** @class */ (function (_super) {
+        __extends(Nuke, _super);
+        function Nuke() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.defaultValues = {
+                activated: false,
+                timer: 300
+            };
+            return _this;
+        }
+        Nuke.prototype.getScreenName = function () {
+            return null;
+        };
+        Nuke.prototype.explode = function (radius) {
+            SoundLib.playSoundAtBlock(this, this.dimension, "NukeExplosion.ogg", 1, 1, 100000);
+            var damageRad = radius * 1.5;
+            var epicenter = new Vector3(this.x + .5, this.y + .5, this.z + .5);
+            var entities = EntityHelper.getEntitiesInRadius(this.region, epicenter, damageRad);
+            for (var _i = 0, entities_7 = entities; _i < entities_7.length; _i++) {
+                var ent = entities_7[_i];
+                var dist = Entity.getDistanceBetweenCoords(epicenter, Entity.getPosition(ent));
+                var damage = Math.ceil(damageRad * damageRad * 25 / (dist * dist));
+                if (damage >= 100) {
+                    Entity.damageEntity(ent, damage);
+                }
+                else {
+                    Entity.damageEntity(ent, damage, 11);
+                }
+            }
+            var height = radius / 2;
+            for (var dx = -radius; dx <= radius; dx++)
+                for (var dy = -height; dy <= height; dy++)
+                    for (var dz = -radius; dz <= radius; dz++) {
+                        if (Math.sqrt(dx * dx + dy * dy * 4 + dz * dz) <= radius) {
+                            var xx = this.x + dx, yy = this.y + dy, zz = this.z + dz;
+                            var block = this.blockSource.getBlock(xx, yy, zz);
+                            if (block.id > 0 && Block.getExplosionResistance(block.id) < 10000) {
+                                if (Math.random() < 0.01) {
+                                    var drop = this.blockSource.breakBlockForJsResult(xx, yy, zz, -1, new ItemStack());
+                                    for (var _a = 0, _b = drop.items; _a < _b.length; _a++) {
+                                        var item = _b[_a];
+                                        this.blockSource.spawnDroppedItem(xx + .5, yy + .5, zz + .5, item.id, item.count, item.data, item.extra || null);
+                                    }
+                                }
+                                else {
+                                    this.blockSource.setBlock(xx, yy, zz, 0, 0);
+                                }
+                            }
+                        }
+                    }
+            RadiationAPI.addRadiationSource(epicenter.x, epicenter.y, epicenter.z, this.dimension, radius * 2, 300);
+            this.sendPacket("explodeAnimation", { rad: radius });
+        };
+        Nuke.prototype.onTick = function () {
+            if (this.data.activated) {
+                if (this.data.timer <= 0) {
+                    this.explode(20);
+                    this.selfDestroy();
+                    return;
+                }
+                this.data.timer--;
+            }
+        };
+        Nuke.prototype.onRedstoneUpdate = function (signal) {
+            if (signal > 0) {
+                this.data.activated = true;
+                this.region.setBlock(this, this.blockID, 1);
+            }
+        };
+        Nuke.prototype.explodeAnimation = function (data) {
+            var radius = data.rad;
+            var count = radius * radius * radius / 200;
+            for (var i = 0; i < count; i++) {
+                var dx = MathUtil.randomInt(-radius, radius);
+                var dy = MathUtil.randomInt(-radius / 2, radius / 2);
+                var dz = MathUtil.randomInt(-radius, radius);
+                if (Math.sqrt(dx * dx + dy * dy * 4 + dz * dz) <= radius) {
+                    Particles.addParticle(ParticleType.hugeexplosionSeed, this.x + dx, this.y + dy, this.z + dz, 0, 0, 0);
+                }
+            }
+        };
+        __decorate([
+            Machine.NetworkEvent(Side.Client)
+        ], Nuke.prototype, "explodeAnimation", null);
+        return Nuke;
+    }(TileEntityBase));
+    MachineRegistry.registerPrototype(BlockID.nuke, new Nuke());
+})(Machine || (Machine = {}));
 BlockRegistry.createBlock("teslaCoil", [
-    { name: "Tesla Coil", texture: [["tesla_coil", 0], ["tesla_coil", 0], ["tesla_coil", 1], ["tesla_coil", 1], ["tesla_coil", 1], ["tesla_coil", 1]], inCreative: true },
+    { name: "Tesla Coil", texture: [["tesla_coil_top", 0], ["tesla_coil_top", 0], ["tesla_coil_side", 0]], inCreative: true },
 ], "machine");
 BlockRegistry.setBlockMaterial(BlockID.teslaCoil, "stone", 1);
-ItemName.addTierTooltip("teslaCoil", 3);
+ItemName.addTierTooltip(BlockID.teslaCoil, 3);
 Callback.addCallback("PreLoaded", function () {
     Recipes.addShaped({ id: BlockID.teslaCoil, count: 1, data: 0 }, [
-        "ror",
+        "rrr",
         "r#r",
         "cxc"
-    ], ['#', BlockID.machineBlockBasic, 0, 'x', ItemID.circuitBasic, 0, 'c', ItemID.casingIron, 0, 'o', ItemID.coil, 0, 'r', 331, 0]);
+    ], ['#', BlockID.transformerMV, 0, 'x', ItemID.circuitBasic, 0, 'c', ItemID.casingIron, 0, 'o', ItemID.coil, 0, 'r', 331, 0]);
 });
 var Machine;
 (function (Machine) {
@@ -11402,8 +13758,8 @@ var Machine;
                 if (World.getThreadTime() % 32 == 0) {
                     var entities = this.region.listEntitiesInAABB(this.x - 4, this.y - 4, this.z - 4, this.x + 5, this.y + 5, this.z + 5);
                     var damage = Math.floor(this.data.energy / 400);
-                    for (var _i = 0, entities_7 = entities; _i < entities_7.length; _i++) {
-                        var ent = entities_7[_i];
+                    for (var _i = 0, entities_8 = entities; _i < entities_8.length; _i++) {
+                        var ent = entities_8[_i];
                         if (!EntityHelper.canTakeDamage(ent, DamageSource.electricity))
                             continue;
                         if (damage >= 24) {
@@ -11419,7 +13775,7 @@ var Machine;
         TeslaCoil.prototype.onRedstoneUpdate = function (signal) {
             this.data.isEnabled = signal > 0;
         };
-        TeslaCoil.prototype.getEnergyStorage = function () {
+        TeslaCoil.prototype.getEnergyCapacity = function () {
             return 10000;
         };
         return TeslaCoil;
@@ -11427,6 +13783,157 @@ var Machine;
     Machine.TeslaCoil = TeslaCoil;
     MachineRegistry.registerPrototype(BlockID.teslaCoil, new TeslaCoil());
 })(Machine || (Machine = {}));
+BlockRegistry.createBlock("luminator", [
+    { name: "Luminator", texture: [["ic_luminator", 0]], inCreative: false },
+    { name: "Luminator", texture: [["ic_luminator", 0]], inCreative: true },
+    { name: "Luminator", texture: [["ic_luminator", 0]], inCreative: false },
+    { name: "Luminator", texture: [["ic_luminator", 0]], inCreative: false },
+    { name: "Luminator", texture: [["ic_luminator", 0]], inCreative: false },
+    { name: "Luminator", texture: [["ic_luminator", 0]], inCreative: false }
+], { destroyTime: 2, explosionResistance: 0.5, renderLayer: 7 });
+Block.setBlockMaterial(BlockID.luminator, "stone", 1);
+Block.setBlockShape(BlockID.luminator, { x: 0, y: 15 / 16, z: 0 }, { x: 1, y: 1, z: 1 }, 0);
+Block.setBlockShape(BlockID.luminator, { x: 0, y: 0, z: 0 }, { x: 1, y: 1 / 16, z: 1 }, 1);
+Block.setBlockShape(BlockID.luminator, { x: 0, y: 0, z: 15 / 16 }, { x: 1, y: 1, z: 1 }, 2);
+Block.setBlockShape(BlockID.luminator, { x: 0, y: 0, z: 0 }, { x: 1, y: 1, z: 1 / 16 }, 3);
+Block.setBlockShape(BlockID.luminator, { x: 15 / 16, y: 0, z: 0 }, { x: 1, y: 1, z: 1 }, 4);
+Block.setBlockShape(BlockID.luminator, { x: 0, y: 0, z: 0 }, { x: 1 / 16, y: 1, z: 1 }, 5);
+BlockRegistry.createBlock("luminator_on", [
+    { name: "Luminator", texture: [["ic_luminator_on", 0]], inCreative: false },
+    { name: "Luminator", texture: [["ic_luminator_on", 0]], inCreative: false },
+    { name: "Luminator", texture: [["ic_luminator_on", 0]], inCreative: false },
+    { name: "Luminator", texture: [["ic_luminator_on", 0]], inCreative: false },
+    { name: "Luminator", texture: [["ic_luminator_on", 0]], inCreative: false },
+    { name: "Luminator", texture: [["ic_luminator_on", 0]], inCreative: false }
+], {
+    destroyTime: 2,
+    explosionResistance: 0.5,
+    renderLayer: 7,
+    lightLevel: 15
+});
+Block.setBlockMaterial(BlockID.luminator_on, "stone", 1);
+Block.setBlockShape(BlockID.luminator_on, { x: 0, y: 15 / 16, z: 0 }, { x: 1, y: 1, z: 1 }, 0);
+Block.setBlockShape(BlockID.luminator_on, { x: 0, y: 0, z: 0 }, { x: 1, y: 1 / 16, z: 1 }, 1);
+Block.setBlockShape(BlockID.luminator_on, { x: 0, y: 0, z: 15 / 16 }, { x: 1, y: 1, z: 1 }, 2);
+Block.setBlockShape(BlockID.luminator_on, { x: 0, y: 0, z: 0 }, { x: 1, y: 1, z: 1 / 16 }, 3);
+Block.setBlockShape(BlockID.luminator_on, { x: 15 / 16, y: 0, z: 0 }, { x: 1, y: 1, z: 1 }, 4);
+Block.setBlockShape(BlockID.luminator_on, { x: 0, y: 0, z: 0 }, { x: 1 / 16, y: 1, z: 1 }, 5);
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: BlockID.luminator, count: 8, data: 1 }, [
+        "cxc",
+        "aba",
+        "aaa",
+    ], ['a', 20, 0, 'x', ItemID.cableCopper1, 0, 'b', ItemID.cableTin0, 0, 'c', ItemID.casingIron, 0]);
+});
+var Machine;
+(function (Machine) {
+    var Lamp = /** @class */ (function (_super) {
+        __extends(Lamp, _super);
+        function Lamp() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.defaultValues = {
+                isActive: false,
+                energy: 0
+            };
+            return _this;
+        }
+        Lamp.prototype.getEnergyCapacity = function () {
+            return 100;
+        };
+        Lamp.prototype.onItemUse = function () {
+            if (this.blockID == BlockID.luminator_on) {
+                this.data.isActive = false;
+                this.setBlock(BlockID.luminator);
+            }
+            else {
+                this.data.isActive = true;
+            }
+            return true;
+        };
+        Lamp.prototype.setBlock = function (blockID) {
+            /* @ts-ignore */
+            this.blockID = blockID;
+            var blockData = this.region.getBlockData(this);
+            this.region.setBlock(this, blockID, blockData);
+        };
+        Lamp.prototype.onTick = function () {
+            if (this.data.isActive) {
+                if (this.data.energy >= 0.25) {
+                    this.data.energy -= 0.25;
+                    if (this.blockID == BlockID.luminator) {
+                        this.setBlock(BlockID.luminator_on);
+                    }
+                }
+                else if (this.blockID == BlockID.luminator_on) {
+                    this.setBlock(BlockID.luminator);
+                }
+            }
+        };
+        Lamp.prototype.getDefaultDrop = function () {
+            return new ItemStack(BlockID.luminator, 1, 1);
+        };
+        Lamp.prototype.getDemontaged = function () {
+            return new ItemStack(BlockID.luminator, 1, 1);
+        };
+        return Lamp;
+    }(Machine.ElectricMachine));
+    MachineRegistry.registerPrototype(BlockID.luminator, new Lamp());
+    MachineRegistry.registerPrototype(BlockID.luminator_on, new Lamp());
+})(Machine || (Machine = {}));
+Block.registerPlaceFunction("luminator", function (coords, item, block, player, blockSource) {
+    var place = coords.relative;
+    var tile = blockSource.getBlock(place.x, place.y, place.z);
+    if (World.canTileBeReplaced(tile.id, tile.data)) {
+        blockSource.setBlock(place.x, place.y, place.z, item.id, coords.side);
+        return place;
+    }
+});
+var ItemReinforcedDoor = /** @class */ (function (_super) {
+    __extends(ItemReinforcedDoor, _super);
+    function ItemReinforcedDoor(stringID, name, texture) {
+        if (texture === void 0) { texture = name; }
+        var _this = _super.call(this, stringID, name, texture) || this;
+        _this.setCategory(ItemCategory.BUILDING);
+        return _this;
+    }
+    ItemReinforcedDoor.prototype.onItemUse = function (coords, item, block, player) {
+        var region = WorldRegion.getForActor(player);
+        var tileBelow = region.getBlock(coords.relative.x, coords.relative.y - 1, coords.relative.z);
+        var tile1 = region.getBlock(coords.relative.x, coords.relative.y, coords.relative.z);
+        var tile2 = region.getBlock(coords.relative.x, coords.relative.y + 1, coords.relative.z);
+        if (Block.isSolid(tileBelow.id) &&
+            World.canTileBeReplaced(tile1.id, tile1.data) &&
+            World.canTileBeReplaced(tile2.id, tile2.data)) {
+            var doorBlockId = Block.getNumericId(this.stringID);
+            var rotation = BlockRegistry.getBlockRotation(player);
+            var placeData = rotation - 2;
+            var vec = World.getVectorByBlockSide(rotation);
+            var posLeft = new Vector3(coords.relative.x - vec.z, coords.relative.y, coords.relative.z + vec.x);
+            var posRight = new Vector3(coords.relative.x + vec.z, coords.relative.y, coords.relative.z - vec.x);
+            var leftBlockId = region.getBlockId(posLeft);
+            var leftSolidBlocks = (+Block.isSolid(leftBlockId)) + (+Block.isSolid(region.getBlockId(posLeft.x, posLeft.y + 1, posLeft.z)));
+            var rightSolidBlocks = (+Block.isSolid(region.getBlockId(posRight))) + (+Block.isSolid(region.getBlockId(posRight.x, posRight.y + 1, posRight.z)));
+            if (leftBlockId == BlockID.reinforcedDoor || rightSolidBlocks > leftSolidBlocks) {
+                placeData += 4;
+            }
+            region.setBlock(coords.relative.x, coords.relative.y, coords.relative.z, doorBlockId, placeData);
+            region.setBlock(coords.relative.x, coords.relative.y + 1, coords.relative.z, doorBlockId, placeData + 8);
+            if (Game.isItemSpendingAllowed(player)) {
+                Entity.setCarriedItem(player, item.id, item.count - 1, item.data, item.extra);
+            }
+            region.playSound(coords.relative.x + 0.5, coords.relative.y + 0.5, coords.relative.z + 0.5, "dig.stone", 1, MathUtil.randomFloat(0.8, 1));
+        }
+    };
+    return ItemReinforcedDoor;
+}(ItemCommon));
+ItemRegistry.registerItem(new ItemReinforcedDoor("reinforcedDoor", "reinforced_door"));
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: ItemID.reinforcedDoor, count: 1, data: 0 }, [
+        "aba",
+        "aba",
+        "aba"
+    ], ['a', ItemID.plateIron, 0, 'b', ItemID.plateLead, 0]);
+});
 ItemRegistry.createItem("latex", { name: "latex", icon: "latex" });
 ItemRegistry.createItem("rubber", { name: "rubber", icon: "rubber" });
 Recipes.addFurnace(ItemID.latex, ItemID.rubber, 0);
@@ -11474,7 +13981,7 @@ Item.addCreativeGroup("oreCrushedPurified", Translation.translate("Purified Crus
     ItemID.crushedPurifiedSilver,
     ItemID.crushedPurifiedUranium
 ]);
-//Dust
+// Dust
 ItemRegistry.createItem("dustCopper", { name: "copper_dust", icon: "dust_copper" });
 ItemRegistry.createItem("dustTin", { name: "tin_dust", icon: "dust_tin" });
 ItemRegistry.createItem("dustBronze", { name: "bronze_dust", icon: "dust_bronze" });
@@ -11486,7 +13993,10 @@ ItemRegistry.createItem("dustSilver", { name: "silver_dust", icon: "dust_silver"
 ItemRegistry.createItem("dustStone", { name: "stone_dust", icon: "dust_stone" });
 ItemRegistry.createItem("dustCoal", { name: "coal_dust", icon: "dust_coal" });
 ItemRegistry.createItem("dustSulfur", { name: "sulfur_dust", icon: "dust_sulfur" });
+ItemRegistry.createItem("dustClay", { name: "clay_dust", icon: "dust_clay" });
+ItemRegistry.createItem("dustSiliconDioxide", { name: "silicon_dioxide_dust", icon: "dust_silicon_dioxide" });
 ItemRegistry.createItem("dustLapis", { name: "lapis_dust", icon: "dust_lapis" });
+ItemRegistry.createItem("dustObsidian", { name: "obsidian_dust", icon: "dust_obsidian" });
 ItemRegistry.createItem("dustDiamond", { name: "diamond_dust", icon: "dust_diamond" });
 ItemRegistry.createItem("dustEnergium", { name: "energium_dust", icon: "dust_energium" });
 Item.addCreativeGroup("dust", Translation.translate("Dusts"), [
@@ -11501,97 +14011,80 @@ Item.addCreativeGroup("dust", Translation.translate("Dusts"), [
     ItemID.dustStone,
     ItemID.dustCoal,
     ItemID.dustSulfur,
+    ItemID.dustClay,
+    ItemID.dustSiliconDioxide,
     ItemID.dustLapis,
+    ItemID.dustObsidian,
     ItemID.dustDiamond,
     ItemID.dustEnergium
 ]);
 // Small Dust
-ItemRegistry.createItem("dustSmallCopper", { name: "small_copper_dust", icon: "dust_copper_small" });
-ItemRegistry.createItem("dustSmallTin", { name: "small_tin_dust", icon: "dust_tin_small" });
-ItemRegistry.createItem("dustSmallIron", { name: "small_iron_dust", icon: "dust_iron_small" });
-ItemRegistry.createItem("dustSmallLead", { name: "small_lead_dust", icon: "dust_lead_small" });
-ItemRegistry.createItem("dustSmallGold", { name: "small_gold_dust", icon: "dust_gold_small" });
-ItemRegistry.createItem("dustSmallSilver", { name: "small_silver_dust", icon: "dust_silver_small" });
-ItemRegistry.createItem("dustSmallSulfur", { name: "small_sulfur_dust", icon: "dust_sulfur_small" });
+ItemRegistry.createItem("dustSmallCopper", { name: "small_copper_dust", icon: "dust_small_copper" });
+ItemRegistry.createItem("dustSmallTin", { name: "small_tin_dust", icon: "dust_small_tin" });
+ItemRegistry.createItem("dustSmallBronze", { name: "small_bronze_dust", icon: "dust_small_bronze" });
+ItemRegistry.createItem("dustSmallIron", { name: "small_iron_dust", icon: "dust_small_iron" });
+ItemRegistry.createItem("dustSmallSteel", { name: "small_steel_dust", icon: "dust_small_steel" });
+ItemRegistry.createItem("dustSmallLead", { name: "small_lead_dust", icon: "dust_small_lead" });
+ItemRegistry.createItem("dustSmallGold", { name: "small_gold_dust", icon: "dust_small_gold" });
+ItemRegistry.createItem("dustSmallSilver", { name: "small_silver_dust", icon: "dust_small_silver" });
+ItemRegistry.createItem("dustSmallSulfur", { name: "small_sulfur_dust", icon: "dust_small_sulfur" });
 Item.addCreativeGroup("dustSmall", Translation.translate("Small Dusts"), [
     ItemID.dustSmallCopper,
     ItemID.dustSmallTin,
+    ItemID.dustSmallBronze,
     ItemID.dustSmallIron,
+    ItemID.dustSmallSteel,
     ItemID.dustSmallLead,
     ItemID.dustSmallGold,
     ItemID.dustSmallSilver,
     ItemID.dustSmallSulfur
 ]);
-// Recipe
-Recipes.addShaped({ id: ItemID.dustEnergium, count: 9, data: 0 }, [
-    "xax",
-    "axa",
-    "xax",
-], ['x', 331, 0, 'a', ItemID.dustDiamond, 0]);
-Recipes.addShapeless({ id: ItemID.dustBronze, count: 4, data: 0 }, [
-    { id: ItemID.crushedCopper, data: 0 },
-    { id: ItemID.crushedCopper, data: 0 },
-    { id: ItemID.crushedCopper, data: 0 },
-    { id: ItemID.crushedTin, data: 0 }
-]);
-Recipes.addShapeless({ id: ItemID.dustBronze, count: 4, data: 0 }, [
-    { id: ItemID.crushedPurifiedCopper, data: 0 },
-    { id: ItemID.crushedPurifiedCopper, data: 0 },
-    { id: ItemID.crushedPurifiedCopper, data: 0 },
-    { id: ItemID.crushedPurifiedTin, data: 0 }
-]);
-Recipes.addShapeless({ id: ItemID.dustBronze, count: 4, data: 0 }, [
-    { id: ItemID.dustCopper, data: 0 },
-    { id: ItemID.dustCopper, data: 0 },
-    { id: ItemID.dustCopper, data: 0 },
-    { id: ItemID.dustTin, data: 0 }
-]);
-Recipes.addShaped({ id: ItemID.dustCopper, count: 1, data: 0 }, [
-    "xxx",
-    "xxx",
-    "xxx",
-], ['x', ItemID.dustSmallCopper, 0]);
-Recipes.addShaped({ id: ItemID.dustTin, count: 1, data: 0 }, [
-    "xxx",
-    "xxx",
-    "xxx",
-], ['x', ItemID.dustSmallTin, 0]);
-Recipes.addShaped({ id: ItemID.dustIron, count: 1, data: 0 }, [
-    "xxx",
-    "xxx",
-    "xxx",
-], ['x', ItemID.dustSmallIron, 0]);
-Recipes.addShaped({ id: ItemID.dustLead, count: 1, data: 0 }, [
-    "xxx",
-    "xxx",
-    "xxx",
-], ['x', ItemID.dustSmallLead, 0]);
-Recipes.addShaped({ id: ItemID.dustGold, count: 1, data: 0 }, [
-    "xxx",
-    "xxx",
-    "xxx",
-], ['x', ItemID.dustSmallGold, 0]);
-Recipes.addShaped({ id: ItemID.dustSilver, count: 1, data: 0 }, [
-    "xxx",
-    "xxx",
-    "xxx",
-], ['x', ItemID.dustSmallSilver, 0]);
-Recipes.addShaped({ id: ItemID.dustSulfur, count: 1, data: 0 }, [
-    "xxx",
-    "xxx",
-    "xxx",
-], ['x', ItemID.dustSmallSulfur, 0]);
-// alternative
-Recipes.addShaped({ id: 348, count: 1, data: 0 }, [
-    "xax",
-    "axa",
-    "xax",
-], ['x', 331, 0, 'a', ItemID.dustGold, 0]);
-Recipes.addShaped({ id: 289, count: 3, data: 0 }, [
-    "xax",
-    "axa",
-    "xax",
-], ['x', 331, 0, 'a', ItemID.dustCoal, 0]);
+// Recipes
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: ItemID.dustEnergium, count: 9, data: 0 }, [
+        "xax",
+        "axa",
+        "xax",
+    ], ['x', 331, 0, 'a', ItemID.dustDiamond, 0]);
+    Recipes.addShapeless({ id: ItemID.dustBronze, count: 4, data: 0 }, [
+        { id: ItemID.crushedCopper, data: 0 },
+        { id: ItemID.crushedCopper, data: 0 },
+        { id: ItemID.crushedCopper, data: 0 },
+        { id: ItemID.crushedTin, data: 0 }
+    ]);
+    Recipes.addShapeless({ id: ItemID.dustBronze, count: 4, data: 0 }, [
+        { id: ItemID.crushedPurifiedCopper, data: 0 },
+        { id: ItemID.crushedPurifiedCopper, data: 0 },
+        { id: ItemID.crushedPurifiedCopper, data: 0 },
+        { id: ItemID.crushedPurifiedTin, data: 0 }
+    ]);
+    Recipes.addShapeless({ id: ItemID.dustBronze, count: 4, data: 0 }, [
+        { id: ItemID.dustCopper, data: 0 },
+        { id: ItemID.dustCopper, data: 0 },
+        { id: ItemID.dustCopper, data: 0 },
+        { id: ItemID.dustTin, data: 0 }
+    ]);
+    var dustNames = ["Copper", "Tin", "Bronze", "Iron", "Steel", "Lead", "Gold", "Silver", "Sulfur"];
+    for (var _i = 0, dustNames_1 = dustNames; _i < dustNames_1.length; _i++) {
+        var name = dustNames_1[_i];
+        Recipes.addShaped({ id: ItemID["dust" + name], count: 1, data: 0 }, [
+            "xxx",
+            "xxx",
+            "xxx",
+        ], ['x', ItemID["dustSmall" + name], 0]);
+    }
+    // alternative
+    Recipes.addShaped({ id: 348, count: 1, data: 0 }, [
+        "xax",
+        "axa",
+        "xax",
+    ], ['x', 331, 0, 'a', ItemID.dustGold, 0]);
+    Recipes.addShaped({ id: 289, count: 3, data: 0 }, [
+        "xax",
+        "axa",
+        "xax",
+    ], ['x', 331, 0, 'a', ItemID.dustCoal, 0]);
+});
 ItemRegistry.createItem("ingotCopper", { name: "copper_ingot", icon: "ingot_copper" });
 ItemRegistry.createItem("ingotTin", { name: "tin_ingot", icon: "ingot_tin" });
 ItemRegistry.createItem("ingotBronze", { name: "bronze_ingot", icon: "ingot_bronze" });
@@ -11644,12 +14137,17 @@ Callback.addCallback("PreLoaded", function () {
     Recipes.addFurnace(ItemID.plateIron, 265, 0);
     Recipes.addFurnace(ItemID.plateGold, 266, 0);
     Recipes.addFurnace(ItemID.plateLead, ItemID.ingotLead, 0);
-    var ironPlate = IC2Config.hardRecipes ? ItemID.plateSteel : ItemID.plateIron;
+    Recipes.addFurnace(ItemID.plateSilver, ItemID.ingotSilver, 0);
     Recipes.addShaped({ id: ItemID.ingotAlloy, count: 2, data: 0 }, [
         "aaa",
         "bbb",
         "ccc"
-    ], ['a', ironPlate, -1, 'b', ItemID.plateBronze, -1, 'c', ItemID.plateTin, -1]);
+    ], ['a', ItemID.plateIron, -1, 'b', ItemID.plateBronze, -1, 'c', ItemID.plateTin, -1]);
+    Recipes.addShaped({ id: ItemID.ingotAlloy, count: 1, data: 0 }, [
+        "a",
+        "b",
+        "c"
+    ], ['a', ItemID.plateSteel, -1, 'b', ItemID.plateBronze, -1, 'c', ItemID.plateTin, -1]);
     // alternative
     Recipes.addShaped({ id: 66, count: 12, data: 0 }, [
         "a a",
@@ -11669,6 +14167,7 @@ ItemRegistry.createItem("plateIron", { name: "iron_plate", icon: "plate_iron" })
 ItemRegistry.createItem("plateSteel", { name: "steel_plate", icon: "plate_steel" });
 ItemRegistry.createItem("plateGold", { name: "gold_plate", icon: "plate_gold" });
 ItemRegistry.createItem("plateLead", { name: "lead_plate", icon: "plate_lead" });
+ItemRegistry.createItem("plateSilver", { name: "silver_plate", icon: "plate_silver" });
 ItemRegistry.createItem("plateLapis", { name: "lapis_plate", icon: "plate_lapis" });
 Item.addCreativeGroup("plate", Translation.translate("Plates"), [
     ItemID.plateCopper,
@@ -11678,6 +14177,7 @@ Item.addCreativeGroup("plate", Translation.translate("Plates"), [
     ItemID.plateSteel,
     ItemID.plateGold,
     ItemID.plateLead,
+    ItemID.plateSilver,
     ItemID.plateLapis
 ]);
 // recipes
@@ -11688,6 +14188,7 @@ Callback.addCallback("PreLoaded", function () {
     ICTool.addRecipe({ id: ItemID.plateIron, count: 1, data: 0 }, [{ id: 265, data: 0 }], ItemID.craftingHammer);
     ICTool.addRecipe({ id: ItemID.plateGold, count: 1, data: 0 }, [{ id: 266, data: 0 }], ItemID.craftingHammer);
     ICTool.addRecipe({ id: ItemID.plateLead, count: 1, data: 0 }, [{ id: ItemID.ingotLead, data: 0 }], ItemID.craftingHammer);
+    ICTool.addRecipe({ id: ItemID.plateSilver, count: 1, data: 0 }, [{ id: ItemID.ingotSilver, data: 0 }], ItemID.craftingHammer);
 });
 ItemRegistry.createItem("densePlateCopper", { name: "dense_copper_plate", icon: "dense_plate_copper" });
 ItemRegistry.createItem("densePlateTin", { name: "dense_tin_plate", icon: "dense_plate_tin" });
@@ -11696,6 +14197,7 @@ ItemRegistry.createItem("densePlateIron", { name: "dense_iron_plate", icon: "den
 ItemRegistry.createItem("densePlateSteel", { name: "dense_steel_plate", icon: "dense_plate_steel" });
 ItemRegistry.createItem("densePlateGold", { name: "dense_gold_plate", icon: "dense_plate_gold" });
 ItemRegistry.createItem("densePlateLead", { name: "dense_lead_plate", icon: "dense_plate_lead" });
+ItemRegistry.createItem("densePlateSilver", { name: "dense_silver_plate", icon: "dense_plate_silver" });
 Item.addCreativeGroup("plateDense", Translation.translate("Desne Plates"), [
     ItemID.densePlateCopper,
     ItemID.densePlateTin,
@@ -11703,7 +14205,8 @@ Item.addCreativeGroup("plateDense", Translation.translate("Desne Plates"), [
     ItemID.densePlateIron,
     ItemID.densePlateSteel,
     ItemID.densePlateGold,
-    ItemID.densePlateLead
+    ItemID.densePlateLead,
+    ItemID.densePlateSilver
 ]);
 ItemRegistry.createItem("casingCopper", { name: "copper_casing", icon: "casing_copper" });
 ItemRegistry.createItem("casingTin", { name: "tin_casing", icon: "casing_tin" });
@@ -11712,15 +14215,17 @@ ItemRegistry.createItem("casingIron", { name: "iron_casing", icon: "casing_iron"
 ItemRegistry.createItem("casingSteel", { name: "steel_casing", icon: "casing_steel" });
 ItemRegistry.createItem("casingGold", { name: "gold_casing", icon: "casing_gold" });
 ItemRegistry.createItem("casingLead", { name: "lead_casing", icon: "casing_lead" });
+ItemRegistry.createItem("casingSilver", { name: "silver_casing", icon: "casing_silver" });
 // creative group
 Item.addCreativeGroup("casingMetal", Translation.translate("Metal Casings"), [
     ItemID.casingCopper,
-    ItemID.casingLead,
-    ItemID.casingGold,
-    ItemID.casingSteel,
-    ItemID.casingIron,
+    ItemID.casingTin,
     ItemID.casingBronze,
-    ItemID.casingTin
+    ItemID.casingIron,
+    ItemID.casingSteel,
+    ItemID.casingGold,
+    ItemID.casingLead,
+    ItemID.casingSilver
 ]);
 // recipes
 Callback.addCallback("PreLoaded", function () {
@@ -11728,8 +14233,10 @@ Callback.addCallback("PreLoaded", function () {
     ICTool.addRecipe({ id: ItemID.casingTin, count: 2, data: 0 }, [{ id: ItemID.plateTin, data: 0 }], ItemID.craftingHammer);
     ICTool.addRecipe({ id: ItemID.casingBronze, count: 2, data: 0 }, [{ id: ItemID.plateBronze, data: 0 }], ItemID.craftingHammer);
     ICTool.addRecipe({ id: ItemID.casingIron, count: 2, data: 0 }, [{ id: ItemID.plateIron, data: 0 }], ItemID.craftingHammer);
+    ICTool.addRecipe({ id: ItemID.casingSteel, count: 2, data: 0 }, [{ id: ItemID.plateSteel, data: 0 }], ItemID.craftingHammer);
     ICTool.addRecipe({ id: ItemID.casingGold, count: 2, data: 0 }, [{ id: ItemID.plateGold, data: 0 }], ItemID.craftingHammer);
     ICTool.addRecipe({ id: ItemID.casingLead, count: 2, data: 0 }, [{ id: ItemID.plateLead, data: 0 }], ItemID.craftingHammer);
+    ICTool.addRecipe({ id: ItemID.casingSilver, count: 2, data: 0 }, [{ id: ItemID.plateSilver, data: 0 }], ItemID.craftingHammer);
 });
 ItemRegistry.createItem("uranium", { name: "enriched_uranium", icon: "uranium" });
 RadiationAPI.setRadioactivity(ItemID.uranium, 60);
@@ -11867,171 +14374,161 @@ MachineRecipeRegistry.addRecipeFor("catalyser", ItemID.scrap, { input: 5000, out
 MachineRecipeRegistry.addRecipeFor("catalyser", ItemID.scrapBox, { input: 45000, output: 270000 });
 ItemRegistry.createItem("matter", { name: "uu_matter", icon: "uu_matter", rarity: EnumRarity.RARE });
 Callback.addCallback("PreLoaded", function () {
-    Recipes.addShaped({ id: ItemID.iridiumChunk, count: 1, data: 0 }, [
-        "xxx",
-        " x ",
-        "xxx"
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 264, count: 1, data: 0 }, [
-        "xxx",
-        "xxx",
-        "xxx"
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 17, count: 8, data: 0 }, [
-        " x ",
-        "   ",
-        "   "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 1, count: 16, data: 0 }, [
-        "   ",
-        " x ",
-        "   "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 2, count: 16, data: 0 }, [
-        "   ",
-        "x  ",
-        "x  "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 80, count: 4, data: 0 }, [
+    Recipes.addShaped({ id: ItemID.iridiumChunk, count: 2, data: 0 }, [
         "x x",
-        "   ",
+        "xax",
+        "xxx"
+    ], ['x', ItemID.matter, -1, 'a', ItemID.iridiumChunk, -1]);
+    Recipes.addShaped({ id: 264, count: 2, data: 0 }, [
+        "xxx",
+        "xax",
+        "xxx"
+    ], ['x', ItemID.matter, -1, 'a', 264, -1]);
+    Recipes.addShaped({ id: 17, count: 9, data: 0 }, [
+        " x ",
+        " a ",
         "   "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 8, count: 1, data: 0 }, [
+    ], ['x', ItemID.matter, -1, 'a', 17, 0]);
+    Recipes.addShaped({ id: 1, count: 16, data: 0 }, [
+        " a ",
+        " x ",
+        "   "
+    ], ['x', ItemID.matter, -1, 'a', 1, 0]);
+    Recipes.addShaped({ id: 2, count: 16, data: 0 }, [
+        " x ",
+        " a ",
+        " x "
+    ], ['x', ItemID.matter, -1, 'a', 2, 0]);
+    Recipes.addShaped({ id: 80, count: 5, data: 0 }, [
         "   ",
-        " x ",
-        " x "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 10, count: 1, data: 0 }, [
-        " x ",
-        " x ",
-        " x "
-    ], ['x', ItemID.matter, -1]);
+        "xax",
+        "   "
+    ], ['x', ItemID.matter, -1, 'a', 80, 0]);
     Recipes.addShaped({ id: 35, count: 12, data: 0 }, [
         "x x",
-        "   ",
+        " a ",
         " x "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 106, count: 24, data: 0 }, [
+    ], ['x', ItemID.matter, -1, 'a', 35, 0]);
+    Recipes.addShaped({ id: VanillaBlockID.vine, count: 24, data: 0 }, [
         "x  ",
-        "x  ",
+        "xa ",
         "x  "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 332, count: 24, data: 0 }, [
+    ], ['x', ItemID.matter, -1, 'a', VanillaBlockID.vine, 0]);
+    Recipes.addShaped({ id: VanillaItemID.snowball, count: 24, data: 0 }, [
         "   ",
-        "   ",
+        " a ",
         "xxx"
-    ], ['x', ItemID.matter, -1]);
+    ], ['x', ItemID.matter, -1, 'a', VanillaItemID.snowball, -1]);
     Recipes.addShaped({ id: 20, count: 32, data: 0 }, [
         " x ",
-        "x x",
+        "xax",
         " x "
-    ], ['x', ItemID.matter, -1]);
+    ], ['x', ItemID.matter, -1, 'a', 20, 0]);
     Recipes.addShaped({ id: 49, count: 12, data: 0 }, [
-        "x x",
-        "x x",
-        "   "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 288, count: 32, data: 0 }, [
         " x ",
-        " x ",
-        "x x"
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped(IDConverter.getStack("ink_sac", 48), [
-        " xx",
-        " xx",
+        "xax",
         " x "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped(IDConverter.getStack("cocoa_beans", 32), [
-        "xx ",
-        "  x",
-        "xx "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped(IDConverter.getStack("lapis_lazuli", 9), [
+    ], ['x', ItemID.matter, -1, 'a', 49, 0]);
+    Recipes.addShaped({ id: VanillaItemID.feather, count: 32, data: 0 }, [
         " x ",
-        " x ",
+        "xax",
+        " x "
+    ], ['x', ItemID.matter, -1, 'a', VanillaItemID.feather, -1]);
+    Recipes.addShaped({ id: VanillaItemID.ink_sac, count: 48, data: 0 }, [
+        " xx",
+        "xa ",
         " xx"
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 337, count: 48, data: 0 }, [
+    ], ['x', ItemID.matter, -1, 'a', VanillaItemID.ink_sac, -1]);
+    Recipes.addShaped({ id: VanillaItemID.cocoa_beans, count: 32, data: 0 }, [
         "xx ",
-        "x  ",
+        " ax",
         "xx "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 110, count: 24, data: 0 }, [
+    ], ['x', ItemID.matter, -1, 'a', VanillaItemID.cocoa_beans, -1]);
+    Recipes.addShaped({ id: VanillaItemID.lapis_lazuli, count: 10, data: 0 }, [
+        " x ",
+        "xax",
+        " x "
+    ], ['x', ItemID.matter, -1, 'a', VanillaItemID.lapis_lazuli, -1]);
+    Recipes.addShaped({ id: VanillaItemID.clay_ball, count: 48, data: 0 }, [
+        "xx ",
+        "xa ",
+        "xx "
+    ], ['x', ItemID.matter, -1, 'a', VanillaItemID.clay_ball, -1]);
+    Recipes.addShaped({ id: VanillaBlockID.mycelium, count: 24, data: 0 }, [
         "   ",
-        "x x",
+        "xax",
         "xxx"
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 318, count: 32, data: 0 }, [
+    ], ['x', ItemID.matter, -1, 'a', VanillaBlockID.mycelium, 0]);
+    Recipes.addShaped({ id: VanillaItemID.flint, count: 32, data: 0 }, [
         " x ",
-        "xx ",
-        "xx "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 98, count: 48, data: 0 }, [
-        "xx ",
-        "xx ",
-        "x  "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 89, count: 8, data: 0 }, [
-        " x ",
+        "xax",
+        "x x"
+    ], ['x', ItemID.matter, -1, 'a', VanillaItemID.flint, -1]);
+    Recipes.addShaped({ id: VanillaBlockID.stonebrick, count: 48, data: 0 }, [
         "x x",
+        "xax",
+        " x "
+    ], ['x', ItemID.matter, -1, 'a', VanillaBlockID.stonebrick, 0]);
+    Recipes.addShaped({ id: VanillaBlockID.glowstone, count: 9, data: 0 }, [
+        " x ",
+        "xax",
         "xxx"
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 81, count: 48, data: 0 }, [
+    ], ['x', ItemID.matter, -1, 'a', VanillaBlockID.glowstone, 0]);
+    Recipes.addShaped({ id: VanillaBlockID.cactus, count: 48, data: 0 }, [
         " x ",
         "xxx",
-        "x x"
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 338, count: 48, data: 0 }, [
+        "xax"
+    ], ['x', ItemID.matter, -1, 'a', VanillaBlockID.cactus, 0]);
+    Recipes.addShaped({ id: VanillaBlockID.reeds, count: 48, data: 0 }, [
         "x x",
-        "x x",
+        "xax",
         "x x"
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 289, count: 16, data: 0 }, [
+    ], ['x', ItemID.matter, -1, 'a', VanillaBlockID.reeds, 0]);
+    Recipes.addShaped({ id: VanillaItemID.gunpowder, count: 16, data: 0 }, [
         "xxx",
-        "x  ",
+        "xa ",
         "xxx"
-    ], ['x', ItemID.matter, -1]);
+    ], ['x', ItemID.matter, -1, 'a', VanillaItemID.gunpowder, -1]);
     Recipes.addShaped({ id: 263, count: 20, data: 0 }, [
         "  x",
-        "x  ",
+        "xa ",
         "  x"
-    ], ['x', ItemID.matter, -1]);
+    ], ['x', ItemID.matter, -1, 'a', 263, 0]);
     Recipes.addShaped({ id: 331, count: 24, data: 0 }, [
-        "   ",
         " x ",
+        "xax",
+        " x "
+    ], ['x', ItemID.matter, -1, 'a', 331, -1]);
+    Recipes.addShaped({ id: VanillaItemID.emerald, count: 3, data: 0 }, [
+        "xxx",
+        "xax",
+        "xx "
+    ], ['x', ItemID.matter, -1, 'a', VanillaItemID.emerald, -1]);
+    Recipes.addShaped({ id: ItemID.latex, count: 22, data: 0 }, [
+        " x ",
+        "xax",
+        " x "
+    ], ['x', ItemID.matter, -1, 'a', ItemID.latex, -1]);
+    Recipes.addShaped({ id: VanillaBlockID.gold_ore, count: 3, data: 0 }, [
+        "x x",
+        " a ",
         "xxx"
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 388, count: 2, data: 0 }, [
+    ], ['x', ItemID.matter, -1, 'a', VanillaBlockID.gold_ore, 0]);
+    Recipes.addShaped({ id: VanillaBlockID.iron_ore, count: 3, data: 0 }, [
         "xxx",
-        "xxx",
-        " x "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: ItemID.latex, count: 21, data: 0 }, [
-        "x x",
-        "   ",
+        " a ",
         "x x"
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 14, count: 2, data: 0 }, [
-        " x ",
-        "xxx",
-        " x "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: 15, count: 2, data: 0 }, [
-        "x x",
-        " x ",
-        "x x"
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: BlockID.oreCopper, count: 5, data: 0 }, [
+    ], ['x', ItemID.matter, -1, 'a', VanillaBlockID.iron_ore, 0]);
+    Recipes.addShaped({ id: BlockID.oreCopper, count: 6, data: 0 }, [
         "  x",
-        "x x",
+        "xax",
         "   "
-    ], ['x', ItemID.matter, -1]);
-    Recipes.addShaped({ id: BlockID.oreTin, count: 5, data: 0 }, [
+    ], ['x', ItemID.matter, -1, 'a', BlockID.oreCopper, 0]);
+    Recipes.addShaped({ id: BlockID.oreTin, count: 6, data: 0 }, [
         "   ",
-        "x x",
+        "xax",
         "  x"
-    ], ['x', ItemID.matter, -1]);
+    ], ['x', ItemID.matter, -1, 'a', BlockID.oreTin, 0]);
 });
 ItemRegistry.createItem("iridiumChunk", { name: "iridium_chunk", icon: "iridium_chunk", rarity: EnumRarity.RARE });
 ItemRegistry.createItem("plateReinforcedIridium", { name: "iridium_reinforced_plate", icon: "plate_reinforced_iridium", rarity: EnumRarity.RARE });
@@ -12078,9 +14575,97 @@ Callback.addCallback("PreLoaded", function () {
         "xax"
     ], ['x', ItemID.iridiumChunk, 0, '#', 264, 0, 'a', ItemID.plateAlloy, 0]);
 });
+ItemRegistry.createItem("circuitBasic", { name: "electronic_circuit", icon: "circuit_basic" });
+ItemRegistry.createItem("circuitAdvanced", { name: "advanced_circuit", icon: "circuit_advanced", rarity: EnumRarity.UNCOMMON });
+ItemRegistry.createItem("coil", { name: "coil", icon: "coil" });
+ItemRegistry.createItem("electricMotor", { name: "electric_motor", icon: "electric_motor" });
+ItemRegistry.createItem("powerUnit", { name: "power_unit", icon: "power_unit" });
+ItemRegistry.createItem("powerUnitSmall", { name: "small_power_unit", icon: "power_unit_small" });
+ItemRegistry.createItem("heatConductor", { name: "heat_conductor", icon: "heat_conductor" });
+ItemRegistry.createItem("cuttingBladeIron", { name: "cutting_blade_iron", icon: "cutting_blade_iron", stack: 1 });
+ItemRegistry.createItem("cuttingBladeSteel", { name: "cutting_blade_steel", icon: "cutting_blade_steel", stack: 1 });
+ItemRegistry.createItem("cuttingBladeDiamond", { name: "cutting_blade_diamond", icon: "cutting_blade_diamond", stack: 1 });
+ItemName.addTooltip(ItemID.cuttingBladeIron, "tooltip.blade.hardness", 2);
+ItemName.addTooltip(ItemID.cuttingBladeSteel, "tooltip.blade.hardness", 3);
+ItemName.addTooltip(ItemID.cuttingBladeDiamond, "tooltip.blade.hardness", 4);
+Item.addCreativeGroup("ic2_component", Translation.translate("Crafting Components"), [
+    ItemID.circuitBasic,
+    ItemID.circuitAdvanced,
+    ItemID.coil,
+    ItemID.electricMotor,
+    ItemID.powerUnit,
+    ItemID.powerUnitSmall,
+    ItemID.heatConductor,
+    ItemID.cuttingBladeIron,
+    ItemID.cuttingBladeSteel,
+    ItemID.cuttingBladeDiamond
+]);
+Callback.addCallback("PreLoaded", function () {
+    Recipes.addShaped({ id: ItemID.circuitBasic, count: 1, data: 0 }, [
+        "xxx",
+        "a#a",
+        "xxx"
+    ], ['x', ItemID.cableCopper1, 0, 'a', 331, 0, '#', ItemID.plateIron, 0]);
+    Recipes.addShaped({ id: ItemID.circuitBasic, count: 1, data: 0 }, [
+        "xax",
+        "x#x",
+        "xax"
+    ], ['x', ItemID.cableCopper1, 0, 'a', 331, 0, '#', ItemID.plateIron, 0]);
+    Recipes.addShaped({ id: ItemID.circuitAdvanced, count: 1, data: 0 }, [
+        "xbx",
+        "a#a",
+        "xbx"
+    ], ['x', 331, 0, 'a', 348, 0, 'b', ItemID.dustLapis, 0, '#', ItemID.circuitBasic, 0]);
+    Recipes.addShaped({ id: ItemID.circuitAdvanced, count: 1, data: 0 }, [
+        "xax",
+        "b#b",
+        "xax"
+    ], ['x', 331, 0, 'a', 348, 0, 'b', ItemID.dustLapis, 0, '#', ItemID.circuitBasic, 0]);
+    Recipes.addShaped({ id: ItemID.coil, count: 1, data: 0 }, [
+        "aaa",
+        "axa",
+        "aaa"
+    ], ['x', 265, 0, 'a', ItemID.cableCopper0, 0]);
+    Recipes.addShaped({ id: ItemID.electricMotor, count: 1, data: 0 }, [
+        " b ",
+        "axa",
+        " b "
+    ], ['x', 265, 0, 'a', ItemID.coil, 0, 'b', ItemID.casingTin, 0]);
+    Recipes.addShaped({ id: ItemID.powerUnit, count: 1, data: 0 }, [
+        "acs",
+        "axe",
+        "acs"
+    ], ['x', ItemID.circuitBasic, 0, 'e', ItemID.electricMotor, 0, 'a', ItemID.storageBattery, -1, 's', ItemID.casingIron, 0, 'c', ItemID.cableCopper0, 0]);
+    Recipes.addShaped({ id: ItemID.powerUnitSmall, count: 1, data: 0 }, [
+        " cs",
+        "axe",
+        " cs"
+    ], ['x', ItemID.circuitBasic, 0, 'e', ItemID.electricMotor, 0, 'a', ItemID.storageBattery, -1, 's', ItemID.casingIron, 0, 'c', ItemID.cableCopper0, 0]);
+    Recipes.addShaped({ id: ItemID.heatConductor, count: 1, data: 0 }, [
+        "aсa",
+        "aсa",
+        "aсa"
+    ], ['с', ItemID.plateCopper, 0, 'a', ItemID.rubber, 0]);
+    Recipes.addShaped({ id: ItemID.cuttingBladeIron, count: 1, data: 0 }, [
+        "bbb",
+        "bab",
+        "bbb"
+    ], ['a', ItemID.ingotBronze, 0, 'b', ItemID.plateIron, 0]);
+    Recipes.addShaped({ id: ItemID.cuttingBladeSteel, count: 1, data: 0 }, [
+        "bbb",
+        "bab",
+        "bbb"
+    ], ['a', VanillaItemID.iron_ingot, 0, 'b', ItemID.plateSteel, 0]);
+    Recipes.addShaped({ id: ItemID.cuttingBladeDiamond, count: 1, data: 0 }, [
+        "cbc",
+        "bab",
+        "cbc"
+    ], ['a', ItemID.ingotSteel, 0, 'b', ItemID.plateSteel, 0, 'c', VanillaItemID.diamond, 0]);
+});
 LiquidRegistry.registerLiquid("biomass", "Biomass", ["liquid_biomass", "liquid_biomass_48x30", "liquid_biomass_55x47"]);
 LiquidRegistry.registerLiquid("biogas", "Biogas", ["liquid_biogas", "liquid_biogas_55x47"]);
 LiquidRegistry.registerLiquid("coolant", "Coolant", ["liquid_coolant", "liquid_coolant_110x94"]);
+LiquidRegistry.registerLiquid("distilled_water", "Distilled Water", ["distilled_water", "distilled_water_55x47"]);
 LiquidRegistry.getLiquidData("lava").uiTextures.push("gui_lava_texture_55x47");
 LiquidRegistry.getLiquidData("water").uiTextures.push("gui_water_texture_47x24");
 LiquidRegistry.getLiquidData("water").uiTextures.push("gui_water_texture_55x47");
@@ -12111,16 +14696,54 @@ var ItemLiquidCell = /** @class */ (function (_super) {
     __extends(ItemLiquidCell, _super);
     function ItemLiquidCell(stringID, liquid) {
         var _this = _super.call(this, stringID, "".concat(liquid, "_cell"), "cell_".concat(liquid)) || this;
-        LiquidItemRegistry.registerItem(liquid, ItemID.cellEmpty, _this.id, 1000);
+        _this.liquidStorage = 1000;
+        _this.liquidType = liquid;
+        _this.setMaxDamage(_this.liquidStorage);
+        LiquidItemRegistry.registerItem(liquid, { id: ItemID.cellEmpty, data: 0 }, { id: _this.id, data: 0 }, _this.liquidStorage);
+        LiquidItemRegistry.registerItemInterface(_this.id, _this);
         return _this;
     }
     ItemLiquidCell.prototype.onNameOverride = function (item, name) {
-        return name + "\n§7" + (1000 - item.data) + " mB";
+        return name + "\n§7" + this.getAmount(item.data) + " mB";
+    };
+    ItemLiquidCell.prototype.isValidLiquid = function (liquid) {
+        return liquid == this.liquidType;
+    };
+    ItemLiquidCell.prototype.getLiquidStored = function () {
+        return this.liquidType;
+    };
+    ItemLiquidCell.prototype.getAmount = function (itemData) {
+        return this.liquidStorage - itemData;
+    };
+    ItemLiquidCell.prototype.getLiquid = function (item, amount) {
+        amount = Math.min(this.getAmount(item.data), amount);
+        item.data += amount;
+        return amount;
+    };
+    ItemLiquidCell.prototype.addLiquid = function (item, liquid, amount) {
+        if (item.id == ItemID.cellEmpty) {
+            if (amount > this.liquidStorage) {
+                amount = this.liquidStorage;
+            }
+            item.id = this.id;
+            item.data = this.liquidStorage - amount;
+            return amount;
+        }
+        amount = Math.min(this.liquidStorage - this.getAmount(item.data), amount);
+        item.data -= amount;
+        return amount;
+    };
+    ItemLiquidCell.prototype.getEmptyItem = function () {
+        return new ItemStack(ItemID.cellEmpty, 1, 0);
+    };
+    ItemLiquidCell.prototype.getFullItem = function (liquid) {
+        return this.isValidLiquid(liquid) ? new ItemStack(this.id, 1, 0) : null;
     };
     return ItemLiquidCell;
 }(ItemCommon));
 ItemRegistry.registerItem(new ItemEmptyCell());
 ItemRegistry.registerItem(new ItemLiquidCell("cellWater", "water"));
+ItemRegistry.registerItem(new ItemLiquidCell("cellDistilledWater", "distilled_water"));
 ItemRegistry.registerItem(new ItemLiquidCell("cellLava", "lava"));
 ItemRegistry.registerItem(new ItemLiquidCell("cellBiomass", "biomass"));
 ItemRegistry.registerItem(new ItemLiquidCell("cellBiogas", "biogas"));
@@ -12134,7 +14757,8 @@ Item.addCreativeGroup("cells", Translation.translate("Cells"), [
     ItemID.cellBiomass,
     ItemID.cellBiogas,
     ItemID.cellCoolant,
-    ItemID.cellMatter,
+    ItemID.cellDistilledWater,
+    //ItemID.cellMatter,
     ItemID.cellAir
 ]);
 Recipes.addShaped({ id: ItemID.cellEmpty, count: 1, data: 0 }, [
@@ -12299,6 +14923,7 @@ Callback.addCallback("PostLoaded", function () {
         "xx ",
     ], ['x', 1, -1]);
 });
+// Item data: 0 - normal, 1 - rotten, 2 - poisoned
 var ItemTinCanFull = /** @class */ (function (_super) {
     __extends(ItemTinCanFull, _super);
     function ItemTinCanFull() {
@@ -12327,7 +14952,7 @@ var ItemTinCanFull = /** @class */ (function (_super) {
             item.decrease(count);
             player.setCarriedItem(item);
             player.addItemToInventory(ItemID.tinCanEmpty, count, 0);
-            SoundManager.playSoundAtEntity(playerUid, "eat.ogg");
+            SoundLib.playSoundAtEntity(playerUid, "eat.ogg");
         }
     };
     return ItemTinCanFull;
@@ -12426,7 +15051,7 @@ var IC2Coffee;
     function craftFunction(api, field, result, player) {
         for (var i = 0; i < 9; i++) {
             var item = field[i];
-            var emptyItem = LiquidItemRegistry.getEmptyItem(item.id, item.data);
+            var emptyItem = LiquidRegistry.getEmptyItem(item.id, item.data);
             if (emptyItem) {
                 var playerEntity = new PlayerEntity(player);
                 playerEntity.addItemToInventory(emptyItem.id, 1, emptyItem.data);
@@ -12469,7 +15094,7 @@ var ItemCable = /** @class */ (function (_super) {
         return _this;
     }
     ItemCable.prototype.onNameOverride = function (item, name) {
-        name += "\n§7" + Translation.translate("tooltip.max_voltage").replace("%s", this.maxVoltage.toString());
+        name += "\n§7" + ItemName.getTranslatedTextWithParams("tooltip.max_voltage", this.maxVoltage);
         return name;
     };
     ItemCable.prototype.onItemUse = function (coords, item, block, player) {
@@ -12581,69 +15206,6 @@ Callback.addCallback("PreLoaded", function () {
         { id: ItemID.rubber, data: 0 }
     ]);
 });
-ItemRegistry.createItem("circuitBasic", { name: "electronic_circuit", icon: "circuit_basic" });
-ItemRegistry.createItem("circuitAdvanced", { name: "advanced_circuit", icon: "circuit_advanced", rarity: EnumRarity.UNCOMMON });
-ItemRegistry.createItem("coil", { name: "coil", icon: "coil" });
-ItemRegistry.createItem("electricMotor", { name: "electric_motor", icon: "electric_motor" });
-ItemRegistry.createItem("powerUnit", { name: "power_unit", icon: "power_unit" });
-ItemRegistry.createItem("powerUnitSmall", { name: "small_power_unit", icon: "power_unit_small" });
-ItemRegistry.createItem("heatConductor", { name: "heat_conductor", icon: "heat_conductor" });
-Item.addCreativeGroup("ic2_component", Translation.translate("Crafting Components"), [
-    ItemID.circuitBasic,
-    ItemID.circuitAdvanced,
-    ItemID.coil,
-    ItemID.electricMotor,
-    ItemID.powerUnit,
-    ItemID.powerUnitSmall,
-    ItemID.heatConductor
-]);
-Callback.addCallback("PreLoaded", function () {
-    Recipes.addShaped({ id: ItemID.circuitBasic, count: 1, data: 0 }, [
-        "xxx",
-        "a#a",
-        "xxx"
-    ], ['x', ItemID.cableCopper1, 0, 'a', 331, 0, '#', ItemID.plateIron, 0]);
-    Recipes.addShaped({ id: ItemID.circuitBasic, count: 1, data: 0 }, [
-        "xax",
-        "x#x",
-        "xax"
-    ], ['x', ItemID.cableCopper1, 0, 'a', 331, 0, '#', ItemID.plateIron, 0]);
-    Recipes.addShaped({ id: ItemID.circuitAdvanced, count: 1, data: 0 }, [
-        "xbx",
-        "a#a",
-        "xbx"
-    ], ['x', 331, 0, 'a', 348, 0, 'b', ItemID.dustLapis, 0, '#', ItemID.circuitBasic, 0]);
-    Recipes.addShaped({ id: ItemID.circuitAdvanced, count: 1, data: 0 }, [
-        "xax",
-        "b#b",
-        "xax"
-    ], ['x', 331, 0, 'a', 348, 0, 'b', ItemID.dustLapis, 0, '#', ItemID.circuitBasic, 0]);
-    Recipes.addShaped({ id: ItemID.coil, count: 1, data: 0 }, [
-        "aaa",
-        "axa",
-        "aaa"
-    ], ['x', 265, 0, 'a', ItemID.cableCopper0, 0]);
-    Recipes.addShaped({ id: ItemID.electricMotor, count: 1, data: 0 }, [
-        " b ",
-        "axa",
-        " b "
-    ], ['x', 265, 0, 'a', ItemID.coil, 0, 'b', ItemID.casingTin, 0]);
-    Recipes.addShaped({ id: ItemID.powerUnit, count: 1, data: 0 }, [
-        "acs",
-        "axe",
-        "acs"
-    ], ['x', ItemID.circuitBasic, 0, 'e', ItemID.electricMotor, 0, 'a', ItemID.storageBattery, -1, 's', ItemID.casingIron, 0, 'c', ItemID.cableCopper0, 0]);
-    Recipes.addShaped({ id: ItemID.powerUnitSmall, count: 1, data: 0 }, [
-        " cs",
-        "axe",
-        " cs"
-    ], ['x', ItemID.circuitBasic, 0, 'e', ItemID.electricMotor, 0, 'a', ItemID.storageBattery, -1, 's', ItemID.casingIron, 0, 'c', ItemID.cableCopper0, 0]);
-    Recipes.addShaped({ id: ItemID.heatConductor, count: 1, data: 0 }, [
-        "aсa",
-        "aсa",
-        "aсa"
-    ], ['с', ItemID.plateCopper, 0, 'a', ItemID.rubber, 0]);
-});
 var ItemElectric = /** @class */ (function (_super) {
     __extends(ItemElectric, _super);
     function ItemElectric(stringID, name, maxCharge, transferLimit, tier, inCreative) {
@@ -12716,11 +15278,11 @@ var ItemBatteryCharging = /** @class */ (function (_super) {
     ItemBatteryCharging.prototype.readMode = function (extra) {
         if (!extra)
             return 0;
-        return extra.getInt("mode");
+        return extra.getInt("mode", 0);
     };
     ItemBatteryCharging.prototype.onNoTargetUse = function (item, player) {
         var extra = item.extra || new ItemExtraData();
-        var mode = (extra.getInt("mode") + 1) % 3;
+        var mode = (extra.getInt("mode", 0) + 1) % 3;
         extra.putInt("mode", mode);
         Entity.setCarriedItem(player, item.id, 1, item.data, extra);
         var client = Network.getClientForPlayer(player);
@@ -12913,7 +15475,7 @@ var UpgradeEnergyStorage = /** @class */ (function (_super) {
     }
     UpgradeEnergyStorage.prototype.onNameOverride = function (item, name) {
         var capacity = this.getExtraEnergyStorage(item);
-        return name + "§7\n" + Translation.translate("tooltip.upgrade.storage").replace("%s", ItemName.displayEnergy(capacity, false));
+        return name + "§7\n" + ItemName.getTranslatedTextWithParams("tooltip.upgrade.storage", ItemName.displayEnergy(capacity, false));
     };
     UpgradeEnergyStorage.prototype.getExtraEnergyStorage = function (item) {
         return 10000;
@@ -12933,17 +15495,18 @@ var UpgradeFluidEjector = /** @class */ (function (_super) {
     };
     UpgradeFluidEjector.prototype.onTick = function (item, machine) {
         var _a;
-        var machineStorage = StorageInterface.getInterface(machine);
+        var machineStorage = StorageInterface.getTileEntityInterface(machine);
         var checkSide = item.data - 1;
         for (var side = 0; side < 6; side++) {
             if (checkSide > 0 && checkSide != side)
                 continue;
-            var liquid = (_a = machineStorage.getOutputTank(side)) === null || _a === void 0 ? void 0 : _a.getLiquidStored();
+            var liquid = (_a = machineStorage.getOutputTank(side, machine)) === null || _a === void 0 ? void 0 : _a.getLiquidStored();
             if (!liquid)
                 continue;
             var storage = StorageInterface.getNeighbourLiquidStorage(machine.blockSource, machine, side);
-            if (storage)
+            if (storage) {
                 StorageInterface.transportLiquid(liquid, 0.25, machineStorage, storage, side);
+            }
         }
     };
     return UpgradeFluidEjector;
@@ -12961,15 +15524,16 @@ var UpgradeFluidPulling = /** @class */ (function (_super) {
     };
     UpgradeFluidPulling.prototype.onTick = function (item, machine) {
         var _a;
-        var machineStorage = StorageInterface.getInterface(machine);
+        var machineStorage = StorageInterface.getTileEntityInterface(machine);
         var checkSide = item.data - 1;
         for (var side = 0; side < 6; side++) {
             if (checkSide > 0 && checkSide != side)
                 continue;
-            var liquid = (_a = machineStorage.getInputTank(side)) === null || _a === void 0 ? void 0 : _a.getLiquidStored();
+            var liquid = (_a = machineStorage.getInputTank(side, machine)) === null || _a === void 0 ? void 0 : _a.getLiquidStored();
             var storage = StorageInterface.getNeighbourLiquidStorage(machine.blockSource, machine, side);
-            if (storage)
+            if (storage) {
                 StorageInterface.extractLiquid(liquid, 0.25, machineStorage, storage, side);
+            }
         }
     };
     return UpgradeFluidPulling;
@@ -12988,10 +15552,10 @@ var UpgradeOverclocker = /** @class */ (function (_super) {
         if (ToolHUD.currentUIscreen == "in_game_play_screen" || ToolHUD.currentUIscreen == "world_loading_progress_screen - local_world_load") {
             percent += percent; // this game is broken
         }
+        var timePercent = this.getProcessTimeMultiplier(item) * 100 + percent;
         var energyDemandPercent = this.getEnergyDemandMultiplier(item) * 100 + percent;
-        var powerPercent = this.getProcessTimeMultiplier(item) * 100 + percent;
-        var timeTooltip = Translation.translate("tooltip.upgrade.overclocker.time") + energyDemandPercent;
-        var powerTooltip = Translation.translate("tooltip.upgrade.overclocker.power") + powerPercent;
+        var timeTooltip = ItemName.getTranslatedTextWithParams("tooltip.upgrade.overclocker.time", timePercent);
+        var powerTooltip = ItemName.getTranslatedTextWithParams("tooltip.upgrade.overclocker.power", energyDemandPercent);
         return name + "§7\n" + timeTooltip + "\n" + powerTooltip;
     };
     UpgradeOverclocker.prototype.getSpeedModifier = function (item) {
@@ -13120,16 +15684,16 @@ Callback.addCallback("PreLoaded", function () {
 });
 var ReactorItem;
 (function (ReactorItem) {
-    var reactor_components = {};
+    var reactorComponents = {};
     function registerComponent(id, component) {
         if (component instanceof ReactorItem.DamageableReactorComponent) {
             Item.setMaxDamage(id, 27);
         }
-        reactor_components[id] = component;
+        reactorComponents[id] = component;
     }
     ReactorItem.registerComponent = registerComponent;
     function getComponent(id) {
-        return reactor_components[id];
+        return reactorComponents[id];
     }
     ReactorItem.getComponent = getComponent;
     function isReactorItem(id) {
@@ -13189,7 +15753,8 @@ var ReactorItem;
             return _this;
         }
         DamageableReactorComponent.prototype.getCustomDamage = function (item) {
-            return item.extra ? item.extra.getInt("damage") : 0;
+            var _a;
+            return ((_a = item.extra) === null || _a === void 0 ? void 0 : _a.getInt("damage")) || 0;
         };
         DamageableReactorComponent.prototype.setCustomDamage = function (item, damage) {
             var extra = item.extra || new ItemExtraData();
@@ -13374,7 +15939,6 @@ RadiationAPI.setRadioactivity(ItemID.fuelRodDepletedMOX, 10);
 RadiationAPI.setRadioactivity(ItemID.fuelRodDepletedMOX2, 10);
 RadiationAPI.setRadioactivity(ItemID.fuelRodDepletedMOX4, 10);
 Item.addCreativeGroup("ic2_fuelRod", Translation.translate("Nuclear Fuel Rods"), [
-    ItemID.fuelRod,
     ItemID.fuelRodUranium,
     ItemID.fuelRodUranium2,
     ItemID.fuelRodUranium4,
@@ -13386,7 +15950,8 @@ Item.addCreativeGroup("ic2_fuelRod", Translation.translate("Nuclear Fuel Rods"),
     ItemID.fuelRodDepletedUranium4,
     ItemID.fuelRodDepletedMOX,
     ItemID.fuelRodDepletedMOX2,
-    ItemID.fuelRodDepletedMOX4
+    ItemID.fuelRodDepletedMOX4,
+    ItemID.fuelRod
 ]);
 Recipes.addShaped({ id: ItemID.fuelRodUranium2, count: 1, data: 0 }, [
     "fxf"
@@ -14025,7 +16590,7 @@ var ArmorHazmat = /** @class */ (function (_super) {
                 Entity.setHealth(playerUid, Entity.getHealth(playerUid) + params.damage - Dp);
             }
             item.data += Db;
-            if (item.data >= Item.getMaxDamage(this.id)) {
+            if (item.data >= this.maxDamage) {
                 item.id = item.count = 0;
             }
             return item;
@@ -14045,6 +16610,175 @@ var ArmorHazmat = /** @class */ (function (_super) {
         }
     };
     return ArmorHazmat;
+}(ArmorIC2));
+/// <reference path="./IJetpack.ts" />
+var JetpackProvider;
+(function (JetpackProvider) {
+    var jetpacks = {};
+    var playerData = {};
+    function registerItem(itemId, instance) {
+        ToolHUD.setButtonFor(itemId, "button_fly");
+        ToolHUD.setButtonFor(itemId, "button_hover");
+        jetpacks[itemId] = instance;
+    }
+    JetpackProvider.registerItem = registerItem;
+    function canBeFlying(item, playerPos) {
+        var jetpack = jetpacks[item.id];
+        if (!jetpack)
+            return true; // reverse compatibility
+        return jetpack.canFly(item, playerPos);
+    }
+    JetpackProvider.canBeFlying = canBeFlying;
+    function getFlying(playerUid) {
+        return playerData[playerUid] || false;
+    }
+    JetpackProvider.getFlying = getFlying;
+    function setFlying(playerUid, fly) {
+        return playerData[playerUid] = fly;
+    }
+    JetpackProvider.setFlying = setFlying;
+    function onTick(item, playerUid) {
+        var energyStored = ChargeItemRegistry.getEnergyStored(item);
+        var canFly = canBeFlying(item, Entity.getPosition(playerUid));
+        var vel = Entity.getVelocity(playerUid);
+        if (item.extra && item.extra.getBoolean("hover")) {
+            if (!canFly || EntityHelper.isOnGround(playerUid)) {
+                item.extra.putBoolean("hover", false);
+                var client = Network.getClientForPlayer(playerUid);
+                if (client)
+                    BlockEngine.sendMessage(client, "§4", "message.hover_mode.disabled");
+                return item;
+            }
+            else {
+                if (vel.y < 0) {
+                    EntityHelper.resetFallHeight(playerUid);
+                }
+                if (World.getThreadTime() % 5 == 0) {
+                    var energyUse = getFlying(playerUid) ? 40 : 20;
+                    ChargeItemRegistry.setEnergyStored(item, Math.max(energyStored - energyUse, 0));
+                    return item;
+                }
+            }
+        }
+        else if (getFlying(playerUid) && canFly) {
+            if (vel.y > -1.2 && vel.y < 0) {
+                EntityHelper.resetFallHeight(playerUid);
+            }
+            ChargeItemRegistry.setEnergyStored(item, energyStored - 8);
+            return item;
+        }
+        return null;
+    }
+    JetpackProvider.onTick = onTick;
+    Callback.addCallback("ServerLevelLeft", function () {
+        playerData = {};
+    });
+})(JetpackProvider || (JetpackProvider = {}));
+/// <reference path="./ArmorIC2.ts" />
+/// <reference path="./JetpackProvider.ts" />
+var ArmorFuelJetpack = /** @class */ (function (_super) {
+    __extends(ArmorFuelJetpack, _super);
+    function ArmorFuelJetpack() {
+        var _this = _super.call(this, "fuelJetpack", "fuel_jetpack", { type: "chestplate", defence: 3, texture: "fuel_jetpack" }, false) || this;
+        _this.liquidStorage = 3000;
+        JetpackProvider.registerItem(_this.id, _this);
+        _this.setMaxDamage(_this.liquidStorage + 1);
+        Item.addToCreative(_this.id, 1, 1);
+        LiquidItemRegistry.registerItemInterface(_this.id, _this);
+        return _this;
+    }
+    ArmorFuelJetpack.prototype.onNameOverride = function (item, name) {
+        var amount = this.getAmount(item.data);
+        if (amount == 0) {
+            return name + "\n§7" + Translation.translate("generic.text.empty");
+        }
+        return "".concat(name, "\n\u00A77").concat(Translation.translate("Biogas"), " ").concat(amount, " mB");
+    };
+    ArmorFuelJetpack.prototype.onHurt = function (params, item, index, playerUid) {
+        if (params.type == 5 && !EntityHelper.isOnGround(playerUid)) {
+            Game.prevent();
+        }
+        return item;
+    };
+    ArmorFuelJetpack.prototype.onTick = function (item, index, playerUid) {
+        var canFly = this.canFly(item, Entity.getPosition(playerUid));
+        var vel = Entity.getVelocity(playerUid);
+        if (item.extra && item.extra.getBoolean("hover")) {
+            if (!canFly || EntityHelper.isOnGround(playerUid)) {
+                item.extra.putBoolean("hover", false);
+                var client = Network.getClientForPlayer(playerUid);
+                if (client)
+                    BlockEngine.sendMessage(client, "§4", "message.hover_mode.disabled");
+                return item;
+            }
+            else {
+                if (vel.y < 0) {
+                    EntityHelper.resetFallHeight(playerUid);
+                }
+                if (JetpackProvider.getFlying(playerUid)) {
+                    return this.burnFuel(item, 2);
+                }
+                if (World.getThreadTime() % ArmorFuelJetpack.FUEL_BURN_TICKS == 0) {
+                    return this.burnFuel(item, ArmorFuelJetpack.FUEL_BURN_TICKS);
+                }
+            }
+        }
+        else if (JetpackProvider.getFlying(playerUid)) {
+            if (vel.y > -1.2 && vel.y < 0) {
+                EntityHelper.resetFallHeight(playerUid);
+            }
+            return this.burnFuel(item, 2);
+        }
+        return null;
+    };
+    ArmorFuelJetpack.prototype.canFly = function (item, playerPos) {
+        var _a;
+        return playerPos.y < 256 && (item.data < this.maxDamage || ((_a = item.extra) === null || _a === void 0 ? void 0 : _a.getInt("burnTime")) > 0);
+    };
+    ArmorFuelJetpack.prototype.burnFuel = function (item, amount) {
+        if (!item.extra)
+            item.extra = new ItemExtraData();
+        var burnTime = item.extra.getInt("burnTime");
+        if (burnTime > amount) {
+            item.extra.putInt("burnTime", burnTime - amount);
+        }
+        else if (item.data < this.maxDamage) {
+            item.extra.putInt("burnTime", ArmorFuelJetpack.FUEL_BURN_TICKS * 2);
+            item.data++;
+        }
+        else {
+            item.extra.putInt("burnTime", 0);
+        }
+        return item;
+    };
+    ArmorFuelJetpack.prototype.isValidLiquid = function (liquid) {
+        return liquid == "biogas";
+    };
+    ArmorFuelJetpack.prototype.getLiquidStored = function (itemData) {
+        return itemData < this.maxDamage ? "biogas" : null;
+    };
+    ArmorFuelJetpack.prototype.getAmount = function (itemData) {
+        return this.maxDamage - itemData;
+    };
+    ArmorFuelJetpack.prototype.getEmptyItem = function () {
+        return new ItemStack(this.id, 1, this.maxDamage);
+    };
+    ArmorFuelJetpack.prototype.getFullItem = function (liquid) {
+        return this.isValidLiquid(liquid) ? new ItemStack(this.id, 1, 1) : null;
+    };
+    ArmorFuelJetpack.prototype.getLiquid = function (item, amount) {
+        amount = Math.min(this.getAmount(item.data), amount);
+        item.data += amount;
+        return amount;
+    };
+    ArmorFuelJetpack.prototype.addLiquid = function (item, liquid, amount) {
+        amount = Math.min(this.liquidStorage - this.getAmount(item.data), amount);
+        item.data -= amount;
+        return amount;
+    };
+    /** Amount of ticks of active flying that 1 mB of fuel provides divided by 2 */
+    ArmorFuelJetpack.FUEL_BURN_TICKS = 5;
+    return ArmorFuelJetpack;
 }(ArmorIC2));
 /// <reference path="./ArmorIC2.ts" />
 var ArmorElectric = /** @class */ (function (_super) {
@@ -14071,80 +16805,28 @@ var ArmorElectric = /** @class */ (function (_super) {
     };
     return ArmorElectric;
 }(ArmorIC2));
-var JetpackProvider;
-(function (JetpackProvider) {
-    var playerData = {};
-    function getFlying(playerUid) {
-        return playerData[playerUid] || false;
-    }
-    JetpackProvider.getFlying = getFlying;
-    function setFlying(playerUid, fly) {
-        return playerData[playerUid] = fly;
-    }
-    JetpackProvider.setFlying = setFlying;
-    function onTick(item, playerUid) {
-        var energyStored = ChargeItemRegistry.getEnergyStored(item);
-        var vel = Entity.getVelocity(playerUid);
-        if (item.extra && item.extra.getBoolean("hover")) {
-            if (energyStored < 8 || EntityHelper.isOnGround(playerUid)) {
-                item.extra.putBoolean("hover", false);
-                var client = Network.getClientForPlayer(playerUid);
-                if (client)
-                    BlockEngine.sendMessage(client, "§4", "message.hover_mode.disabled");
-                return item;
-            }
-            else {
-                if (vel.y < 0) {
-                    EntityHelper.resetFallHeight(playerUid);
-                }
-                if (World.getThreadTime() % 5 == 0) {
-                    var energyUse = getFlying(playerUid) ? 40 : 20;
-                    ChargeItemRegistry.setEnergyStored(item, Math.max(energyStored - energyUse, 0));
-                    return item;
-                }
-            }
-        }
-        else if (getFlying(playerUid) && energyStored > 8) {
-            if (vel.y > -1.2 && vel.y < 0) {
-                EntityHelper.resetFallHeight(playerUid);
-            }
-            ChargeItemRegistry.setEnergyStored(item, energyStored - 8);
-            return item;
-        }
-        /*if (playSound && IC2Config.soundEnabled) {
-            if (hoverMode) {
-                SoundManager.startPlaySound(SourceType.ENTITY, playerUid, "JetpackLoop.ogg", 0.8);
-            } else {
-                SoundManager.startPlaySound(SourceType.ENTITY, playerUid, "JetpackLoop.ogg", 1);
-            }
-        }
-        if (!playSound) {
-            SoundManager.stopPlaySound(playerUid, "JetpackLoop.ogg");
-        }*/
-        return null;
-    }
-    JetpackProvider.onTick = onTick;
-})(JetpackProvider || (JetpackProvider = {}));
 /// <reference path="./ArmorElectric.ts" />
 /// <reference path="./JetpackProvider.ts" />
-var ArmorJetpackElectric = /** @class */ (function (_super) {
-    __extends(ArmorJetpackElectric, _super);
-    function ArmorJetpackElectric() {
+var ArmorElectricJetpack = /** @class */ (function (_super) {
+    __extends(ArmorElectricJetpack, _super);
+    function ArmorElectricJetpack() {
         var _this = _super.call(this, "jetpack", "electric_jetpack", { type: "chestplate", defence: 3, texture: "electric_jetpack" }, 30000, 100, 1) || this;
-        ToolHUD.setButtonFor(_this.id, "button_fly");
-        ToolHUD.setButtonFor(_this.id, "button_hover");
+        JetpackProvider.registerItem(_this.id, _this);
         return _this;
     }
-    ArmorJetpackElectric.prototype.onHurt = function (params, item, index, playerUid) {
+    ArmorElectricJetpack.prototype.onHurt = function (params, item, index, playerUid) {
         if (BlockEngine.getMainGameVersion() >= 16 && params.type == 5 && !EntityHelper.isOnGround(playerUid)) {
             Game.prevent();
         }
         return item;
     };
-    ArmorJetpackElectric.prototype.onTick = function (item, index, playerUid) {
+    ArmorElectricJetpack.prototype.onTick = function (item, index, playerUid) {
         return JetpackProvider.onTick(item, playerUid);
     };
-    return ArmorJetpackElectric;
+    ArmorElectricJetpack.prototype.canFly = function (item, playerPos) {
+        return playerPos.y < 256 && ChargeItemRegistry.getEnergyStored(item) >= 8;
+    };
+    return ArmorElectricJetpack;
 }(ArmorElectric));
 /// <reference path="./ArmorElectric.ts" />
 var ArmorBatpack = /** @class */ (function (_super) {
@@ -14254,7 +16936,6 @@ var ArmorNanoHelmet = /** @class */ (function (_super) {
             else {
                 Entity.addEffect(playerUid, PotionEffect.nightVision, 1, 225);
             }
-            Entity.addEffect(playerUid, PotionEffect.nightVision, 1, 225);
             if (World.getThreadTime() % 20 == 0) {
                 ChargeItemRegistry.setEnergyStored(item, Math.max(energyStored - 20, 0));
                 return item;
@@ -14302,17 +16983,54 @@ var ArmorNanoBoots = /** @class */ (function (_super) {
     };
     return ArmorNanoBoots;
 }(ArmorNanoSuit));
-/** @deprecated */
-var NANO_ARMOR_FUNCS = {
-    hurt: function (params, item, index) {
-        return !!ArmorNanoSuit.prototype.onHurt(params, item, index, Player.get());
-    },
-    tick: function (item, index) {
-        return !!ArmorNanoSuit.prototype.onTick(item, index, Player.get());
+Callback.addCallback("EntityHurt", function (attacker, victim, damage, type) {
+    if (damage > 0 && EntityHelper.isPlayer(victim) && EntityHelper.isPhysicalDamage(type)) {
+        var defencePoints = 0;
+        for (var i = 0; i < 4; i++) {
+            var item = Entity.getArmorSlot(victim, i);
+            var armor = ItemRegistry.getInstanceOf(item.id);
+            if (armor instanceof ArmorNanoSuit || armor instanceof ArmorQuantumSuit) {
+                if (ChargeItemRegistry.getEnergyStored(item) >= armor.getEnergyPerDamage() * damage) {
+                    defencePoints += armor.getExtraDefence();
+                }
+            }
+        }
+        if (defencePoints > 0) {
+            var damageGot = damage / 5;
+            var damageReceived = damageGot * (20 - defencePoints) / 20;
+            if (damageGot > 1) {
+                damageGot = Math.floor(damageGot);
+            }
+            var damageAbsorbed = Math.ceil(damageGot - Math.floor(damageReceived));
+            var health_1 = Math.min(Entity.getMaxHealth(victim), Entity.getHealth(victim));
+            //Game.message(`time: ${World.getThreadTime()}, ${damage} damage of type ${type} taken`);
+            //Game.message(`health: ${health}, vanilla reduce: ${damageGot}, mod reduce: ${damageReceived}, delta: ${damageAbsorbed}`);
+            if (damageReceived < 1) {
+                if (damageGot < 1) {
+                    if (Math.random() >= damageReceived / damageGot) {
+                        runOnMainThread(function () {
+                            var curHealth = Entity.getHealth(victim);
+                            //Game.message(`Health fix: ${curHealth}/${health}`);
+                            if (curHealth < health_1) {
+                                Entity.setHealth(victim, curHealth + 1);
+                            }
+                        });
+                    }
+                    return;
+                }
+                else if (Math.random() < damageReceived) {
+                    damageAbsorbed--;
+                }
+            }
+            if (damageAbsorbed > 0) {
+                Entity.setHealth(victim, health_1 + damageAbsorbed);
+            }
+        }
     }
-};
+});
 /// <reference path="./ArmorElectric.ts" />
 /// <reference path="./JetpackProvider.ts" />
+/// <reference path="./PowerArmorDamageAbsorption.ts" />
 var ArmorQuantumSuit = /** @class */ (function (_super) {
     __extends(ArmorQuantumSuit, _super);
     function ArmorQuantumSuit(stringID, name, params, inCreative) {
@@ -14330,8 +17048,10 @@ var ArmorQuantumSuit = /** @class */ (function (_super) {
     ArmorQuantumSuit.prototype.onHurt = function (params, item, index, playerUid) {
         var energyStored = ChargeItemRegistry.getEnergyStored(item);
         var energyPerDamage = this.getEnergyPerDamage();
-        var type = params.type;
-        if (energyStored >= energyPerDamage && (type == 2 || type == 3 || type == 11)) {
+        if (energyStored >= energyPerDamage && EntityHelper.isPhysicalDamage(params.type)) {
+            if (params.type == EDamageCause.LAVA) { // fix lava damage being called each tick
+                Entity.addEffect(playerUid, EPotionEffect.FIRE_RESISTANCE, 1, 10);
+            }
             var energy = params.damage * energyPerDamage;
             ChargeItemRegistry.setEnergyStored(item, Math.max(energyStored - energy, 0));
             return item;
@@ -14351,7 +17071,7 @@ var ArmorQuantumHelmet = /** @class */ (function (_super) {
         var energyStored = ChargeItemRegistry.getEnergyStored(item);
         if (params.type == 9 && energyStored >= 500) {
             Game.prevent();
-            Entity.addEffect(playerUid, PotionEffect.waterBreathing, 1, 60);
+            Entity.addEffect(playerUid, EPotionEffect.WATER_BREATHING, 1, 60);
             ChargeItemRegistry.setEnergyStored(item, energyStored - 500);
         }
         return _super.prototype.onHurt.call(this, params, item, index, playerUid);
@@ -14360,12 +17080,18 @@ var ArmorQuantumHelmet = /** @class */ (function (_super) {
         var energyStored = ChargeItemRegistry.getEnergyStored(item);
         if (energyStored <= 0)
             return null;
-        Entity.clearEffect(playerUid, PotionEffect.poison);
-        Entity.clearEffect(playerUid, PotionEffect.wither);
         var newEnergyStored = energyStored;
-        if (RadiationAPI.getRadiation(playerUid) > 0 && energyStored >= 100000) {
+        if (newEnergyStored >= 10000 && RadiationAPI.getRadiation(playerUid)) {
             RadiationAPI.setRadiation(playerUid, 0);
-            newEnergyStored -= 100000;
+            newEnergyStored -= 10000;
+        }
+        if (newEnergyStored >= 10000 && Entity.getEffect(playerUid, EPotionEffect.POISON).duration > 0) {
+            Entity.clearEffect(playerUid, EPotionEffect.POISON);
+            newEnergyStored -= 10000;
+        }
+        if (newEnergyStored >= 25000 && Entity.getEffect(playerUid, EPotionEffect.WITHER).duration > 0) {
+            Entity.clearEffect(playerUid, EPotionEffect.WITHER);
+            newEnergyStored -= 25000;
         }
         var player = new PlayerEntity(playerUid);
         var hunger = player.getHunger();
@@ -14387,11 +17113,11 @@ var ArmorQuantumHelmet = /** @class */ (function (_super) {
             var time = World.getWorldTime() % 24000;
             var region = WorldRegion.getForActor(playerUid);
             if (region.getLightLevel(coords.x, coords.y, coords.z) > 13 && time <= 12000) {
-                Entity.addEffect(playerUid, PotionEffect.blindness, 1, 25);
-                Entity.clearEffect(playerUid, PotionEffect.nightVision);
+                Entity.addEffect(playerUid, EPotionEffect.BLINDNESS, 1, 25);
+                Entity.clearEffect(playerUid, EPotionEffect.NIGHT_VISION);
             }
             else {
-                Entity.addEffect(playerUid, PotionEffect.nightVision, 1, 225);
+                Entity.addEffect(playerUid, EPotionEffect.NIGHT_VISION, 1, 225);
             }
             if (World.getThreadTime() % 20 == 0) {
                 newEnergyStored = Math.max(newEnergyStored - 20, 0);
@@ -14409,8 +17135,7 @@ var ArmorQuantumChestplate = /** @class */ (function (_super) {
     __extends(ArmorQuantumChestplate, _super);
     function ArmorQuantumChestplate(stringID, name, texture) {
         var _this = _super.call(this, stringID, name, { type: "chestplate", defence: 8, texture: texture }) || this;
-        ToolHUD.setButtonFor(_this.id, "button_fly");
-        ToolHUD.setButtonFor(_this.id, "button_hover");
+        JetpackProvider.registerItem(_this.id, _this);
         return _this;
     }
     ArmorQuantumChestplate.prototype.onHurt = function (params, item, index, playerUid) {
@@ -14425,6 +17150,9 @@ var ArmorQuantumChestplate = /** @class */ (function (_super) {
             Entity.setFire(playerUid, 0, true);
         }
         return JetpackProvider.onTick(item, playerUid);
+    };
+    ArmorQuantumChestplate.prototype.canFly = function (item, playerPos) {
+        return playerPos.y < 256 && ChargeItemRegistry.getEnergyStored(item) >= 8;
     };
     return ArmorQuantumChestplate;
 }(ArmorQuantumSuit));
@@ -14447,7 +17175,7 @@ var ArmorQuantumLeggings = /** @class */ (function (_super) {
             this.runTime++;
         }
         if (this.runTime > 2 && !Player.getFlying()) {
-            Entity.addEffect(playerUid, PotionEffect.movementSpeed, 6, 5);
+            Entity.addEffect(playerUid, EPotionEffect.MOVEMENT_SPEED, 6, 5);
             if (World.getThreadTime() % 5 == 0) {
                 ChargeItemRegistry.setEnergyStored(item, Math.max(energyStored - Math.floor(horizontalVel * 600)));
                 return item;
@@ -14486,56 +17214,6 @@ var ArmorQuantumBoots = /** @class */ (function (_super) {
     };
     return ArmorQuantumBoots;
 }(ArmorQuantumSuit));
-Callback.addCallback("EntityHurt", function (attacker, victim, damage, type) {
-    if (damage > 0 && EntityHelper.isPlayer(victim) && (type == 2 || type == 3 || type == 11)) {
-        var defencePoints = 0;
-        for (var i = 0; i < 4; i++) {
-            var item = Entity.getArmorSlot(victim, i);
-            var armor = ItemRegistry.getInstanceOf(item.id);
-            if (armor instanceof ArmorNanoSuit || armor instanceof ArmorQuantumSuit) {
-                if (ChargeItemRegistry.getEnergyStored(item) >= armor.getEnergyPerDamage() * damage) {
-                    defencePoints += armor.getExtraDefence();
-                }
-            }
-        }
-        if (defencePoints > 0) {
-            var damageGot = damage / 5;
-            var damageReceived = damageGot * (20 - defencePoints) / 20;
-            if (damageGot > 1)
-                damageGot = Math.floor(damageGot);
-            var damageAbsorbed = Math.ceil(damageGot - Math.floor(damageReceived));
-            var health_1 = Math.min(Entity.getMaxHealth(victim), Entity.getHealth(victim));
-            if (damageReceived < 1) {
-                if (damageGot < 1) {
-                    if (Math.random() >= damageReceived / damageGot) {
-                        runOnMainThread(function () {
-                            var curHealth = Entity.getHealth(victim);
-                            if (curHealth < health_1) {
-                                Entity.setHealth(victim, curHealth + 1);
-                            }
-                        });
-                    }
-                    return;
-                }
-                else if (Math.random() < damageReceived) {
-                    damageAbsorbed--;
-                }
-            }
-            if (damageAbsorbed > 0) {
-                Entity.setHealth(victim, health_1 + damageAbsorbed);
-            }
-        }
-    }
-});
-/** @deprecated */
-var QUANTUM_ARMOR_FUNCS = {
-    hurt: function (params, item, index) {
-        return !!ArmorQuantumSuit.prototype.onHurt(params, item, index, Player.get());
-    },
-    tick: function (item, index) {
-        return !!ArmorQuantumSuit.prototype.onTick(item, index, Player.get());
-    }
-};
 /// <reference path="./ArmorIC2.ts" />
 var ArmorSolarHelmet = /** @class */ (function (_super) {
     __extends(ArmorSolarHelmet, _super);
@@ -14545,15 +17223,16 @@ var ArmorSolarHelmet = /** @class */ (function (_super) {
         return _this;
     }
     ArmorSolarHelmet.prototype.onTick = function (item, index, playerUid) {
+        var tickRate = 20;
         var time = World.getWorldTime() % 24000;
-        if (World.getThreadTime() % 20 == 0 && time >= 23500 || time < 12550) {
+        if (World.getThreadTime() % tickRate == 0 && (time >= 23500 || time < 12550)) {
             var pos = Entity.getPosition(playerUid);
             var region = WorldRegion.getForActor(playerUid);
             if (region.canSeeSky(pos) && (!World.getWeather().rain || region.getLightLevel(pos) > 14)) {
                 for (var i = 1; i < 4; i++) {
-                    var energy = 20;
+                    var energy = tickRate;
                     var armor = Entity.getArmorSlot(playerUid, i);
-                    var energyAdd = ChargeItemRegistry.addEnergyTo(armor, "Eu", energy, 4);
+                    var energyAdd = ChargeItemRegistry.addEnergyTo(armor, "Eu", energy, 4, true);
                     if (energyAdd > 0) {
                         energy -= energyAdd;
                         Entity.setArmorSlot(playerUid, i, armor.id, 1, armor.data, armor.extra);
@@ -14568,7 +17247,8 @@ var ArmorSolarHelmet = /** @class */ (function (_super) {
 }(ArmorIC2));
 /// <reference path="ArmorIC2.ts" />
 /// <reference path="ArmorHazmat.ts" />
-/// <reference path="ArmorJetpackElectric.ts" />
+/// <reference path="ArmorFuelJetpack.ts" />
+/// <reference path="ArmorElectricJetpack.ts" />
 /// <reference path="ArmorBatpack.ts" />
 /// <reference path="ArmorNightvisionGoggles.ts" />
 /// <reference path="ArmorNanoSuit.ts" />
@@ -14577,8 +17257,8 @@ var ArmorSolarHelmet = /** @class */ (function (_super) {
 ItemRegistry.addArmorMaterial("bronze", { durabilityFactor: 14, enchantability: 10, repairMaterial: ItemID.ingotBronze });
 ItemRegistry.registerItem(new ArmorIC2("bronzeHelmet", "bronze_helmet", { type: "helmet", defence: 2, texture: "bronze", material: "bronze" }));
 ItemRegistry.registerItem(new ArmorIC2("bronzeChestplate", "bronze_chestplate", { type: "chestplate", defence: 6, texture: "bronze", material: "bronze" }));
-ItemRegistry.registerItem(new ArmorIC2("bronzeLeggings", "bronze_leggings", { type: "leggings", defence: 6, texture: "bronze", material: "bronze" }));
-ItemRegistry.registerItem(new ArmorIC2("bronzeBoots", "bronze_boots", { type: "boots", defence: 6, texture: "bronze", material: "bronze" }));
+ItemRegistry.registerItem(new ArmorIC2("bronzeLeggings", "bronze_leggings", { type: "leggings", defence: 5, texture: "bronze", material: "bronze" }));
+ItemRegistry.registerItem(new ArmorIC2("bronzeBoots", "bronze_boots", { type: "boots", defence: 2, texture: "bronze", material: "bronze" }));
 ItemRegistry.addArmorMaterial("composite", { durabilityFactor: 50, enchantability: 8, repairMaterial: ItemID.plateAlloy });
 ItemRegistry.registerItem(new ArmorIC2("compositeHelmet", "composite_helmet", { type: "helmet", defence: 3, texture: "composite", material: "composite" }));
 ItemRegistry.registerItem(new ArmorIC2("compositeChestplate", "composite_chestplate", { type: "chestplate", defence: 8, texture: "composite", material: "composite" }));
@@ -14588,7 +17268,8 @@ ItemRegistry.registerItem(new ArmorHazmat("hazmatHelmet", "hazmat_helmet", { typ
 ItemRegistry.registerItem(new ArmorHazmat("hazmatChestplate", "hazmat_chestplate", { type: "chestplate", defence: 1, texture: "hazmat" }));
 ItemRegistry.registerItem(new ArmorHazmat("hazmatLeggings", "hazmat_leggings", { type: "leggings", defence: 1, texture: "hazmat" }));
 ItemRegistry.registerItem(new ArmorHazmat("rubberBoots", "rubber_boots", { type: "boots", defence: 1, texture: "rubber" }));
-ItemRegistry.registerItem(new ArmorJetpackElectric());
+ItemRegistry.registerItem(new ArmorFuelJetpack());
+ItemRegistry.registerItem(new ArmorElectricJetpack());
 ItemRegistry.registerItem(new ArmorBatpack("batpack", "batpack", 60000, 100, 1));
 ItemRegistry.registerItem(new ArmorBatpack("advBatpack", "advanced_batpack", 600000, 512, 2));
 ItemRegistry.registerItem(new ArmorBatpack("energypack", "energypack", 2000000, 2048, 3));
@@ -14638,8 +17319,8 @@ Recipes.addShaped({ id: ItemID.compositeHelmet, count: 1, data: 0 }, [
 Recipes.addShaped({ id: ItemID.compositeChestplate, count: 1, data: 0 }, [
     "x x",
     "xax",
-    "xxx"
-], ['x', ItemID.plateAlloy, 0, 'a', VanillaItemID.iron_chestplate, 0]);
+    "xbx"
+], ['x', ItemID.plateAlloy, 0, 'a', VanillaItemID.iron_chestplate, 0, 'b', VanillaItemID.leather_chestplate, 0]);
 Recipes.addShaped({ id: ItemID.compositeLeggings, count: 1, data: 0 }, [
     "xax",
     "x x",
@@ -14689,12 +17370,17 @@ Recipes.addShaped({ id: ItemID.rubberBoots, count: 1, data: 0 }, [
     "x x",
     "xwx"
 ], ['x', ItemID.rubber, 0, 'w', 35, -1]);
-// Jetpack
+// Jetpacks
 Recipes.addShaped({ id: ItemID.jetpack, count: 1, data: ELECTRIC_ITEM_MAX_DAMAGE }, [
     "bcb",
     "bab",
-    "d d"
-], ['a', BlockID.storageBatBox, -1, 'b', ItemID.casingIron, 0, 'c', ItemID.circuitAdvanced, 0, 'd', 348, 0]);
+    "g g"
+], ['a', BlockID.storageBatBox, -1, 'b', ItemID.casingIron, 0, 'c', ItemID.circuitAdvanced, 0, 'g', 348, 0]);
+Recipes.addShaped({ id: ItemID.fuelJetpack, count: 1, data: Item.getMaxDamage(ItemID.fuelJetpack) }, [
+    "bcb",
+    "bab",
+    "r r"
+], ['a', ItemID.cellEmpty, -1, 'b', ItemID.casingIron, 0, 'c', ItemID.circuitBasic, 0, 'r', VanillaItemID.redstone, 0]);
 // Batpacks
 Recipes.addShaped({ id: ItemID.batpack, count: 1, data: ELECTRIC_ITEM_MAX_DAMAGE }, [
     "bcb",
@@ -14774,10 +17460,12 @@ Recipes.addShaped({ id: ItemID.solarHelmet, count: 1, data: 0 }, [
 ], ['x', BlockID.solarPanel, -1, 'a', VanillaItemID.iron_helmet, 0, 'c', ItemID.cableCopper1, 0]);
 ItemRegistry.createItem("toolbox", { name: "tool_box", icon: "tool_box", stack: 1, category: ItemCategory.EQUIPMENT });
 var toolboxItems = [
-    ItemID.treetap, ItemID.craftingHammer, ItemID.cutter, ItemID.electricHoe, ItemID.electricTreetap, ItemID.EUMeter,
+    ItemID.treetap, ItemID.craftingHammer, ItemID.cutter,
+    ItemID.electricHoe, ItemID.electricTreetap, ItemID.windMeter, ItemID.EUMeter,
     ItemID.cableTin0, ItemID.cableTin1, ItemID.cableCopper0, ItemID.cableCopper1,
     ItemID.cableGold0, ItemID.cableGold1, ItemID.cableGold2,
-    ItemID.cableIron0, ItemID.cableIron1, ItemID.cableIron2, ItemID.cableIron3, ItemID.cableOptic
+    ItemID.cableIron0, ItemID.cableIron1, ItemID.cableIron2, ItemID.cableIron3,
+    ItemID.cableOptic
 ];
 BackpackRegistry.register(ItemID.toolbox, {
     title: "Tool Box",
@@ -14801,10 +17489,10 @@ var guiContainmentBox = new UI.StandartWindow({
     },
     drawing: [
         { type: "background", color: Color.parseColor("#d5d9b9") },
-        { type: "bitmap", x: 415, y: 112, bitmap: "containment_box_image", scale: GUI_SCALE },
-        { type: "bitmap", x: 805, y: 112, bitmap: "containment_box_image", scale: GUI_SCALE },
-        { type: "bitmap", x: 415, y: 232, bitmap: "containment_box_image", scale: GUI_SCALE },
-        { type: "bitmap", x: 805, y: 232, bitmap: "containment_box_image", scale: GUI_SCALE },
+        { type: "bitmap", x: 415, y: 112, bitmap: "icpe.containment_box_image", scale: GUI_SCALE },
+        { type: "bitmap", x: 805, y: 112, bitmap: "icpe.containment_box_image", scale: GUI_SCALE },
+        { type: "bitmap", x: 415, y: 232, bitmap: "icpe.containment_box_image", scale: GUI_SCALE },
+        { type: "bitmap", x: 805, y: 232, bitmap: "icpe.containment_box_image", scale: GUI_SCALE },
     ],
     elements: {
         "slot0": { type: "slot", x: 530, y: 120 },
@@ -14838,7 +17526,7 @@ var DebugItem = /** @class */ (function (_super) {
         return _this;
     }
     DebugItem.prototype.onCharge = function (item, amount, tier, addAll) {
-        return amount;
+        return addAll ? 0 : amount;
     };
     DebugItem.prototype.onDischarge = function (item, amount, tier, getAll) {
         return amount;
@@ -14862,7 +17550,8 @@ var DebugItem = /** @class */ (function (_super) {
             for (var key in tile.data) {
                 var value = tile.data[key];
                 if (key == "energy") {
-                    client.sendMessage("energy: ".concat(value, "/").concat(tile.getEnergyStorage()));
+                    var capacity = tile.getEnergyCapacity ? tile.getEnergyCapacity() : tile.getEnergyStorage ? tile.getEnergyStorage() : 0;
+                    client.sendMessage("energy: ".concat(value, "/").concat(capacity));
                 }
                 else
                     try {
@@ -14912,6 +17601,7 @@ var EUMeterUpdatable = /** @class */ (function () {
     };
     EUMeterUpdatable.prototype.resetValues = function () {
         this.time = 0;
+        this.voltageTime = 0;
         this.sum = 0;
         this.minValue = 2e9;
         this.maxValue = -2e9;
@@ -14924,27 +17614,34 @@ var EUMeterUpdatable = /** @class */ (function () {
         }
         this.time++;
         var value = this.getValue();
+        var recordedTime = this.mode === 3 /* EuMeterMode.Voltage */ ? this.getVoltageTime(value) : this.time;
         this.minValue = Math.min(this.minValue, value);
         this.maxValue = Math.max(this.maxValue, value);
         this.sum += value;
         this.container.setText("textMinValue", this.displayValue(this.minValue));
         this.container.setText("textMaxValue", this.displayValue(this.maxValue));
-        this.container.setText("textAvgValue", this.displayValue(this.sum / this.time));
+        this.container.setText("textAvgValue", this.displayValue(recordedTime > 0 ? this.sum / recordedTime : 0));
         this.container.setText("textTime", Translation.translate("Cycle: ") + Math.floor(this.time / 20) + " " + Translation.translate("sec"));
         this.container.sendChanges();
+    };
+    EUMeterUpdatable.prototype.getVoltageTime = function (value) {
+        if (value !== 0) {
+            this.voltageTime++;
+        }
+        return this.voltageTime;
     };
     EUMeterUpdatable.prototype.getUnit = function () {
         return (this.mode < 3) ? "EU/t" : "V";
     };
     EUMeterUpdatable.prototype.getValue = function () {
         switch (this.mode) {
-            case 0:
+            case 0 /* EuMeterMode.EnergyIn */:
                 return this.node.energyIn;
-            case 1:
+            case 1 /* EuMeterMode.EnergyOut */:
                 return this.node.energyOut;
-            case 2:
+            case 2 /* EuMeterMode.EnergyGain */:
                 return this.node.energyIn - this.node.energyOut;
-            case 3:
+            case 3 /* EuMeterMode.Voltage */:
                 return this.node.energyPower;
         }
     };
@@ -14966,7 +17663,7 @@ var EUMeter = /** @class */ (function (_super) {
         ItemContainer.registerScreenFactory("eu_meter.ui", function (container, name) {
             var gui = EUMeter.gui;
             var elements = gui.getContent().elements;
-            elements.arrow.bitmap = "eu_meter_arrow_0";
+            elements.arrow.bitmap = "icpe.eu_meter_arrow_0";
             elements.textMode2.text = Translation.translate("EnergyIn");
             return gui;
         });
@@ -14993,10 +17690,10 @@ var EUMeter = /** @class */ (function (_super) {
         },
         drawing: [
             { type: "background", color: 0 },
-            { type: "bitmap", x: 218, y: 30, bitmap: "eu_meter_background", scale: GUI_SCALE },
+            { type: "bitmap", x: 218, y: 30, bitmap: "icpe.eu_meter_background", scale: GUI_SCALE },
         ],
         elements: {
-            "arrow": { type: "image", x: 576, y: 206, bitmap: "eu_meter_arrow_0", scale: GUI_SCALE },
+            "arrow": { type: "image", x: 576, y: 206, bitmap: "icpe.eu_meter_arrow_0", scale: GUI_SCALE },
             "textName": { type: "text", font: { size: 32 }, x: 378, y: 48, width: 256, height: 42, text: Translation.translate("eu_meter") },
             "textAvg": { type: "text", font: { size: 22, color: Color.GREEN }, x: 266, y: 164, width: 256, height: 42, text: Translation.translate("Avg:") },
             "textAvgValue": { type: "text", font: { size: 22, color: Color.GREEN }, x: 266, y: 194, width: 256, height: 42, text: "0 EU/t" },
@@ -15007,49 +17704,49 @@ var EUMeter = /** @class */ (function (_super) {
             "textMode2": { type: "text", font: { size: 22, color: Color.GREEN }, x: 554, y: 348, width: 256, height: 42, text: Translation.translate("EnergyIn") },
             "textTime": { type: "text", font: { size: 22, color: Color.GREEN }, x: 266, y: 348, width: 256, height: 42, text: "Cycle: 0 sec" },
             "textReset": { type: "text", font: { size: 22, color: Color.GREEN }, x: 330, y: 392, width: 256, height: 42, text: Translation.translate("Reset") },
-            "closeButton": { type: "button", x: 727, y: 40, bitmap: "close_button_small", scale: GUI_SCALE, clicker: {
+            "closeButton": { type: "button", x: 727, y: 40, bitmap: "icpe.close_button_small", scale: GUI_SCALE, clicker: {
                     onClick: function (_, container) {
                         container.close();
                     }
                 } },
-            "resetButton": { type: "button", x: 298, y: 385, bitmap: "eu_meter_reset_button", scale: GUI_SCALE, clicker: {
+            "resetButton": { type: "button", x: 298, y: 385, bitmap: "icpe.eu_meter_reset_button", scale: GUI_SCALE, clicker: {
                     onClick: function (_, container) {
                         container.sendEvent("reset", {});
                     }
                 } },
-            "arrowButton0": { type: "button", x: 576, y: 206, bitmap: "eu_meter_switch_button", scale: GUI_SCALE, clicker: {
-                    onClick: function (pos, container) {
-                        container.sendEvent("setMode", { mode: 0 });
+            "arrowButton0": { type: "button", x: 576, y: 206, bitmap: "icpe.eu_meter_switch_button", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("setMode", { mode: 0 /* EuMeterMode.EnergyIn */ });
                         //@ts-ignore
                         var elements = container.getWindow().getContent().elements;
                         elements.arrow.bitmap = "eu_meter_arrow_0";
                         elements.textMode2.text = Translation.translate("EnergyIn");
                     }
                 } },
-            "arrowButton1": { type: "button", x: 640, y: 206, bitmap: "eu_meter_switch_button", scale: GUI_SCALE, clicker: {
-                    onClick: function (pos, container) {
-                        container.sendEvent("setMode", { mode: 1 });
+            "arrowButton1": { type: "button", x: 640, y: 206, bitmap: "icpe.eu_meter_switch_button", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("setMode", { mode: 1 /* EuMeterMode.EnergyOut */ });
                         //@ts-ignore
                         var elements = container.getWindow().getContent().elements;
-                        elements.arrow.bitmap = "eu_meter_arrow_1";
+                        elements.arrow.bitmap = "icpe.eu_meter_arrow_1";
                         elements.textMode2.text = Translation.translate("EnergyOut");
                     }
                 } },
-            "arrowButton2": { type: "button", x: 576, y: 270, bitmap: "eu_meter_switch_button", scale: GUI_SCALE, clicker: {
-                    onClick: function (pos, container) {
-                        container.sendEvent("setMode", { mode: 2 });
+            "arrowButton2": { type: "button", x: 576, y: 270, bitmap: "icpe.eu_meter_switch_button", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("setMode", { mode: 2 /* EuMeterMode.EnergyGain */ });
                         //@ts-ignore
                         var elements = container.getWindow().getContent().elements;
-                        elements.arrow.bitmap = "eu_meter_arrow_2";
+                        elements.arrow.bitmap = "icpe.eu_meter_arrow_2";
                         elements.textMode2.text = Translation.translate("EnergyGain");
                     }
                 } },
-            "arrowButton3": { type: "button", x: 640, y: 270, bitmap: "eu_meter_switch_button", scale: GUI_SCALE, clicker: {
-                    onClick: function (pos, container) {
-                        container.sendEvent("setMode", { mode: 3 });
+            "arrowButton3": { type: "button", x: 640, y: 270, bitmap: "icpe.eu_meter_switch_button", scale: GUI_SCALE, clicker: {
+                    onClick: function (_, container) {
+                        container.sendEvent("setMode", { mode: 3 /* EuMeterMode.Voltage */ });
                         //@ts-ignore
                         var elements = container.getWindow().getContent().elements;
-                        elements.arrow.bitmap = "eu_meter_arrow_3";
+                        elements.arrow.bitmap = "icpe.eu_meter_arrow_3";
                         elements.textMode2.text = Translation.translate("Voltage");
                     }
                 } },
@@ -15129,14 +17826,14 @@ var ItemTransmitter = /** @class */ (function (_super) {
     };
     return ItemTransmitter;
 }(ItemCommon));
-var ore_blocks = [14, 15, 16, 21, 73, 74, 56, 129, 153];
+var scannerOreBlocks = [14, 15, 16, 21, 73, 74, 56, 129, 153];
 if (BlockEngine.getMainGameVersion() >= 16) {
-    ore_blocks.push(VanillaTileID.nether_gold_ore, VanillaTileID.gilded_blackstone, VanillaTileID.ancient_debris);
+    scannerOreBlocks.push(VanillaTileID.nether_gold_ore, VanillaTileID.gilded_blackstone, VanillaTileID.ancient_debris);
 }
 Callback.addCallback("PreLoaded", function () {
     for (var id in BlockID) {
-        if (id.startsWith("ore") && !TileEntity.isTileEntityBlock(BlockID[id])) {
-            ore_blocks.push(BlockID[id]);
+        if ((id.startsWith("ore") || id.endsWith("_ore")) && !TileEntity.isTileEntityBlock(BlockID[id])) {
+            scannerOreBlocks.push(BlockID[id]);
         }
     }
 });
@@ -15154,7 +17851,7 @@ var ItemScanner = /** @class */ (function (_super) {
     ItemScanner.prototype.onItemUse = function (coords, item, block, player) {
         var client = Network.getClientForPlayer(player);
         if (client && ICTool.useElectricItem(item, this.getEnergyPerUse(), player)) {
-            SoundManager.playSoundAtEntity(player, "ODScanner.ogg");
+            SoundLib.playSoundAtEntity(player, "ODScanner.ogg");
             BlockEngine.sendMessage(client, "message.scan_result", "".concat(coords.x, ", ").concat(coords.y, ", ").concat(coords.z));
             var ores = {};
             var radius = this.getScanRadius();
@@ -15163,7 +17860,7 @@ var ItemScanner = /** @class */ (function (_super) {
                 for (var y = coords.y - radius; y <= coords.y + radius; y++) {
                     for (var z = coords.z - radius; z <= coords.z + radius; z++) {
                         var blockID = region.getBlockId(x, y, z);
-                        if (ore_blocks.indexOf(blockID) != -1) {
+                        if (scannerOreBlocks.indexOf(blockID) != -1) {
                             if (!ores[blockID])
                                 ores[blockID] = 0;
                             ores[blockID]++;
@@ -15187,10 +17884,18 @@ var ItemWindMeter = /** @class */ (function (_super) {
         return _this;
     }
     ItemWindMeter.prototype.onNoTargetUse = function (item, player) {
+        var playerCoords = Entity.getPosition(player);
+        this.measureWindAt(playerCoords, item, player);
+    };
+    ItemWindMeter.prototype.onItemUse = function (coords, item, block, player) {
+        this.measureWindAt(coords, item, player);
+    };
+    ItemWindMeter.prototype.measureWindAt = function (coords, item, player) {
         var client = Network.getClientForPlayer(player);
         if (client && ICTool.useElectricItem(item, this.energyPerUse, player)) {
-            var height = Entity.getPosition(player).y;
-            var windStrength = Math.round(WindSim.getWindAt(height) * 100) / 100;
+            var blockSource = BlockSource.getDefaultForActor(player);
+            var windStrength = WindSim.getWindAt(blockSource, coords.x, coords.y, coords.z);
+            windStrength = Math.round(windStrength * 100) / 100;
             client.sendMessage("Wind Strength: ".concat(windStrength, " MCW"));
         }
     };
@@ -15208,7 +17913,7 @@ var ItemTreetap = /** @class */ (function (_super) {
     ItemTreetap.prototype.onItemUse = function (coords, item, block, player) {
         if (block.id == BlockID.rubberTreeLogLatex && block.data >= 4 && block.data == coords.side + 2) {
             var region = WorldRegion.getForActor(player);
-            SoundManager.playSoundAt(coords.vec.x, coords.vec.y, coords.vec.z, "Treetap.ogg");
+            SoundLib.playSoundAt(coords.vec, region.getDimension(), "Treetap.ogg");
             region.setBlock(coords, BlockID.rubberTreeLogLatex, block.data - 4);
             Entity.setCarriedItem(player, item.id, ++item.data < 17 ? item.count : 0, item.data);
             var entity = region.dropAtBlock(coords.relative.x, coords.relative.y, coords.relative.z, ItemID.latex, MathUtil.randomInt(1, 3), 0);
@@ -15231,9 +17936,12 @@ Item.registerUseFunction("cutter", function (coords, item, block, playerUid) {
                 region.setBlock(coords.x, coords.y, coords.z, blockID, 0);
                 stack.decrease(1);
                 player.setInventorySlot(i, stack);
-                if (block.data > 0) {
-                    EnergyGridBuilder.rebuildWireGrid(region, coords.x, coords.y, coords.z);
+                var grid = EnergyNet.getNodeOnCoords(region, coords.x, coords.y, coords.z);
+                if (grid && grid instanceof EUCableGrid) {
+                    grid.removeCoords(coords.x, coords.y, coords.z);
+                    grid.checkAndRebuild();
                 }
+                EnergyGridBuilder.onWirePlaced(region, coords.x, coords.y, coords.z);
                 break;
             }
         }
@@ -15249,20 +17957,25 @@ Callback.addCallback("DestroyBlockStart", function (coords, block, playerUid) {
 });
 Network.addServerPacket(IC2NetworkPackets.cutterLongClick, function (client, coords) {
     var playerUid = client.getPlayerUid();
-    var player = new PlayerEntity(playerUid);
-    var item = player.getCarriedItem();
-    var region = BlockSource.getDefaultForActor(playerUid);
-    var block = region.getBlock(coords.x, coords.y, coords.z);
-    var cableData = CableRegistry.getCableData(block.id);
-    if (item.id == ItemID.cutter && cableData && cableData.insulation > 0) {
-        item.applyDamage(1);
-        player.setCarriedItem(item);
-        SoundManager.playSoundAtBlock(coords, "InsulationCutters.ogg", 1);
-        var blockID = CableRegistry.getBlockID(cableData.name, cableData.insulation - 1);
-        region.setBlock(coords.x, coords.y, coords.z, blockID, 0);
-        region.spawnDroppedItem(coords.x + .5, coords.y + 1, coords.z + .5, ItemID.rubber, 1, 0);
-        if (block.data > 0) {
-            EnergyGridBuilder.rebuildWireGrid(region, coords.x, coords.y, coords.z);
+    if (Entity.getDistanceToCoords(playerUid, coords) <= 10) {
+        var player = new PlayerEntity(playerUid);
+        var item = player.getCarriedItem();
+        var region = BlockSource.getDefaultForActor(playerUid);
+        var block = region.getBlock(coords.x, coords.y, coords.z);
+        var cableData = CableRegistry.getCableData(block.id);
+        if (item.id == ItemID.cutter && cableData && cableData.insulation > 0) {
+            item.applyDamage(1);
+            player.setCarriedItem(item);
+            SoundLib.playSoundAtBlock(coords, region.getDimension(), "InsulationCutters.ogg");
+            var blockID = CableRegistry.getBlockID(cableData.name, cableData.insulation - 1);
+            region.setBlock(coords.x, coords.y, coords.z, blockID, 0);
+            region.spawnDroppedItem(coords.x + .5, coords.y + 1, coords.z + .5, ItemID.rubber, 1, 0);
+            var grid = EnergyNet.getNodeOnCoords(region, coords.x, coords.y, coords.z);
+            if (grid && grid instanceof EUCableGrid) {
+                grid.removeCoords(coords.x, coords.y, coords.z);
+                grid.checkAndRebuild();
+            }
+            EnergyGridBuilder.onWirePlaced(region, coords.x, coords.y, coords.z);
         }
     }
 });
@@ -15316,7 +18029,7 @@ var ElectricTreetap = /** @class */ (function (_super) {
     ElectricTreetap.prototype.onItemUse = function (coords, item, block, player) {
         if (block.id == BlockID.rubberTreeLogLatex && block.data >= 4 && block.data == coords.side + 2 && ICTool.useElectricItem(item, this.energyPerUse, player)) {
             var region = WorldRegion.getForActor(player);
-            SoundManager.playSoundAt(coords.vec.x, coords.vec.y, coords.vec.z, "Treetap.ogg");
+            SoundLib.playSoundAt(coords.vec, region.getDimension(), "Treetap.ogg");
             region.setBlock(coords, BlockID.rubberTreeLogLatex, block.data - 4);
             var entity = region.dropAtBlock(coords.relative.x, coords.relative.y, coords.relative.z, ItemID.latex, MathUtil.randomInt(1, 3), 0);
             Entity.setVelocity(entity, (coords.relative.x - coords.x) * 0.25, (coords.relative.y - coords.y) * 0.25, (coords.relative.z - coords.z) * 0.25);
@@ -15393,10 +18106,10 @@ var ElectricChainsaw = /** @class */ (function (_super) {
         toolData.blockMaterials = ["wood", "wool", "fibre", "plant"];
         _this.setToolParams(toolData);
         _this.extraDamage = toolData.damage;
-        ICTool.setOnHandSound(_this.id, "ChainsawIdle.ogg", "ChainsawStop.ogg");
+        ICTool.setOnHandEquipped(_this.id, _this);
         return _this;
     }
-    ElectricChainsaw.prototype.modifyEnchants = function (enchantData, item, coords, block) {
+    ElectricChainsaw.prototype.modifyEnchant = function (enchantData, item, coords, block) {
         if (block && ToolAPI.getBlockMaterialName(block.id) == "plant") {
             enchantData.silk = true;
         }
@@ -15420,6 +18133,25 @@ var ElectricChainsaw = /** @class */ (function (_super) {
         }
         return true;
     };
+    ElectricChainsaw.prototype.onHandEquippedLocal = function (item) {
+        if (this.canEmitSound(item)) {
+            ICTool.startPlaySound("ChainsawIdle.ogg", true);
+        }
+        else {
+            this.stopPlaySound();
+        }
+    };
+    ElectricChainsaw.prototype.onHandUnequippedLocal = function () {
+        this.stopPlaySound();
+    };
+    ElectricChainsaw.prototype.canEmitSound = function (item) {
+        return ChargeItemRegistry.getEnergyStored(item) >= this.energyPerUse;
+    };
+    ElectricChainsaw.prototype.stopPlaySound = function () {
+        if (ICTool.stopPlaySound("ChainsawIdle.ogg")) {
+            ICTool.startPlaySound("ChainsawStop.ogg", false);
+        }
+    };
     return ElectricChainsaw;
 }(ElectricTool));
 /// <reference path="ElectricTool.ts" />
@@ -15434,7 +18166,7 @@ var ToolDrill = /** @class */ (function (_super) {
     ToolDrill.prototype.onDestroy = function (item, coords, block, player) {
         if (Block.getDestroyTime(block.id) > 0) {
             ICTool.dischargeItem(item, this.getEnergyPerUse(item), player);
-            this.playDestroySound(item, block, player);
+            this.playDestroySound(coords, item, block, player);
         }
         return true;
     };
@@ -15470,19 +18202,19 @@ var ToolDrill = /** @class */ (function (_super) {
             break;
         }
     };
-    ToolDrill.prototype.continueDestroyBlock = function (item, coords, block, progress) {
+    /*continueDestroyBlock(item: ItemInstance, coords: Callback.ItemUseCoordinates, block: Tile, progress: number): void {
         if (progress > 0) {
             this.playDestroySound(item, block, Player.get());
         }
-    };
-    ToolDrill.prototype.playDestroySound = function (item, block, player) {
+    }*/
+    ToolDrill.prototype.playDestroySound = function (coords, item, block, player) {
         if (IC2Config.soundEnabled && ChargeItemRegistry.getEnergyStored(item) >= this.getEnergyPerUse(item)) {
             var hardness = Block.getDestroyTime(block.id);
             if (hardness > 1 || hardness < 0) {
-                SoundManager.startPlaySound(SourceType.ENTITY, player, "DrillHard.ogg");
+                SoundLib.playSoundAtBlock(coords, Entity.getDimension(player), "DrillHard.ogg");
             }
             else if (hardness > 0) {
-                SoundManager.startPlaySound(SourceType.ENTITY, player, "DrillSoft.ogg");
+                SoundLib.playSoundAtBlock(coords, Entity.getDimension(player), "DrillSoft.ogg");
             }
         }
     };
@@ -15501,7 +18233,7 @@ var ToolDrillIridium = /** @class */ (function (_super) {
     ToolDrillIridium.prototype.readMode = function (extra) {
         if (!extra)
             return 0;
-        return extra.getInt("mode");
+        return extra.getInt("mode", 0);
     };
     ToolDrillIridium.prototype.getModeName = function (mode) {
         switch (mode) {
@@ -15522,7 +18254,7 @@ var ToolDrillIridium = /** @class */ (function (_super) {
     };
     ToolDrillIridium.prototype.onModeSwitch = function (item, player) {
         var extra = item.extra || new ItemExtraData();
-        var mode = (extra.getInt("mode") + 1) % 4;
+        var mode = (extra.getInt("mode", 0) + 1) % 4;
         extra.putInt("mode", mode);
         Entity.setCarriedItem(player, item.id, 1, item.data, extra);
         var client = Network.getClientForPlayer(player);
@@ -15582,7 +18314,7 @@ var ToolDrillIridium = /** @class */ (function (_super) {
         return params.base;
     };
     ToolDrillIridium.prototype.onDestroy = function (item, coords, block, player) {
-        this.playDestroySound(item, block, player);
+        this.playDestroySound(coords, item, block, player);
         var mode = this.readMode(item.extra);
         var material = ToolAPI.getBlockMaterialName(block.id);
         var energyStored = ChargeItemRegistry.getEnergyStored(item);
@@ -15628,8 +18360,8 @@ var ItemNanoSaber = /** @class */ (function (_super) {
         _this.damage = 4;
         _this.setToolParams({ energyPerUse: 64, level: 0, damage: 16, efficiency: 4 });
         _this.setRarity(EnumRarity.UNCOMMON);
+        ICTool.setOnHandEquipped(_this.id, _this);
         return _this;
-        //ICTool.setOnHandSound(this.id, "NanosaberIdle.ogg");
     }
     ItemNanoSaber.prototype.onIconOverride = function (item) {
         if (item.extra && item.extra.getBoolean("active")) {
@@ -15640,7 +18372,7 @@ var ItemNanoSaber = /** @class */ (function (_super) {
     ItemNanoSaber.prototype.onAttack = function (item, victim, attacker) {
         if (item.extra && item.extra.getBoolean("active")) {
             this.toolMaterial.damage = 16;
-            SoundManager.playSoundAtEntity(attacker, "NanosaberSwing.ogg");
+            SoundLib.playSoundAtEntity(attacker, "NanosaberSwing.ogg");
         }
         else {
             this.toolMaterial.damage = 0;
@@ -15656,12 +18388,27 @@ var ItemNanoSaber = /** @class */ (function (_super) {
         else if (ChargeItemRegistry.getEnergyStored(item) >= 64) {
             extra.putBoolean("active", true);
             Entity.setCarriedItem(player, item.id, 1, item.data, extra);
-            SoundManager.playSoundAtEntity(player, "NanosaberPowerup.ogg");
+            SoundLib.playSoundAtEntity(player, "NanosaberPowerup.ogg");
         }
     };
     /** KEX compatibility for dynamic Nano Saber damage */
     ItemNanoSaber.prototype.getAttackDamageBonus = function (item) {
         return item.extra && item.extra.getBoolean("active") ? 16 : 0;
+    };
+    ItemNanoSaber.prototype.onHandEquippedLocal = function (item) {
+        if (this.canEmitSound(item)) {
+            ICTool.startPlaySound("NanosaberIdle.ogg", true);
+        }
+        else {
+            ICTool.stopPlaySound("NanosaberIdle.ogg");
+        }
+    };
+    ItemNanoSaber.prototype.onHandUnequippedLocal = function () {
+        ICTool.stopPlaySound("NanosaberIdle.ogg");
+    };
+    ItemNanoSaber.prototype.canEmitSound = function (item) {
+        var _a;
+        return ((_a = item.extra) === null || _a === void 0 ? void 0 : _a.getBoolean("active")) || false;
     };
     ItemNanoSaber.onTick = function (playerUid) {
         if (World.getThreadTime() % 20 == 0) {
@@ -15733,7 +18480,7 @@ var ItemMiningLaser = /** @class */ (function (_super) {
             return;
         var mode = this.getModeProperties(laserSetting);
         if (ICTool.useElectricItem(item, mode.energy, player)) {
-            SoundManager.playSoundAtEntity(player, mode.sound || "MiningLaser.ogg");
+            SoundLib.playSoundAtEntity(player, mode.sound || "MiningLaser.ogg");
             var pos = Entity.getPosition(player);
             var angle = Entity.getLookAngle(player);
             var dir = new Vector3(Entity.getLookVectorByAngle(angle));
@@ -15771,7 +18518,7 @@ var ItemMiningLaser = /** @class */ (function (_super) {
         }
         var mode = this.getModeProperties(laserSetting);
         if (ICTool.useElectricItem(item, mode.energy, player)) {
-            SoundManager.playSoundAtEntity(player, mode.sound || "MiningLaser.ogg");
+            SoundLib.playSoundAtEntity(player, mode.sound || "MiningLaser.ogg");
             var pos = Entity.getPosition(player);
             var angle = Entity.getLookAngle(player);
             var dir = new Vector3(Entity.getLookVectorByAngle(angle));
@@ -16079,7 +18826,7 @@ var CropAnalyserGUI;
         },
         drawing: [
             { type: "background", color: 0 },
-            { type: "bitmap", x: 250, y: 27, bitmap: "agricultural_analyser", scale: GUI_SCALE / 2.3 },
+            { type: "bitmap", x: 250, y: 27, bitmap: "icpe.agricultural_analyser", scale: GUI_SCALE / 2.3 },
         ],
         elements: {
             "closeButton": { type: "closeButton", x: 672, y: 47, bitmap: "close_button_small", scale: GUI_SCALE },
@@ -16148,20 +18895,29 @@ var ItemPainter = /** @class */ (function (_super) {
     ItemPainter.prototype.onItemUse = function (coords, item, block, player) {
         if (CableRegistry.canBePainted(block.id) && block.data != this.color) {
             var region = BlockSource.getDefaultForActor(player);
-            region.setBlock(coords.x, coords.y, coords.z, 0, 0);
             region.setBlock(coords.x, coords.y, coords.z, block.id, this.color);
-            var node = EnergyNet.getNodeOnCoords(region, coords.x, coords.y, coords.z);
-            if (node) {
-                node.destroy();
-                EnergyGridBuilder.rebuildForWire(region, coords.x, coords.y, coords.z, block.id);
+            var grid = EnergyNet.getNodeOnCoords(region, coords.x, coords.y, coords.z);
+            if (grid && grid instanceof EUCableGrid) {
+                grid.removeCoords(coords.x, coords.y, coords.z);
+                grid.checkAndRebuild();
             }
-            if (Game.isItemSpendingAllowed(player)) {
-                if (++item.data >= Item.getMaxDamage(item.id))
-                    item.id = ItemID.icPainter;
-                Entity.setCarriedItem(player, item.id, 1, item.data);
-            }
-            SoundManager.playSoundAt(coords.x + .5, coords.y + .5, coords.z + .5, "Painters.ogg");
+            EnergyGridBuilder.onWirePlaced(region, coords.x, coords.y, coords.z);
+            this.useItem(coords, item, player);
         }
+        else if (block.id == 35 && block.data != 15 - this.color) {
+            var region = BlockSource.getDefaultForActor(player);
+            region.setBlock(coords.x, coords.y, coords.z, 35, 15 - this.color);
+            this.useItem(coords, item, player);
+        }
+    };
+    ItemPainter.prototype.useItem = function (coords, item, player) {
+        SoundLib.playSoundAtBlock(coords, Entity.getDimension(player), "Painter.ogg", 0.5);
+        if (!Game.isItemSpendingAllowed(player))
+            return;
+        if (++item.data >= Item.getMaxDamage(item.id)) {
+            item.id = ItemID.icPainter;
+        }
+        Entity.setCarriedItem(player, item.id, 1, item.data);
     };
     return ItemPainter;
 }(ItemCommon));
@@ -16173,11 +18929,12 @@ var UpgradeMFSU = /** @class */ (function (_super) {
         return _this;
     }
     UpgradeMFSU.prototype.onItemUse = function (coords, item, block, player) {
-        if (block.id == BlockID.storageMFE) {
+        if (block.id == BlockID.storageMFE || block.id == BlockID.chargepadMFE) {
             var region = WorldRegion.getForActor(player);
             var tile = region.getTileEntity(coords);
             tile.selfDestroy();
-            region.setBlock(coords, BlockID.storageMFSU, tile.getFacing());
+            var newBlockId = block.id == BlockID.storageMFE ? BlockID.storageMFSU : BlockID.chargepadMFSU;
+            region.setBlock(coords, newBlockId, tile.getFacing());
             var newTile = region.addTileEntity(coords);
             newTile.data = tile.data;
             Entity.setCarriedItem(player, item.id, item.count - 1, 0);
@@ -16233,7 +18990,7 @@ ItemRegistry.registerItem(new ElectricHoe());
 ItemRegistry.registerItem(new CropAnalyser());
 ItemRegistry.registerItem(new EUMeter());
 ItemRegistry.registerItem(new ElectricChainsaw("chainsaw", "chainsaw", { energyPerUse: 100, level: 3, efficiency: 12, damage: 6 }, 30000, 100, 1));
-ItemRegistry.registerItem(new ToolDrill("drill", "drill", { energyPerUse: 50, level: 3, efficiency: 8, damage: 3 }, 30000, 100, 1));
+ItemRegistry.registerItem(new ToolDrill("drill", "mining_drill", { energyPerUse: 50, level: 3, efficiency: 8, damage: 3 }, 30000, 100, 1));
 ItemRegistry.registerItem(new ToolDrill("diamondDrill", "diamond_drill", { energyPerUse: 80, level: 4, efficiency: 16, damage: 4 }, 30000, 100, 1));
 ItemRegistry.registerItem(new ToolDrillIridium());
 Item.addCreativeGroup("ic2_drills", Translation.translate("Mining Drills"), [
@@ -16324,10 +19081,10 @@ Callback.addCallback("PreLoaded", function () {
         "xxx"
     ], ['x', ItemID.cableCopper1, -1, 'b', ItemID.storageBattery, -1, 'c', ItemID.circuitBasic, -1, 'd', 348, 0, 'g', ItemID.casingGold, -1], ChargeItemRegistry.transferEnergy);
     Recipes.addShaped({ id: ItemID.scannerAdvanced, count: 1, data: 27 }, [
-        "gbg",
+        "pbp",
         "dcd",
         "xsx"
-    ], ['x', ItemID.cableGold2, -1, 's', ItemID.scanner, -1, 'b', ItemID.storageAdvBattery, -1, 'c', ItemID.circuitAdvanced, -1, 'd', 348, 0, 'g', ItemID.casingGold, -1], ChargeItemRegistry.transferEnergy);
+    ], ['x', ItemID.cableGold2, -1, 's', ItemID.scanner, -1, 'b', ItemID.storageAdvBattery, -1, 'c', ItemID.circuitAdvanced, -1, 'd', 348, 0, 'p', ItemID.casingSilver, -1], ChargeItemRegistry.transferEnergy);
     // Windmeter
     Recipes.addShaped({ id: ItemID.windMeter, count: 1, data: 27 }, [
         " c",
@@ -16430,9 +19187,9 @@ var RV;
 ModAPI.addAPICallback("RecipeViewer", function (api) {
     RV = api;
     var Bitmap = android.graphics.Bitmap;
-    var RecipeTypeForICPE = /** @class */ (function (_super) {
-        __extends(RecipeTypeForICPE, _super);
-        function RecipeTypeForICPE(name, icon, content) {
+    var RecipeViewForICPE = /** @class */ (function (_super) {
+        __extends(RecipeViewForICPE, _super);
+        function RecipeViewForICPE(name, icon, content) {
             var _a, _b;
             (_a = content.params) !== null && _a !== void 0 ? _a : (content.params = {});
             (_b = content.drawing) !== null && _b !== void 0 ? _b : (content.drawing = []);
@@ -16440,11 +19197,11 @@ ModAPI.addAPICallback("RecipeViewer", function (api) {
             content.drawing.unshift({ type: "frame", x: 0, y: 0, width: 1000, height: 540, bitmap: "classic_frame_bg_light", scale: 2 });
             return _super.call(this, Translation.translate(name), icon, content) || this;
         }
-        return RecipeTypeForICPE;
+        return RecipeViewForICPE;
     }(api.RecipeType));
-    var BasicMachineRecipe = /** @class */ (function (_super) {
-        __extends(BasicMachineRecipe, _super);
-        function BasicMachineRecipe(recipeKey, name, icon, scaleBmp) {
+    var BasicMachineRecipeView = /** @class */ (function (_super) {
+        __extends(BasicMachineRecipeView, _super);
+        function BasicMachineRecipeView(recipeKey, name, icon, scaleBmp) {
             var _this = _super.call(this, name, icon, {
                 drawing: [
                     { type: "bitmap", x: 430, y: 200, scale: 6, bitmap: scaleBmp }
@@ -16457,27 +19214,27 @@ ModAPI.addAPICallback("RecipeViewer", function (api) {
             _this.recipeKey = recipeKey;
             return _this;
         }
-        BasicMachineRecipe.prototype.getAllList = function () {
+        BasicMachineRecipeView.prototype.getAllList = function () {
             var list = [];
-            var recipe = MachineRecipeRegistry.requireRecipesFor(this.recipeKey);
-            var input;
-            for (var key in recipe) {
-                input = key.split(":");
+            var dictionary = MachineRecipeRegistry.getDictionary(this.recipeKey);
+            var recipes = dictionary.getAll();
+            recipes.forEach(function (recipe) {
+                var resultEntry = recipe.result[0];
                 list.push({
-                    input: [{ id: +input[0], count: recipe[key].sourceCount || 1, data: +input[1] || 0 }],
-                    output: [{ id: recipe[key].id, count: recipe[key].count || 0, data: recipe[key].data || 0 }]
+                    input: [{ id: recipe.source.id, count: recipe.source.count, data: recipe.source.data }],
+                    output: [{ id: resultEntry.id, count: resultEntry.count, data: resultEntry.data || 0 }]
                 });
-            }
+            });
             return list;
         };
-        return BasicMachineRecipe;
-    }(RecipeTypeForICPE));
-    api.RecipeTypeRegistry.register("icpe_macerator", new BasicMachineRecipe("macerator", "Macerator", BlockID.macerator, "macerator_bar_scale"));
-    api.RecipeTypeRegistry.register("icpe_compressor", new BasicMachineRecipe("compressor", "Compressor", BlockID.compressor, "compressor_bar_scale"));
-    api.RecipeTypeRegistry.register("icpe_extractor", new BasicMachineRecipe("extractor", "Extractor", BlockID.extractor, "extractor_bar_scale"));
-    var SolidCannerRecipe = /** @class */ (function (_super) {
-        __extends(SolidCannerRecipe, _super);
-        function SolidCannerRecipe() {
+        return BasicMachineRecipeView;
+    }(RecipeViewForICPE));
+    api.RecipeTypeRegistry.register("icpe_macerator", new BasicMachineRecipeView("macerator", "Macerator", BlockID.macerator, "macerator_bar_scale"));
+    api.RecipeTypeRegistry.register("icpe_compressor", new BasicMachineRecipeView("compressor", "Compressor", BlockID.compressor, "compressor_bar_scale"));
+    api.RecipeTypeRegistry.register("icpe_extractor", new BasicMachineRecipeView("extractor", "Extractor", BlockID.extractor, "extractor_bar_scale"));
+    var SolidCannerRecipeView = /** @class */ (function (_super) {
+        __extends(SolidCannerRecipeView, _super);
+        function SolidCannerRecipeView() {
             return _super.call(this, "Solid Canning", BlockID.solidCanner, {
                 drawing: [
                     { type: "bitmap", x: 209 + 20 * 6, y: 200 + 1 * 6, scale: 6, bitmap: "solid_canner_arrow" },
@@ -16490,28 +19247,28 @@ ModAPI.addAPICallback("RecipeViewer", function (api) {
                 }
             }) || this;
         }
-        SolidCannerRecipe.prototype.getAllList = function () {
+        SolidCannerRecipeView.prototype.getAllList = function () {
             var list = [];
-            var recipe = MachineRecipeRegistry.requireRecipesFor("solidCanner");
-            var input;
-            for (var key in recipe) {
-                input = key.split(":");
+            var dictionary = MachineRecipeRegistry.getDictionary("solidCanner");
+            var recipes = dictionary.getAll();
+            for (var _i = 0, recipes_1 = recipes; _i < recipes_1.length; _i++) {
+                var recipe = recipes_1[_i];
                 list.push({
                     input: [
-                        { id: +input[0], count: 1, data: +input[1] || 0 },
-                        { id: recipe[key].can, count: 1, data: 0 }
+                        { id: recipe.source.id, count: 1, data: recipe.source.data },
+                        { id: recipe.can, count: 1, data: 0 },
                     ],
-                    output: [recipe[key].result]
+                    output: [recipe.result],
                 });
             }
             return list;
         };
-        return SolidCannerRecipe;
-    }(RecipeTypeForICPE));
-    api.RecipeTypeRegistry.register("icpe_solidCanner", new SolidCannerRecipe());
-    var CannerRecipe = /** @class */ (function (_super) {
-        __extends(CannerRecipe, _super);
-        function CannerRecipe() {
+        return SolidCannerRecipeView;
+    }(RecipeViewForICPE));
+    api.RecipeTypeRegistry.register("icpe_solidCanner", new SolidCannerRecipeView());
+    var CannerRecipeView = /** @class */ (function (_super) {
+        __extends(CannerRecipeView, _super);
+        function CannerRecipeView() {
             var _this = _super.call(this, "Canning", BlockID.canner, {
                 drawing: [
                     { type: "bitmap", x: 212 + 34 * 6, y: 20 + 6 * 6, scale: 6, bitmap: "extractor_bar_scale" },
@@ -16532,33 +19289,36 @@ ModAPI.addAPICallback("RecipeViewer", function (api) {
             _this.setTankLimit(8000);
             return _this;
         }
-        CannerRecipe.prototype.getAllList = function () {
+        CannerRecipeView.prototype.getAllList = function () {
             var list = [];
-            var solidRecipe = MachineRecipeRegistry.requireRecipesFor("solidCanner");
-            var item;
-            for (var key in solidRecipe) {
-                item = key.split(":");
+            var solidDictionary = MachineRecipeRegistry.getDictionary("solidCanner");
+            var solidRecipes = solidDictionary.getAll();
+            for (var _i = 0, solidRecipes_1 = solidRecipes; _i < solidRecipes_1.length; _i++) {
+                var recipe = solidRecipes_1[_i];
                 list.push({
                     input: [
-                        { id: solidRecipe[key].can, count: 1, data: 0 },
-                        { id: +item[0], count: 1, data: +item[1] || 0 }
+                        { id: recipe.can, count: 1, data: 0 },
+                        { id: recipe.source.id, count: 1, data: recipe.source.data }
                     ],
-                    output: [solidRecipe[key].result],
+                    output: [recipe.result],
                     mode: 0
                 });
             }
-            var fluidRecipe = MachineRecipeRegistry.requireRecipesFor("fluidCanner");
-            for (var i = 0; i < fluidRecipe.length; i++) {
+            var fluidDictionary = MachineRecipeRegistry.getDictionary("fluidCanner");
+            var fluidRecipes = fluidDictionary.getAll();
+            for (var _a = 0, fluidRecipes_1 = fluidRecipes; _a < fluidRecipes_1.length; _a++) {
+                var recipe = fluidRecipes_1[_a];
                 list.push({
                     input: [
                         null,
-                        { id: fluidRecipe[i].input[1].id, count: fluidRecipe[i].input[1].count, data: 0 }
+                        { id: recipe.source.id, count: recipe.source.count, data: recipe.source.data }
                     ],
-                    inputLiq: [{ liquid: fluidRecipe[i].input[0], amount: 1000 }],
-                    outputLiq: [{ liquid: fluidRecipe[i].output, amount: 1000 }],
+                    inputLiq: [{ liquid: recipe.inputFluid.name, amount: recipe.inputFluid.amount }],
+                    outputLiq: [{ liquid: recipe.outputFluid.name, amount: recipe.outputFluid.amount }],
                     mode: 3
                 });
             }
+            var item;
             var full;
             var empty;
             for (var key in LiquidRegistry.EmptyByFull) {
@@ -16580,62 +19340,59 @@ ModAPI.addAPICallback("RecipeViewer", function (api) {
             }
             return list;
         };
-        CannerRecipe.prototype.onOpen = function (elements, recipe) {
+        CannerRecipeView.prototype.onOpen = function (elements, recipe) {
             elements.get("background").setBinding("texture", "canner_background_" + recipe.mode);
             elements.get("slotBack").setBinding("texture", "canner_slot_source_" + recipe.mode);
             elements.get("mode").setBinding("texture", "canner_mode_" + recipe.mode);
         };
-        return CannerRecipe;
-    }(RecipeTypeForICPE));
-    api.RecipeTypeRegistry.register("icpe_canner", new CannerRecipe());
-    var MetalFormerRecipe = /** @class */ (function (_super) {
-        __extends(MetalFormerRecipe, _super);
-        function MetalFormerRecipe() {
+        return CannerRecipeView;
+    }(RecipeViewForICPE));
+    api.RecipeTypeRegistry.register("icpe_canner", new CannerRecipeView());
+    var MetalFormerRecipeView = /** @class */ (function (_super) {
+        __extends(MetalFormerRecipeView, _super);
+        function MetalFormerRecipeView() {
             return _super.call(this, "Metal Former", BlockID.metalFormer, {
                 drawing: [
-                    { type: "bitmap", x: 360, y: 220, scale: 6, bitmap: "metalformer_bar_scale" }
+                    { type: "bitmap", x: 360, y: 220, scale: 6, bitmap: "icpe.metalformer_bar_scale" }
                 ],
                 elements: {
-                    mode: { type: "scale", x: 445, y: 320, bitmap: "metal_former_button_0", scale: 6, value: 1 },
+                    mode: { type: "scale", x: 445, y: 320, bitmap: "icpe.metal_former_button_0", scale: 6, value: 1 },
                     input0: { x: 220, y: 190, size: 120 },
                     output0: { x: 660, y: 190, size: 120 }
                 }
             }) || this;
         }
-        MetalFormerRecipe.prototype.getAllList = function () {
+        MetalFormerRecipeView.prototype.getAllList = function () {
             var list = [];
-            var recipe;
-            var input;
-            for (var mode = 0; mode < 3; mode++) {
-                recipe = MachineRecipeRegistry.requireRecipesFor("metalFormer" + mode);
-                for (var key in recipe) {
-                    input = key.split(":");
+            var dictionaryData = [
+                { mode: 0, key: "metalRolling" },
+                { mode: 1, key: "metalCutting" },
+                { mode: 2, key: "metalExtruding" }
+            ];
+            for (var i = 0; i < dictionaryData.length; i++) {
+                var modeData = dictionaryData[i];
+                var dictionary = MachineRecipeRegistry.getDictionary(modeData.key);
+                var recipes = dictionary.getAll();
+                recipes.forEach(function (recipe) {
+                    var resultEntry = recipe.result[0];
                     list.push({
-                        input: [{ id: +input[0], count: recipe[key].sourceCount || 1, data: +input[1] || 0 }],
-                        output: [{ id: recipe[key].id, count: recipe[key].count || 0, data: recipe[key].data || 0 }],
-                        mode: mode
+                        input: [{ id: recipe.source.id, count: recipe.source.count, data: recipe.source.data }],
+                        output: [{ id: resultEntry.id, count: resultEntry.count, data: resultEntry.data || 0 }]
                     });
-                }
+                });
             }
             return list;
         };
-        MetalFormerRecipe.prototype.onOpen = function (elements, recipe) {
-            elements.get("mode").setBinding("texture", "metal_former_button_" + recipe.mode);
+        MetalFormerRecipeView.prototype.onOpen = function (elements, recipe) {
+            elements.get("mode").setBinding("texture", "icpe.metal_former_button_" + recipe.mode);
         };
-        return MetalFormerRecipe;
-    }(RecipeTypeForICPE));
-    api.RecipeTypeRegistry.register("icpe_metalFormer", new MetalFormerRecipe());
-    var numArray2Output = function (arr) {
-        var output = [];
-        for (var i = 0; i < arr.length; i += 2) {
-            output.push({ id: arr[i], count: arr[i + 1], data: 0 });
-        }
-        return output;
-    };
+        return MetalFormerRecipeView;
+    }(RecipeViewForICPE));
+    api.RecipeTypeRegistry.register("icpe_metalFormer", new MetalFormerRecipeView());
     UI.TextureSource.put("ore_washer_background_trim", Bitmap.createBitmap(UI.TextureSource.get("ore_washer_background"), 56, 17, 63, 55, null, true));
-    var OreWasherRecipe = /** @class */ (function (_super) {
-        __extends(OreWasherRecipe, _super);
-        function OreWasherRecipe() {
+    var OreWasherRecipeView = /** @class */ (function (_super) {
+        __extends(OreWasherRecipeView, _super);
+        function OreWasherRecipeView() {
             var _this = _super.call(this, "Ore Washing", BlockID.oreWasher, {
                 drawing: [
                     { type: "bitmap", x: 263, y: 110, scale: 6, bitmap: "ore_washer_background_trim" },
@@ -16652,26 +19409,26 @@ ModAPI.addAPICallback("RecipeViewer", function (api) {
             _this.setTankLimit(8000);
             return _this;
         }
-        OreWasherRecipe.prototype.getAllList = function () {
+        OreWasherRecipeView.prototype.getAllList = function () {
             var list = [];
-            var recipe = MachineRecipeRegistry.requireRecipesFor("oreWasher");
-            var input;
-            for (var key in recipe) {
-                input = key.split(":");
+            var dictionary = MachineRecipeRegistry.getDictionary("oreWasher");
+            var recipes = dictionary.getAll();
+            for (var i = 0; i < recipes.length; i++) {
+                var recipe = recipes[i];
                 list.push({
-                    input: [{ id: +input[0], count: 1, data: +input[1] || 0 }],
-                    output: numArray2Output(recipe[key]),
+                    input: [{ id: recipe.source.id, count: recipe.source.count || 1, data: recipe.source.data || 0 }],
+                    output: recipe.result.map(function (item) { return ({ id: item.id, count: item.count, data: item.data || 0 }); }),
                     inputLiq: [{ liquid: "water", amount: 1000 }]
                 });
             }
             return list;
         };
-        return OreWasherRecipe;
-    }(RecipeTypeForICPE));
-    api.RecipeTypeRegistry.register("icpe_oreWasher", new OreWasherRecipe());
-    var ThermalCentrifugeRecipe = /** @class */ (function (_super) {
-        __extends(ThermalCentrifugeRecipe, _super);
-        function ThermalCentrifugeRecipe() {
+        return OreWasherRecipeView;
+    }(RecipeViewForICPE));
+    api.RecipeTypeRegistry.register("icpe_oreWasher", new OreWasherRecipeView());
+    var ThermalCentrifugeRecipeView = /** @class */ (function (_super) {
+        __extends(ThermalCentrifugeRecipeView, _super);
+        function ThermalCentrifugeRecipeView() {
             return _super.call(this, "Thermal Centrifuge", BlockID.thermalCentrifuge, {
                 drawing: [
                     { type: "bitmap", x: 314, y: 100, scale: 6, bitmap: "thermal_centrifuge_background" },
@@ -16688,33 +19445,96 @@ ModAPI.addAPICallback("RecipeViewer", function (api) {
                 }
             }) || this;
         }
-        ThermalCentrifugeRecipe.prototype.getAllList = function () {
+        ThermalCentrifugeRecipeView.prototype.getAllList = function () {
             var list = [];
-            var recipe = MachineRecipeRegistry.requireRecipesFor("thermalCentrifuge");
-            var input;
-            for (var key in recipe) {
-                input = key.split(":");
+            var dictionary = MachineRecipeRegistry.getDictionary("thermalCentrifuge");
+            var recipes = dictionary.getAll();
+            recipes.forEach(function (recipe) {
                 list.push({
-                    input: [{ id: +input[0], count: 1, data: +input[1] || 0 }],
-                    output: numArray2Output(recipe[key].result),
-                    heat: recipe[key].heat
+                    input: [{ id: recipe.source.id, count: recipe.source.count || 1, data: recipe.source.data || 0 }],
+                    output: recipe.result.map(function (item) { return ({ id: item.id, count: item.count, data: item.data || 0 }); }),
+                    heat: recipe.heat
+                });
+            });
+            return list;
+        };
+        ThermalCentrifugeRecipeView.prototype.onOpen = function (elements, recipe) {
+            elements.get("textHeat").setBinding("text", Translation.translate("Heat: ") + recipe.heat);
+        };
+        return ThermalCentrifugeRecipeView;
+    }(RecipeViewForICPE));
+    api.RecipeTypeRegistry.register("icpe_thermalCentrifuge", new ThermalCentrifugeRecipeView());
+    var BlockCuttingMachineRecipeView = /** @class */ (function (_super) {
+        __extends(BlockCuttingMachineRecipeView, _super);
+        function BlockCuttingMachineRecipeView() {
+            return _super.call(this, "Block Cutting Machine", BlockID.blockCuttingMachine, {
+                drawing: [
+                    { type: "bitmap", x: 377, y: 229, scale: 6, bitmap: "icpe.cutting_machine_bar_background" }
+                ],
+                elements: {
+                    input0: { x: 210, y: 229, size: 18 * 6 },
+                    input1: { x: 458, y: 229, size: 18 * 6, bitmap: "transparent_slot" },
+                    output0: { x: 709, y: 229, size: 18 * 6 },
+                    progressScale: { type: "scale", x: 377, y: 229, scale: 6, direction: 0, value: 1, bitmap: "icpe.cutting_machine_bar_scale" },
+                    textHardness: { type: "text", x: 377, y: 395, font: { size: 40, color: Color.WHITE, shadow: 0.5 } }
+                }
+            }) || this;
+        }
+        BlockCuttingMachineRecipeView.prototype.getBladeByHardness = function (hardnessLevel) {
+            switch (hardnessLevel) {
+                case 1:
+                case 2:
+                    return { id: ItemID.cuttingBladeIron, count: 1, data: 0 };
+                case 3:
+                    return { id: ItemID.cuttingBladeSteel, count: 1, data: 0 };
+                case 4:
+                    return { id: ItemID.cuttingBladeDiamond, count: 1, data: 0 };
+                default:
+                    return null;
+            }
+        };
+        BlockCuttingMachineRecipeView.prototype.getAllList = function () {
+            var list = [];
+            var dictionary = MachineRecipeRegistry.getDictionary("cuttingMachine");
+            var recipes = dictionary.getAll().sort(function (recipe1, recipe2) {
+                return recipe1.hardnessLevel != recipe2.hardnessLevel ? recipe1.hardnessLevel - recipe2.hardnessLevel :
+                    recipe1.result.id != recipe2.result.id ? recipe1.result.id - recipe2.result.id :
+                        recipe1.result.data - recipe2.result.data;
+            });
+            for (var _i = 0, recipes_2 = recipes; _i < recipes_2.length; _i++) {
+                var recipe = recipes_2[_i];
+                var blade = this.getBladeByHardness(recipe.hardnessLevel);
+                if (!blade) {
+                    continue;
+                }
+                list.push({
+                    input: [
+                        { id: recipe.source.id, count: recipe.source.count, data: recipe.source.data },
+                        blade
+                    ],
+                    output: [{
+                            id: recipe.result.id,
+                            count: recipe.result.count,
+                            data: recipe.result.data || 0
+                        }],
+                    hardness: recipe.hardnessLevel
                 });
             }
             return list;
         };
-        ThermalCentrifugeRecipe.prototype.onOpen = function (elements, recipe) {
-            elements.get("textHeat").setBinding("text", Translation.translate("Heat: ") + recipe.heat);
+        BlockCuttingMachineRecipeView.prototype.onOpen = function (elements, recipe) {
+            elements.get("textHardness").setBinding("text", Translation.translate("description.blade_hardness").replace("%s", recipe.hardness));
         };
-        return ThermalCentrifugeRecipe;
-    }(RecipeTypeForICPE));
-    api.RecipeTypeRegistry.register("icpe_thermalCentrifuge", new ThermalCentrifugeRecipe());
-    var BlastFurnaceRecipe = /** @class */ (function (_super) {
-        __extends(BlastFurnaceRecipe, _super);
-        function BlastFurnaceRecipe() {
+        return BlockCuttingMachineRecipeView;
+    }(RecipeViewForICPE));
+    api.RecipeTypeRegistry.register("icpe_cutting_machine", new BlockCuttingMachineRecipeView());
+    var BlastFurnaceRecipeView = /** @class */ (function (_super) {
+        __extends(BlastFurnaceRecipeView, _super);
+        function BlastFurnaceRecipeView() {
             return _super.call(this, "Blast Furnace", BlockID.blastFurnace, {
                 drawing: [
-                    { type: "bitmap", x: 200, y: 100 - 11 * 5, scale: 5, bitmap: "blast_furnace_background" },
-                    { type: "bitmap", x: 200 + 50 * 5, y: 100 + 16 * 5, scale: 5, bitmap: "blast_furnace_scale" },
+                    { type: "bitmap", x: 200, y: 100 - 11 * 5, scale: 5, bitmap: "icpe.blast_furnace_background" },
+                    { type: "bitmap", x: 200 + 50 * 5, y: 100 + 16 * 5, scale: 5, bitmap: "icpe.blast_furnace_scale" },
                     { type: "bitmap", x: 200 + 46 * 5, y: 100 + 52 * 5, scale: 5, bitmap: "heat_scale" },
                     { type: "bitmap", x: 200 + 70 * 5, y: 100 + 48 * 5, scale: 5, bitmap: "indicator_green" }
                 ],
@@ -16726,31 +19546,27 @@ ModAPI.addAPICallback("RecipeViewer", function (api) {
                 }
             }) || this;
         }
-        BlastFurnaceRecipe.prototype.getAllList = function () {
+        BlastFurnaceRecipeView.prototype.getAllList = function () {
             var list = [];
-            var recipe = MachineRecipeRegistry.requireRecipesFor("blastFurnace");
-            var input;
-            for (var key in recipe) {
-                input = key.split(":");
+            var dictionary = MachineRecipeRegistry.getDictionary("blastFurnace");
+            var recipes = dictionary.getAll();
+            recipes.forEach(function (recipe) {
                 list.push({
-                    input: [
-                        { id: +input[0], count: 1, data: +input[1] || 0 },
-                        { id: ItemID.cellAir, count: 1, data: 0 }
-                    ],
-                    output: numArray2Output(recipe[key].result),
+                    input: [{ id: recipe.source.id, count: recipe.source.count || 1, data: 0 }],
+                    output: recipe.result.map(function (item) { return ({ id: item.id, count: item.count, data: item.data || 0 }); })
                 });
-            }
+            });
             return list;
         };
-        return BlastFurnaceRecipe;
-    }(RecipeTypeForICPE));
-    api.RecipeTypeRegistry.register("icpe_blastFurnace", new BlastFurnaceRecipe());
-    var FermenterRecipe = /** @class */ (function (_super) {
-        __extends(FermenterRecipe, _super);
-        function FermenterRecipe() {
+        return BlastFurnaceRecipeView;
+    }(RecipeViewForICPE));
+    api.RecipeTypeRegistry.register("icpe_blastFurnace", new BlastFurnaceRecipeView());
+    var FermenterRecipeView = /** @class */ (function (_super) {
+        __extends(FermenterRecipeView, _super);
+        function FermenterRecipeView() {
             var _this = _super.call(this, "Fermenter", BlockID.icFermenter, {
                 drawing: [
-                    { type: "bitmap", x: 20, y: 20, scale: 6, bitmap: "fermenter_background" },
+                    { type: "bitmap", x: 20, y: 20, scale: 6, bitmap: "icpe.fermenter_background" },
                     { type: "bitmap", x: 20 + 118 * 6, y: 20 + 4 * 6, scale: 6, bitmap: "liquid_bar" }
                 ],
                 elements: {
@@ -16762,19 +19578,19 @@ ModAPI.addAPICallback("RecipeViewer", function (api) {
             _this.setTankLimit(1000);
             return _this;
         }
-        FermenterRecipe.prototype.getAllList = function () {
+        FermenterRecipeView.prototype.getAllList = function () {
             return [{
                     output: [{ id: ItemID.fertilizer, count: 1, data: 0 }],
                     inputLiq: [{ liquid: "biomass", amount: 500 }],
                     outputLiq: [{ liquid: "biogas", amount: 500 }]
                 }];
         };
-        return FermenterRecipe;
-    }(RecipeTypeForICPE));
-    api.RecipeTypeRegistry.register("icpe_fermenter", new FermenterRecipe());
-    var FluidFuelRecipe = /** @class */ (function (_super) {
-        __extends(FluidFuelRecipe, _super);
-        function FluidFuelRecipe() {
+        return FermenterRecipeView;
+    }(RecipeViewForICPE));
+    api.RecipeTypeRegistry.register("icpe_fermenter", new FermenterRecipeView());
+    var FluidFuelRecipeView = /** @class */ (function (_super) {
+        __extends(FluidFuelRecipeView, _super);
+        function FluidFuelRecipeView() {
             var _this = _super.call(this, "Fluid Fuel", ItemID.cellEmpty, {
                 drawing: [
                     { type: "bitmap", x: 290, y: 140, scale: 8, bitmap: "furnace_burn" },
@@ -16789,7 +19605,7 @@ ModAPI.addAPICallback("RecipeViewer", function (api) {
             _this.setTankLimit(100);
             return _this;
         }
-        FluidFuelRecipe.prototype.getAllList = function () {
+        FluidFuelRecipeView.prototype.getAllList = function () {
             var list = [];
             var recipe = MachineRecipeRegistry.requireFluidRecipes("fluidFuel");
             for (var liq in recipe) {
@@ -16800,12 +19616,42 @@ ModAPI.addAPICallback("RecipeViewer", function (api) {
             }
             return list;
         };
-        FluidFuelRecipe.prototype.onOpen = function (elements, recipe) {
+        FluidFuelRecipeView.prototype.onOpen = function (elements, recipe) {
             elements.get("text").setBinding("text", recipe.power + "EU / tick");
         };
-        return FluidFuelRecipe;
-    }(RecipeTypeForICPE));
-    api.RecipeTypeRegistry.register("icpe_fluidFuel", new FluidFuelRecipe());
+        return FluidFuelRecipeView;
+    }(RecipeViewForICPE));
+    api.RecipeTypeRegistry.register("icpe_fluidFuel", new FluidFuelRecipeView());
+    var GeneratorFuelRecipeView = /** @class */ (function (_super) {
+        __extends(GeneratorFuelRecipeView, _super);
+        function GeneratorFuelRecipeView() {
+            var _this = _super.call(this, "Generator Fuel", BlockID.primalGenerator, {
+                drawing: [
+                    { type: "bitmap", x: 500 - 104, y: 300 - 240, scale: 16, bitmap: "fire_scale" }
+                ],
+                elements: {
+                    input0: { x: 500 - 120, y: 300, size: 240 },
+                    text: { type: "text", x: 500, y: 600, multiline: true, font: { size: 80, color: Color.WHITE, shadow: 0.5, align: UI.Font.ALIGN_CENTER } }
+                }
+            }) || this;
+            _this.setGridView(2, 3, true);
+            _this.setDescription("Fuel");
+            return _this;
+        }
+        GeneratorFuelRecipeView.prototype.getAllList = function () {
+            return api.RecipeTypeRegistry.get("fuel").getAllList();
+        };
+        GeneratorFuelRecipeView.prototype.getList = function (id, data, isUsage) {
+            return isUsage && Recipes.getFuelBurnDuration(id, data) > 0 ? [{ input: [{ id: id, count: 1, data: data }] }] : [];
+        };
+        GeneratorFuelRecipeView.prototype.onOpen = function (elements, recipe) {
+            var item = recipe.input[0];
+            var time = Recipes.getFuelBurnDuration(item.id, item.data);
+            elements.get("text").setBinding("text", "".concat(time / 4 * EnergyProductionModifiers.FuelGenerator, " EU"));
+        };
+        return GeneratorFuelRecipeView;
+    }(api.RecipeType));
+    api.RecipeTypeRegistry.register("icpe_generatorFuel", new GeneratorFuelRecipeView());
 });
 ModAPI.addAPICallback("RedCore", function (api) {
     api.Integration.addDeployerItem(ItemID.cableTin0);
@@ -16820,6 +19666,13 @@ ModAPI.addAPICallback("RedCore", function (api) {
     api.Integration.addDeployerItem(ItemID.cableIron2);
     api.Integration.addDeployerItem(ItemID.cableIron3);
     api.Integration.addDeployerItem(ItemID.cableOptic);
+    var dictionary = MachineRecipeRegistry.getDictionary("compressor");
+    dictionary.addRecipe({ id: ItemID.nikolite, count: 9 }, { id: BlockID.blockNikolite, count: 1 });
+    dictionary.addRecipe({ id: ItemID.gemRuby, count: 9 }, { id: BlockID.blockRuby, count: 1 });
+    dictionary.addRecipe({ id: ItemID.gemSapphire, count: 9 }, { id: BlockID.blockSapphire, count: 1 });
+    dictionary.addRecipe({ id: ItemID.gemGreenSapphire, count: 9 }, { id: BlockID.blockGreenSapphire, count: 1 });
+    var cuttingRecipes = MachineRecipeRegistry.getDictionary("cuttingMachine");
+    cuttingRecipes.addRecipe({ id: ItemID.siliconBoule }, { id: ItemID.waferSilicon, count: 16 }, 4);
 });
 ModAPI.addAPICallback("TreeCapitator", function (api) {
     api.registerTree([[BlockID.rubberTreeLog, -1], [BlockID.rubberTreeLogLatex, -1]], [BlockID.rubberTreeLeaves, -1]);
@@ -16834,7 +19687,7 @@ var ICore = {
     ReactorItem: ReactorItem,
     Radiation: RadiationAPI,
     Tool: ICTool,
-    Sound: SoundManager,
+    Sound: SoundLib,
     Agriculture: Agriculture,
     ItemName: ItemName,
     UI: ToolHUD,
